@@ -55,6 +55,17 @@ public class OrderServiceImpl extends BaseServiceImpl implements OrderService {
         this.queryFactory = getQueryFactory();
     }
 
+    /**
+     * 生成订单id
+     *
+     * @return 订单id
+     */
+    private String createOrderId() {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
+        String dateString = sdf.format(new Date(System.currentTimeMillis()));
+        return dateString + randomOrderIdEnd();
+    }
+
     @Override
     public OrderVO createOrder(String token, Integer addressId) throws XShopException {
 
@@ -67,10 +78,8 @@ public class OrderServiceImpl extends BaseServiceImpl implements OrderService {
             throw new XShopException(ErrEumn.BUY_CAR_IS_NULL);
         }
         Order order = new Order();
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
-        String dateString = sdf.format(new Date(System.currentTimeMillis()));
 
-        order.setOrderId(dateString + randomOrderIdEnd());
+        order.setOrderId(createOrderId());
 
         List<OrderDetails> orderDetails = new ArrayList<>();
         BigDecimal orderAmount = new BigDecimal(0);
@@ -662,39 +671,75 @@ public class OrderServiceImpl extends BaseServiceImpl implements OrderService {
         return null;
     }
 
-    @Override
-    public void consignment(String orderId, String token, Integer deliveryId) throws XShopException {
-        Optional<Order> orderOptional = orderRepository.findById(orderId);
-        if (!orderOptional.isPresent()) {
-            throw new XShopException(ErrEumn.ORDER_NOT_EXIST);
-        }
-        Order order = orderOptional.get();
-        order.setStatus(1);
-        order.setDeliveryId(deliveryId);
-        orderRepository.save(order);
-    }
+//    @Override
+//    public void consignment(String orderId, String token, Integer deliveryId) throws XShopException {
+//        Optional<Order> orderOptional = orderRepository.findById(orderId);
+//        if (!orderOptional.isPresent()) {
+//            throw new XShopException(ErrEumn.ORDER_NOT_EXIST);
+//        }
+//        Order order = orderOptional.get();
+//        order.setStatus(1);
+//        order.setDeliveryId(deliveryId);
+//        orderRepository.save(order);
+//    }
 
     @Override
-    public OrderVO createOrderUseShoppingCar(List<String> shoppingCarIds, String token) throws XShopException {
+    public OrderVO createOrderUseShoppingCar(List<String> shoppingCarIds,
+                                             String token, Integer addressId) throws XShopException {
         User user = userService.tokenGetUser(token);
         List<BuyCarVO> buyCars = buyCarService.getBuyCarByIds(shoppingCarIds);
 
+        String orderId = createOrderId();
         // 验证是否为本人购物车商品
+        int i = 0;
         for (BuyCarVO buyCar : buyCars) {
+            i++;
             if (!buyCar.getUserId().equals(user.getUid())) {
                 throw new XShopException(ErrEumn.BUY_CAR_IS_NOT_YOUR);
             }
+            OrderDetails orderDetails = new OrderDetails();
+            orderDetails.setGoodsId(buyCar.getGoods().getGoodsId());
+            orderDetails.setNumber(buyCar.getNumber());
+            orderDetails.setOdId(orderId + createOdId(i));
+            orderDetails.setOrderId(orderId);
+            //TODO: 将改代码块逻辑放在计算价格中，将计算价格部分返回Map改为返回一个po
+            orderDetails.setTransactionPrice();
         }
 
 
         // 结算
+        Map<String, BigDecimal> number = settleAccounts(buyCars);
+
+        Order order = new Order();
+        order.setOrderId(orderId);
+        order.setUserId(user.getUid());
+        order.setAddrId(addressId);
+        order.setOrderAmount(number.get("goodsNumber").add(number.get("despatchNumber")));
+        order.setDespatchMoney(number.get("despatchNumber"));
+        // TODO: 后续有了优惠系统在进行优惠逻辑编写
+        order.setOffer(new BigDecimal(0));
+        orderRepository.save(order);
 
 
         return null;
     }
 
-    private BigDecimal settleAccounts(List<BuyCarVO> buyCars) {
-        //TODO: 没做完
+    /**
+     * 创建订单详情id
+     *
+     * @return 订单详情id
+     */
+    private String createOdId(int index) {
+        int ORDER_DETAIL_ID_LENGTH = 4;
+        StringBuilder odId = new StringBuilder();
+        for (int i = 0; i < ORDER_DETAIL_ID_LENGTH - String.valueOf(index).length(); i++) {
+            odId.append("0");
+        }
+        odId.append(index);
+        return odId.toString();
+    }
+
+    private Map<String, BigDecimal> settleAccounts(List<BuyCarVO> buyCars) {
 
         // 商品总价
         BigDecimal goodsNumber = new BigDecimal(0);
@@ -711,29 +756,32 @@ public class OrderServiceImpl extends BaseServiceImpl implements OrderService {
 
             // 计算运费
 
-            // 单次购买数量是否达到包邮数量
-
-            // 叠加运费且多件免运费
-            if (goods.getFreePostageNum() == -1 && goods.getDespatchPlus() == 1) {
-                despatchNumber = despatchNumber.add(goods.getDespatchMoney().multiply(new BigDecimal(buyCar.getNumber())));
-            }
-            // 不叠加运费且多件免运费
-            if (goods.getFreePostageNum() > -1 && goods.getDespatchPlus() == 1) {
-
-                if (buyCar.getNumber() < goods.getFreePostageNum()) {
-                    // 未达到多件免运费数量
-                    despatchNumber = despatchNumber.add(goods.getDespatchMoney().multiply(new BigDecimal(buyCar.getNumber())));
-                }
+            // 判断是否执行免邮数量
+            if (goods.getExecFreePostageNum() && goods.getFreePostageNum() <= buyCar.getNumber()) {
+                break;
             }
 
-            // 叠加运费且多件不免邮
-            if (goods.getFreePostageNum() == -1 && goods.getDespatchPlus() == 0) {
-                despatchNumber = despatchNumber.add(goods.getDespatchMoney().multiply(new BigDecimal(buyCar.getNumber())));
+            // 商品累加并 且累加价格大于0 且购买商品大于1
+            if (goods.getDespatchIsPlus()
+                    && goods.getDespatchPlusMoney().compareTo(new BigDecimal(0)) > 0
+                    && buyCar.getNumber() > 1) {
+                // 累加运费 总运费 = 运费价格 + (购买数量 - 1) * 累加价格
+                despatchNumber = despatchNumber
+                        .add(goods.getDespatchMoney()
+                                .add(goods.getDespatchPlusMoney()
+                                        .multiply(new BigDecimal(buyCar.getNumber() - 1))));
+                break;
             }
+
+            despatchNumber = despatchNumber.add(goods.getDespatchMoney());
 
         }
 
-        return new BigDecimal(0);
+        Map<String, BigDecimal> number = new HashMap<>();
+        number.put("goodsNumber", goodsNumber);
+        number.put("despatchNumber", despatchNumber);
+
+        return number;
 
     }
 

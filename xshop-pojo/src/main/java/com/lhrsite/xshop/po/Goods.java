@@ -11,7 +11,7 @@ import java.util.Date;
 
 @Entity
 @Data
-public class Goods implements Serializable{
+public class Goods implements Serializable {
 
     @Id
     /* 商品id */
@@ -41,14 +41,18 @@ public class Goods implements Serializable{
     private String deliveryPlace;
     /* 快递费 */
     private BigDecimal despatchMoney;
-    /* 运费是否累加0不累加，1累加 */
-    private Integer despatchPlus;
-    /* 免邮费数量，购买数到达该数量免邮费 -1为不进行数量免邮 */
+    /* 快递费是否累加 */
+    private Boolean despatchIsPlus;
+    /* 运费累加单价 */
+    private BigDecimal despatchPlusMoney;
+    /* 免邮费数量，购买数到达该数量免邮费*/
     private Integer freePostageNum;
-    /* banner图 */
-    private String pictures;
+    /* 是否执行免邮数量 */
+    private Boolean execFreePostageNum;
     /* 内容 */
     private String content;
+    /* banner图 */
+    private String pictures;
     /* 更新人id */
     private Integer updateUser;
     /* 创建时间 */

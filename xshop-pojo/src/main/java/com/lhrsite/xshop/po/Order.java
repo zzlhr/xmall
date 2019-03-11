@@ -30,6 +30,5 @@ public class Order implements Serializable {
     private Date createTime;
     private Integer addrId;
 
-    private Integer deliveryId;
 
 }
