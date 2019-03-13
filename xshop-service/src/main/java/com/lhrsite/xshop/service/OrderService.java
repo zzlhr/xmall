@@ -67,7 +67,7 @@ public interface OrderService {
     Order receipt(String token, String orderId);
 
 
-    void consignment(String orderId, String token, Integer deliveryId) throws XShopException;
+//    void consignment(String orderId, String token, Integer deliveryId) throws XShopException;
 
 
     /**
@@ -77,5 +77,7 @@ public interface OrderService {
      * @param token          用户token
      * @return 订单视图
      */
-    OrderVO createOrderUseShoppingCar(List<String> shoppingCarIds, String token) throws XShopException;
+
+    OrderVO createOrderUseShoppingCar(List<String> shoppingCarIds,
+                                      String token, Integer addressId) throws XShopException;
 }

@@ -113,7 +113,6 @@ public class OrderServiceImpl extends BaseServiceImpl implements OrderService {
         order.setOffer(offer);
         order.setStatus(0);
         order.setAddrId(addressId);
-        order.setDeliveryId(0);
         Order order1 = orderRepository.save(order);
         System.out.println(order1);
 
@@ -697,26 +696,19 @@ public class OrderServiceImpl extends BaseServiceImpl implements OrderService {
             if (!buyCar.getUserId().equals(user.getUid())) {
                 throw new XShopException(ErrEumn.BUY_CAR_IS_NOT_YOUR);
             }
-            OrderDetails orderDetails = new OrderDetails();
-            orderDetails.setGoodsId(buyCar.getGoods().getGoodsId());
-            orderDetails.setNumber(buyCar.getNumber());
-            orderDetails.setOdId(orderId + createOdId(i));
-            orderDetails.setOrderId(orderId);
-            //TODO: 将改代码块逻辑放在计算价格中，将计算价格部分返回Map改为返回一个po
-            orderDetails.setTransactionPrice();
+
         }
 
 
         // 结算
-        Map<String, BigDecimal> number = settleAccounts(buyCars);
+        OrderSettleAccounts orderSettleAccounts = settleAccounts(buyCars, orderId);
 
         Order order = new Order();
         order.setOrderId(orderId);
         order.setUserId(user.getUid());
         order.setAddrId(addressId);
-        order.setOrderAmount(number.get("goodsNumber").add(number.get("despatchNumber")));
-        order.setDespatchMoney(number.get("despatchNumber"));
-        // TODO: 后续有了优惠系统在进行优惠逻辑编写
+        order.setOrderAmount(orderSettleAccounts.getGoodsNumber().add(orderSettleAccounts.getDespatchNumber()));
+        order.setDespatchMoney(orderSettleAccounts.getDespatchNumber());
         order.setOffer(new BigDecimal(0));
         orderRepository.save(order);
 
@@ -739,14 +731,16 @@ public class OrderServiceImpl extends BaseServiceImpl implements OrderService {
         return odId.toString();
     }
 
-    private Map<String, BigDecimal> settleAccounts(List<BuyCarVO> buyCars) {
+    private OrderSettleAccounts settleAccounts(List<BuyCarVO> buyCars, String orderId) {
 
         // 商品总价
         BigDecimal goodsNumber = new BigDecimal(0);
         // 运费总价
         BigDecimal despatchNumber = new BigDecimal(0);
-
+        int i = 0;
+        List<OrderDetails> orderDetailsList = new ArrayList<>();
         for (BuyCarVO buyCar : buyCars) {
+            i++;
             Goods goods = buyCar.getGoods();
             // 按照促销价或者原价计算
             BigDecimal price = goods.getSaleStatus() == 0 ? goods.getOriginalPrice() : goods.getSalePrice();
@@ -774,14 +768,23 @@ public class OrderServiceImpl extends BaseServiceImpl implements OrderService {
             }
 
             despatchNumber = despatchNumber.add(goods.getDespatchMoney());
-
+            // 生产订单详情
+            OrderDetails orderDetails = new OrderDetails();
+            orderDetails.setGoodsId(buyCar.getGoods().getGoodsId());
+            orderDetails.setNumber(buyCar.getNumber());
+            orderDetails.setOdId(orderId + createOdId(i));
+            orderDetails.setOrderId(orderId);
+            //TODO: 将改代码块逻辑放在计算价格中，将计算价格部分返回Map改为返回一个po
+            orderDetails.setTransactionPrice(goodsNumber);
+            orderDetailsList.add(orderDetails);
         }
 
-        Map<String, BigDecimal> number = new HashMap<>();
-        number.put("goodsNumber", goodsNumber);
-        number.put("despatchNumber", despatchNumber);
 
-        return number;
+        OrderSettleAccounts orderSettleAccounts = new OrderSettleAccounts();
+        orderSettleAccounts.setDespatchNumber(despatchNumber);
+        orderSettleAccounts.setGoodsNumber(goodsNumber);
+        orderSettleAccounts.setOrderDetailsList(orderDetailsList);
+        return orderSettleAccounts;
 
     }
 

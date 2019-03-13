@@ -96,9 +96,9 @@ public class OrderController {
         return resultVO;
     }
 
-    @PostMapping("/consignment")
-    public ResultVO consignment(String token, String orderId, Integer deliveryId) throws XShopException {
-        orderService.consignment(orderId, token, deliveryId);
-        return resultVO;
-    }
+//    @PostMapping("/consignment")
+//    public ResultVO consignment(String token, String orderId, Integer deliveryId) throws XShopException {
+//        orderService.consignment(orderId, token, deliveryId);
+//        return resultVO;
+//    }
 }
