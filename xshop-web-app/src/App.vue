@@ -26,7 +26,7 @@
   @import '~vux/src/styles/1px.less';
 
   body {
-    background-color: #fbf9fe;
+    background-color: #fff;
   }
   .vux-header{
     background-color: #0084ff !important;

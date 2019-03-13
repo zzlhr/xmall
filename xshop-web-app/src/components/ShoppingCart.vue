@@ -30,7 +30,7 @@
         <div class="shop_bc_box" v-show="totalNumber > 0 && aggregate > 0">
             <x-hr class="shop_bc_hr"></x-hr>
             <p class="shop_bc_total_prices">合计：￥ {{aggregate}}(包含配送费)</p>
-            <x-button class="shop_send_order" type="primary" @click.native="createOrder">下单</x-button>
+            <x-button class="shop_send_order" type="primary" @click.native="goConfirmOrder">下单</x-button>
         </div>
         <popover placement="top" style="margin: 20px;" v-show="totalNumber <= 0 || aggregate <= 0">
             <p style="text-align:center;">
@@ -154,6 +154,10 @@
 
         },
         methods: {
+            // 前往订单确认页面
+            goConfirmOrder() {
+                this.$router.push({name: "ConfirmOrder", params: {}})
+            },
             emitPrice(price) {
                 console.log(price)
                 this.$set(this.$data, 'aggregate', this.$data.aggregate + price)
