@@ -19,11 +19,23 @@
         </div>
         <div class="confirm_order_shop">
             <div class="confirm_order_shop_item">
-                <img src="../assets/shop_img.webp">
+                <div class="confirm_order_shop_item_img">
+                    <img src="../assets/d1.jpg" alt="shop_img">
+                </div>
+                <div class="confirm_order_shop_item_content">
+                    <span class="confirm_order_shop_item_title">这是一个好看的一个好看的衣服这是一个好看的衣服这是一个好看的衣服</span>
+                    <div class="confirm_order_shop_item_bottom">
+                        <span class="confirm_order_address_content_price">￥200.0</span>
+                        <span class="confirm_order_address_content_num">x10</span>
+                    </div>
+                </div>
             </div>
         </div>
         <div class="confirm_order_bottom">
-
+            <div class="confirm_order_bottom_addup">合计金额: ￥56.50</div>
+            <div class="confirm_order_bottom_btn_group">
+                <button>结&nbsp;&nbsp;算</button>
+            </div>
         </div>
     </div>
 
@@ -36,6 +48,38 @@
 </script>
 
 <style scoped>
+    .confirm_order_bottom {
+        position: fixed;
+        bottom: 0;
+        height: 50px;
+        width: 100%;
+        border-top: 1px solid #dedede;
+        display: flex;
+        flex-flow: row nowrap;
+    }
+
+    .confirm_order_bottom_addup {
+        flex: 3;
+        height: 100%;
+        line-height: 50px;
+        padding-right: 10px;
+        text-align: right;
+    }
+
+    .confirm_order_bottom_btn_group {
+        flex: 1;
+        height: 100%;
+    }
+
+    .confirm_order_bottom_btn_group > button {
+        height: 100%;
+        width: 100%;
+        background-color: #fd512e;
+        border: none;
+        color: #fff;
+        font-size: 16px;
+    }
+
     .confirm_order {
         background-color: #fff;
         height: 100%;
@@ -75,5 +119,35 @@
         height: 100px;
         background-color: #EEEEEE;
         padding: 10px;
+        display: flex;
     }
+
+    .confirm_order_shop_item_img > img {
+        width: 100px;
+        height: 100px;
+        margin-right: 5px;
+    }
+
+    .confirm_order_shop_item_content {
+        line-height: 14px;
+        font-size: 14px;
+        display: flex;
+        flex-flow: column nowrap;
+    }
+
+    .confirm_order_address_content_price {
+        color: #c76541;
+        flex: 3;
+    }
+
+    .confirm_order_shop_item_bottom {
+        display: flex;
+        flex-flow: row nowrap;
+    }
+
+    .confirm_order_shop_item_title {
+        flex: 3;
+    }
+
+
 </style>
