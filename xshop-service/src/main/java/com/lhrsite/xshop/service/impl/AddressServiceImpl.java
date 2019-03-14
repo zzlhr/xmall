@@ -55,14 +55,11 @@ public class AddressServiceImpl extends BaseServiceImpl implements AddressServic
     public Address add(Address address, String token) throws XShopException, ConstraintViolationException {
         User user = userService.tokenGetUser(token);
         address.setUid(user.getUid());
-        if (this.getAddress(token).size() == 0) {
+        if (address.getDefaultStatus() == 0 && this.getAddress(token).size() == 0) {
             address.setDefaultStatus(1);
-        } else {
-            address.setDefaultStatus(0);
         }
         log.info("【save address】addr={}", address);
         Address address1;
-
         try {
             address1 = addressRepository.save(address);
         } catch (ConstraintViolationException e) {
@@ -97,7 +94,7 @@ public class AddressServiceImpl extends BaseServiceImpl implements AddressServic
 
         // 修改欲要修改的地址
         Optional<Address> addressOptional = addressRepository.findById(addrId);
-        if (addressOptional.isPresent()) {
+        if (!addressOptional.isPresent()) {
             throw new XShopException(ErrEumn.ADDRESS_NOT_EXIST);
         }
         Address address = addressOptional.get();

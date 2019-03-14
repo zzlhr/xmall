@@ -44,8 +44,9 @@ logging:
 mybatis:
   mapper-locations: classpath*:mapper/*.xml
   type-aliases-package: com.lhrsite.xshop.mapper
-  configuration:
-    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+  # 打印sql
+#  configuration:
+#    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
 lombok:
   anyConstructor:
     addConstructorProperties: true

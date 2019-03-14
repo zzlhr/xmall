@@ -11,7 +11,7 @@
                addr.addr,
                addr.consignee,
                addr.link_tel linkTel,
-               addr.default_status,
+               addr.default_status defaultStatus,
                user.username,
                city.name     cityName,
                province.name provinceName,

@@ -103,7 +103,8 @@
                 position: 'bottom',
                 showPositionValue: false,
                 toastMsg: '',
-                address: []
+                address: [],
+                selectedBuyCar: [],
             }
         },
         watch: {
@@ -156,7 +157,19 @@
         methods: {
             // 前往订单确认页面
             goConfirmOrder() {
-                this.$router.push({name: "ConfirmOrder", params: {}})
+                // 清楚选中数据
+                this.selectedBuyCar = [];
+                for (let i = 0; i < this.buyCars.length; i++) {
+                    // 将选中数据放进选中数组
+                    if (this.buyCars[i].selected) {
+                        this.selectedBuyCar.push(this.buyCars[i])
+                    }
+                }
+                if (this.selectedBuyCar.length === 0){
+                    this.$vux.toast.show({text:"请选择商品", type: "warn"});
+                    return;
+                }
+                this.$router.push({name: "ConfirmOrder", params: {selectedBuyCar: this.selectedBuyCar}})
             },
             emitPrice(price) {
                 console.log(price)

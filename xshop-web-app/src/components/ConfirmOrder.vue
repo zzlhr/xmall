@@ -6,27 +6,32 @@
             <div class="confirm_order_address_logo">
                 <font-awesome-icon icon="address-card"></font-awesome-icon>
             </div>
-            <div class="confirm_order_address_content">
+            <div class="confirm_order_address_content" @click="selectAddress">
                 <p class="confirm_order_address_consignee">
-                    <span>收货人: 刘先生</span>
-                    <span>19937150218</span>
+                    <span>收货人: {{defaultAddress.consignee}}</span>
+                    <span>{{defaultAddress.linkTel}}</span>
                 </p>
-                <span class="confirm_order_address_info">收货地址: 河南省郑州市中原区梧桐街道高新区升龙又一城D区1号楼1单元xxx</span>
+                <span class="confirm_order_address_info">收货地址:
+                    {{defaultAddress.provinceName +
+                    defaultAddress.cityName +
+                    (defaultAddress.countryName || "") +
+                    (defaultAddress.townName || "") +
+                    (defaultAddress.addr || "")}}</span>
             </div>
             <div class="confirm_order_address_logo">
                 <font-awesome-icon icon="chevron-right"></font-awesome-icon>
             </div>
         </div>
         <div class="confirm_order_shop">
-            <div class="confirm_order_shop_item">
+            <div class="confirm_order_shop_item" v-for="(buyCar, index) in selectedBuyCar" :key="index">
                 <div class="confirm_order_shop_item_img">
-                    <img src="../assets/d1.jpg" alt="shop_img">
+                    <img :src="buyCar.goods.cover" alt="shop_img">
                 </div>
                 <div class="confirm_order_shop_item_content">
-                    <span class="confirm_order_shop_item_title">这是一个好看的一个好看的衣服这是一个好看的衣服这是一个好看的衣服</span>
+                    <span class="confirm_order_shop_item_title">{{buyCar.goods.title}}</span>
                     <div class="confirm_order_shop_item_bottom">
-                        <span class="confirm_order_address_content_price">￥200.0</span>
-                        <span class="confirm_order_address_content_num">x10</span>
+                        <span class="confirm_order_address_content_price">￥{{buyCar.goods.originalPrice}}</span>
+                        <span class="confirm_order_address_content_num">x{{buyCar.number}}</span>
                     </div>
                 </div>
             </div>
@@ -42,8 +47,38 @@
 </template>
 
 <script>
+    import http from "../util/HttpUtil";
+
     export default {
-        name: "ConfirmOrder"
+        name: "ConfirmOrder",
+        data() {
+            return {
+                address: [],
+                defaultAddress: {},
+                selectedBuyCar: [],
+            }
+        },
+        mounted() {
+            this.getAddr();
+            this.selectedBuyCar = this.$route.params.selectedBuyCar;
+        },
+        methods: {
+            selectAddress(){
+
+            },
+            getAddr() {
+                const token = localStorage.getItem("token");
+                const that = this;
+                http.postForm(this, "address", "getAddress", {token: token}, function (resp) {
+                    that.address = resp.data.data;
+                    for (let i = 0; i < that.address.length; i++) {
+                        if (that.address[i].defaultStatus === 1) {
+                            that.defaultAddress = that.address[i];
+                        }
+                    }
+                })
+            }
+        }
     }
 </script>
 
@@ -107,6 +142,7 @@
     .confirm_order_address_content {
         display: flex;
         flex-flow: column nowrap;
+        flex: 3;
     }
 
     .confirm_order_address_info {
@@ -133,6 +169,7 @@
         font-size: 14px;
         display: flex;
         flex-flow: column nowrap;
+        flex: 3;
     }
 
     .confirm_order_address_content_price {
