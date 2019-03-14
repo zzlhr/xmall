@@ -394,8 +394,7 @@ public class OrderServiceImpl extends BaseServiceImpl implements OrderService {
                         qUser.username,
                         qUser.phone,
                         qUser.email,
-                        qAddress.addr,
-                        qOrder.deliveryId
+                        qAddress.addr
                 )
         ).from(qOrder)
                 .leftJoin(qUser).on(qOrder.userId.eq(qUser.uid))
@@ -496,8 +495,7 @@ public class OrderServiceImpl extends BaseServiceImpl implements OrderService {
                         qUser.username,
                         qUser.phone,
                         qUser.email,
-                        qAddress.addr,
-                        qOrder.deliveryId
+                        qAddress.addr
                 )
         ).from(qOrder)
                 .leftJoin(qUser).on(qOrder.userId.eq(qUser.uid))
@@ -601,8 +599,7 @@ public class OrderServiceImpl extends BaseServiceImpl implements OrderService {
                         qUser.username,
                         qUser.phone,
                         qUser.email,
-                        qAddress.addr,
-                        qOrder.deliveryId
+                        qAddress.addr
                 )
         ).from(qOrder)
                 .leftJoin(qUser).on(qOrder.userId.eq(qUser.uid))

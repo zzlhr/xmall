@@ -6,9 +6,9 @@
 #
 
 
-DROP DATABASE IF EXISTS `shop`;
-CREATE DATABASE `shop` DEFAULT CHARACTER SET utf8mb4 DEFAULT COLLATE utf8mb4_0900_ai_ci;
-USE `shop`;
+DROP DATABASE IF EXISTS `xshop`;
+CREATE DATABASE `xshop` DEFAULT CHARACTER SET utf8mb4 DEFAULT COLLATE utf8mb4_general_ci;
+USE `xshop`;
 
 
 
@@ -51,16 +51,16 @@ DROP TABLE IF EXISTS `address`;
 CREATE TABLE `address` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `uid` int(11) NOT NULL COMMENT '用户id',
-  `province` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '省份id',
-  `city` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '城市id',
-  `country` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '区域id',
+  `province` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '省份id',
+  `city` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '城市id',
+  `country` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '区域id',
   `town` varchar(20) DEFAULT NULL COMMENT '街道id',
-  `addr` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT '' COMMENT '地址',
-  `consignee` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '收货人',
-  `link_tel` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '联系方式',
+  `addr` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT '地址',
+  `consignee` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '收货人',
+  `link_tel` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '联系方式',
   `default_status` tinyint(1) NOT NULL DEFAULT '0' COMMENT '默认状态',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 
 CREATE TABLE `app` (
@@ -68,7 +68,7 @@ CREATE TABLE `app` (
   `link` text NOT NULL COMMENT '联系方式',
   `picture` text NOT NULL COMMENT '首页轮播图',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 
 CREATE TABLE `auth_code` (
@@ -77,7 +77,7 @@ CREATE TABLE `auth_code` (
   `create_time` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `type` tinyint(4) NOT NULL DEFAULT '0',
   PRIMARY KEY (`phone_number`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 
 CREATE TABLE `auth_group` (
@@ -101,7 +101,7 @@ CREATE TABLE `auth_value` (
   `update_time` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
   `update_user` int(11) NOT NULL COMMENT '更新人',
   PRIMARY KEY (`menu_id`,`group_id`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 
 CREATE TABLE `buy_car` (
@@ -111,7 +111,7 @@ CREATE TABLE `buy_car` (
   `number` int(11) NOT NULL DEFAULT '0' COMMENT '数量',
   `create_time` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 
 CREATE TABLE `city` (
@@ -120,7 +120,7 @@ CREATE TABLE `city` (
   `city_id` varchar(12) DEFAULT NULL,
   `province_id` varchar(12) DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 
 CREATE TABLE `classify` (
@@ -131,7 +131,7 @@ CREATE TABLE `classify` (
   `cl_del` tinyint(4) NOT NULL DEFAULT '0' COMMENT '删除标识0表示为删除1已删除',
   `cl_serial` int(11) NOT NULL DEFAULT '99' COMMENT '序号',
   PRIMARY KEY (`cl_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=113 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=113 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 
 CREATE TABLE `config_setting` (
@@ -140,7 +140,7 @@ CREATE TABLE `config_setting` (
   `config_value` int(11) NOT NULL COMMENT '配置项值',
   `config_enterprise` int(11) NOT NULL COMMENT '配置值所属企业',
   PRIMARY KEY (`csid`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='配置设置';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='配置设置';
 
 
 CREATE TABLE `config_type` (
@@ -148,7 +148,7 @@ CREATE TABLE `config_type` (
   `ct_type` int(11) NOT NULL COMMENT '配置类型',
   `ct_description` varchar(50) NOT NULL COMMENT '配置类型描述',
   PRIMARY KEY (`ctid`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='配置类型';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='配置类型';
 
 
 CREATE TABLE `config_values` (
@@ -158,7 +158,7 @@ CREATE TABLE `config_values` (
   `cvs_description` varchar(50) NOT NULL COMMENT '配置值描述',
   `cvs_enterprise` int(11) NOT NULL DEFAULT '0' COMMENT '所属企业',
   PRIMARY KEY (`cvsid`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='配置值';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='配置值';
 
 
 CREATE TABLE `country` (
@@ -167,7 +167,7 @@ CREATE TABLE `country` (
   `country_id` varchar(12) DEFAULT NULL,
   `city_id` varchar(12) DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 
 CREATE TABLE `enterprise` (
@@ -210,7 +210,7 @@ CREATE TABLE `goods` (
   `cl_id` int(11) NOT NULL DEFAULT '0' COMMENT '所属分类',
   `cl_fid` int(11) NOT NULL DEFAULT '0' COMMENT '所属分类父级',
   PRIMARY KEY (`goods_id`,`sale_status`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 
 CREATE TABLE `menu` (
@@ -240,7 +240,7 @@ CREATE TABLE `message` (
   `send_user` int(11) NOT NULL COMMENT '发送人',
   `incept_user` int(11) NOT NULL COMMENT '接收人',
   PRIMARY KEY (`msg_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 
 CREATE TABLE `order_details` (
@@ -251,7 +251,7 @@ CREATE TABLE `order_details` (
   `transaction_price` decimal(18,2) NOT NULL COMMENT '成交价',
   `create_time` datetime DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`od_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 
 CREATE TABLE `order_master` (
@@ -264,7 +264,7 @@ CREATE TABLE `order_master` (
   `create_time` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `addr_id` int(11) NOT NULL COMMENT '收货地址',
   PRIMARY KEY (`order_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 
 CREATE TABLE `province` (
@@ -272,7 +272,7 @@ CREATE TABLE `province` (
   `name` varchar(64) DEFAULT NULL,
   `province_id` varchar(12) DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 
 CREATE TABLE `st_storage` (
@@ -286,7 +286,7 @@ CREATE TABLE `st_storage` (
   `update_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
   `update_user` int(11) NOT NULL COMMENT '更新人',
   PRIMARY KEY (`storage_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='仓库表';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='仓库表';
 
 
 CREATE TABLE `st_storage_in_details` (
@@ -304,7 +304,7 @@ CREATE TABLE `st_storage_in_details` (
   `update_user` int(11) NOT NULL COMMENT '更新人',
   `sid_remark` varchar(100) NOT NULL DEFAULT '' COMMENT '备注',
   PRIMARY KEY (`sid_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='入库单详情';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='入库单详情';
 
 
 CREATE TABLE `st_storage_in_master` (
@@ -326,7 +326,7 @@ CREATE TABLE `st_storage_in_master` (
   `update_user` int(11) NOT NULL COMMENT '修改用户',
   `update_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
   PRIMARY KEY (`si_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='入库单主表';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='入库单主表';
 
 
 CREATE TABLE `st_storage_out_details` (
@@ -336,7 +336,7 @@ CREATE TABLE `st_storage_out_details` (
   `goods_number` decimal(18,2) NOT NULL DEFAULT '0.00' COMMENT '出库商品数量',
   `storage_id` int(11) NOT NULL COMMENT '仓库id',
   PRIMARY KEY (`sod_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='出库单详情';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='出库单详情';
 
 
 CREATE TABLE `st_storage_out_master` (
@@ -356,7 +356,7 @@ CREATE TABLE `st_storage_out_master` (
   `examine_remark` varchar(500) NOT NULL DEFAULT '' COMMENT '审核备注',
   `examine_time` datetime NOT NULL COMMENT '审核时间',
   PRIMARY KEY (`so_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='出库单主表';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='出库单主表';
 
 
 CREATE TABLE `st_supplier` (
@@ -370,7 +370,7 @@ CREATE TABLE `st_supplier` (
   `update_user` int(11) NOT NULL COMMENT '更新人',
   `update_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
   PRIMARY KEY (`supplier_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='供货商';
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='供货商';
 
 
 CREATE TABLE `supplier` (
@@ -387,7 +387,7 @@ CREATE TABLE `supplier` (
   `enterprise` int(11) DEFAULT NULL COMMENT '所属企业',
   `row_status` tinyint(4) NOT NULL DEFAULT '0' COMMENT '删除否',
   PRIMARY KEY (`supplier_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='供应商表';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='供应商表';
 
 
 CREATE TABLE `town` (
@@ -396,7 +396,7 @@ CREATE TABLE `town` (
   `town_id` varchar(12) DEFAULT NULL,
   `country_id` varchar(12) DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 
 CREATE TABLE `user` (
@@ -428,7 +428,7 @@ CREATE TABLE `user_login` (
   `create_time` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `expire_time` datetime DEFAULT '1970-01-01 00:00:00' COMMENT '过期时间',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 
 

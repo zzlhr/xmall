@@ -21,13 +21,21 @@
 
 
 ## 启动
-1. 安装依赖
+1. 还原数据库
+```bash
+# 还原
+mysql -uroot -p < ./sql/shop.sql
+# Enter password:
+```
+
+
+2. 安装依赖
 ```bash
 mvn compile
 mvn install
 ```
 
-2. 编译后台
+3. 编译后台
 ```bash
 cd xshop-web-api
 mvn package
@@ -35,7 +43,7 @@ java -jar target/xshop-web-api.jar
 ```
 
 
-3. 编译页面
+4. 编译页面
 ```bash
 cd xshop-web-app
 npm install
