@@ -1,14 +1,14 @@
 package com.lhrsite.xshop.webapi.controller;
 
 
-
+import com.lhrsite.xshop.core.exception.XShopException;
+import com.lhrsite.xshop.po.Order;
+import com.lhrsite.xshop.service.OrderService;
 import com.lhrsite.xshop.vo.OrderListVO;
 import com.lhrsite.xshop.vo.ResultVO;
-import com.lhrsite.xshop.po.Order;
-import com.lhrsite.xshop.core.exception.XShopException;
-import com.lhrsite.xshop.service.OrderService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -64,19 +64,19 @@ public class OrderController {
 
     @PostMapping("/orderList")
     public ResultVO getOrderList(String token,
-                               @RequestParam(defaultValue = "") String orderId,
-                               @RequestParam(defaultValue = "0") Integer orderStatus,
-                               @RequestParam(defaultValue = "1") long page,
-                               @RequestParam(defaultValue = "5") long pageSize) throws XShopException {
+                                 @RequestParam(defaultValue = "") String orderId,
+                                 @RequestParam(defaultValue = "0") Integer orderStatus,
+                                 @RequestParam(defaultValue = "1") long page,
+                                 @RequestParam(defaultValue = "5") long pageSize) throws XShopException {
         resultVO.setData(orderService.orderListByUser(token, orderId, orderStatus, page, pageSize));
         return resultVO;
     }
 
     @PostMapping("/orderListByUserAdmin")
     public ResultVO orderListByUserAdmin(String token,
-                                       @RequestParam(defaultValue = "") String orderId,
-                                       @RequestParam(defaultValue = "1") long page,
-                                       @RequestParam(defaultValue = "5") long pageSize) throws XShopException {
+                                         @RequestParam(defaultValue = "") String orderId,
+                                         @RequestParam(defaultValue = "1") long page,
+                                         @RequestParam(defaultValue = "5") long pageSize) throws XShopException {
         resultVO.setData(orderService.orderListByUserAdmin(token, orderId, page, pageSize));
         return resultVO;
     }
@@ -89,13 +89,25 @@ public class OrderController {
 
     @PostMapping("/list")
     public ResultVO list(String token,
-                       @RequestParam(defaultValue = "") String orderId,
-                       @RequestParam(defaultValue = "1") long page,
-                       @RequestParam(defaultValue = "5") long pageSize) throws XShopException {
+                         @RequestParam(defaultValue = "") String orderId,
+                         @RequestParam(defaultValue = "1") long page,
+                         @RequestParam(defaultValue = "5") long pageSize) throws XShopException {
         resultVO.setData(orderService.list(token, orderId, page, pageSize));
         return resultVO;
     }
 
+    /**
+     * 计算总价
+     *
+     * @param buyCarIds 购物车ids
+     * @return 总价
+     */
+    @PostMapping("/getTotalPrice")
+    public ResultVO getTotalPrice(String buyCarIds) {
+        String[] buyCarIdList = StringUtils.commaDelimitedListToStringArray(buyCarIds);
+        resultVO.setData(orderService.getTotalPrice(buyCarIdList));
+        return resultVO;
+    }
 //    @PostMapping("/consignment")
 //    public ResultVO consignment(String token, String orderId, Integer deliveryId) throws XShopException {
 //        orderService.consignment(orderId, token, deliveryId);

@@ -18,4 +18,5 @@ public interface BuyCarService {
     BuyCar minusBuyCar(String token, String goodsId, Integer number) throws XShopException;
 
     List<BuyCarVO> getBuyCarByIds(List<String> buyCarIds);
+
 }

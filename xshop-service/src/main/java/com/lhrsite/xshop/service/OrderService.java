@@ -81,4 +81,7 @@ public interface OrderService {
 
     OrderVO createOrderUseShoppingCar(List<String> shoppingCarIds,
                                       String token, Integer addressId) throws XShopException;
+
+
+    BigDecimal getTotalPrice(String[] buyCarIdList);
 }

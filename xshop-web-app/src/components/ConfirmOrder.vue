@@ -1,22 +1,21 @@
 <template>
     <div class="confirm_order">
-        <x-header>确认订单</x-header>
-
+        <x-header :left-options="{preventGoBack: true}" @on-click-back="goBack()">确认订单</x-header>
         <div class="confirm_order_address">
             <div class="confirm_order_address_logo">
                 <font-awesome-icon icon="address-card"></font-awesome-icon>
             </div>
             <div class="confirm_order_address_content" @click="selectAddress">
                 <p class="confirm_order_address_consignee">
-                    <span>收货人: {{defaultAddress.consignee}}</span>
-                    <span>{{defaultAddress.linkTel}}</span>
+                    <span>收货人: {{address.consignee}}</span>
+                    <span>{{address.linkTel}}</span>
                 </p>
                 <span class="confirm_order_address_info">收货地址:
-                    {{defaultAddress.provinceName +
-                    defaultAddress.cityName +
-                    (defaultAddress.countryName || "") +
-                    (defaultAddress.townName || "") +
-                    (defaultAddress.addr || "")}}</span>
+                    {{address.provinceName +
+                    address.cityName +
+                    (address.countryName || "") +
+                    (address.townName || "") +
+                    (address.addr || "")}}</span>
             </div>
             <div class="confirm_order_address_logo">
                 <font-awesome-icon icon="chevron-right"></font-awesome-icon>
@@ -39,7 +38,7 @@
         <div class="confirm_order_bottom">
             <div class="confirm_order_bottom_addup">合计金额: ￥56.50</div>
             <div class="confirm_order_bottom_btn_group">
-                <button>结&nbsp;&nbsp;算</button>
+                <button @click="settleAccounts">结&nbsp;&nbsp;算</button>
             </div>
         </div>
     </div>
@@ -53,27 +52,54 @@
         name: "ConfirmOrder",
         data() {
             return {
-                address: [],
-                defaultAddress: {},
+                address: {},
                 selectedBuyCar: [],
+                totalPrices: 0,
             }
         },
         mounted() {
-            this.getAddr();
-            this.selectedBuyCar = this.$route.params.selectedBuyCar;
+
+            this.selectedBuyCar = this.$route.params['selectedBuyCar'];
+            if (this.$route.params['addr'] !== undefined) {
+                // 如果从选择收货地址页面跳转回来的需要初始化地址
+                this.address = this.$route.params['addr']
+            } else {
+                // 如果不是从选择地址跳转进来的加载默认收货地址。
+                this.getAddr();
+            }
+            this.initPrices();
         },
         methods: {
-            selectAddress(){
+            initPrices() {
+                const buyCars = this.selectedBuyCar;
+                for (let i = 0; i < buyCars.length; i++) {
+                    const price = buyCars[i].goods.saleStatus === 0 ?
+                        buyCars.goods.originalPrice : buyCars.goods.salePrice;
+                    this.totalPrices += price * buyCars.number;
+                }
+            },
+            settleAccounts() {
+                // 结算、下单
 
+            },
+            goBack() {
+                // 退回到购物车
+                this.$router.push({name: 'ShoppingCart'});
+            },
+            selectAddress() {
+                this.$router.push({
+                    name: 'SelectAddress',
+                    params: {from: 'ConfirmOrder', selectedBuyCar: this.selectedBuyCar}
+                })
             },
             getAddr() {
                 const token = localStorage.getItem("token");
                 const that = this;
                 http.postForm(this, "address", "getAddress", {token: token}, function (resp) {
-                    that.address = resp.data.data;
-                    for (let i = 0; i < that.address.length; i++) {
-                        if (that.address[i].defaultStatus === 1) {
-                            that.defaultAddress = that.address[i];
+                    const addresses = resp.data.data;
+                    for (let i = 0; i < addresses.length; i++) {
+                        if (addresses[i].defaultStatus === 1) {
+                            that.address = addresses[i];
                         }
                     }
                 })

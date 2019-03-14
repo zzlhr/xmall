@@ -716,6 +716,14 @@ public class OrderServiceImpl extends BaseServiceImpl implements OrderService {
         return null;
     }
 
+    @Override
+    public BigDecimal getTotalPrice(String[] buyCarIdList) {
+        List<String> buyIdsList = new ArrayList<>(Arrays.asList(buyCarIdList));
+        List<BuyCarVO> buyCars = buyCarService.getBuyCarByIds(buyIdsList);
+        // TODO: 计算
+        return null;
+    }
+
     /**
      * 创建订单详情id
      *
