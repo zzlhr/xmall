@@ -18,6 +18,7 @@ import Login from "@/components/Login";
 import EditAddress from "../components/EditAddress";
 import ConfirmOrder from "../components/ConfirmOrder";
 import SelectAddress from "../components/SelectAddress";
+import Classify from "../components/Classify";
 
 Vue.use(Router);
 
@@ -103,10 +104,14 @@ export default new Router({
             path: "/confirmOrder",
             name: "ConfirmOrder",
             component: ConfirmOrder
-        },{
+        }, {
             path: '/selectAddress',
             name: 'SelectAddress',
             component: SelectAddress
+        }, {
+            path: '/classify',
+            name: 'Classify',
+            component: Classify
         }
     ]
 })

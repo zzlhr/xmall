@@ -2,7 +2,7 @@
   <div>
     <x-header :left-options="{showBack: true}">用户登录</x-header>
     <div class="login-logo">
-      <img src="../assets/logo1.png" alt="logo">
+      <img src="../assets/logo.png" alt="logo">
     </div>
     <div>
       <group>
