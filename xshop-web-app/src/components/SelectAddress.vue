@@ -1,16 +1,18 @@
 <template>
     <div>
-        <x-header :left-options="{preventGoBack: true}" @on-click-back="goBack()">收货地址管理</x-header>
+        <x-header :left-options="{preventGoBack: true}" @on-click-back="goBack()">选择收货地址</x-header>
         <div>
             <group>
                 <div class="address_list" v-for="(address, index) in addresses" :key="index">
-                    <div class="address_item">
+                    <div class="address_item" @click="select(address)">
                         <div class="address_edit" @click="addressEdit(address.id)">
                             <font-awesome-icon icon="edit" fixed-width></font-awesome-icon>
                         </div>
+
                         <label>{{address.consignee}}
                             <small>{{address.linkTel}}</small>
                         </label>
+
                         <p class="address_describe">
                             <small>{{address.provinceName + address.cityName + address.countryName
                                 + (address.townName || "") + address.addr}}
@@ -50,7 +52,7 @@
             Selector,
             Icon
         },
-        name: "Address",
+        name: "SelectAddress",
         data() {
             return {
                 selectProvince: {},
@@ -92,14 +94,43 @@
             this.loadData();
         },
         methods: {
+            select(address) {
+
+
+                if (this.$route.params['from'] !== undefined) {
+                    // 如果传入购物车信息返回该信息。
+
+                    if (this.$route.params['selectedBuyCar'] !== undefined) {
+                        this.$router.push({
+                            name: this.$route.params['from'],
+                            params: {
+                                selectedBuyCar: this.$route.params['selectedBuyCar'],
+                                addr: address,
+                            }
+                        });
+                    }
+                    this.$router.push({name: this.$route.params['from']});
+                }
+            },
             goBack() {
                 if (this.$route.params['from'] !== undefined) {
+                    // 如果传入购物车信息返回该信息。
+                    if (this.$route.params['selectedBuyCar'] !== undefined) {
+                        this.$router.push({
+                            name: this.$route.params['from'],
+                            selectedBuyCar: this.$route.params['selectedBuyCar']
+                        });
+                    }
                     this.$router.push({name: this.$route.params['from']});
+                    return;
                 }
                 if (this.$route.query['from'] !== undefined) {
                     this.$router.push({name: this.$route.query['from']});
+                    return;
+
                 }
                 this.$router.push({name: 'My'});
+
             },
             goAddAddr() {
                 // this.showToast = true

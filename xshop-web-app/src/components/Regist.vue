@@ -105,7 +105,7 @@
           // 验证手机号是否注册
           http.postForm(this, 'user', 'phoneIsExist', {phone: phoneNum}, function (resp) {
             const dt = resp.data
-            // console.log("dt.code${dt.code}")
+            //
             if (dt.code !== 0) {
               that.$set(that.$data, 'showPositionValue', true)
               that.$set(that.$data, 'toastMsg', dt.msg)
@@ -141,7 +141,7 @@
         const that = this;
         http.postForm(this, 'user', 'addUser', this.$data.registForm, function (resp) {
           const dt = resp.data;
-          console.log(dt)
+
           that.$set(that.$data, 'showPositionValue', true)
           if (dt.code === 0) {
             that.$set(that.$data, 'toastMsg', '注册成功！');

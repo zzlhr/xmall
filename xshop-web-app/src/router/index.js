@@ -16,86 +16,97 @@ import About from '@/components/About'
 import SaleList from '@/components/SaleList'
 import Login from "@/components/Login";
 import EditAddress from "../components/EditAddress";
+import ConfirmOrder from "../components/ConfirmOrder";
+import SelectAddress from "../components/SelectAddress";
+
 Vue.use(Router);
 
 export default new Router({
-  routes: [
-    {
-      path: '/',
-      name: 'home',
-      component: Home
-    }, {
-      path: '/home',
-      name: 'home',
-      component: Home
-    }, {
-      path: '/my',
-      name: 'My',
-      component: My
-    }, {
-      path: '/class',
-      name: 'class',
-      component: Class
-    }, {
-      path: '/shoppingCart',
-      name: 'ShoppingCart',
-      component: ShoppingCart
-    },
-    {
-      path: '/commodity/:id',
-      name: 'Commodity',
-      component: Commodity
-    },
-    {
-      path: '/orders',
-      name: 'OrderList',
-      component: OrderList
-    },
-    {
-      path: '/order/:id',
-      name: 'OrderInfo',
-      component: OrderInfo
-    },
-    {
-      path: '/address',
-      name: 'Address',
-      component: Address
-    },
-    {
-      path: '/class1c/:cid',
-      name: 'ClassCommodity',
-      component: ClassCommodity
-    },
-    {
-      path: '/uppwd',
-      name: 'UpPwd',
-      component: UpPwd
-    },
-    {
-      path: '/regist',
-      name: 'Regist',
-      component: Regist
-    },
-    {
-      path: '/about',
-      name: 'About',
-      component: About
-    }, {
-      path: '/sale',
-      name: 'SaleList',
-      component: SaleList
-    }, {
-      path: '/regist1',
-      name: 'Regist1',
-      component: Regist1,
-    },{
-      path: '/login',
-      name: 'Login',
-      component: Login
-    },{
-      path: '/editAddress',
-      name: 'EditAddress',
-      component: EditAddress
-    }
-  ]
+    routes: [
+        {
+            path: '/',
+            name: 'home',
+            component: Home
+        }, {
+            path: '/home',
+            name: 'home',
+            component: Home
+        }, {
+            path: '/my',
+            name: 'My',
+            component: My
+        }, {
+            path: '/class',
+            name: 'class',
+            component: Class
+        }, {
+            path: '/shoppingCart',
+            name: 'ShoppingCart',
+            component: ShoppingCart
+        },
+        {
+            path: '/commodity/:id',
+            name: 'Commodity',
+            component: Commodity
+        },
+        {
+            path: '/orders',
+            name: 'OrderList',
+            component: OrderList
+        },
+        {
+            path: '/order/:id',
+            name: 'OrderInfo',
+            component: OrderInfo
+        },
+        {
+            path: '/address',
+            name: 'Address',
+            component: Address
+        },
+        {
+            path: '/class1c/:cid',
+            name: 'ClassCommodity',
+            component: ClassCommodity
+        },
+        {
+            path: '/uppwd',
+            name: 'UpPwd',
+            component: UpPwd
+        },
+        {
+            path: '/regist',
+            name: 'Regist',
+            component: Regist
+        },
+        {
+            path: '/about',
+            name: 'About',
+            component: About
+        }, {
+            path: '/sale',
+            name: 'SaleList',
+            component: SaleList
+        }, {
+            path: '/regist1',
+            name: 'Regist1',
+            component: Regist1,
+        }, {
+            path: '/login',
+            name: 'Login',
+            component: Login
+        }, {
+            path: '/editAddress',
+            name: 'EditAddress',
+            component: EditAddress
+        }, {
+            path: "/confirmOrder",
+            name: "ConfirmOrder",
+            component: ConfirmOrder
+        },{
+            path: '/selectAddress',
+            name: 'SelectAddress',
+            component: SelectAddress
+        }
+    ]
 })

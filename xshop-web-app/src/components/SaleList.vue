@@ -71,7 +71,7 @@
       },
       loadGoodsList() {
         const that = this;
-        console.log(this.$data.goodsParams)
+
         http.postForm(this, 'goods', 'list', this.$data.goodsParams, function (resp) {
           const data = resp.data.data
           that.$set(that.$data, 'shopList', that.shopList.concat(data.arr))

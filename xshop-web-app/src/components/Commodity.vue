@@ -79,11 +79,11 @@
       },
       addShoppingCart: function () {
         // 加入购物车
-        console.log("addBuyShop")
+
         this.$set(this.$data, 'position', 'bottom');
 
         this.$set(this.$data, 'showPositionValue', true);
-        console.log(this.$store.state.user.token)
+
         if (this.$data.buyNumber < 1) {
           this.$set(this.$data, 'toastMsg', '数量不能少于0');
         }
@@ -108,7 +108,7 @@
         const sendData = 'goodsId=' + this.$route.params.id
         http.post(this, 'goods', 'info', sendData, function (resp) {
           const data = resp.data.data
-          console.log(data)
+
 
           that.$set(that.$data, 'commodiy', data)
 
@@ -127,7 +127,7 @@
             p['fallbackImg'] = 'https://ws3.sinaimg.cn/large/006tNbRwly1fw5rgy9nh5j30b40b4gli.jpg'
             ps.push(p)
           }
-          console.log(ps)
+
           that.$set(that.$data, 'pictures', ps)
         })
       },

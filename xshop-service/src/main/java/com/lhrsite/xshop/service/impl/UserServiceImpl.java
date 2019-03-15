@@ -3,11 +3,7 @@ package com.lhrsite.xshop.service.impl;
 import com.lhrsite.xshop.core.enums.UserStatusEnums;
 import com.lhrsite.xshop.core.exception.ErrEumn;
 import com.lhrsite.xshop.core.exception.XShopException;
-import com.lhrsite.xshop.core.service.RedisService;
-import com.lhrsite.xshop.core.utils.EncryptUtil;
-import com.lhrsite.xshop.core.utils.IpUtil;
-import com.lhrsite.xshop.core.utils.TimeUtil;
-import com.lhrsite.xshop.core.utils.WeChatUtil;
+import com.lhrsite.xshop.core.utils.*;
 import com.lhrsite.xshop.po.*;
 import com.lhrsite.xshop.repository.AuthGroupRepository;
 import com.lhrsite.xshop.repository.EnterpriseRepository;
@@ -47,7 +43,8 @@ public class UserServiceImpl extends BaseServiceImpl implements UserService {
     private final AuthGroupRepository authGroupRepository;
 
     private final UserLoginRepository userLoginRepository;
-    private final RedisService<User> userRedisService;
+    private final RedisUtil<String, User> redisUtil;
+
     //JPA查询工厂
     private JPAQueryFactory queryFactory;
 
@@ -56,13 +53,13 @@ public class UserServiceImpl extends BaseServiceImpl implements UserService {
                            EnterpriseRepository enterpriseRepository,
                            AuthGroupRepository authGroupRepository,
                            UserLoginRepository userLoginRepository,
-                           EntityManager entityManager, RedisService redisService, RedisService<User> userRedisService) {
+                           EntityManager entityManager, RedisUtil<String, User> redisUtil) {
         super(entityManager);
         this.userRepository = userRepository;
         this.enterpriseRepository = enterpriseRepository;
         this.authGroupRepository = authGroupRepository;
         this.userLoginRepository = userLoginRepository;
-        this.userRedisService = userRedisService;
+        this.redisUtil = redisUtil;
         this.queryFactory = getQueryFactory();
     }
 
@@ -145,7 +142,7 @@ public class UserServiceImpl extends BaseServiceImpl implements UserService {
         UserVO userVO = userToUserVO(user, false);
         userVO.setToken(userLogin.getUserToken());
         // redis缓存
-        userRedisService.set("login" + userVO.getToken(), user, 30, TimeUnit.DAYS);
+        redisUtil.hashPut("login", userVO.getToken(), user);
         return userVO;
     }
 
@@ -165,7 +162,7 @@ public class UserServiceImpl extends BaseServiceImpl implements UserService {
     @Override
     public UserVO tokenCanUse(String token) throws XShopException {
 
-        User user = userRedisService.get("login" + token);
+        User user = redisUtil.hashGet("login", token);
 
         if (user != null) {
             UserVO userVO = userToUserVO(user, true);
@@ -330,7 +327,8 @@ public class UserServiceImpl extends BaseServiceImpl implements UserService {
 
 //        UserLogin userLogin =
 //                userLoginRepository.findByUserToken(token);
-        User user = userRedisService.get("login" + token);
+        User user = redisUtil.hashGet("login", token);
+
         if (user == null) {
             throw new XShopException(ErrEumn.EXPIRE_TOKEN);
         }

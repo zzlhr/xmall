@@ -106,7 +106,7 @@
         const that = this;
         http.postForm(this, 'user', 'sendUpPwdCode', {token: localStorage.getItem("token")}, function (resp) {
           const dt = resp.data;
-          console.log(dt)
+
           that.$set(that.$data, 'showPositionValue', true)
           if (dt.code === 0){
             that.$set(that.$data, 'toastMsg', '发送成功！');
@@ -119,7 +119,7 @@
         const that = this;
         http.postForm(this, 'user', 'upPassword', this.$data.upPwdForm, function (resp) {
           const dt = resp.data;
-          console.log(dt)
+
           that.$set(that.$data, 'showPositionValue', true)
           if (dt.code === 0) {
             that.$set(that.$data, 'toastMsg', '修改密码成功！');
@@ -136,10 +136,10 @@
         http.postForm(this, 'order', 'createOrder',
           {'token': this.$store.state.user.token},
           function (resp) {
-            console.log("创建订单")
+
             console.table(resp)
             const dt = resp.data;
-            console.log(dt.msg)
+
             that.$set(that.$data, 'position', 'bottom');
             that.$set(that.$data, 'showPositionValue', true);
             if (dt.code === 0) {
@@ -162,7 +162,7 @@
         this.$set(this.$data, 'position', 'bottom');
 
         this.$set(this.$data, 'showPositionValue', true);
-        console.log(this.$store.state.user.token)
+
         if (this.$store.state.user.token === undefined || this.$store.state.user.token === '') {
           this.$set(this.$data, 'toastMsg', '请先登录!');
         } else {

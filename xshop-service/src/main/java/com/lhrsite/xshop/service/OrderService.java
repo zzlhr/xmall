@@ -13,7 +13,7 @@ public interface OrderService {
 
 
     @Transactional
-    OrderVO createOrder(String token, Integer addressId) throws XShopException;
+    OrderVO createOrder(String token, Integer addressId, String buyCarIds) throws XShopException;
 
     Map<String, BigDecimal> settleAccounts(String token) throws XShopException;
 
@@ -75,9 +75,13 @@ public interface OrderService {
      *
      * @param shoppingCarIds 购物车内容编号
      * @param token          用户token
+     * @param addressId      用户收货地址id
      * @return 订单视图
      */
 
     OrderVO createOrderUseShoppingCar(List<String> shoppingCarIds,
                                       String token, Integer addressId) throws XShopException;
+
+
+    BigDecimal getTotalPrice(String[] buyCarIdList);
 }

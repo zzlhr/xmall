@@ -1,11 +1,11 @@
 package com.lhrsite.xshop.webapi.controller;
 
 
-
-import com.lhrsite.xshop.vo.ResultVO;
-import com.lhrsite.xshop.po.Address;
 import com.lhrsite.xshop.core.exception.XShopException;
+import com.lhrsite.xshop.po.Address;
 import com.lhrsite.xshop.service.AddressService;
+import com.lhrsite.xshop.vo.ResultVO;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,6 +21,7 @@ import javax.validation.ConstraintViolationException;
  */
 @RestController
 @RequestMapping("/address")
+@Slf4j
 public class AddressController {
 
     private final AddressService addressService;
@@ -62,6 +63,12 @@ public class AddressController {
     @PostMapping("/getAddress")
     public ResultVO getAddress(String token) throws XShopException {
         resultVO.setData(addressService.getAddress(token));
+        return resultVO;
+    }
+
+    @PostMapping("/addressInfo")
+    public ResultVO addressInfo(Integer id) throws XShopException {
+        resultVO.setData(addressService.getAddressById(id));
         return resultVO;
     }
 

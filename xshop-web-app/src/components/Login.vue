@@ -65,7 +65,7 @@
         }
 
         http.postForm(this, "user", "login", this.login, function (resp) {
-          console.log(resp)
+
           const dt = resp.data;
           if (dt.code === 0) {
             const user = dt.data;
@@ -76,7 +76,7 @@
               text: '登录成功'
             });
             localStorage.setItem("token", user.token);
-            console.log(that.$route.params.from);
+
             that.$router.push({name: that.$route.params.from || "home"})
           } else {
             that.$vux.toast.show({
