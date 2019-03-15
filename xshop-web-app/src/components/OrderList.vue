@@ -98,12 +98,12 @@
     },
     methods: {
       receipt(orderId){
-        console.log(orderId);
+
         const that = this;
         http.postForm(this, 'order', 'receipt', {token: this.$store.state.user.token, orderId: orderId}, function (data) {
           const dt = data.data;
           that.$set(that.$data, 'toastShow', true)
-          console.log(dt)
+
           if (dt.code !== 0) {
             that.$set(that.$data, 'toastText', '签收失败！')
           }else {
@@ -117,7 +117,7 @@
         this.$set(this.$data.sendForm, 'page', 1)
         this.$set(this.$data, 'orders', [])
         this.loadData()
-        console.log(index)
+
       },
       refresh() {
         this.$set(this.$data.sendForm, 'page', 1);
@@ -125,7 +125,7 @@
         this.loadData()
       },
       loadData() {
-        console.log("loadData")
+
         const that = this
         const send = this.sendForm;
         const page = send.page
@@ -134,13 +134,12 @@
         send.token = token;
 
         http.postForm(this, 'order', 'orderList', send, function (resp) {
-          console.log(resp)
+
           if (page === 1){
             that.$set(that.$data, 'orders', [])
           }
           if (resp.data.code === 0) {
-            const dt = resp.data.data
-            console.log(that.orders.concat(dt))
+            const dt = resp.data.data;
 
             for (let i = 0; i < dt.length; i++) {
               dt[i].orderNumber = dt[i].orderInfoVOS.length;

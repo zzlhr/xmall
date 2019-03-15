@@ -115,7 +115,6 @@
         this.$store.state.user.token === null ||
         this.$store.state.user.token === ""
       ) {
-        console.log("token:" + localStorage.getItem("token"))
         const token = localStorage.getItem("token");
 
         if (token !== undefined) {
@@ -137,7 +136,7 @@
     },
     watch: {
       order: function (newOrder, oldOrder) {
-        console.log("order 发生了改变");
+
         let number = 0;
         for (var i = 0; i < newOrder.orderInfoVOS.length; i++) {
           number += newOrder.orderInfoVOS[0].number;
@@ -199,16 +198,16 @@
           function (resp) {
             if (resp.data.code === 0) {
               const od = resp.data.data[0];
-              console.log("-------------");
-              console.log(od);
-              console.log("-------------");
+
+
+
               that.$set(that.$data, "order", od);
             }
           }
         );
       },
       outLogin() {
-        console.log("退出登录");
+
         this.$store.commit("loginSuccess", {});
         localStorage.setItem("token", {});
       },

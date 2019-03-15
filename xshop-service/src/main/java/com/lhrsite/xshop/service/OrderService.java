@@ -13,7 +13,7 @@ public interface OrderService {
 
 
     @Transactional
-    OrderVO createOrder(String token, Integer addressId) throws XShopException;
+    OrderVO createOrder(String token, Integer addressId, String buyCarIds) throws XShopException;
 
     Map<String, BigDecimal> settleAccounts(String token) throws XShopException;
 

@@ -48,7 +48,7 @@
                 if (this.$route.params['id'] !== undefined) {
                     const that = this;
                     http.postForm(this, "address", "addressInfo", {id: this.$route.params['id']}, function (resp) {
-                        console.log(resp.data.data);
+
                         that.address = resp.data.data;
                         that.address.defaultStatus = resp.data.data.defaultStatus + "";
 

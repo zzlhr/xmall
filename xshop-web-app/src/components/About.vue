@@ -22,7 +22,7 @@
     mounted(){
       const that = this;
       http.get(this, 'app', 'link', function (resp) {
-        console.log(resp)
+
         that.$set(that.$data, 'link', resp.data.data)
       })
     }

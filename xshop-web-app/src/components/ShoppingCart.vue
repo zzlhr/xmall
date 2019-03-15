@@ -113,7 +113,7 @@
                     let aggregate = 0;
                     let totalNumber = 0;
                     for (let i = 0; i < vals.length; i++) {
-                        console.log(vals[i])
+
                         totalNumber += vals[i].number;
                         aggregate += (vals[i].goods.saleStatus === 1 ? vals[i].goods.salePrice : vals[i].goods.originalPrice) * vals[i].number
                         // 加快递费
@@ -145,7 +145,7 @@
                         that.loadData();
                     })
                 } else {
-                    console.log("登录")
+
                     this.$router.push({path: 'my', params: {login: true}})
                 }
             } else {
@@ -172,7 +172,7 @@
                 this.$router.push({name: "ConfirmOrder", params: {selectedBuyCar: this.selectedBuyCar}})
             },
             emitPrice(price) {
-                console.log(price)
+
                 this.$set(this.$data, 'aggregate', this.$data.aggregate + price)
                 // 接组件传来的加减价格通知
             },
@@ -181,10 +181,10 @@
                 http.postForm(this, 'order', 'createOrder',
                     {'token': this.$store.state.user.token, addressId: this.$data.addressSelect},
                     function (resp) {
-                        console.log("创建订单")
+
                         console.table(resp)
                         const dt = resp.data;
-                        console.log(dt.msg)
+
                         that.$set(that.$data, 'position', 'bottom');
                         that.$set(that.$data, 'showPositionValue', true);
                         if (dt.code === 0) {
@@ -203,10 +203,10 @@
                 http.postForm(this, 'address', 'getAddress', {token: localStorage.getItem("token")}, function (resp) {
                     const dt = resp.data;
                     const d = dt.data
-                    console.log(d)
+
                     that.$set(that.$data, 'address', d);
                     const addressOption = []
-                    console.log(d.length)
+
                     if (d.length <= 0) {
                         this.$set(this.$data, 'showPositionValue', true);
                         this.$set(this.$data, 'toastMsg', '您还有没添加收货地址！');
@@ -232,10 +232,10 @@
                     function (resp) {
                         const dt = resp.data;
                         if (dt.code === 0) {
-                            console.log(dt.data)
+
                             that.$set(that.$data, 'buyCars', dt.data);
                         } else {
-                            console.log('获取购物车数据失败！')
+
                         }
 
                     }
@@ -260,7 +260,7 @@
             },
             add(buyCar) {
                 // 添加购物车商品数量
-                console.log(buyCar)
+
                 http.postForm(this, 'buyCar', 'add',
                     {
                         'token': localStorage.getItem("token"),
@@ -272,7 +272,7 @@
                         if (dt.code === 0) {
                             buyCar.number++;
                         } else {
-                            console.log('添加购物车商品数量失败！')
+
                         }
                     }
                 )
@@ -289,7 +289,7 @@
                         if (dt.code === 0) {
                             buyCar.number--;
                         } else {
-                            console.log('添加购物车商品数量失败！')
+
                         }
 
                     }

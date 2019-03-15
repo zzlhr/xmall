@@ -95,11 +95,11 @@
         },
         methods: {
             select(address) {
-                console.log(this.$route.params['selectedBuyCar']);
+
 
                 if (this.$route.params['from'] !== undefined) {
                     // 如果传入购物车信息返回该信息。
-                    console.log(this.$route.params['selectedBuyCar']);
+
                     if (this.$route.params['selectedBuyCar'] !== undefined) {
                         this.$router.push({
                             name: this.$route.params['from'],
@@ -139,7 +139,7 @@
             },
             addressEdit(id) {
                 this.$router.push({name: 'EditAddress', params: {id: id}})
-                console.log('addd')
+
             },
 
             loadData() {
@@ -157,7 +157,7 @@
                 http.postForm(this, "address", "updateDefaultAddr",
                     {token: this.$store.state.user.token, addrId: id},
                     function (resp) {
-                        console.log(resp)
+
                         if (resp.data.code === 0) {
                             that.$set(that.$data, 'position', 'bottom');
                             that.$set(that.$data, 'showPositionValue', true);
@@ -176,7 +176,7 @@
                 http.postForm(this, "address", "delAddr",
                     {token: this.$store.state.user.token, addrId: id},
                     function (resp) {
-                        console.log(resp)
+
                         if (resp.data.code === 0) {
                             that.$set(that.$data, 'position', 'bottom');
                             that.$set(that.$data, 'showPositionValue', true);
@@ -207,7 +207,7 @@
                 const selectTown = this.$data.selectTown;
                 const townOption = this.$data.townOption;
                 for (let i = 0; i < cityOption.length; i++) {
-                    console.log(cityOption[i].key + "==?" + selectCity);
+
                     if (cityOption[i].key === selectCity) {
                         for (let j = 0; j < townOption.length; j++) {
                             if (townOption[j].key === selectTown) {
@@ -220,7 +220,7 @@
                 http.postForm(this, "address", "updateAddr",
                     form,
                     function (resp) {
-                        console.log(resp)
+
                         if (resp.data.code === 0) {
                             that.$set(that.$data, 'position', 'bottom');
                             that.$set(that.$data, 'showPositionValue', true);

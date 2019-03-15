@@ -3,6 +3,7 @@ package com.lhrsite.xshop.service.impl;
 
 import com.lhrsite.xshop.core.exception.ErrEumn;
 import com.lhrsite.xshop.core.exception.XShopException;
+import com.lhrsite.xshop.mapper.GoodsMapper;
 import com.lhrsite.xshop.po.*;
 import com.lhrsite.xshop.repository.GoodsRepository;
 import com.lhrsite.xshop.repository.MessageRepositroy;
@@ -40,9 +41,13 @@ public class OrderServiceImpl extends BaseServiceImpl implements OrderService {
     private final AddressService addressService;
     private final MessageRepositroy messageRepositroy;
     private final GoodsRepository goodsRepository;
+    private final GoodsMapper goodsMapper;
     private final JdbcTemplate jdbcTemplate;
 
-    public OrderServiceImpl(EntityManager entityManager, OrderRepository orderRepository, UserService userService, OrderDetailsRepository orderDetailsRepository, BuyCarService buyCarService, AddressService addressService, MessageRepositroy messageRepositroy, GoodsRepository goodsRepository, JdbcTemplate jdbcTemplate) {
+    public OrderServiceImpl(EntityManager entityManager, OrderRepository orderRepository, UserService userService,
+                            OrderDetailsRepository orderDetailsRepository, BuyCarService buyCarService,
+                            AddressService addressService, MessageRepositroy messageRepositroy,
+                            GoodsRepository goodsRepository, GoodsMapper goodsMapper, JdbcTemplate jdbcTemplate) {
         super(entityManager);
         this.orderRepository = orderRepository;
         this.userService = userService;
@@ -51,6 +56,7 @@ public class OrderServiceImpl extends BaseServiceImpl implements OrderService {
         this.addressService = addressService;
         this.messageRepositroy = messageRepositroy;
         this.goodsRepository = goodsRepository;
+        this.goodsMapper = goodsMapper;
         this.jdbcTemplate = jdbcTemplate;
         this.queryFactory = getQueryFactory();
     }
@@ -67,73 +73,67 @@ public class OrderServiceImpl extends BaseServiceImpl implements OrderService {
     }
 
     @Override
-    public OrderVO createOrder(String token, Integer addressId) throws XShopException {
-
-        // 获取用户购物车
-        List<BuyCarVO> buyCarVOS = buyCarService.getBuyCar(token);
-        List<String> buyCarIds = new ArrayList<>();
-
-        if (buyCarVOS.size() == 0) {
-            // 购物车为空
-            throw new XShopException(ErrEumn.BUY_CAR_IS_NULL);
-        }
-        Order order = new Order();
-
-        order.setOrderId(createOrderId());
-
-        List<OrderDetails> orderDetails = new ArrayList<>();
-        BigDecimal orderAmount = new BigDecimal(0);
-        BigDecimal despatchMoney = new BigDecimal(0);
-        // 优惠
-        BigDecimal offer = new BigDecimal(0);
-        for (int i = 0; i < buyCarVOS.size(); i++) {
-
-            buyCarIds.add(buyCarVOS.get(i).getId());
-
-            orderDetails.add(buyCarVOSToOrderDetails(buyCarVOS.get(i), order.getOrderId(), i));
-            // 算单个商品价格（价格*数量）
-
-            Map<String, BigDecimal> result = settleAccountsOneGoods(buyCarVOS, orderAmount, offer, i, despatchMoney);
-            orderAmount = result.get("orderAmount");
-            despatchMoney = result.get("despatchMoney");
-            offer = result.get("offer");
-        }
+    public OrderVO createOrder(String token, Integer addressId, String buyCarIds) throws XShopException {
 
         User user = userService.tokenGetUser(token);
-        Address address = addressService.getAddressById(addressId);
-        System.out.println(address.getAddr().indexOf('县'));
-        if (address.getAddr().indexOf('县') > 0) {
-            // 县里双倍运费
-            order.setDespatchMoney(despatchMoney.add(despatchMoney));
-        } else {
-            order.setDespatchMoney(despatchMoney);
+
+        // 获取结算购物车列表
+        List<String> buyCarIdList = Arrays.asList(buyCarIds.replaceAll(" ", "").split(","));
+
+        if (buyCarIdList.size() == 0) {
+            throw new XShopException(ErrEumn.PLEASE_SELECTED_GOODS);
         }
+
+
+        List<BuyCarVO> buyCarVOS = buyCarService.getBuyCarByIds(buyCarIdList);
+
+        // 验证是否为本人的购物车数据
+        for (BuyCarVO buyCarVO : buyCarVOS) {
+            if (!buyCarVO.getUserId().equals(user.getUid())) {
+                throw new XShopException(ErrEumn.BUY_CAR_IS_NOT_YOUR);
+            }
+        }
+
+
+        Order order = new Order();
+
+        String orderId = createOrderId();
+        order.setOrderId(orderId);
+
+        OrderSettleAccounts orderSettleAccounts = settleAccounts(buyCarVOS, orderId);
+
+
+        order.setDespatchMoney(orderSettleAccounts.getDespatchNumber());
         order.setUserId(user.getUid());
-        order.setOrderAmount(orderAmount);
-        order.setOffer(offer);
+        order.setOrderAmount(orderSettleAccounts.getGoodsNumber());
+        order.setOffer(order.getOffer());
         order.setStatus(0);
         order.setAddrId(addressId);
-        Order order1 = orderRepository.save(order);
-        System.out.println(order1);
+        order.setOffer(new BigDecimal(0));
+        order = orderRepository.save(order);
+        System.out.println(order);
 
 
         OrderVO orderVO = new OrderVO();
-        orderVO.setOrder(order1);
-        orderVO.setOrderDetails(orderDetailsRepository.saveAll(orderDetails));
-        // 成功下单删除购物车商品
-        for (String buyCarId : buyCarIds) {
-            buyCarService.deleteBuyCar(buyCarId);
-        }
+        orderVO.setOrder(order);
+        orderVO.setOrderDetails(orderDetailsRepository
+                .saveAll(orderSettleAccounts.getOrderDetailsList()));
+
+
+        //TODO: 消息队列处理
         //下单成功减少库存
         List<Goods> goodses = new ArrayList<>();
         buyCarVOS.forEach(buyCarVO -> {
             Goods goods = buyCarVO.getGoods();
             goods.setStock(goods.getStock() - buyCarVO.getNumber());
             // 销量累加
+            if (goods.getSalesVolume() == null) {
+                goods.setSalesVolume(0);
+            }
             goods.setSalesVolume(goods.getSalesVolume() + buyCarVO.getNumber());
             goodses.add(goods);
         });
-        goodsRepository.saveAll(goodses);
+        goodsMapper.updateGoodsSalesVolumeAndStock(goodses);
 
         // 通知管理员处理订单
         Message message = new Message();
@@ -235,15 +235,9 @@ public class OrderServiceImpl extends BaseServiceImpl implements OrderService {
         return orderIdEnd.toString();
     }
 
-    private OrderDetails buyCarVOSToOrderDetails(BuyCarVO buyCarVO, String orderId, int time) {
+    private OrderDetails createOrderDetails(BuyCarVO buyCarVO, String orderId, int time) {
         OrderDetails orderDetails = new OrderDetails();
-        StringBuilder str = new StringBuilder();
-        for (int i = 0; i < (4 - String.valueOf(time).length()); i++) {
-            str.append("0");
-        }
-        str.append(time);
-
-        orderDetails.setOdId(orderId + str.toString());
+        orderDetails.setOdId(orderId + createOdId(time));
         orderDetails.setGoodsId(buyCarVO.getGoods().getGoodsId());
         orderDetails.setNumber(buyCarVO.getNumber());
         orderDetails.setTransactionPrice(
@@ -251,9 +245,7 @@ public class OrderServiceImpl extends BaseServiceImpl implements OrderService {
                         buyCarVO.getGoods().getSalePrice() :
                         buyCarVO.getGoods().getOriginalPrice());
         orderDetails.setOrderId(orderId);
-
         return orderDetails;
-
     }
 
     @Override
@@ -394,8 +386,7 @@ public class OrderServiceImpl extends BaseServiceImpl implements OrderService {
                         qUser.username,
                         qUser.phone,
                         qUser.email,
-                        qAddress.addr,
-                        qOrder.deliveryId
+                        qAddress.addr
                 )
         ).from(qOrder)
                 .leftJoin(qUser).on(qOrder.userId.eq(qUser.uid))
@@ -496,8 +487,7 @@ public class OrderServiceImpl extends BaseServiceImpl implements OrderService {
                         qUser.username,
                         qUser.phone,
                         qUser.email,
-                        qAddress.addr,
-                        qOrder.deliveryId
+                        qAddress.addr
                 )
         ).from(qOrder)
                 .leftJoin(qUser).on(qOrder.userId.eq(qUser.uid))
@@ -601,8 +591,7 @@ public class OrderServiceImpl extends BaseServiceImpl implements OrderService {
                         qUser.username,
                         qUser.phone,
                         qUser.email,
-                        qAddress.addr,
-                        qOrder.deliveryId
+                        qAddress.addr
                 )
         ).from(qOrder)
                 .leftJoin(qUser).on(qOrder.userId.eq(qUser.uid))
@@ -670,17 +659,6 @@ public class OrderServiceImpl extends BaseServiceImpl implements OrderService {
         return null;
     }
 
-//    @Override
-//    public void consignment(String orderId, String token, Integer deliveryId) throws XShopException {
-//        Optional<Order> orderOptional = orderRepository.findById(orderId);
-//        if (!orderOptional.isPresent()) {
-//            throw new XShopException(ErrEumn.ORDER_NOT_EXIST);
-//        }
-//        Order order = orderOptional.get();
-//        order.setStatus(1);
-//        order.setDeliveryId(deliveryId);
-//        orderRepository.save(order);
-//    }
 
     @Override
     public OrderVO createOrderUseShoppingCar(List<String> shoppingCarIds,
@@ -690,9 +668,7 @@ public class OrderServiceImpl extends BaseServiceImpl implements OrderService {
 
         String orderId = createOrderId();
         // 验证是否为本人购物车商品
-        int i = 0;
         for (BuyCarVO buyCar : buyCars) {
-            i++;
             if (!buyCar.getUserId().equals(user.getUid())) {
                 throw new XShopException(ErrEumn.BUY_CAR_IS_NOT_YOUR);
             }
@@ -716,12 +692,23 @@ public class OrderServiceImpl extends BaseServiceImpl implements OrderService {
         return null;
     }
 
+    /**
+     * 计算价格
+     *
+     * @param buyCars 购物车对象
+     * @return 总价（邮费+商品总价）
+     */
+    private BigDecimal totoalPrice(List<BuyCarVO> buyCars) {
+        // 结算
+        OrderSettleAccounts orderSettleAccounts = settleAccounts(buyCars, "");
+        return orderSettleAccounts.getGoodsNumber().add(orderSettleAccounts.getDespatchNumber());
+    }
+
     @Override
     public BigDecimal getTotalPrice(String[] buyCarIdList) {
         List<String> buyIdsList = new ArrayList<>(Arrays.asList(buyCarIdList));
         List<BuyCarVO> buyCars = buyCarService.getBuyCarByIds(buyIdsList);
-        // TODO: 计算
-        return null;
+        return totoalPrice(buyCars);
     }
 
     /**

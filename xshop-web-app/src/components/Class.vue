@@ -59,7 +59,7 @@
       selectClassify(index) {
         const select = this.$data.select;
         select[index] = !(select[index] === undefined ? false : select[index])
-        console.log(select);
+
         this.$set(this.$data, 'select', select)
       },
       go(c) {
@@ -75,7 +75,7 @@
         const that = this;
         http.postForm(this, 'goods', 'classifyTree', {}, function (resp) {
           const data = resp.data.data;
-          console.log(data)
+
           for (let i = 0; i < data.length; i++) {
             data[i].select = false;
           }
@@ -97,7 +97,7 @@
           http.postForm(this, 'user', 'tokenUse', sendData, function (data) {
             const dt = data.data;
             if (dt.code !== 0) {
-              console.log("登录")
+
               // that.$router.push({path: 'my', params: {login: true}})
               return;
             }

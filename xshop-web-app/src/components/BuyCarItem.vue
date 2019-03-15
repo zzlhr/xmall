@@ -40,11 +40,11 @@
       }
     },
     mounted() {
-      console.log(this.buyCar.number)
+
     },
     methods: {
       deleteBuyCar() {
-        console.log(this.buyCar)
+
         const that = this
         http.postForm(this, 'buyCar', 'deleteBuyCar', {buyCarId: this.buyCar.id}, function (resp) {
           that.$emit('loadData')
@@ -65,10 +65,10 @@
             function (resp) {
               const dt = resp.data;
               if (dt.code === 0) {
-                console.log(dt.data)
+
                 that.$emit('emitPrice', (that.buyCar.goods.salePrice === 1 ? that.buyCar.goods.salePrice : that.buyCar.goods.originalPrice + that.buyCar.goods.despatchMoney))
               } else {
-                console.log('添加购物车商品数量失败！')
+
               }
 
             }
@@ -84,11 +84,11 @@
             function (resp) {
               const dt = resp.data;
               if (dt.code === 0) {
-                console.log(that.buyCar)
+
                 that.$emit('emitPrice', -(that.buyCar.goods.salePrice === 1 ? that.buyCar.goods.salePrice : that.buyCar.goods.originalPrice + that.buyCar.goods.despatchMoney))
 
               } else {
-                console.log('添加购物车商品数量失败！')
+
               }
 
             }

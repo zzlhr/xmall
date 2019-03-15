@@ -128,11 +128,11 @@
           {token: localStorage.getItem('token'), type: MESSAGE_TYPE, page: 1, pageSize: 5}, function (resp) {
             const data = resp.data.data;
             that.$set(that, 'messageList', data);
-            console.log(data)
+
           })
       },
       goSale(saleType) {
-        console.log(saleType)
+
         this.$router.push({name: 'SaleList', params: {cid: saleType}})
       },
       loadGoodsListSearch() {
@@ -141,7 +141,7 @@
         this.loadGoodsList();
       },
       loadGoodsList(done) {
-        console.log("触发上拉");
+
         const that = this;
         http.postForm(this, "goods", "list", this.goodsParams, function (resp) {
           const data = resp.data.data;
@@ -160,7 +160,7 @@
         const that = this;
         http.get(this, "goods", "fClassify", function (resp) {
           that.fClassify = resp.data.data
-          console.log(that.fClassify.length)
+
           that.$set(that.$data, 'selectedClassify', that.fClassify[0].clId);
         })
       },
@@ -169,7 +169,7 @@
         const that = this;
         http.postForm(this, 'goods', 'getClassifyPriceRange', {fid: fid}, function (resp) {
           that.priceRange = resp.data.data
-          console.log(that.priceRange)
+
         })
       },
       goCommodity(id) {
@@ -218,7 +218,7 @@
           http.postForm(this, "user", "tokenUse", sendData, function (data) {
             const dt = data.data;
             if (dt.code !== 0) {
-              console.log("登录")
+
               // that.$r5outer.push({path: 'my', params: {login: true}})
               return;
             }

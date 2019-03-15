@@ -12,6 +12,10 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.math.BigDecimal;
+import java.util.HashMap;
+import java.util.Map;
+
 @RestController
 @RequestMapping("/order")
 @Slf4j
@@ -32,8 +36,8 @@ public class OrderController {
 
 
     @PostMapping("/createOrder")
-    public ResultVO createOrder(String token, Integer addressId) throws XShopException {
-        resultVO.setData(orderService.createOrder(token, addressId));
+    public ResultVO createOrder(String token, Integer addressId, String buyCarIds) throws XShopException {
+        resultVO.setData(orderService.createOrder(token, addressId, buyCarIds));
         return resultVO;
     }
 
@@ -104,13 +108,10 @@ public class OrderController {
      */
     @PostMapping("/getTotalPrice")
     public ResultVO getTotalPrice(String buyCarIds) {
-        String[] buyCarIdList = StringUtils.commaDelimitedListToStringArray(buyCarIds);
-        resultVO.setData(orderService.getTotalPrice(buyCarIdList));
+        String[] buyCarIdList = buyCarIds.replaceAll(" ", "").split(",");
+        Map<String, BigDecimal> totalPrice = new HashMap<>();
+        totalPrice.put("totalPrice", orderService.getTotalPrice(buyCarIdList));
+        resultVO.setData(totalPrice);
         return resultVO;
     }
-//    @PostMapping("/consignment")
-//    public ResultVO consignment(String token, String orderId, Integer deliveryId) throws XShopException {
-//        orderService.consignment(orderId, token, deliveryId);
-//        return resultVO;
-//    }
 }

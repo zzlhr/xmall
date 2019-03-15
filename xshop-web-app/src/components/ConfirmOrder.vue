@@ -36,7 +36,7 @@
             </div>
         </div>
         <div class="confirm_order_bottom">
-            <div class="confirm_order_bottom_addup">合计金额: ￥56.50</div>
+            <div class="confirm_order_bottom_addup">合计金额: ￥{{totalPrice}}</div>
             <div class="confirm_order_bottom_btn_group">
                 <button @click="settleAccounts">结&nbsp;&nbsp;算</button>
             </div>
@@ -54,7 +54,7 @@
             return {
                 address: {},
                 selectedBuyCar: [],
-                totalPrices: 0,
+                totalPrice: 0,
             }
         },
         mounted() {
@@ -71,16 +71,45 @@
         },
         methods: {
             initPrices() {
-                const buyCars = this.selectedBuyCar;
-                for (let i = 0; i < buyCars.length; i++) {
-                    const price = buyCars[i].goods.saleStatus === 0 ?
-                        buyCars.goods.originalPrice : buyCars.goods.salePrice;
-                    this.totalPrices += price * buyCars.number;
+                let buyCarIds = "";
+                for (let i = 0; i < this.selectedBuyCar.length; i++) {
+                    buyCarIds += this.selectedBuyCar[i].id + ",";
                 }
+                buyCarIds = buyCarIds.substring(0, buyCarIds.length - 1);
+                const that = this;
+                http.postForm(this, "order", "getTotalPrice", {buyCarIds: buyCarIds}, function (resp) {
+                    console.log(resp.data.data.totalPrice);
+                    that.totalPrice = resp.data.data.totalPrice;
+                })
             },
             settleAccounts() {
                 // 结算、下单
-
+                let buyCarIds = "";
+                for (let i = 0; i < this.selectedBuyCar.length; i++) {
+                    buyCarIds += this.selectedBuyCar[i].id + ",";
+                }
+                buyCarIds = buyCarIds.substring(0, buyCarIds.length - 1);
+                const that = this;
+                http.postForm(this, "order", "createOrder",
+                    {
+                        token: localStorage.getItem("token"),
+                        addressId: this.address.id,
+                        buyCarIds: buyCarIds
+                    },
+                    function (resp) {
+                        if (resp.data.code === 0) {
+                            that.$vux.toast.show({
+                                type: "success",
+                                text: "下单成功！",
+                            });
+                        } else {
+                            that.$vux.toast.show({
+                                type: "warn",
+                                text: "下单失败！",
+                            });
+                        }
+                    }
+                )
             },
             goBack() {
                 // 退回到购物车

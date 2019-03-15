@@ -16,7 +16,7 @@
     },
     methods: {
       searchSubmit() {
-        console.log(this.searchVal)
+
         this.$router.push({name: 'SaleList', params: {title: this.searchVal, cid: 5}})
       }
     }
