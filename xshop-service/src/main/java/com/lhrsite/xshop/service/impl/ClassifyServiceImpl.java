@@ -1,17 +1,16 @@
 package com.lhrsite.xshop.service.impl;
 
-import com.lhrsite.xshop.vo.ClassifyVO;
-import com.lhrsite.xshop.vo.NewClassify;
-import com.lhrsite.xshop.po.Classify;
-import com.lhrsite.xshop.po.QClassify;
 import com.lhrsite.xshop.core.exception.ErrEumn;
 import com.lhrsite.xshop.core.exception.XShopException;
+import com.lhrsite.xshop.mapper.ClassifyMapper;
+import com.lhrsite.xshop.po.Classify;
+import com.lhrsite.xshop.po.QClassify;
 import com.lhrsite.xshop.repository.ClassifyRepository;
 import com.lhrsite.xshop.service.ClassifyService;
+import com.lhrsite.xshop.vo.ClassifyPriceRange;
+import com.lhrsite.xshop.vo.ClassifyVO;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.BeanPropertyRowMapper;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityManager;
@@ -24,26 +23,21 @@ public class ClassifyServiceImpl extends BaseServiceImpl implements ClassifyServ
 
     private final ClassifyRepository classifyRepository;
     private JPAQueryFactory queryFactory;
-    private final JdbcTemplate jdbcTemplate;
+    private final ClassifyMapper classifyMapper;
 
     @Autowired
-    public ClassifyServiceImpl(EntityManager entityManager, ClassifyRepository classifyRepository, JdbcTemplate jdbcTemplate) {
+    public ClassifyServiceImpl(EntityManager entityManager, ClassifyRepository classifyRepository,
+                               ClassifyMapper classifyMapper) {
         super(entityManager);
         this.classifyRepository = classifyRepository;
-        this.jdbcTemplate = jdbcTemplate;
+        this.classifyMapper = classifyMapper;
         queryFactory = getQueryFactory();
     }
 
     @Override
-    public List<ClassifyVO> getClassifyTree() {
+    public List<ClassifyVO> getClassifyTree(Integer eid) {
 
-        QClassify qClassify = QClassify.classify;
-
-        List<Classify> classifies = queryFactory.selectFrom(qClassify)
-                .orderBy(qClassify.clGrade.desc())
-                .orderBy(qClassify.clSerial.asc())
-                .where(qClassify.clDel.eq(0))
-                .fetch();
+        List<Classify> classifies = classifyMapper.findAllClassify(eid);
 
         List<ClassifyVO> classifyVOS = ClassifyVO.init(classifies);
 
@@ -55,13 +49,10 @@ public class ClassifyServiceImpl extends BaseServiceImpl implements ClassifyServ
     }
 
     @Override
-    public List<ClassifyVO> getFClassify() {
-        QClassify qClassify = QClassify.classify;
-        List<Classify> classifies = queryFactory.selectFrom(qClassify)
-                .orderBy(qClassify.clGrade.desc())
-                .where(qClassify.clDel.eq(0))
-                .where(qClassify.clFid.eq(0))
-                .fetch();
+    public List<ClassifyVO> getFClassify(Integer eid) {
+
+        List<Classify> classifies = classifyMapper.findClassifyByFid(0, eid);
+
         List<ClassifyVO> classifyVOS = ClassifyVO.init(classifies);
 
         List<ClassifyVO> resultVO = new ArrayList<>();
@@ -95,6 +86,7 @@ public class ClassifyServiceImpl extends BaseServiceImpl implements ClassifyServ
                         qClassify.clDel.eq(0)
                                 .and(qClassify.clName.eq(classify.getClName()))
                 ).fetchOne();
+
         if (existClassify != null) {
             throw new XShopException(ErrEumn.CLASSIFY_IS_EXIST);
         }
@@ -122,34 +114,12 @@ public class ClassifyServiceImpl extends BaseServiceImpl implements ClassifyServ
     }
 
     @Override
-    public void del(Integer clId, Integer clFid) throws XShopException {
-        if (clId == 0) {
-            List<Classify> classifies = findByFid(clFid);
-
-            for (Classify classify : classifies) {
-                classify.setClDel(1);
-            }
-            Classify classify = findById(clFid);
-            classify.setClDel(1);
-            classifies.add(classify);
-            classifyRepository.saveAll(classifies);
-
-
-        } else {
-            Classify classify = findById(clId);
-            classify.setClDel(1);
-            classifyRepository.save(classify);
-        }
-
+    public void del(Integer clId, Integer eid) throws XShopException {
+        classifyMapper.delClassify(clId, eid);
     }
 
     @Override
-    public List<NewClassify> getClassifyPriceRange(Integer fid) {
-        String sql = "select c.cl_id, c.cl_name, max(g.original_price) max, min(original_price) min from goods g\n" +
-                "inner join classify c on g.cl_id=c.cl_id\n" +
-                "where g.status=0 and  c.cl_fid=" + fid + "\n" +
-                "group by c.cl_name";
-
-        return jdbcTemplate.query(sql, new Object[]{}, new BeanPropertyRowMapper<>(NewClassify.class));
+    public List<ClassifyPriceRange> getClassifyPriceRange(Integer fid, Integer eid) {
+        return classifyMapper.getClassifyPriceRange(fid, eid);
     }
 }

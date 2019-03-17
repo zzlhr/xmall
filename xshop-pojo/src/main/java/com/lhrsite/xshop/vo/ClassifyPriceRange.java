@@ -5,8 +5,11 @@ import lombok.Data;
 import java.io.Serializable;
 import java.math.BigDecimal;
 
+/**
+ * 分类价格区间
+ */
 @Data
-public class NewClassify implements Serializable {
+public class ClassifyPriceRange implements Serializable {
 
     private Integer clId;
     private String clName;

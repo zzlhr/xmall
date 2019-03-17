@@ -64,14 +64,14 @@ public class GoodsController {
     }
 
     @RequestMapping("/classifyTree")
-    public ResultVO classifyTree() {
-        resultVO.setData(classifyService.getClassifyTree());
+    public ResultVO classifyTree(Integer eid) {
+        resultVO.setData(classifyService.getClassifyTree(eid));
         return resultVO;
     }
 
     @GetMapping("/fClassify")
-    public ResultVO fClassify() {
-        resultVO.setData(classifyService.getFClassify());
+    public ResultVO fClassify(Integer eid) {
+        resultVO.setData(classifyService.getFClassify(eid));
         return resultVO;
     }
 
@@ -119,8 +119,8 @@ public class GoodsController {
     }
 
     @PostMapping("/getClassifyPriceRange")
-    public ResultVO getClassifyPriceRange(Integer fid) {
-        resultVO.setData(classifyService.getClassifyPriceRange(fid));
+    public ResultVO getClassifyPriceRange(Integer fid, Integer eid) {
+        resultVO.setData(classifyService.getClassifyPriceRange(fid, eid));
         return resultVO;
     }
 

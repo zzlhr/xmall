@@ -19,6 +19,6 @@ public class Classify implements Serializable {
     private String clName;
     private Integer clGrade;
     private Integer clFid;
-    private Integer clDel;
     private Integer clSerial;
+    private Integer eid;
 }
