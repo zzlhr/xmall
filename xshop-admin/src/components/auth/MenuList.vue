@@ -112,7 +112,7 @@
                 const enterprise = user.enterprise;
                 console.log(enterprise);
                 httpUtil.get(this, "auth", "getMenuList?enterprise="+enterprise, function (resp) {
-                    const d1 = JSON.parse(resp.body.data);
+                    const d1 = resp.body.data;
                     console.log(d1);
                     that.$set(that.$data, 'menuList', d1)
                 })

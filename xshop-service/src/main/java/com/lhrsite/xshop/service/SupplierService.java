@@ -26,15 +26,15 @@ public interface SupplierService {
      * 查询供应商
      *
      * @param supplierName 供应商名称
-     * @param status       供应商状态
      * @param rowStatus    删除否
+     * @param supplierTel  供应商联系方式
+     * @param enterprise   企业id
+     * @param page         页数
+     * @param pageSize     每页数量
      * @return 供应商分页对象
      */
-    PageVO<SupplierVO> list(String supplierName,
-                            Integer status,
-                            Integer rowStatus,
-                            long page,
-                            long pageSize);
+    PageVO<SupplierVO> list(String supplierName, String supplierTel, Integer enterprise, Integer rowStatus,
+                            Integer page, Integer pageSize);
 
     /**
      * 删除供应商

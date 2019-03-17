@@ -2,9 +2,7 @@
     <el-card class="box-card">
         <div slot="header" class="clearfix">
             <span>{{title}}</span>
-            <!--<el-button style="float: right; padding: 3px 0" type="text">编辑</el-button>-->
         </div>
-
         <el-form ref="goods" :model="goods" label-width="80px">
             <el-form-item label="商品标题">
                 <el-input size="mini" v-model="goods.title" placeholder="请输入商品标题"></el-input>
@@ -800,5 +798,9 @@
     }
     .quill-editor{
         height: 250px;
+    }
+    .el-card__body{
+        height: calc(100% - 39px);
+        /*overflow: scroll;*/
     }
 </style>

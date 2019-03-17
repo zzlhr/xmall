@@ -1,17 +1,25 @@
 package com.lhrsite.xshop.vo;
 
 
-import com.lhrsite.xshop.po.Message;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 
 import java.io.Serializable;
+import java.util.Date;
 
-@EqualsAndHashCode(callSuper = true)
 @Data
-public class MessageVO extends Message implements Serializable {
+public class MessageVO implements Serializable {
 
-
+    private String msgId;
+    private Integer messageType;
+    private String messageValue;
+    // 消息状态 0未读，1已读，2删除
+    private Integer messageStatus;
+    // 发送人
+    private Integer sendUser;
+    // 接收人
+    private Integer inceptUser;
+    private Date createTime;
+    private Date updateTime;
     private String sendUserName;
 
 

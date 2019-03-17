@@ -43,8 +43,8 @@
 
     /* .el-header {
         margin: 0; */
-        /* padding: 0;
-    } */
+    /* padding: 0;
+} */
 
     .el-pagination, .el-footer {
         text-align: center;
@@ -62,5 +62,10 @@
 
     .el-table td, .el-table th {
         padding: 5px 0;
+    }
+
+    /* 修复card scroll */
+    .box-card {
+        overflow-y: scroll;
     }
 </style>

@@ -3,11 +3,17 @@
         <div slot="header" class="clearfix">
             <span>权限组管理</span>
             <template class="noselect_btn" v-if="isSelectItem === 'false'">
-                <el-button style="float: right; padding: 6px 0; margin: 0 10px;" type="text" @click="loadData" icon="el-icon-refresh">刷新</el-button>
-                <el-button style="float: right; padding: 6px 0" type="text" @click="jumpAdd" icon="el-icon-circle-plus">添加</el-button>
+                <el-button style="float: right; padding: 6px 0; margin: 0 10px;" type="text" @click="loadData"
+                           icon="el-icon-refresh">刷新
+                </el-button>
+                <el-button style="float: right; padding: 6px 0" type="text" @click="jumpAdd" icon="el-icon-circle-plus">
+                    添加
+                </el-button>
             </template>
             <template class="select_btn" v-else>
-                <el-button style="float: right; padding: 6px 0" type="text" @click="examine" icon="el-icon-edit-outline">审核</el-button>
+                <el-button style="float: right; padding: 6px 0" type="text" @click="examine"
+                           icon="el-icon-edit-outline">审核
+                </el-button>
             </template>
 
             <el-form :inline="true" :model="param" class="demo-form-inline">
@@ -35,7 +41,7 @@
                 @select="tableItemSelect"
                 @select-all="tableItemSelectAll"
                 highlight-current-row
-                max-height="7000" >
+                max-height="7000">
             <el-table-column
                     type="selection"
                     width="45">
@@ -48,7 +54,7 @@
             <el-table-column
                     prop="agName"
                     label="权限组名称"
-                    min-width="150" >
+                    min-width="150">
             </el-table-column>
             <el-table-column
                     prop="agStatus"
@@ -94,31 +100,31 @@
         </el-pagination>
         <!-- 添加/编辑 权限组弹窗 -->
         <el-dialog :title="Title" :visible.sync="editDialogVisible">
-            <el-form :model="form"  label-width="80px">
+            <el-form :model="form" label-width="80px">
                 <el-form-item label="权限组">
                     <el-input size="mini" v-model="form.agName" auto-complete="off" placeholder="权限组名称"></el-input>
-                </el-form-item>              
+                </el-form-item>
                 <el-form-item label="所属企业" v-show="isShow">
-                    <el-select 
-                        v-model="value10"
-                        filterable
-                        allow-create
-                        default-first-option
-                        placeholder="请选择企业" :disabled="disable"
-                        @change="changeSelect(value10)"
-                        size="mini">
+                    <el-select
+                            v-model="value10"
+                            filterable
+                            allow-create
+                            default-first-option
+                            placeholder="请选择企业" :disabled="disable"
+                            @change="changeSelect(value10)"
+                            size="mini">
                         <el-option
-                        v-for="item in options5"
-                        :key="item.eid"
-                        :label="item.epShortName"
-                        :value="item.eid" >
+                                v-for="item in options5"
+                                :key="item.eid"
+                                :label="item.epShortName"
+                                :value="item.eid">
                         </el-option>
                     </el-select>
                 </el-form-item>
                 <el-form-item label="状态">
                     <el-radio-group v-model="form.agStatus">
-                            <el-radio :label="0">启用</el-radio>
-                            <el-radio :label="1">停用</el-radio>
+                        <el-radio :label="0">启用</el-radio>
+                        <el-radio :label="1">停用</el-radio>
                     </el-radio-group>
                 </el-form-item>
             </el-form>
@@ -154,12 +160,13 @@
                 <el-button size="mini" type="primary" @click="lookAgree">确 定</el-button>
             </div>
         </el-dialog>
-        
+
     </el-card>
 </template>
 
 <script>
     import httpUtil from '../../util/HttpUtil.js';
+
     export default {
         name: "AuthGroup",
         data() {
@@ -168,35 +175,35 @@
                 editDialogVisible: false,
                 lookDialogVisible: false,
                 isSelectItem: 'false',
-                selectItem:[],
-                eqData: [{epName:'',eid:0}],
+                selectItem: [],
+                eqData: [{epName: '', eid: 0}],
                 enterpriseNameOne: '',
                 Title: '',
                 agStatusValue: '',
                 options5: [],
-                value10: '', 
-                error:{
-                    msg:'暂无消息',
-                    type:'info',
-                    show:'true'
+                value10: '',
+                error: {
+                    msg: '暂无消息',
+                    type: 'info',
+                    show: 'true'
                 },
-                user:this.$store.getters.user,
-                form:{
+                user: this.$store.getters.user,
+                form: {
                     agName: '',
                     agStatus: 0,
                     enterprise: 1,
                     project: 0,
                     updateUser: this.$store.getters.user.uid,
                     enterpriseName: '',
-                    agStatusValue: '',   
+                    agStatusValue: '',
                 },
                 dataObject: {},
-                param:{
+                param: {
                     page: 1,
                     pageSize: 10,
                     agName: '',
                     agStatus: 0,
-                    enterprise:1,
+                    enterprise: 1,
                     enterpriseId: this.$store.getters.user.enterprise,
                     agStatusValue: ''
                 },
@@ -210,18 +217,18 @@
                 totalCount: 0,
                 totalPages: 0,
                 //企业下拉是否显示
-                isShow:false,
+                isShow: false,
                 loading: true,
                 tableData: []
             }
         },
 
         methods: {
-            editAuth(row){
+            editAuth(row) {
                 sessionStorage.setItem('editAuthValueObj', JSON.stringify(row))
-                this.$router.push({path:'/auth/editAuthValue/'})
+                this.$router.push({path: '/auth/editAuthValue/'})
             },
-            formatterStatus(row){
+            formatterStatus(row) {
                 return row.agStatus === 0 ? '启用' : '禁用';
             },
             // 查询按钮
@@ -234,9 +241,9 @@
                 //this.$emit('eleven', '/user/info/');
                 this.$set(this.$data, 'lookDialogVisible', true)
                 this.$set(this.$data, 'dataObject', row)
-                if(this.dataObject.agStatus===0) {
+                if (this.dataObject.agStatus === 0) {
                     this.agStatusValue = '启用'
-                }else {
+                } else {
                     this.agStatusValue = '禁用'
                 }
             },
@@ -251,7 +258,7 @@
                 this.loadData();
                 //console.log(`当前页: ${val}`);
             },
-            alertClose(e){
+            alertClose(e) {
                 //console.log(e);
             },
             // 弹窗 '确定' 按钮
@@ -268,23 +275,23 @@
             loadForm() {
                 const that = this;
                 this.$set(this.$data, 'loading', true);
-                httpUtil.post(this,'auth', 'editAuthGroup', this.$data.form, function(resp) {
-                    let data= JSON.parse(resp.body.data);
+                httpUtil.post(this, 'auth', 'editAuthGroup', this.$data.form, function (resp) {
+                    let data = JSON.parse(resp.body.data);
                     console.log(data)
                     that.$set(that.$data, 'loading', false);
                     that.loadData();
-                    if(resp.body.code === 0) {
+                    if (resp.body.code === 0) {
                         that.successMsg("编辑权限成功")
-                    }      
+                    }
                 })
             },
             // 获取getAuthGroup数据，显示数据。
-            loadData(){  
+            loadData() {
                 const that = this;
                 this.$set(this.$data, 'loading', true);
                 console.log(this.$data.param)
                 httpUtil.post(this, 'auth', "getAuthGroup", this.$data.param, function (resp) {
-                    const data= JSON.parse(resp.body.data);
+                    const data = resp.body.data;
                     that.$set(that.$data, "tableData", data.arr);
                     that.$set(that.$data, 'currentNumber', data.currentNumber);
                     that.$set(that.$data, 'currentPage', data.currentPage);
@@ -297,35 +304,35 @@
             // 企业下拉,选择
             seachAll() {
                 const that = this;
-                    httpUtil.get(that, 'enterprise', "getEnterpriseDropDown?keyword=", function(resp) {
-                        // console.log(resp.body.data)
-                        let epArr= JSON.parse(resp.body.data);
-                       //console.log(epArr)
-                        if(resp.body.code ===0) {
-                            // that.$set(that.$data, 'eqData', epArr);
-                            that.options5 = epArr
-                        }
-                        
-                        console.log("企业下拉=========")
-                        console.log(that.options5);
-                    })
-                    
+                httpUtil.get(that, 'enterprise', "getEnterpriseDropDown?keyword=", function (resp) {
+                    // console.log(resp.body.data)
+                    let epArr = resp.body.data;
+                    //console.log(epArr)
+                    if (resp.body.code === 0) {
+                        // that.$set(that.$data, 'eqData', epArr);
+                        that.options5 = epArr
+                    }
+
+                    console.log("企业下拉=========")
+                    console.log(that.options5);
+                })
+
             },
             // 点击编辑按钮方法
-            jumpEdit(row){
+            jumpEdit(row) {
                 console.log(row);
                 // this.$emit('eleven', '/user/edit/' + row.userId);
-                
+
                 this.$set(this.$data, 'editDialogVisible', true)
                 this.$set(this.$data, 'form', row)
                 this.disable = true
                 this.Title = "编辑权限组"
                 this.eqData = []
                 this.value10 = row.enterprise;
-                
+
             },
             // 点击添加按钮的方法
-            jumpAdd(){
+            jumpAdd() {
                 this.$set(this.$data, 'form', {
                     agName: '',
                     agStatus: 0,
@@ -333,89 +340,95 @@
                     project: 0,
                     updateUser: this.$store.getters.user.uid,
                     enterpriseName: '',
-                    agStatusValue: ''})
+                    agStatusValue: ''
+                })
                 this.$set(this.$data, 'editDialogVisible', true)
                 this.disable = false
-                this.Title = '添加权限组' 
+                this.Title = '添加权限组'
                 this.value10 = this.$store.getters.user.enterprise
-                
-                
+
+
             },
 
-            tableItemSelect(selection, row){
-                if (selection.length > 0){
+            tableItemSelect(selection, row) {
+                if (selection.length > 0) {
                     this.$set(this.$data, 'isSelectItem', 'true')
-                }else {
+                } else {
                     this.$set(this.$data, 'isSelectItem', 'false')
                 }
                 this.$set(this.$data, 'selectItem', selection)
             },
-            tableItemSelectAll(selection){
-                if (selection.length > 0){
+            tableItemSelectAll(selection) {
+                if (selection.length > 0) {
                     this.$set(this.$data, 'isSelectItem', 'true')
-                }else {
+                } else {
                     this.$set(this.$data, 'isSelectItem', 'false')
                 }
                 this.$set(this.$data, 'selectItem', selection)
             },
-            examine(){
+            examine() {
                 this.$alert(this.$data.selectItem, '审核内容', {
                     confirmButtonText: '确定',
                     callback: action => {
                         this.$message({
                             type: 'info',
-                            message: `action: ${ action }`
+                            message: `action: ${action}`
                         });
                     }
                 });
             },
             // 成功信息提示
             successMsg(value) {
-                this.$message({ 
+                this.$message({
                     message: value,
                     type: 'success'
                 });
             },
             //选中企业更改时触发
-            changeSelect(value){
+            changeSelect(value) {
                 this.value10 = value;
                 this.form.enterprise = value;
             }
         },
-        mounted(){
+        mounted() {
             // load data
             this.loadData();
-            this.$set(this.$data, 'totalPages' , 1);    
+            this.$set(this.$data, 'totalPages', 1);
             this.seachAll();
         },
     }
 </script>
 
 <style>
-    .el-pagination{
+    .el-pagination {
         margin-top: 1rem;
     }
-    .clearfix>span{
+
+    .clearfix > span {
         text-align: left !important;
     }
-    .el-form-item{
+
+    .el-form-item {
         margin-bottom: 0;
         margin-top: 1rem;
     }
 
-    .box-card{
+    .box-card {
         height: 100%;
     }
-    .el-card__header, .el-card__body{
+
+    .el-card__header, .el-card__body {
         padding: 0.5rem;
     }
-    .spterp_info_item{
-    margin: 20px;
-    line-height: 1rem;
-    width: 100%;
-    height: 20px;
+
+    .spterp_info_item {
+        margin: 20px;
+        line-height: 1rem;
+        width: 100%;
+        height: 20px;
     }
-    .spterp_info_label{
+
+    .spterp_info_label {
         width: 100px !important;
         text-align: right;
         float: left;

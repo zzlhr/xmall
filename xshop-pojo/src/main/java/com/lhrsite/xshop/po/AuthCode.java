@@ -13,7 +13,6 @@ import java.util.Date;
 public class AuthCode implements Serializable {
     @Id
     private String phoneNumber;
-
     private String code;
 
     @Column(insertable = false, updatable = false)

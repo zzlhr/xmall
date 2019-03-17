@@ -3,8 +3,8 @@
         <x-header :left-options="{showBack: false}">产品分类</x-header>
         <div class="shop_class_content">
             <div class="shop_class_list">
-                <div class="shop_class_item selected">
-                    <span>男装</span>
+                <div class="shop_class_item" v-for="(classify, index) in classList">
+                    <span>{{classify}}</span>
                 </div>
             </div>
             <div class="shop_class_info"></div>
@@ -26,7 +26,9 @@
             return {
                 classify: [],
                 select: {},
-                classList: [],
+                classList: [
+                    "男装", "女装", "美妆洗护", "食品", "手机数码", "人群偏爱", "美妆洗护",
+                    "鞋靴", "百货", "百货", "百货", "百货", "百货", "百货", "美妆洗护", "美妆洗护"],
             }
         },
         methods: {}
@@ -39,7 +41,10 @@
         position: fixed;
         width: 100%;
         height: 100%;
+    }
 
+    .shop_class::-webkit-scrollbar {
+        width: 0
     }
 
     .shop_class_content {
@@ -52,18 +57,21 @@
         left: 0;
         top: 46px;
         width: 80px;
-        height: 100%;
-        padding-bottom: 59px;
+        height: calc(100% - 59px);
+        background-color: #fff;
+        overflow-y: scroll;
     }
 
     .shop_class_item {
-        padding: 10px;
+        padding: 10px 5px;
         font-size: 16px;
         text-align: center;
+        border-bottom: 1px solid #ccc;
     }
 
     .selected {
-        background-color: #fff;
+        background-color: #F2F2F2;
+
     }
 
     .shop_class_info {

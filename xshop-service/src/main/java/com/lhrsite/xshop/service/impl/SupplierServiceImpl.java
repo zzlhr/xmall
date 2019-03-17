@@ -1,21 +1,22 @@
 package com.lhrsite.xshop.service.impl;
 
-import com.lhrsite.xshop.vo.PageVO;
-import com.lhrsite.xshop.vo.SupplierVO;
-import com.lhrsite.xshop.po.QSupplier;
-import com.lhrsite.xshop.po.QUser;
-import com.lhrsite.xshop.po.Supplier;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.lhrsite.xshop.core.exception.ErrEumn;
 import com.lhrsite.xshop.core.exception.XShopException;
+import com.lhrsite.xshop.mapper.SupplierMapper;
+import com.lhrsite.xshop.po.Supplier;
 import com.lhrsite.xshop.repository.SupplierRepository;
 import com.lhrsite.xshop.service.SupplierService;
-import com.querydsl.core.BooleanBuilder;
-import com.querydsl.core.types.Projections;
+import com.lhrsite.xshop.util.PageInfoUtil;
+import com.lhrsite.xshop.vo.PageVO;
+import com.lhrsite.xshop.vo.SupplierVO;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityManager;
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -29,11 +30,13 @@ public class SupplierServiceImpl extends BaseServiceImpl implements SupplierServ
 
     private final SupplierRepository supplierRepository;
     private JPAQueryFactory queryFactory;
+    private final SupplierMapper supplierMapper;
 
     @Autowired
-    public SupplierServiceImpl(EntityManager entityManager, SupplierRepository supplierRepository) {
+    public SupplierServiceImpl(EntityManager entityManager, SupplierRepository supplierRepository, SupplierMapper supplierMapper) {
         super(entityManager);
         this.supplierRepository = supplierRepository;
+        this.supplierMapper = supplierMapper;
         queryFactory = getQueryFactory();
     }
 
@@ -43,39 +46,18 @@ public class SupplierServiceImpl extends BaseServiceImpl implements SupplierServ
     }
 
     @Override
-    public PageVO<SupplierVO> list(String supplierName, Integer status,
-                                   Integer rowStatus, long page, long pageSize) {
+    public PageVO<SupplierVO> list(String supplierName, String supplierTel, Integer rowStatus, Integer enterprise,
+                                   Integer page, Integer pageSize) {
 
-        QSupplier qSupplier = QSupplier.supplier;
-        QUser qUser = QUser.user;
-        BooleanBuilder builder = new BooleanBuilder();
-        builder.and(qSupplier.rowStatus.eq(rowStatus));
+        PageHelper.startPage(page, pageSize);
+        List<SupplierVO> supplierVOList = supplierMapper.supplierList(supplierName, supplierTel,
+                enterprise, rowStatus, page, pageSize);
 
-        PageVO<SupplierVO> supplierVOPageVO = new PageVO<>();
+        PageInfo<SupplierVO> pageInfo = new PageInfo<>(supplierVOList);
 
-        supplierVOPageVO.init(queryFactory.select(
-                Projections.bean(
-                        SupplierVO.class,
-                        qSupplier.createTime,
-                        qSupplier.rowStatus,
-                        qSupplier.supplierId,
-                        qSupplier.supplierAddress,
-                        qSupplier.supplierDescribe,
-                        qSupplier.supplierRemark,
-                        qSupplier.supplierName,
-                        qSupplier.createUser,
-                        qSupplier.createTime,
-                        qSupplier.updateTime,
-                        qSupplier.updateUser,
-                        qUser.username.as("updateUserName")
-                )
-        ).from(qSupplier)
-                .leftJoin(qUser).on(qSupplier.updateUser.eq(qUser.uid))
-                .where(builder)
-                .offset((page - 1) * pageSize)
-                .limit(pageSize), page);
+        PageInfoUtil<SupplierVO> pageInfoUtil = new PageInfoUtil<>();
 
-        return supplierVOPageVO;
+        return pageInfoUtil.init(pageInfo);
     }
 
     @Override

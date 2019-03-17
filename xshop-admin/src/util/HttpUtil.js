@@ -1,8 +1,8 @@
 const httpUtil = {
     baseurl(name) {
-        const host = "https://xuanhuobang.com/"
-        const baseHost = host + "api/";
-        // const baseHost = "http://192.168.31.8:8008/"
+        const host = "http://192.168.31.8:8008/";
+        // const baseHost = host + "api/";
+        const baseHost = "http://192.168.31.8:8008/"
         switch (name) {
             case 'home':
                 return baseHost;
@@ -31,8 +31,8 @@ const httpUtil = {
         }
     },
     home() {
-        return "https://xuanhuobang.com/";
-        // return "http://192.168.31.8:8088/";
+        // return "https://xuanhuobang.com/";
+        return "http://192.168.31.8:8088/";
 
     },
 

@@ -41,11 +41,12 @@ public class SupplierController {
 
     @PostMapping("/list")
     public ResultVO list(@RequestParam(defaultValue = "") String supplierName,
-                         @RequestParam(defaultValue = "0") Integer status,
-                         @RequestParam(defaultValue = "0") Integer del,
-                         @RequestParam(defaultValue = "1") long page,
-                         @RequestParam(defaultValue = "10") long pageSize) {
-        resultVO.setData(supplierService.list(supplierName, status, del, page, pageSize));
+                         @RequestParam(defaultValue = "") String supplierTel,
+                         @RequestParam(defaultValue = "0") Integer rwoStatus,
+                         Integer eid,
+                         @RequestParam(defaultValue = "1") Integer page,
+                         @RequestParam(defaultValue = "10") Integer pageSize) {
+        resultVO.setData(supplierService.list(supplierName, supplierTel, eid, rwoStatus, page, pageSize));
         return resultVO;
     }
 

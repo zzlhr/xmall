@@ -3,6 +3,7 @@ package com.lhrsite.xshop.webapi.controller;
 
 
 
+import com.lhrsite.xshop.vo.MessageVO;
 import com.lhrsite.xshop.vo.ResultVO;
 import com.lhrsite.xshop.po.Message;
 import com.lhrsite.xshop.core.exception.XShopException;
@@ -10,6 +11,8 @@ import com.lhrsite.xshop.service.MessageService;
 import lombok.extern.slf4j.Slf4j;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -70,6 +73,14 @@ public class MessageController {
         log.info("【发送首页通知】message={}", message);
         messageService.sendMessage(message);
         return resultVO;
+    }
+
+    @MessageMapping("/message")
+    @SendTo("/topic/greetings")
+    public MessageVO greetings() throws InterruptedException {
+        Thread.sleep(1000); // simulated delay
+        MessageVO messageVO = new MessageVO();
+        return messageVO;
     }
 
 }

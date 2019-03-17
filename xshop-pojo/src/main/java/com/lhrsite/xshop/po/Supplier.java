@@ -1,9 +1,13 @@
 package com.lhrsite.xshop.po;
 
-import java.util.Date;
-import java.io.Serializable;
 import lombok.Data;
-import javax.persistence.*;
+
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import java.io.Serializable;
+import java.sql.Timestamp;
 
 /**
  * 供应商表
@@ -33,9 +37,9 @@ public class Supplier implements Serializable{
     /* 修改人id */
     private Integer updateUser;
     /* 创建时间 */
-    private Date createTime;
+    private Timestamp createTime;
     /* 更新时间 */
-    private Date updateTime;
+    private Timestamp updateTime;
     /* 所属企业 */
     private Integer enterprise;
     /* 删除否 */

@@ -277,7 +277,7 @@
                     if (dt.code !== 0) {
                         return;
                     }
-                    const user = JSON.parse(dt.data);
+                    const user = dt.data;
                     that.$set(that.$data, 'user', user);
                     //console.log(user)
                     that.$cookie.set('token', user.token);
@@ -289,10 +289,10 @@
                 })
             }
             const that = this;
-            that.getNewOrderCount();
-            const timer = setInterval(function () {
-                that.getNewOrderCount();
-            }, 5000)
+            // that.getNewOrderCount();
+            // const timer = setInterval(function () {
+            //     that.getNewOrderCount();
+            // }, 5000)
         },
         methods: {
             goMessagePage() {
@@ -329,7 +329,8 @@
                                 message: '登录成功',
                                 type: 'success'
                             });
-                            const user = JSON.parse(dt.data);
+                            const user = dt.data;
+                            console.log("token = " + user.token)
                             that.$set(that.$data, 'user', user);
                             that.$store.commit('loginSuccess', user);
                             that.$cookie.set('token', user.token);

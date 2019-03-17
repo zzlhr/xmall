@@ -208,7 +208,7 @@
                 httpUtil.post(this, 'goods', "list", this.$data.param, function (resp) {
                     // let aa = JSON.parse(resp.data.data);
                     //  console.log(aa);
-                    const data = JSON.parse(resp.body.data);
+                    const data = resp.body.data;
                     console.log(data);
                     that.$set(that.$data, 'tableData', data.arr);
                     that.$set(that.$data, 'currentNumber', data.currentNumber);
