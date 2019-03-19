@@ -10,6 +10,7 @@ import javax.persistence.Table;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.sql.Date;
+import java.sql.Timestamp;
 
 @Data
 @Entity
@@ -27,7 +28,7 @@ public class Order implements Serializable {
     // -1删除
     private Integer status;
     @Column(insertable = false, updatable = false)
-    private Date createTime;
+    private Timestamp createTime;
     private Integer addrId;
 
 

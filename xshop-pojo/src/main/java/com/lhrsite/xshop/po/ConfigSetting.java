@@ -1,12 +1,10 @@
 package com.lhrsite.xshop.po;
 
-import java.util.Date;
 import java.io.Serializable;
 
 import lombok.Data;
 
 import javax.persistence.*;
-import java.math.BigDecimal;
 
 /**
  * 配置设置表

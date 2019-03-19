@@ -82,10 +82,7 @@ public class ClassifyServiceImpl extends BaseServiceImpl implements ClassifyServ
         QClassify qClassify = QClassify.classify;
 
         Classify existClassify = queryFactory.selectFrom(qClassify)
-                .where(
-                        qClassify.clDel.eq(0)
-                                .and(qClassify.clName.eq(classify.getClName()))
-                ).fetchOne();
+                .where(qClassify.clName.eq(classify.getClName())).fetchOne();
 
         if (existClassify != null) {
             throw new XShopException(ErrEumn.CLASSIFY_IS_EXIST);

@@ -9,6 +9,7 @@ import javax.persistence.Table;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.sql.Date;
+import java.sql.Timestamp;
 
 /**
  * 入库单详情(StStorageInDetails)表实体类
@@ -39,12 +40,12 @@ public class StorageInDetails implements Serializable {
     private BigDecimal goodsTotalPrice;
     //创建时间
     @Column(insertable = false, updatable = false)
-    private Date createTime;
+    private Timestamp createTime;
     //创建用户
     private Integer createUser;
     //更新时间
     @Column(insertable = false, updatable = false)
-    private Date updateTime;
+    private Timestamp updateTime;
     //更新人
     private Integer updateUser;
     //备注

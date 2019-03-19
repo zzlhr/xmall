@@ -5,6 +5,7 @@ import lombok.Data;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.sql.Timestamp;
 import java.util.Date;
 
 /**
@@ -24,9 +25,9 @@ public class Enterprise implements Serializable {
     private Integer epType;
     private Integer epStatus;
     @Column(insertable = false, updatable = false)
-    private Date createTime;
+    private Timestamp createTime;
     @Column(insertable = false, updatable = false)
-    private Date updateTime;
+    private Timestamp updateTime;
 
 
 }

@@ -2,6 +2,7 @@ package com.lhrsite.xshop.vo;
 
 import lombok.Data;
 
+import java.sql.Timestamp;
 import java.util.Date;
 
 @Data
@@ -26,7 +27,7 @@ public class AuthGroupVO {
 
 
     /** 创建时间 */
-    private Date createTime;
+    private Timestamp createTime;
 
     /** 更新人 */
     private String username;
@@ -34,7 +35,7 @@ public class AuthGroupVO {
     private Integer updateUser;
 
     /** 更新时间 */
-    private Date updateTime;
+    private Timestamp updateTime;
 
 
 

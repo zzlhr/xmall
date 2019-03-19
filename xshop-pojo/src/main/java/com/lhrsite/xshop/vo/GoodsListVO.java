@@ -3,6 +3,7 @@ package com.lhrsite.xshop.vo;
 import lombok.Data;
 
 import java.math.BigDecimal;
+import java.sql.Timestamp;
 import java.util.Date;
 
 @Data
@@ -48,8 +49,8 @@ public class GoodsListVO {
     private String updateUserName;
 
 
-    private Date createTime;
-    private Date updateTime;
+    private Timestamp createTime;
+    private Timestamp updateTime;
 
     private Integer clId;
     private String clName;

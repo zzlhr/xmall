@@ -5,6 +5,7 @@ import lombok.Data;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.sql.Date;
+import java.sql.Timestamp;
 
 /**
  * 仓库表(StStorage)表实体类
@@ -32,10 +33,10 @@ public class Storage implements Serializable {
     private Integer storageDel;
     //创建时间
     @Column(insertable = false, updatable = false)
-    private Date createTime;
+    private Timestamp createTime;
     //更新时间
     @Column(insertable = false, updatable = false)
-    private Date updateTime;
+    private Timestamp updateTime;
     //更新人
     private Integer updateUser;
 

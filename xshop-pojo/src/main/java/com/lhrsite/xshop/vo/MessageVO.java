@@ -4,6 +4,7 @@ package com.lhrsite.xshop.vo;
 import lombok.Data;
 
 import java.io.Serializable;
+import java.sql.Timestamp;
 import java.util.Date;
 
 @Data
@@ -18,8 +19,8 @@ public class MessageVO implements Serializable {
     private Integer sendUser;
     // 接收人
     private Integer inceptUser;
-    private Date createTime;
-    private Date updateTime;
+    private Timestamp createTime;
+    private Timestamp updateTime;
     private String sendUserName;
 
 

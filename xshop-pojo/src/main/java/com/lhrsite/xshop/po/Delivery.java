@@ -5,6 +5,7 @@ import lombok.Data;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.sql.Timestamp;
 import java.util.Date;
 
 @Data
@@ -19,6 +20,6 @@ public class Delivery implements Serializable {
     private String deliveryPassword;
     private Integer deliveryStatus;
     @Column(insertable = false, updatable = false)
-    private Date createTime;
+    private Timestamp createTime;
     private String token;
 }

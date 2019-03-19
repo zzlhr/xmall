@@ -5,6 +5,7 @@ import lombok.Data;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.sql.Timestamp;
 
 
 /**
@@ -15,31 +16,47 @@ import java.io.Serializable;
 public class AuthGroup implements Serializable {
 
 
-    /** 权限组id */
+    /**
+     * 权限组id
+     */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer agid;
 
-    /** 权限组名称 */
+    /**
+     * 权限组名称
+     */
     private String agName;
 
-    /** 权限组状态 */
+    /**
+     * 权限组状态
+     */
     private Integer agStatus;
 
-    /** 所属企业 */
+    /**
+     * 所属企业
+     */
     private Integer enterprise;
 
-    /** 所属项目 */
+    /**
+     * 所属项目
+     */
     private Integer project;
 
-    /** 创建时间 */
+    /**
+     * 创建时间
+     */
     @Column(insertable = false, updatable = false)
-    private java.sql.Timestamp createTime;
+    private Timestamp createTime;
 
-    /** 更新人 */
+    /**
+     * 更新人
+     */
     private Integer updateUser;
 
-    /** 更新时间 */
+    /**
+     * 更新时间
+     */
     @Column(insertable = false, updatable = false)
     private java.sql.Timestamp updateTime;
 
