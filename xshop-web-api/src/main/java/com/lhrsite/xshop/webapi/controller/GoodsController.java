@@ -38,6 +38,7 @@ public class GoodsController {
         resultVO = new ResultVO();
         resultVO.setCode(0);
         resultVO.setMsg("ok");
+        resultVO.setData(null);
     }
 
     @PostMapping("/list")
@@ -69,9 +70,9 @@ public class GoodsController {
         return resultVO;
     }
 
-    @GetMapping("/fClassify")
-    public ResultVO fClassify(Integer eid) {
-        resultVO.setData(classifyService.getFClassify(eid));
+    @RequestMapping("/fClassify")
+    public ResultVO fClassify(Integer fid, @RequestParam("e") Integer eid) {
+        resultVO.setData(classifyService.getFClassify(fid, eid));
         return resultVO;
     }
 

@@ -1,8 +1,8 @@
 const httpUtil = {
     baseurl(name) {
-        const host = "http://192.168.31.8:8008/";
+        const host = "http://localhost:8008/";
         // const baseHost = host + "api/";
-        const baseHost = "http://192.168.31.8:8008/"
+        const baseHost = "http://localhost:8008/"
         switch (name) {
             case 'home':
                 return baseHost;
@@ -31,15 +31,13 @@ const httpUtil = {
         }
     },
     home() {
-        // return "https://xuanhuobang.com/";
-        return "http://192.168.31.8:8088/";
+        return "http://localhost:8088/";
 
     },
 
     get(that, apiPath, url, callback) {
         console.log(this.baseurl(apiPath) + url);
         that.$http.get(this.baseurl(apiPath) + url).then(response => {
-            //console.log("response => "+response)
             if (response.status !== 200) {
                 that.$notify.error({
                     title: '失败',
@@ -67,7 +65,8 @@ const httpUtil = {
     },
     post(that, apiPath, url, param, callback) {
         if (param.token === undefined) {
-            param.token = that.$store.getters.user.token
+            param.token = that.$store.getters.user.token;
+            param.e = that.$store.getters.user.enterprise;
         }
         that.$http.post(this.baseurl(apiPath) + url, param, {emulateJSON: true})
             .then(response => {

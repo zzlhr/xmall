@@ -11,7 +11,14 @@ public interface ClassifyService {
 
     List<ClassifyVO> getClassifyTree(Integer eid);
 
-    List<ClassifyVO> getFClassify(Integer eid);
+    /**
+     * 通过fid获取菜单
+     *
+     * @param fid fid
+     * @param eid 企业id
+     * @return 分类列表
+     */
+    List<ClassifyVO> getFClassify(Integer fid, Integer eid);
 
     Classify add(Classify classify) throws XShopException;
 

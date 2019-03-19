@@ -20,6 +20,8 @@ import UserIndex from '../components/user/UserIndex'
 import MessageList from '../components/message/List'
 import SaleStatistics from '../components/statistics/SaleStatistics'
 import Message from '../components/system/Message'
+import Classify from "~/components/goods/Classify";
+
 const routes = [
     {
         path: '/',
@@ -96,6 +98,11 @@ const routes = [
             {
                 path: '/message/message',
                 component: Message,
+            },
+            {
+                path: '/goods/classify',
+                name: 'Classify',
+                component: Classify
             }
         ]
     }

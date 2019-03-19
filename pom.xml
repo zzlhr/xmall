@@ -23,7 +23,7 @@
         <xshop.service.version>0.0.1</xshop.service.version>
         <xshop.web.api.version>0.0.1</xshop.web.api.version>
         <xshop.admin.api.version>0.0.1</xshop.admin.api.version>
-        <xshop.pojo.version>0.0.1</xshop.pojo.version>
+        <xshop.pojo.version>0.0.2</xshop.pojo.version>
     </properties>
     <modules>
         <module>xshop-core</module>

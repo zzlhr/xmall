@@ -10,6 +10,7 @@ import com.lhrsite.xshop.service.ClassifyService;
 import com.lhrsite.xshop.vo.ClassifyPriceRange;
 import com.lhrsite.xshop.vo.ClassifyVO;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,6 +20,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
+@Slf4j
 public class ClassifyServiceImpl extends BaseServiceImpl implements ClassifyService {
 
     private final ClassifyRepository classifyRepository;
@@ -49,11 +51,11 @@ public class ClassifyServiceImpl extends BaseServiceImpl implements ClassifyServ
     }
 
     @Override
-    public List<ClassifyVO> getFClassify(Integer eid) {
+    public List<ClassifyVO> getFClassify(Integer fid, Integer eid) {
 
-        List<Classify> classifies = classifyMapper.findClassifyByFid(0, eid);
-
+        List<Classify> classifies = classifyMapper.findClassifyByFid(fid, eid);
         List<ClassifyVO> classifyVOS = ClassifyVO.init(classifies);
+//        log.info("【getFClassify】classifies={}\nclassifyVOS={}", classifies, classifyVOS);
 
         List<ClassifyVO> resultVO = new ArrayList<>();
 
