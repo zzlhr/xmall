@@ -4,20 +4,16 @@ import com.lhrsite.xshop.core.exception.XShopException;
 import com.lhrsite.xshop.po.Classify;
 import com.lhrsite.xshop.vo.ClassifyPriceRange;
 import com.lhrsite.xshop.vo.ClassifyVO;
+import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.util.List;
 
 public interface ClassifyService {
 
     List<ClassifyVO> getClassifyTree(Integer eid);
 
-    /**
-     * 通过fid获取菜单
-     *
-     * @param fid fid
-     * @param eid 企业id
-     * @return 分类列表
-     */
     List<ClassifyVO> getFClassify(Integer fid, Integer eid);
 
     Classify add(Classify classify) throws XShopException;
@@ -38,4 +34,20 @@ public interface ClassifyService {
      */
     List<ClassifyPriceRange> getClassifyPriceRange(Integer fid, Integer eid);
 
+    /**
+     * 上传分类图片
+     *
+     * @param multipartFile 图片文件
+     * @return 图片名
+     * @throws IOException io异常
+     */
+    String uploadClassifyPicture(MultipartFile multipartFile) throws IOException;
+
+    /**
+     * 获取分类图片文件
+     *
+     * @param pictureName 图片文件名
+     * @param response    response
+     */
+    void getClassifyPicture(String pictureName, HttpServletResponse response) throws IOException;
 }

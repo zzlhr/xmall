@@ -36,6 +36,8 @@ app:
       pictures: /data/xuanhuobang/sites/xuanhuobang.com/www/pictures_upload/
     home:
       pictures: /data/xuanhuobang/sites/xuanhuobang.com/www/home_upload/
+    classify:
+      pictures: /Users/haoranliu/IdeaProjects/xshop/upload/classify/
 logging:
   path: /data/xuanhuobang_springboot/logs/
   level:

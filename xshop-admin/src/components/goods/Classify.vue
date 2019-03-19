@@ -1,185 +1,134 @@
 <template>
-    <el-card class="box-card" shadow="never">
+    <el-card class="box-card">
         <div slot="header" class="clearfix">
-            <span>分类列表</span>
-            <el-button style="float: right; padding: 3px 0" type="text" @click="getClassifyList(0)">刷新</el-button>
+            <span>{{title}}</span>
         </div>
-        <el-tree :data="classifyList"
-                 :props="props"
-                 :load="loadNode"
-                 lazy
-                 show-checkbox
-                 node-key="id"
-                 default-expand-all
-                 :expand-on-click-node="false">
-          <span class="custom-tree-node" slot-scope="{ node, classifyList }">
-            <span>{{ node.label }}</span>
-            <span>
-            <el-button type="text" size="mini" @click="() => append(node)">添加</el-button>
-              <el-button type="text" size="mini" @click="() => update(node)">编辑</el-button>
+        <el-tree
+                :load="loadNode"
+                show-checkbox
+                node-key="id"
+                lazy
+                :expand-on-click-node="false"
+                :node-expand="(data, node, self) => getClassify(data.clId)">
+            <span class="custom-tree-node" slot-scope="{ node, data }">
+                <span>{{ node.label }}</span>
+                <span>
+                    <el-button
+                            type="text"
+                            size="mini"
+                            @click="() => edit(data)">
+                        编辑
+                    </el-button>
+                    <el-button
+                            type="text"
+                            size="mini"
+                            @click="() => append(data)">
+                        添加
+                    </el-button>
+                    <el-button
+                            type="text"
+                            size="mini"
+                            @click="() => remove(data)">
+                        删除
+                    </el-button>
+                </span>
             </span>
-          </span>
         </el-tree>
         <el-dialog
-                :title="dialog.title"
-                :visible.sync="dialog.show"
-                width="30%"
-                :before-close="dialogClose">
-            <!--<span>这是一段信息</span>-->
-            <div>
-                <el-form ref="menuForm" :model="menuForm" label-width="80px">
-                    <el-form-item label="菜单名称">
-                        <el-input v-model="menuForm.menuName"></el-input>
-                    </el-form-item>
-                    <el-form-item label="菜单url">
-                        <el-input v-model="menuForm.menuUrl"></el-input>
-                    </el-form-item>
-                    <el-form-item label="菜单API">
-                        <el-input v-model="menuForm.menuApi"></el-input>
-                    </el-form-item>
-                    <el-form-item label="菜单状态">
-                        <el-radio-group v-model="menuForm.menuStatus">
-                            <el-radio :label="0">启用</el-radio>
-                            <el-radio :label="1">停用</el-radio>
-                        </el-radio-group>
-                    </el-form-item>
-                </el-form>
-            </div>
+                title="分类"
+                :visible.sync="dialogVisible"
+                width="30%">
+            <el-form>
+                <el-form-item label="分类名称">
+                    <el-input v-model="classifyForm.clName"></el-input>
+                </el-form-item>
+                <el-upload
+                        class="upload-demo"
+                        drag,
+                        name="img"
+                        :multiple="false"
+                        accept="jpg,png"
+                        limit="1"
+                        :on-success="(response, file, fileList) => {classifyForm.picture=response.data.data.fileName}"
+                        :on-error="() => {this.$message.error('上传文件失败！')}"
+                        :action="classifyUploadPath">
+                    <i class="el-icon-upload"></i>
+                    <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
+                    <div class="el-upload__tip" slot="tip">只能上传jpg/png文件，且不超过500kb</div>
+                </el-upload>
+            </el-form>
             <span slot="footer" class="dialog-footer">
             <el-button @click="dialogVisible = false">取 消</el-button>
-            <el-button type="primary" @click="sendMenuForm">确 定</el-button>
+            <el-button type="primary" @click="dialogVisible = false">确 定</el-button>
         </span>
         </el-dialog>
     </el-card>
 </template>
 
 <script>
-    import httpUtil from "../../util/HttpUtil.js";
+    import httpUtil from "~/util/HttpUtil";
 
     export default {
         name: "Classify",
         data() {
             return {
-                classifyList: [],
-                dialog: {
-                    title: '添加菜单',
-                    show: false,
-
+                title: "分类列表",
+                fClassifys: [],
+                dialogVisible: false,
+                classifyForm: {
+                    clName: '',
+                    clGrade: 0,
+                    clFid: 0,
+                    clSerial: 99,
+                    eid: 0,
+                    picture: '',
                 },
-                props: {
-                    label: (data, node) => {
-                        return data.clName;
-                    },
-                    children: 'children',
-                    isLeaf: (data, node) => {
-                        return data.clGrade < 2
-                    }
-                },
-                menuForm: {
-                    mid: 0,
-                    menuName: '',
-                    menuUrl: '',
-                    menuApi: '',
-                    menuFmid: 0,
-                    menuStatus: 0,
-                    menuLevel: 0,
-                }
+                classifyUploadPath: httpUtil.baseurl('goods') + 'uploadClassifyPicture'
             }
         },
         mounted() {
-            this.getClassifyList()
+            this.getClassify(0);
+            this.classifyForm.eid = this.$store.state.user.enterprise;
         },
         methods: {
-            dialogClose() {
-                this.menuForm.mid = 0;
-                this.menuForm.menuName = '';
-                this.menuForm.menuUrl = '';
-                this.menuForm.menuApi = '';
-                this.menuForm.menuFmid = 0;
-                this.menuForm.menuStatus = 0;
-                this.menuForm.menuLevel = 0;
-                this.dialog.show = false;
+            append(data) {
+                this.dialogVisible = true;
+            },
+            remove(data) {
+
+            },
+            edit(data) {
+                this.dialogVisible = true;
             },
             loadNode(node, resolve) {
-                if (node.data.clGrade < 2) {
-                    resolve([]);
-                    this.getClassifyList(node.data.clId, resolve);
+                if (node.level === 0) {
+                    this.getClassify(0, resolve)
                 } else {
-                    resolve([])
+                    this.getClassify(node.data.clId, resolve)
                 }
             },
-            getClassifyList(fid, resolve) {
-                if (fid === undefined) {
-                    fid = 0;
-                }
+
+            getClassify(fid, resolve) {
+
                 const that = this;
-                const user = this.$store.getters.user;
-                const enterprise = user.enterprise;
                 httpUtil.post(this, "goods", "fClassify", {fid: fid}, function (resp) {
-                    if (fid === 0) {
-                        that.classifyList = resp.data.data;
-                    } else {
-                        resolve(resp.data.data)
-                    }
+                    // if (fid === 0) {
+                    //     // that.fClassifys = resp.data.data;
+                    //     resolve(resp.data.data)
+                    // } else {
+                    //     for (let i = 0; i < that.fClassifys.length; i++) {
+                    //         if (that.fClassifys[i].clId === fid) {
+                    //             that.fClassifys[i].children = resp.data.data;
+                    //         }
+                    //     }
+                    // }
+                    resolve(resp.data.data)
                 })
-            },
-            sendMenuForm() {
-                const that = this;
-                httpUtil.post(this, 'auth', 'saveMenu', this.$data.menuForm, function (resp) {
-                    console.log(resp);
-                    const respBody = resp.body;
-                    console.log(respBody);
-                    if (respBody.code === 0) {
-                        that.dialogClose();
-                        that.getClassifyList();
-                        that.successMsg("编辑菜单成功.");
-                    }
-                })
-            },
-            append(node) {
-                console.log(node);
-                this.$set(this.$data.dialog, 'show', true);
-                this.$set(this.$data.dialog, 'title', "添加");
-                this.$set(this.$data.menuForm, "menuFmid", node.data.id);
-                this.$set(this.$data.menuForm, "menuLevel", node.data.level + 1)
-                // this.$set(this.$data.menuForm, 'updateUser', )
-
-            },
-            update(node) {
-                this.$set(this.$data.dialog, 'show', true);
-                this.$set(this.$data.dialog, 'title', "编辑菜单");
-                console.log(node);
-                const that = this;
-                httpUtil.post(this, 'auth', 'getMenu', {mid: node.data.id}, function (resp) {
-                    const menuFormData = resp.body.data;
-                    that.$set(that.$data, 'menuForm', JSON.parse(menuFormData));
-                })
-
-            },
-            successMsg(value) {
-                this.$message({
-                    showClose: true,
-                    message: value,
-                    type: 'success'
-                });
-            },
-            remove(node) {
-                // const parent = node.parent;
-                // const children = parent.data.children || parent.data;
-                // const index = children.findIndex(d => d.id === data.id);
-                // children.splice(index, 1);
             }
         }
     }
 </script>
 
-<style>
-    .custom-tree-node {
-        flex: 1;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        font-size: 14px;
-        padding-right: 8px;
-    }
+<style scoped>
+
 </style>

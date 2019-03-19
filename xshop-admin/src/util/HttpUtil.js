@@ -32,7 +32,6 @@ const httpUtil = {
     },
     home() {
         return "http://localhost:8088/";
-
     },
 
     get(that, apiPath, url, callback) {
@@ -94,6 +93,18 @@ const httpUtil = {
                 });
                 // callback(response)
             })
+    },
+
+    getToken(that) {
+        this.isLogin(that);
+    },
+
+    isLogin(that) {
+        const token = that.$cookie.get("token");
+        if (token === null) {
+            that.$route.push({path: "/"});
+            that.$message.error("请先登录")
+        }
     }
 
 

@@ -17,21 +17,23 @@ public class ClassifyVO {
     private Integer clFid;
     private Integer value;
     private String label;
+    private String picture;
     private List<ClassifyVO> children = new ArrayList<>();
 
 
-    public static ClassifyVO init(Classify classify){
+    public static ClassifyVO init(Classify classify) {
         ClassifyVO classifyVO = new ClassifyVO();
         BeanUtils.copyProperties(classify, classifyVO);
         classifyVO.setValue(classify.getClId());
         classifyVO.setLabel(classify.getClName());
-        if (classifyVO.getClGrade().equals(1)){
+        classifyVO.setPicture(classify.getPicture());
+        if (classifyVO.getClGrade().equals(1)) {
             classifyVO.setChildren(null);
         }
         return classifyVO;
     }
 
-    public static List<ClassifyVO> init(List<Classify> classifies){
+    public static List<ClassifyVO> init(List<Classify> classifies) {
         List<ClassifyVO> classifyVOS = new ArrayList<>();
         classifies.forEach(classify -> {
             classifyVOS.add(ClassifyVO.init(classify));

@@ -1,14 +1,14 @@
 package com.lhrsite.xshop.webapi.controller;
 
 
-import com.lhrsite.xshop.vo.ResultVO;
-import com.lhrsite.xshop.po.Classify;
-import com.lhrsite.xshop.po.Goods;
 import com.lhrsite.xshop.core.exception.ErrEumn;
 import com.lhrsite.xshop.core.exception.XShopException;
+import com.lhrsite.xshop.core.utils.HttpUtil;
+import com.lhrsite.xshop.po.Classify;
+import com.lhrsite.xshop.po.Goods;
 import com.lhrsite.xshop.service.ClassifyService;
 import com.lhrsite.xshop.service.GoodsService;
-import com.lhrsite.xshop.core.utils.HttpUtil;
+import com.lhrsite.xshop.vo.ResultVO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -16,6 +16,9 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/goods")
@@ -123,6 +126,20 @@ public class GoodsController {
     public ResultVO getClassifyPriceRange(Integer fid, Integer eid) {
         resultVO.setData(classifyService.getClassifyPriceRange(fid, eid));
         return resultVO;
+    }
+
+
+    @PostMapping("/uploadClassifyPicture")
+    public ResultVO uploadClassifyPicture(MultipartFile img) throws IOException {
+        Map<String, String> resultMap = new HashMap<>();
+        resultMap.put("fileName", classifyService.uploadClassifyPicture(img));
+        resultVO.setData(resultMap);
+        return resultVO;
+    }
+
+    @GetMapping("/classifyImg/{imgName}")
+    public void getClassifyImg(@PathVariable String imgName, HttpServletResponse response) throws IOException {
+        classifyService.getClassifyPicture(imgName, response);
     }
 
 

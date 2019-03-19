@@ -193,6 +193,8 @@ public class GoodsServiceImpl extends BaseServiceImpl implements GoodsService {
     @Override
     public void deleteGoods(String goodsId) {
         goodsRepository.deleteById(goodsId);
-
     }
+
+
+
 }

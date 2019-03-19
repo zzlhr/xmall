@@ -21,4 +21,5 @@ public class Classify implements Serializable {
     private Integer clFid;
     private Integer clSerial;
     private Integer eid;
+    private String picture;
 }

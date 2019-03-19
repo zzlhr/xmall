@@ -2,6 +2,8 @@ package com.lhrsite.xshop.service.impl;
 
 import com.lhrsite.xshop.core.exception.ErrEumn;
 import com.lhrsite.xshop.core.exception.XShopException;
+import com.lhrsite.xshop.core.utils.IdentifyUtil;
+import com.lhrsite.xshop.core.utils.MultipartFileUtil;
 import com.lhrsite.xshop.mapper.ClassifyMapper;
 import com.lhrsite.xshop.po.Classify;
 import com.lhrsite.xshop.po.QClassify;
@@ -11,10 +13,15 @@ import com.lhrsite.xshop.vo.ClassifyPriceRange;
 import com.lhrsite.xshop.vo.ClassifyVO;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.EntityManager;
+import javax.servlet.http.HttpServletResponse;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -26,6 +33,9 @@ public class ClassifyServiceImpl extends BaseServiceImpl implements ClassifyServ
     private final ClassifyRepository classifyRepository;
     private JPAQueryFactory queryFactory;
     private final ClassifyMapper classifyMapper;
+
+    @Value("${app.upload.classify.pictures}")
+    private String uploadPicturePath;
 
     @Autowired
     public ClassifyServiceImpl(EntityManager entityManager, ClassifyRepository classifyRepository,
@@ -55,12 +65,7 @@ public class ClassifyServiceImpl extends BaseServiceImpl implements ClassifyServ
 
         List<Classify> classifies = classifyMapper.findClassifyByFid(fid, eid);
         List<ClassifyVO> classifyVOS = ClassifyVO.init(classifies);
-//        log.info("【getFClassify】classifies={}\nclassifyVOS={}", classifies, classifyVOS);
-
-        List<ClassifyVO> resultVO = new ArrayList<>();
-
-        classifyToVO(classifyVOS, resultVO);
-        return resultVO;
+        return classifyVOS;
     }
 
     private void classifyToVO(List<ClassifyVO> classifyVOS, List<ClassifyVO> resultVO) {
@@ -120,5 +125,24 @@ public class ClassifyServiceImpl extends BaseServiceImpl implements ClassifyServ
     @Override
     public List<ClassifyPriceRange> getClassifyPriceRange(Integer fid, Integer eid) {
         return classifyMapper.getClassifyPriceRange(fid, eid);
+    }
+
+    @Override
+    public String uploadClassifyPicture(MultipartFile multipartFile) throws IOException {
+
+        String newFileName = IdentifyUtil.getIdentify() + MultipartFileUtil.getFileType(multipartFile);
+        System.out.println(newFileName);
+        File file = new File(uploadPicturePath + newFileName);
+
+        IOUtils.copy(multipartFile.getInputStream(), new FileOutputStream(file));
+        return file.getName();
+    }
+
+    @Override
+    public void getClassifyPicture(String pictureName, HttpServletResponse response) throws IOException {
+        File file = new File(uploadPicturePath + pictureName);
+        response.setContentType("image/*");
+        response.setCharacterEncoding("utf8");
+        IOUtils.copy(new FileInputStream(file), response.getOutputStream());
     }
 }
