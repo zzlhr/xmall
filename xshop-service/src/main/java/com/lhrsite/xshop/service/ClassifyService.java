@@ -14,7 +14,9 @@ public interface ClassifyService {
 
     List<ClassifyVO> getClassifyTree(Integer eid);
 
-    List<ClassifyVO> getFClassify(Integer fid, Integer eid);
+    List<ClassifyVO> getClassifyByFid(Integer fid, Integer eid);
+    List<ClassifyVO> getFClassify(Integer eid);
+
 
     Classify add(Classify classify) throws XShopException;
 

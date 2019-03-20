@@ -74,10 +74,17 @@ public class GoodsController {
     }
 
     @RequestMapping("/fClassify")
-    public ResultVO fClassify(Integer fid, @RequestParam("e") Integer eid) {
-        resultVO.setData(classifyService.getFClassify(fid, eid));
+    public ResultVO fClassify(@RequestParam("e") Integer eid) {
+        resultVO.setData(classifyService.getFClassify(eid));
         return resultVO;
     }
+
+    @RequestMapping("/classifyByFid")
+    public ResultVO classifyByFid(Integer fid, @RequestParam("e") Integer eid) {
+        resultVO.setData(classifyService.getClassifyByFid(fid, eid));
+        return resultVO;
+    }
+
 
     @PostMapping("/addClassify")
     public ResultVO add(Classify classify) throws XShopException {

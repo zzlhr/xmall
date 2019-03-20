@@ -61,11 +61,24 @@ public class ClassifyServiceImpl extends BaseServiceImpl implements ClassifyServ
     }
 
     @Override
-    public List<ClassifyVO> getFClassify(Integer fid, Integer eid) {
+    public List<ClassifyVO> getClassifyByFid(Integer fid, Integer eid) {
 
         List<Classify> classifies = classifyMapper.findClassifyByFid(fid, eid);
         List<ClassifyVO> classifyVOS = ClassifyVO.init(classifies);
         return classifyVOS;
+    }
+
+    @Override
+    public List<ClassifyVO> getFClassify(Integer eid) {
+
+        List<Classify> classifies = classifyMapper.findClassifyByFid(0, eid);
+
+        List<ClassifyVO> classifyVOS = ClassifyVO.init(classifies);
+
+        List<ClassifyVO> resultVO = new ArrayList<>();
+
+        classifyToVO(classifyVOS, resultVO);
+        return resultVO;
     }
 
     private void classifyToVO(List<ClassifyVO> classifyVOS, List<ClassifyVO> resultVO) {
@@ -130,10 +143,13 @@ public class ClassifyServiceImpl extends BaseServiceImpl implements ClassifyServ
     @Override
     public String uploadClassifyPicture(MultipartFile multipartFile) throws IOException {
 
-        String newFileName = IdentifyUtil.getIdentify() + MultipartFileUtil.getFileType(multipartFile);
+        String newFileName = IdentifyUtil.getIdentify() + "." + MultipartFileUtil.getFileType(multipartFile);
         System.out.println(newFileName);
+        File filePath = new File(uploadPicturePath);
+        if (!filePath.exists()) {
+            filePath.mkdirs();
+        }
         File file = new File(uploadPicturePath + newFileName);
-
         IOUtils.copy(multipartFile.getInputStream(), new FileOutputStream(file));
         return file.getName();
     }

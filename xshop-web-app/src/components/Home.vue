@@ -115,6 +115,11 @@
                 priceRange: []
             };
         },
+        watch: {
+            selectedClassify(val) {
+                console.log("ssssss" + val);
+            }
+        },
         methods: {
             clickMessage(message) {
                 const jumpUrl = message.messageValue.split("|")[1] || "";
@@ -157,11 +162,10 @@
                 });
             },
 
-            getFClassify() {
+            getFClassify(fid) {
                 const that = this;
-                http.get(this, "goods", "fClassify", function (resp) {
+                http.postForm(this, "goods", "fClassify", {fid: 1}, function (resp) {
                     that.fClassify = resp.data.data
-
                     that.$set(that.$data, 'selectedClassify', that.fClassify[0].clId);
                 })
             },
@@ -235,7 +239,7 @@
             } else {
                 this.getMessage()
             }
-            this.getFClassify();
+            this.getFClassify(1);
         },
         watch: {
             selectedClassify(val) {

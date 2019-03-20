@@ -49,6 +49,7 @@ const http = {
     for (const param in params) {
       formData.append(param, params[param])
     }
+    formData.append("e", 1);
     axios.post(this.baseurl(apiPath) + url, formData)
       .then(function (response) {
         callback(response)

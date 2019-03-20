@@ -44,13 +44,13 @@
                 </el-form-item>
                 <el-upload
                         class="upload-demo"
-                        drag,
+                        drag
                         name="img"
                         :multiple="false"
                         accept="jpg,png"
-                        limit="1"
-                        :on-success="(response, file, fileList) => {classifyForm.picture=response.data.data.fileName}"
-                        :on-error="() => {this.$message.error('上传文件失败！')}"
+                        :limit="1"
+                        :on-success="(response, file, fileList) => {classifyForm.picture=response.data.fileName}"
+                        :on-error="() => {$message.error('上传文件失败！')}"
                         :action="classifyUploadPath">
                     <i class="el-icon-upload"></i>
                     <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
@@ -112,16 +112,7 @@
 
                 const that = this;
                 httpUtil.post(this, "goods", "fClassify", {fid: fid}, function (resp) {
-                    // if (fid === 0) {
-                    //     // that.fClassifys = resp.data.data;
-                    //     resolve(resp.data.data)
-                    // } else {
-                    //     for (let i = 0; i < that.fClassifys.length; i++) {
-                    //         if (that.fClassifys[i].clId === fid) {
-                    //             that.fClassifys[i].children = resp.data.data;
-                    //         }
-                    //     }
-                    // }
+                    console.log(resp.data.data)
                     resolve(resp.data.data)
                 })
             }

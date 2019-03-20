@@ -5,13 +5,13 @@ spring:
       hibernate.format_sql: true
   servlet:
     multipart:
-      max-file-size: 10MB
-      max-request-size: 20MB
+      max-file-size: 30MB
+      max-request-size: 30MB
   freemarker:
     template-loader-path: classpath:/templates/
   jackson:
     date-format: yyyy-MM-dd HH:mm:ss
-#    time-zone: GMT+8
+  #    time-zone: GMT+8
   redis:
     database: 0
     host: localhost
@@ -27,8 +27,6 @@ spring:
     include: xshop-dao
 server:
   port: 8008
-
-
 app:
   upload:
     shop:
