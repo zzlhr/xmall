@@ -9,7 +9,7 @@
   },
   "dependencies": {
     "echarts": "^4.2.0-rc.2",
-    "element-ui": "^2.3.4",
+    "element-ui": "^2.6.3",
     "v-charts": "^1.19.0",
     "vue": "^2.5.16",
     "vue-cookie": "^1.1.4",
