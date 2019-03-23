@@ -3,24 +3,24 @@
  */
 
 import IndexHome from '../pages/IndexHome'
-import UserList from '../components/user/List'
-import UserInfo from '../components/user/Info'
-import EnterpriseList from '../components/enterprise/List'
-import UserEdit from '../components/user/Edit'
-import MenuList from '../components/auth/MenuList'
-import AuthGroup from '../components/auth/AuthGroup'
-import EditAuthValue from '../components/auth/EditAuthValue'
-import GoodsList from '../components/goods/List'
-import GoodsEdit from '../components/goods/Edit'
-import OrderList from '../components/order/List'
-import SystemIndex from '../components/system/Index'
-import SupplierList from '../components/supplier/List'
-import SupplierEdit from '../components/supplier/Edit'
-import UserIndex from '../components/user/UserIndex'
-import MessageList from '../components/message/List'
-import SaleStatistics from '../components/statistics/SaleStatistics'
-import Message from '../components/system/Message'
-import Classify from "~/components/goods/Classify";
+import UserList from '../pages/user/List'
+import UserInfo from '../pages/user/Info'
+import EnterpriseList from '../pages/enterprise/List'
+import UserEdit from '../pages/user/Edit'
+import MenuList from '../pages/auth/MenuList'
+import AuthGroup from '../pages/auth/AuthGroup'
+import EditAuthValue from '../pages/auth/EditAuthValue'
+import GoodsList from '../pages/goods/List'
+import GoodsEdit from '../pages/goods/Edit'
+import OrderList from '../pages/order/List'
+import SystemIndex from '../pages/system/Index'
+import SupplierList from '../pages/supplier/List'
+import SupplierEdit from '../pages/supplier/Edit'
+import UserIndex from '../pages/user/UserIndex'
+import MessageList from '../pages/message/List'
+import SaleStatistics from '../pages/statistics/SaleStatistics'
+import Message from '../pages/system/Message'
+import Classify from "~/pages/goods/Classify";
 
 const routes = [
     {

@@ -8,6 +8,7 @@
         cl_grade,
         cl_fid,
         cl_serial,
+        picture,
         eid
     </sql>
 
@@ -17,7 +18,20 @@
         where eid = #{eid}
           and (cl_id = #{id} or cl_fid = #{id})
     </delete>
-
+    <delete id="delFoundNotFidClassify">
+        delete
+        from classify
+        where eid = #{eid}
+        and cl_id in (<include refid='getNullFClassify'/>)
+    </delete>
+    <sql id="getNullFClassify">
+        select e.cl_id
+        from (select c.cl_id
+              from classify c
+                       left join classify f on c.cl_fid = f.cl_id
+              where f.cl_name is null
+                and f.cl_fid != 0) e
+    </sql>
     <select id="findAllClassify" resultType="com.lhrsite.xshop.po.Classify">
         select
         <include refid="classifyColumns"/>

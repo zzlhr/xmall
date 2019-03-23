@@ -1,3 +1,5 @@
+import user from "~/util/UserUtil";
+
 const httpUtil = {
     baseurl(name) {
         const host = "http://localhost:8008/";
@@ -64,8 +66,7 @@ const httpUtil = {
     },
     post(that, apiPath, url, param, callback) {
         if (param.token === undefined) {
-            param.token = that.$store.getters.user.token;
-            param.e = that.$store.getters.user.enterprise;
+            param.token = user.getToken();
         }
         that.$http.post(this.baseurl(apiPath) + url, param, {emulateJSON: true})
             .then(response => {

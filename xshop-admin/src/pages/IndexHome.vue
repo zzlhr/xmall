@@ -96,24 +96,24 @@
 <script>
     import httpUtil from '../util/HttpUtil.js';
 
-    import Home from "../components/Home";
-    import UserList from '../components/user/List'
-    import UserInfo from '../components/user/Info'
-    import UserEdit from '../components/user/Edit'
-    import EnterpriseList from '../components/enterprise/List'
-    import EnterpriseEdit from '../components/enterprise/Edit'
-    import MenuList from '../components/auth/MenuList'
-    import AuthGroup from '../components/auth/AuthGroup'
-    import AuthGroupEdit from '../components/auth/AuthGroupEdit'
-    import EditAuthValue from '../components/auth/EditAuthValue'
+    import Home from "./Home";
+    import UserList from './user/List'
+    import UserInfo from './user/Info'
+    import UserEdit from './user/Edit'
+    import EnterpriseList from './enterprise/List'
+    import EnterpriseEdit from './enterprise/Edit'
+    import MenuList from './auth/MenuList'
+    import AuthGroup from './auth/AuthGroup'
+    import AuthGroupEdit from './auth/AuthGroupEdit'
+    import EditAuthValue from './auth/EditAuthValue'
 
-    import GoodsList from '../components/goods/List'
-    import GoodsEdit from '../components/goods/Edit'
-    import GoodsAdd from '../components/goods/Edit'
-    import OrderList from '../components/order/list'
-    import SystemIndex from '../components/system/Index'
-    import SupplierList from '../components/supplier/List'
-    import SupplierEdit from '../components/supplier/Edit'
+    import GoodsList from './goods/List'
+    import GoodsEdit from './goods/Edit'
+    import GoodsAdd from './goods/Edit'
+    import OrderList from './order/list'
+    import SystemIndex from './system/Index'
+    import SupplierList from './supplier/List'
+    import SupplierEdit from './supplier/Edit'
     import Menu from '../config/menu'
     import LeftMenu from "~/config/LeftMenu";
 

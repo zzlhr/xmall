@@ -6,9 +6,9 @@ import com.lhrsite.xshop.core.utils.IdentifyUtil;
 import com.lhrsite.xshop.core.utils.MultipartFileUtil;
 import com.lhrsite.xshop.mapper.ClassifyMapper;
 import com.lhrsite.xshop.po.Classify;
-import com.lhrsite.xshop.po.QClassify;
 import com.lhrsite.xshop.repository.ClassifyRepository;
 import com.lhrsite.xshop.service.ClassifyService;
+import com.lhrsite.xshop.service.UserService;
 import com.lhrsite.xshop.vo.ClassifyPriceRange;
 import com.lhrsite.xshop.vo.ClassifyVO;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -21,7 +21,10 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.EntityManager;
 import javax.servlet.http.HttpServletResponse;
-import java.io.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -36,13 +39,15 @@ public class ClassifyServiceImpl extends BaseServiceImpl implements ClassifyServ
 
     @Value("${app.upload.classify.pictures}")
     private String uploadPicturePath;
+    private final UserService userService;
 
     @Autowired
     public ClassifyServiceImpl(EntityManager entityManager, ClassifyRepository classifyRepository,
-                               ClassifyMapper classifyMapper) {
+                               ClassifyMapper classifyMapper, UserService userService) {
         super(entityManager);
         this.classifyRepository = classifyRepository;
         this.classifyMapper = classifyMapper;
+        this.userService = userService;
         queryFactory = getQueryFactory();
     }
 
@@ -61,11 +66,10 @@ public class ClassifyServiceImpl extends BaseServiceImpl implements ClassifyServ
     }
 
     @Override
-    public List<ClassifyVO> getClassifyByFid(Integer fid, Integer eid) {
-
+    public List<ClassifyVO> getClassifyByFid(Integer fid, String token) throws XShopException {
+        Integer eid = userService.getUserEnterpriseId(token);
         List<Classify> classifies = classifyMapper.findClassifyByFid(fid, eid);
-        List<ClassifyVO> classifyVOS = ClassifyVO.init(classifies);
-        return classifyVOS;
+        return ClassifyVO.init(classifies);
     }
 
     @Override
@@ -97,23 +101,25 @@ public class ClassifyServiceImpl extends BaseServiceImpl implements ClassifyServ
     }
 
     @Override
-    public Classify add(Classify classify) throws XShopException {
-        // 判断是否存在
-        QClassify qClassify = QClassify.classify;
+    public ClassifyVO add(Classify classify, String token) throws XShopException {
+        Integer eid = userService.getUserEnterpriseId(token);
 
-        Classify existClassify = queryFactory.selectFrom(qClassify)
-                .where(qClassify.clName.eq(classify.getClName())).fetchOne();
+        Classify existClassify = classifyMapper.findClassifyByClassName(eid, classify.getClName());
 
         if (existClassify != null) {
             throw new XShopException(ErrEumn.CLASSIFY_IS_EXIST);
         }
         classify.setClSerial(0);
-        return classifyRepository.save(classify);
+        classify.setEid(eid);
+        return ClassifyVO.init(classifyRepository.save(classify));
     }
 
     @Override
-    public Classify update(Classify classify) {
-        return classifyRepository.save(classify);
+    public ClassifyVO update(Classify classify, String token) throws XShopException {
+        Integer eid = userService.getUserEnterpriseId(token);
+        classify.setEid(eid);
+        classify.setClSerial(0);
+        return ClassifyVO.init(classifyRepository.save(classify));
     }
 
 
@@ -131,8 +137,12 @@ public class ClassifyServiceImpl extends BaseServiceImpl implements ClassifyServ
     }
 
     @Override
-    public void del(Integer clId, Integer eid) throws XShopException {
+    public void del(Integer clId, String token) throws XShopException {
+        Integer eid = userService.getUserEnterpriseId(token);
+
+
         classifyMapper.delClassify(clId, eid);
+        classifyMapper.delFoundNotFidClassify(eid);
     }
 
     @Override

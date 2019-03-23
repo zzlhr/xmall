@@ -54,4 +54,13 @@ public interface ClassifyMapper {
     void delClassify(Integer id, Integer eid);
 
 
+    /**
+     * 删除全部找不到父类的分类
+     *
+     * 用于删除分类后调用删除子类。
+     *
+     * @param eid 企业id
+     */
+    void delFoundNotFidClassify(Integer eid);
+
 }

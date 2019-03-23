@@ -80,27 +80,27 @@ public class GoodsController {
     }
 
     @RequestMapping("/classifyByFid")
-    public ResultVO classifyByFid(Integer fid, @RequestParam("e") Integer eid) {
-        resultVO.setData(classifyService.getClassifyByFid(fid, eid));
+    public ResultVO classifyByFid(Integer fid, String token) throws XShopException {
+        resultVO.setData(classifyService.getClassifyByFid(fid, token));
         return resultVO;
     }
 
 
     @PostMapping("/addClassify")
-    public ResultVO add(Classify classify) throws XShopException {
-        resultVO.setData(classifyService.add(classify));
+    public ResultVO add(Classify classify, String token) throws XShopException {
+        resultVO.setData(classifyService.add(classify, token));
         return resultVO;
     }
 
     @PostMapping("/updateClassify")
-    public ResultVO updateClassify(Classify classify) {
-        resultVO.setData(classifyService.update(classify));
+    public ResultVO updateClassify(Classify classify, String token) throws XShopException {
+        resultVO.setData(classifyService.update(classify, token));
         return resultVO;
     }
 
     @PostMapping("/delClassify")
-    public ResultVO delClassify(Integer clId, Integer clFid) throws XShopException {
-        classifyService.del(clId, clFid);
+    public ResultVO delClassify(Integer clId, String token) throws XShopException {
+        classifyService.del(clId, token);
         return resultVO;
     }
 

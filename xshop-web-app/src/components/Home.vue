@@ -115,11 +115,6 @@
                 priceRange: []
             };
         },
-        watch: {
-            selectedClassify(val) {
-                console.log("ssssss" + val);
-            }
-        },
         methods: {
             clickMessage(message) {
                 const jumpUrl = message.messageValue.split("|")[1] || "";

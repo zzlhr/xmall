@@ -14,18 +14,19 @@ public interface ClassifyService {
 
     List<ClassifyVO> getClassifyTree(Integer eid);
 
-    List<ClassifyVO> getClassifyByFid(Integer fid, Integer eid);
+    List<ClassifyVO> getClassifyByFid(Integer fid, String token) throws XShopException;
+
     List<ClassifyVO> getFClassify(Integer eid);
 
 
-    Classify add(Classify classify) throws XShopException;
+    ClassifyVO add(Classify classify, String token) throws XShopException;
 
-    Classify update(Classify classify);
+    ClassifyVO update(Classify classify, String token) throws XShopException;
 
     Classify findById(Integer clId) throws XShopException;
 
 
-    void del(Integer clId, Integer eid) throws XShopException;
+    void del(Integer clId, String token) throws XShopException;
 
 
     /**
