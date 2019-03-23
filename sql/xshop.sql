@@ -1,7 +1,7 @@
 #
 # SQL Export
 # Created by Querious (201048)
-# Created: March 11, 2019 at 9:34:53 PM GMT+8
+# Created: March 24, 2019 at 4:10:07 AM GMT+8
 # Encoding: Unicode (UTF-8)
 #
 
@@ -21,7 +21,6 @@ DROP TABLE IF EXISTS `user_login`;
 DROP TABLE IF EXISTS `user`;
 DROP TABLE IF EXISTS `town`;
 DROP TABLE IF EXISTS `supplier`;
-DROP TABLE IF EXISTS `st_supplier`;
 DROP TABLE IF EXISTS `st_storage_out_master`;
 DROP TABLE IF EXISTS `st_storage_out_details`;
 DROP TABLE IF EXISTS `st_storage_in_master`;
@@ -51,16 +50,16 @@ DROP TABLE IF EXISTS `address`;
 CREATE TABLE `address` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `uid` int(11) NOT NULL COMMENT '用户id',
-  `province` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '省份id',
-  `city` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '城市id',
-  `country` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '区域id',
+  `province` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '省份id',
+  `city` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '城市id',
+  `country` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '区域id',
   `town` varchar(20) DEFAULT NULL COMMENT '街道id',
-  `addr` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT '地址',
-  `consignee` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '收货人',
-  `link_tel` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '联系方式',
+  `addr` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT '' COMMENT '地址',
+  `consignee` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '收货人',
+  `link_tel` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '联系方式',
   `default_status` tinyint(1) NOT NULL DEFAULT '0' COMMENT '默认状态',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 
 CREATE TABLE `app` (
@@ -68,7 +67,7 @@ CREATE TABLE `app` (
   `link` text NOT NULL COMMENT '联系方式',
   `picture` text NOT NULL COMMENT '首页轮播图',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 
 CREATE TABLE `auth_code` (
@@ -77,7 +76,7 @@ CREATE TABLE `auth_code` (
   `create_time` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `type` tinyint(4) NOT NULL DEFAULT '0',
   PRIMARY KEY (`phone_number`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 
 CREATE TABLE `auth_group` (
@@ -101,7 +100,7 @@ CREATE TABLE `auth_value` (
   `update_time` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
   `update_user` int(11) NOT NULL COMMENT '更新人',
   PRIMARY KEY (`menu_id`,`group_id`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 
 CREATE TABLE `buy_car` (
@@ -111,7 +110,7 @@ CREATE TABLE `buy_car` (
   `number` int(11) NOT NULL DEFAULT '0' COMMENT '数量',
   `create_time` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 
 CREATE TABLE `city` (
@@ -120,7 +119,7 @@ CREATE TABLE `city` (
   `city_id` varchar(12) DEFAULT NULL,
   `province_id` varchar(12) DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 
 CREATE TABLE `classify` (
@@ -128,10 +127,12 @@ CREATE TABLE `classify` (
   `cl_name` varchar(20) NOT NULL COMMENT '分类名称',
   `cl_grade` tinyint(4) NOT NULL DEFAULT '0' COMMENT '分类等级',
   `cl_fid` int(11) NOT NULL DEFAULT '0' COMMENT '父级',
-  `cl_del` tinyint(4) NOT NULL DEFAULT '0' COMMENT '删除标识0表示为删除1已删除',
   `cl_serial` int(11) NOT NULL DEFAULT '99' COMMENT '序号',
-  PRIMARY KEY (`cl_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=113 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+  `eid` int(11) DEFAULT '1' COMMENT '企业id',
+  `picture` varchar(200) DEFAULT NULL COMMENT '图片',
+  PRIMARY KEY (`cl_id`),
+  UNIQUE KEY `classify_pk` (`cl_name`,`eid`)
+) ENGINE=InnoDB AUTO_INCREMENT=170 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 
 CREATE TABLE `config_setting` (
@@ -140,7 +141,7 @@ CREATE TABLE `config_setting` (
   `config_value` int(11) NOT NULL COMMENT '配置项值',
   `config_enterprise` int(11) NOT NULL COMMENT '配置值所属企业',
   PRIMARY KEY (`csid`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='配置设置';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='配置设置';
 
 
 CREATE TABLE `config_type` (
@@ -148,7 +149,7 @@ CREATE TABLE `config_type` (
   `ct_type` int(11) NOT NULL COMMENT '配置类型',
   `ct_description` varchar(50) NOT NULL COMMENT '配置类型描述',
   PRIMARY KEY (`ctid`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='配置类型';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='配置类型';
 
 
 CREATE TABLE `config_values` (
@@ -158,7 +159,7 @@ CREATE TABLE `config_values` (
   `cvs_description` varchar(50) NOT NULL COMMENT '配置值描述',
   `cvs_enterprise` int(11) NOT NULL DEFAULT '0' COMMENT '所属企业',
   PRIMARY KEY (`cvsid`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='配置值';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='配置值';
 
 
 CREATE TABLE `country` (
@@ -167,7 +168,7 @@ CREATE TABLE `country` (
   `country_id` varchar(12) DEFAULT NULL,
   `city_id` varchar(12) DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 
 CREATE TABLE `enterprise` (
@@ -210,7 +211,7 @@ CREATE TABLE `goods` (
   `cl_id` int(11) NOT NULL DEFAULT '0' COMMENT '所属分类',
   `cl_fid` int(11) NOT NULL DEFAULT '0' COMMENT '所属分类父级',
   PRIMARY KEY (`goods_id`,`sale_status`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 
 CREATE TABLE `menu` (
@@ -240,7 +241,7 @@ CREATE TABLE `message` (
   `send_user` int(11) NOT NULL COMMENT '发送人',
   `incept_user` int(11) NOT NULL COMMENT '接收人',
   PRIMARY KEY (`msg_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 
 CREATE TABLE `order_details` (
@@ -251,7 +252,7 @@ CREATE TABLE `order_details` (
   `transaction_price` decimal(18,2) NOT NULL COMMENT '成交价',
   `create_time` datetime DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`od_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 
 CREATE TABLE `order_master` (
@@ -264,7 +265,7 @@ CREATE TABLE `order_master` (
   `create_time` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `addr_id` int(11) NOT NULL COMMENT '收货地址',
   PRIMARY KEY (`order_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 
 CREATE TABLE `province` (
@@ -272,7 +273,7 @@ CREATE TABLE `province` (
   `name` varchar(64) DEFAULT NULL,
   `province_id` varchar(12) DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 
 CREATE TABLE `st_storage` (
@@ -286,7 +287,7 @@ CREATE TABLE `st_storage` (
   `update_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
   `update_user` int(11) NOT NULL COMMENT '更新人',
   PRIMARY KEY (`storage_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='仓库表';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='仓库表';
 
 
 CREATE TABLE `st_storage_in_details` (
@@ -304,7 +305,7 @@ CREATE TABLE `st_storage_in_details` (
   `update_user` int(11) NOT NULL COMMENT '更新人',
   `sid_remark` varchar(100) NOT NULL DEFAULT '' COMMENT '备注',
   PRIMARY KEY (`sid_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='入库单详情';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='入库单详情';
 
 
 CREATE TABLE `st_storage_in_master` (
@@ -326,7 +327,7 @@ CREATE TABLE `st_storage_in_master` (
   `update_user` int(11) NOT NULL COMMENT '修改用户',
   `update_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
   PRIMARY KEY (`si_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='入库单主表';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='入库单主表';
 
 
 CREATE TABLE `st_storage_out_details` (
@@ -336,7 +337,7 @@ CREATE TABLE `st_storage_out_details` (
   `goods_number` decimal(18,2) NOT NULL DEFAULT '0.00' COMMENT '出库商品数量',
   `storage_id` int(11) NOT NULL COMMENT '仓库id',
   PRIMARY KEY (`sod_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='出库单详情';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='出库单详情';
 
 
 CREATE TABLE `st_storage_out_master` (
@@ -356,21 +357,7 @@ CREATE TABLE `st_storage_out_master` (
   `examine_remark` varchar(500) NOT NULL DEFAULT '' COMMENT '审核备注',
   `examine_time` datetime NOT NULL COMMENT '审核时间',
   PRIMARY KEY (`so_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='出库单主表';
-
-
-CREATE TABLE `st_supplier` (
-  `supplier_id` int(11) unsigned NOT NULL AUTO_INCREMENT COMMENT '供货商id',
-  `supplier_name` varchar(100) NOT NULL DEFAULT '' COMMENT '供货商名称',
-  `supplier_link_man` varchar(20) NOT NULL DEFAULT '' COMMENT '供货商联系人',
-  `supplier_link_tel` varchar(20) NOT NULL DEFAULT '' COMMENT '供货商联系电话',
-  `supplier_status` tinyint(4) NOT NULL DEFAULT '0' COMMENT '状态，0启用，1禁用',
-  `supplier_del` tinyint(4) NOT NULL DEFAULT '0' COMMENT '删除否，0未删除，1删除',
-  `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-  `update_user` int(11) NOT NULL COMMENT '更新人',
-  `update_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
-  PRIMARY KEY (`supplier_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='供货商';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='出库单主表';
 
 
 CREATE TABLE `supplier` (
@@ -387,7 +374,7 @@ CREATE TABLE `supplier` (
   `enterprise` int(11) DEFAULT NULL COMMENT '所属企业',
   `row_status` tinyint(4) NOT NULL DEFAULT '0' COMMENT '删除否',
   PRIMARY KEY (`supplier_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='供应商表';
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='供应商表';
 
 
 CREATE TABLE `town` (
@@ -396,7 +383,7 @@ CREATE TABLE `town` (
   `town_id` varchar(12) DEFAULT NULL,
   `country_id` varchar(12) DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 
 CREATE TABLE `user` (
@@ -428,7 +415,7 @@ CREATE TABLE `user_login` (
   `create_time` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `expire_time` datetime DEFAULT '1970-01-01 00:00:00' COMMENT '过期时间',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 
 
@@ -443,9 +430,9 @@ SET FOREIGN_KEY_CHECKS = 0;
 LOCK TABLES `address` WRITE;
 ALTER TABLE `address` DISABLE KEYS;
 INSERT INTO `address` (`id`, `uid`, `province`, `city`, `country`, `town`, `addr`, `consignee`, `link_tel`, `default_status`) VALUES 
-	(18,1,'120000000000','120100000000','120102000000','120102002000','sadasd','刘先生','12312',1),
+	(18,1,'120000000000','120100000000','120102000000','120102002000','市政家属院1号楼1单元001','刘先生','18837188075',1),
 	(19,1,'410000000000','410100000000','410172000000','false','玉兰街','刘浩然','19937150218',0),
-	(20,1,'110000000000','110100000000','110101000000',NULL,'测试地址','刘先生','19937150218',0);
+	(20,1,'110000000000','110100000000','110101000000','null','测试地址','刘先生','19937150218',0);
 ALTER TABLE `address` ENABLE KEYS;
 UNLOCK TABLES;
 
@@ -509,7 +496,7 @@ INSERT INTO `buy_car` (`id`, `user_id`, `goods_id`, `number`) VALUES
 	('1541222481450',109,'09ae30588a3bc28b7a27adcf31b22781',0),
 	('1541226667133',109,'cd0c9c0e37748251a705d46acf0eb2ca',0),
 	('1542338582951',128,'fdaea0a4fe6c6513871508839f8b34b6',5),
-	('1552201091310',1,'083a1c71a7b519e81b40be58e9422bab',0),
+	('1552201091310',1,'083a1c71a7b519e81b40be58e9422bab',1),
 	('1552202585513',1,'09ae30588a3bc28b7a27adcf31b22781',3);
 ALTER TABLE `buy_car` ENABLE KEYS;
 UNLOCK TABLES;
@@ -867,108 +854,66 @@ UNLOCK TABLES;
 
 LOCK TABLES `classify` WRITE;
 ALTER TABLE `classify` DISABLE KEYS;
-INSERT INTO `classify` (`cl_id`, `cl_name`, `cl_grade`, `cl_fid`, `cl_del`, `cl_serial`) VALUES 
-	(9,'大米',0,0,0,0),
-	(10,'5kg',1,9,1,99),
-	(11,'10kg',1,9,1,99),
-	(12,'25kg',1,9,1,99),
-	(13,'面粉',0,0,0,2),
-	(14,'面5kg',1,13,1,99),
-	(15,'面2.5kg',1,13,1,99),
-	(16,'杂粮',0,0,0,6),
-	(17,'散装杂粮',1,16,1,99),
-	(19,'豆',0,0,0,5),
-	(20,'红小豆',1,19,1,99),
-	(21,'花豇豆',1,0,0,99),
-	(22,'花豇豆',1,19,1,99),
-	(23,'绿豆',1,19,1,99),
-	(24,'小米',0,0,0,3),
-	(25,'田文华',1,24,1,99),
-	(26,'子强',1,24,1,99),
-	(27,'填源',1,24,1,99),
-	(28,'建一',1,24,1,99),
-	(29,'食用油',0,0,0,1),
-	(30,'金鼎',1,29,1,99),
-	(31,'金龙鱼',1,29,1,99),
-	(32,'鲁花',1,29,1,99),
-	(33,'五湖',1,29,1,99),
-	(34,'20L大豆油',1,29,0,99),
-	(35,'挂面',0,0,1,4),
-	(37,'福临门挂面',1,35,1,99),
-	(38,'芝麻',1,16,1,99),
-	(39,'江米',1,9,1,99),
-	(40,'玉米类',1,16,0,99),
-	(41,'泰国香米',1,9,0,99),
-	(42,'赤小豆',1,19,1,99),
-	(43,'黑豆',1,19,1,99),
-	(44,'燕麦类',1,16,0,99),
-	(45,'薏米类',1,16,0,99),
-	(46,'中粮福临门品牌大米',1,9,1,99),
-	(47,'嘉禾品牌大米',1,9,1,99),
-	(48,'黑米',1,9,1,99),
-	(49,'原生态品牌大米',1,9,1,99),
-	(50,'食龙轩品牌大米',1,9,1,99),
-	(51,'双威品牌大米',1,9,1,99),
-	(52,'籼米/仙桃米',1,9,0,99),
-	(53,'一加一品牌面粉',1,13,1,99),
-	(54,'香雪品牌面粉',1,13,1,99),
-	(55,'泰谷香米品牌大米',1,9,1,99),
-	(56,'五常稻花香',1,9,1,99),
-	(57,'漫山香',1,24,1,99),
-	(58,'泰味香品牌大米',1,9,1,99),
-	(59,'大黄米',1,24,1,99),
-	(60,'豫冠品牌大米',1,9,1,99),
-	(62,'测试删除!!!!',0,0,1,99),
-	(63,'测试删除1123221321',1,62,1,99),
-	(64,'测试删除1123221321454',1,62,1,99),
-	(65,'测试删除1',1,62,1,99),
-	(66,'测试删除!!!!',0,0,1,99),
-	(67,'擦撒的撒1',1,66,1,99),
-	(68,'擦撒的撒12',1,66,1,99),
-	(69,'擦撒的撒123',1,66,1,99),
-	(70,'实打实打算',0,0,1,99),
-	(71,'撒大苏打',0,0,1,99),
-	(72,'多力油品牌',1,29,1,99),
-	(73,'杂粮面',1,13,0,99),
-	(74,'花生类',1,16,0,99),
-	(75,'刘波品牌小米',1,24,1,99),
-	(76,'黄豆',1,19,1,99),
-	(77,'豌豆类',1,19,0,99),
-	(78,'杂粮面类',1,13,1,99),
-	(79,'万源品牌大米',1,9,1,99),
-	(80,'原优品牌大米',1,9,1,99),
-	(81,'御皇贡品牌大米',1,9,1,99),
-	(82,'泰国大米',1,9,1,99),
-	(83,'五谷珍宝品牌大米',1,9,1,99),
-	(84,'吉米多品牌大米',1,9,1,99),
-	(85,'福临门品牌面粉',1,13,1,99),
-	(86,'神象品牌面粉',1,13,1,99),
-	(87,'荞麦类',1,16,1,99),
-	(88,'高粱类',1,16,1,99),
-	(89,'红米类',1,16,1,99),
-	(90,'粥类',1,16,0,99),
-	(91,'品牌小米',1,24,0,99),
-	(92,'小包装小米',1,24,0,99),
-	(93,'黑米类',1,16,0,0),
-	(94,'黄豆类',1,19,0,0),
-	(95,'黑豆类',1,19,0,0),
-	(96,'红豆类',1,19,0,0),
-	(97,'绿豆类',1,19,0,0),
-	(98,'豇豆类',1,19,0,0),
-	(99,'中粮五湖大豆油',1,29,0,0),
-	(100,'其他豆类',1,19,0,0),
-	(101,'糯米/江米类',1,16,0,0),
-	(102,'东北珍珠米类',1,9,0,0),
-	(103,'东北长粒香类',1,9,0,0),
-	(104,'原阳大米类',1,9,0,0),
-	(105,'小包装品牌大米类',1,9,0,0),
-	(106,'特价大米类',1,9,0,0),
-	(107,'芝麻类',1,16,0,0),
-	(108,'麦仁类',1,16,0,0),
-	(109,'淀粉类',0,0,0,0),
-	(110,'食用淀粉类',1,109,0,0),
-	(111,'稻花香类',1,9,0,0),
-	(112,'碎米',1,9,0,0);
+INSERT INTO `classify` (`cl_id`, `cl_name`, `cl_grade`, `cl_fid`, `cl_serial`, `eid`, `picture`) VALUES 
+	(1,'粮食',0,0,0,1,''),
+	(9,'大米',1,1,0,1,NULL),
+	(13,'面粉',1,1,2,1,NULL),
+	(16,'杂粮',1,1,6,1,NULL),
+	(19,'豆',1,1,5,1,NULL),
+	(21,'花豇豆',1,1,99,1,NULL),
+	(24,'小米',1,1,3,1,NULL),
+	(29,'食用油',1,1,1,1,NULL),
+	(34,'20L大豆油',2,29,99,1,NULL),
+	(40,'玉米类',2,16,99,1,NULL),
+	(41,'泰国香米',2,9,99,1,NULL),
+	(44,'燕麦类',2,16,99,1,NULL),
+	(45,'薏米类',2,16,99,1,NULL),
+	(52,'籼米/仙桃米',2,9,99,1,NULL),
+	(73,'杂粮面',2,13,99,1,NULL),
+	(74,'花生类',2,16,99,1,NULL),
+	(77,'豌豆类',2,19,99,1,NULL),
+	(90,'粥类',2,16,99,1,NULL),
+	(91,'品牌小米',2,24,99,1,NULL),
+	(92,'小包装小米',2,24,99,1,NULL),
+	(93,'黑米类',2,16,0,1,NULL),
+	(94,'黄豆类',2,19,0,1,NULL),
+	(95,'黑豆类',2,19,0,1,NULL),
+	(96,'红豆类',2,19,0,1,NULL),
+	(97,'绿豆类',2,19,0,1,NULL),
+	(98,'豇豆类',2,19,0,1,NULL),
+	(99,'中粮五湖大豆油',2,29,0,1,NULL),
+	(100,'其他豆类',2,19,0,1,NULL),
+	(101,'糯米/江米类',2,16,0,1,NULL),
+	(102,'东北珍珠米类',2,9,0,1,NULL),
+	(103,'东北长粒香类',2,9,0,1,NULL),
+	(104,'原阳大米类',2,9,0,1,NULL),
+	(105,'小包装品牌大米类',2,9,0,1,NULL),
+	(106,'特价大米类',2,9,0,1,NULL),
+	(107,'芝麻类',2,16,0,1,NULL),
+	(108,'麦仁类',2,16,0,1,NULL),
+	(109,'淀粉类',1,1,0,1,NULL),
+	(110,'食用淀粉类',2,109,0,1,NULL),
+	(111,'稻花香类',2,9,0,1,NULL),
+	(112,'碎米',2,9,0,1,NULL),
+	(121,'吃吃吃112',0,119,0,1,''),
+	(129,'测试啦啦啦',0,120,0,1,''),
+	(130,'吃啥想吃啥',0,128,0,1,''),
+	(131,'阿斯顿',0,128,0,1,''),
+	(132,'2133333',0,128,0,1,''),
+	(133,'2孙v',0,128,0,1,''),
+	(134,'889',0,128,0,1,''),
+	(135,'12388',0,128,0,1,''),
+	(139,'woshishui',0,138,0,1,''),
+	(140,'存储',0,138,0,1,''),
+	(141,'男装子分类',0,113,0,1,''),
+	(153,'男的是否·',0,113,0,1,''),
+	(162,'男装',0,0,0,1,''),
+	(163,'女装',0,0,0,1,''),
+	(164,'鞋靴',0,0,0,1,''),
+	(165,'裤子',0,0,0,1,''),
+	(166,'上衣',0,0,0,1,''),
+	(167,'生鲜',0,0,0,1,''),
+	(168,'内衣',0,0,0,1,'');
 ALTER TABLE `classify` ENABLE KEYS;
 UNLOCK TABLES;
 
@@ -4158,7 +4103,7 @@ UNLOCK TABLES;
 LOCK TABLES `enterprise` WRITE;
 ALTER TABLE `enterprise` DISABLE KEYS;
 INSERT INTO `enterprise` (`eid`, `ep_name`, `ep_short_name`, `ep_link`, `ep_remark`, `ep_type`, `ep_status`) VALUES 
-	(1,'河南砼鑫软件科技有限公司','砼鑫软件','0','0',0,1);
+	(1,'xshop','xshop','qq:2388399752','0',0,0);
 ALTER TABLE `enterprise` ENABLE KEYS;
 UNLOCK TABLES;
 
@@ -4167,8 +4112,8 @@ LOCK TABLES `goods` WRITE;
 ALTER TABLE `goods` DISABLE KEYS;
 INSERT INTO `goods` (`goods_id`, `title`, `describe`, `original_price`, `sale_price`, `sale_status`, `sale_type`, `cover`, `status`, `stock`, `sales_volume`, `delivery_place`, `despatch_money`, `despatch_is_plus`, `despatch_plus_money`, `free_postage_num`, `exec_free_postage_num`, `content`, `pictures`, `update_user`, `cl_id`, `cl_fid`) VALUES 
 	('0132c776e7fb8288af24787902f8afbd','糯米面20kg','四十斤江米面，好江米面',103.00,0.00,0,0,'https://xuanhuobang.com/cover_upload/025ec4aa-837f-4053-8584-239ae279ee85.jpeg',0,19,1,'本地',3.00,0,0,0,0,'<p>散装杂粮净重与实际重量误差在0.25kg均属正常请放心购买。&nbsp;</p><p>由于本品为粮食作物天气炎热不宜存放请少购勤购。 由于本品为粮食作物天气炎热不宜存放请少购勤购，若因存放原因生虫变质概不负责。</p><p>因批次不同故包装可能不同，请以实物为准，放心购买。</p>','[{"name":"c675cbfd-a622-47a3-bbc1-862f2bb9469d.jpeg","url":"https://xuanhuobang.com/pictures_upload/c675cbfd-a622-47a3-bbc1-862f2bb9469d.jpeg","uid":1539091444652,"status":"success"}]',108,73,13),
-	('083a1c71a7b519e81b40be58e9422bab','10kg昌旺五常稻花香米','二十斤五常稻花香米',80.00,0.00,0,2,'https://xuanhuobang.com/cover_upload/a4951441-91ea-43a1-aa75-f978d206a1f1.jpeg',0,20,0,'本地',0.00,0,0,0,0,'','[{"name":"7b4d65c2-b42a-4234-b4a7-ca8355337e3e.jpeg","url":"https://xuanhuobang.com/pictures_upload/7b4d65c2-b42a-4234-b4a7-ca8355337e3e.jpeg","uid":1541913687699,"status":"success"}]',108,105,9),
-	('09ae30588a3bc28b7a27adcf31b22781','秋天小町东北珍珠米50kg','五十斤黑龙江华川东北珍珠米',108.00,0.00,0,2,'https://xuanhuobang.com/cover_upload/306c08fa-8aac-4bac-b6cd-43234a94bb1a.jpeg',0,18,2,'本地',0.00,0,0,0,0,'','[{"name":"76966aed-a571-48cb-9e72-e76b084e1fea.jpeg","url":"https://xuanhuobang.com/pictures_upload/76966aed-a571-48cb-9e72-e76b084e1fea.jpeg","uid":1540099834633,"status":"success"}]',108,102,9),
+	('083a1c71a7b519e81b40be58e9422bab','10kg昌旺五常稻花香米','二十斤五常稻花香米',80.00,0.00,0,2,'https://xuanhuobang.com/cover_upload/a4951441-91ea-43a1-aa75-f978d206a1f1.jpeg',0,19,1,'本地',0.00,0,0,0,0,'','[{"name":"7b4d65c2-b42a-4234-b4a7-ca8355337e3e.jpeg","url":"https://xuanhuobang.com/pictures_upload/7b4d65c2-b42a-4234-b4a7-ca8355337e3e.jpeg","uid":1541913687699,"status":"success"}]',108,105,9),
+	('09ae30588a3bc28b7a27adcf31b22781','秋天小町东北珍珠米50kg','五十斤黑龙江华川东北珍珠米',108.00,0.00,0,2,'https://xuanhuobang.com/cover_upload/306c08fa-8aac-4bac-b6cd-43234a94bb1a.jpeg',0,15,3,'本地',0.00,0,0,0,0,'','[{"name":"76966aed-a571-48cb-9e72-e76b084e1fea.jpeg","url":"https://xuanhuobang.com/pictures_upload/76966aed-a571-48cb-9e72-e76b084e1fea.jpeg","uid":1540099834633,"status":"success"}]',108,102,9),
 	('0a6973f3cff5b5f51761b036c4f72b8b','小玉米片','小玉米片',40.00,0.00,0,0,'https://xuanhuobang.com/cover_upload/df7bc1d9-46da-4032-9147-cae3f1112304.jpeg',0,6,4,'本地',0.00,0,0,0,0,'','[{"name":"21664652-d15b-4b2d-b475-0784cf3ce2a1.jpeg","url":"https://xuanhuobang.com/pictures_upload/21664652-d15b-4b2d-b475-0784cf3ce2a1.jpeg","uid":1541211843332,"status":"success"}]',108,40,16),
 	('0d930f3860e53d46132f8966db5c6936','89斤豆浆专用豆','豆浆专用豆',185.00,188.00,0,2,'https://xuanhuobang.com/cover_upload/144b9b80-c765-4dc3-9cb5-f7d512409a79.jpeg',0,29,1,'本地',3.00,0,0,0,0,'','[{"name":"68f245a4-383c-4d79-9d5f-6aa8d91cd87a.jpeg","url":"https://xuanhuobang.com/pictures_upload/68f245a4-383c-4d79-9d5f-6aa8d91cd87a.jpeg","uid":1540101115650,"status":"success"}]',108,94,19),
 	('0ecb57d1484620189ce1e8f863500483','黑米','',121.00,125.00,0,2,'https://xuanhuobang.com/cover_upload/5f0e97d1-e442-40c5-9e9b-2912c5f1aa5c.jpeg',0,50,0,'本地',3.00,0,0,0,0,'','[{"name":"5cfc1c90-1392-41d6-9ffd-8216c242e42b.jpeg","url":"https://xuanhuobang.com/pictures_upload/5cfc1c90-1392-41d6-9ffd-8216c242e42b.jpeg","uid":1541211739833,"status":"success"}]',108,93,16),
@@ -4298,6 +4243,7 @@ INSERT INTO `message` (`msg_id`, `message_type`, `message_value`, `message_statu
 	('34d8aa68-594c-4d6d-85a4-f1d3e35848eb',1,'您有一个订单待处理: 用户 超级管理员(超级管理员) 下了一个订单，订单号:20181103160441154,请及时处理!',0,0,1),
 	('40d888aa-6280-470c-8135-2dae822db58e',1,'您有一个订单待处理: 用户 admin(admin) 下了一个订单，订单号:20181019153003373,请及时处理!',1,0,1),
 	('5dbc2175-a7f6-4e00-90e8-8c886994aa28',3,'新上特价大米49斤/96元一袋|',0,0,0),
+	('5f0bbf52-7779-485f-a1dd-f07b2a1134b8',1,'您有一个订单待处理: 用户 超级管理员(超级管理员) 下了一个订单，订单号:20190317184204435,请及时处理!',0,0,1),
 	('71ea295c-b65c-4459-b369-206510d172d2',2,'特价珍珠米24.5kg96厂家直销|12446e7dfc0ede6c63f4070120a42ce6',0,0,0),
 	('76877944-fa56-46cb-8e43-6e1a7cd245b7',3,'五星黑芝麻下调至490/袋|',0,0,0),
 	('82b0bf95-0df0-4d81-a53a-40c8887d7596',2,'特价大米上新49斤/96元',0,0,0),
@@ -4360,7 +4306,9 @@ INSERT INTO `order_details` (`od_id`, `order_id`, `goods_id`, `number`, `transac
 	('201811181455299890005','20181118145529989','5a6382eee9a188f4d10d413344197825',0,50.00),
 	('201811181455299890006','20181118145529989','5471bb2bfc89bc7a4330ef15a861542a',0,191.00),
 	('201811181455299890007','20181118145529989','3ac761a5abe0a7e96c61d9c4c91cdbd5',0,109.00),
-	('201811181455299890008','20181118145529989','0d930f3860e53d46132f8966db5c6936',1,185.00);
+	('201811181455299890008','20181118145529989','0d930f3860e53d46132f8966db5c6936',1,185.00),
+	('201903171842044350001','20190317184204435','09ae30588a3bc28b7a27adcf31b22781',3,324.00),
+	('201903171842044350002','20190317184204435','083a1c71a7b519e81b40be58e9422bab',1,404.00);
 ALTER TABLE `order_details` ENABLE KEYS;
 UNLOCK TABLES;
 
@@ -4386,7 +4334,8 @@ INSERT INTO `order_master` (`order_id`, `user_id`, `order_amount`, `despatch_mon
 	('20181017104353818',108,1440.00,0.00,0.00,2,14),
 	('20181019153003373',108,2205.00,0.00,0.00,2,14),
 	('20181103160441154',1,1807.00,9.00,0.00,0,11),
-	('20181118145529989',1,737.00,3.00,0.00,0,17);
+	('20181118145529989',1,737.00,3.00,0.00,0,17),
+	('20190317184204435',1,404.00,0.00,0.00,2,18);
 ALTER TABLE `order_master` ENABLE KEYS;
 UNLOCK TABLES;
 
@@ -4459,16 +4408,10 @@ ALTER TABLE `st_storage_out_master` ENABLE KEYS;
 UNLOCK TABLES;
 
 
-LOCK TABLES `st_supplier` WRITE;
-ALTER TABLE `st_supplier` DISABLE KEYS;
-INSERT INTO `st_supplier` (`supplier_id`, `supplier_name`, `supplier_link_man`, `supplier_link_tel`, `supplier_status`, `supplier_del`, `update_user`) VALUES 
-	(1,'供应商名称','供应商联系人','12345678911',0,0,1);
-ALTER TABLE `st_supplier` ENABLE KEYS;
-UNLOCK TABLES;
-
-
 LOCK TABLES `supplier` WRITE;
 ALTER TABLE `supplier` DISABLE KEYS;
+INSERT INTO `supplier` (`supplier_id`, `supplier_name`, `supplier_tel`, `supplier_address`, `supplier_describe`, `supplier_remark`, `create_user`, `update_user`, `enterprise`, `row_status`) VALUES 
+	(1,'默认供应商','123456789','郑州市高新区','这是一条系统自带的供应商','联系人:刘先生,手机号:000000123',1,1,1,0);
 ALTER TABLE `supplier` ENABLE KEYS;
 UNLOCK TABLES;
 
@@ -8972,17 +8915,22 @@ INSERT INTO `user_login` (`id`, `user_id`, `user_token`, `login_ip`, `login_addr
 	('0bcfaffc259039f5cd940e4c8508ae79',108,'6048a591787b0f7f18af1a279972ee5b','117.136.104.214','未知','未知','2019-01-22 11:07:58'),
 	('0bd86dd7d29d830098ee989c73953445',108,'296da929cd1c13a071377b239ab1c0d4','117.136.104.152','未知','未知','2018-12-11 13:18:02'),
 	('0c2e4b56354b6dc9c478efb5aa3f0675',1,'8bc3c6707e41a519ea710f3438891bb4','182.119.160.201','未知','未知','2018-11-30 13:09:36'),
+	('0c3db0077f177c7290cf2561e7dfd302',1,'720a838d87b68540e62795be24d5877b','192.168.31.8','未知','未知','2019-04-13 09:36:29'),
 	('0d41d22515b709862c5781b141d272e4',108,'e6c062820431c809ace3f965d366e207','183.205.191.238','未知','未知','2018-11-25 18:50:35'),
 	('0d8bf825bc2c221bcaadbca2307e7d41',1,'97079f54645294856819a3ee74c50b05','192.168.31.8','未知','未知','2018-09-24 18:52:03'),
 	('0d9c4f279dd2ecf5191bd55a2cdfd976',1,'8ff1ff158614c30592cfc7757cca306e','192.168.31.8','未知','未知','2019-04-09 08:48:17'),
+	('0e22e53879bd9d063e69d11a826be35a',1,'9383baadf112e2dd262e21725e6921f9','192.168.31.8','未知','未知','2019-04-13 09:38:00'),
 	('0f0265263166980e39ea5bfc9fb38441',108,'7c1b4e1e56b8277cd076d4d00df7c504','117.136.104.23','未知','未知','2018-12-10 13:09:03'),
 	('0f1de925e23d1696bff857ea2705141d',1,'ffe7c43765cc1bcb2a850f4a9a9c8ea8','192.168.31.8','未知','未知','2019-04-09 08:50:25'),
+	('0f32cfcc5b84532a9444af05ce921e99',1,'9682812e9e25d88fef84821544ccdf4f','192.168.31.163','未知','未知','2019-04-12 07:53:20'),
 	('0f63984ea296cf3d331c70185a9fd2bd',114,'65a81df4d7c7107d9eedf2721a82897c','123.161.251.210','未知','未知','2018-12-09 15:51:09'),
+	('1096e42dee2fb8188bcefb6a60739c3e',1,'81d3fd50e442da9f0f2c5439ad79b77e','0:0:0:0:0:0:0:1','未知','未知','2019-04-18 06:35:41'),
 	('113ea212fde4249489ffa52a02138678',108,'b4a4b0b6df0658ee7f54927533e11eeb','117.136.104.63','未知','未知','2018-11-22 11:16:39'),
 	('117ec7959d5a6af0e0d418c662145ad7',108,'9bc24847fc444d6788302e0e5a81de39','223.104.109.73','未知','未知','2019-01-12 12:50:00'),
 	('12205599ee8548c08c73fc4942b5d82d',1,'8f5facc8aed1db3022840514bd382dad','192.168.31.10','未知','未知','2018-10-01 00:14:58'),
 	('1236a2ca80e2902e622ff4cbf5db882a',127,'d6b07f399f517afd8661c8ccb732dd68','117.136.104.133','未知','未知','2018-12-20 12:12:43'),
 	('131a96d716f07c95221cbb27ab03a8dd',1,'5643224ce29f9c194e944e7433cfba54','192.168.31.8','未知','未知','2019-04-09 08:01:42'),
+	('138b22fc9e64faaac0455a617adf374f',1,'9a3ca21a83507d2c1fc6ba3806b0d5dc','192.168.31.8','未知','未知','2019-04-17 07:35:53'),
 	('13b7890d34c066423dcdd395a1bbfa2c',1,'a6d7f5b648d5b834552bfc7fccb3a958','182.119.160.201','未知','未知','2018-11-30 13:12:16'),
 	('13cece4b102cec3d14a2411e171d93d4',108,'88c112e6859ff8fcd2acd7c91d867944','117.136.36.174','未知','未知','2018-12-06 09:02:38'),
 	('1416f1a9ff876483ec64defdb3184e88',1,'5b3078ffd52cf0635791a5405f8c4a45','182.119.160.51','未知','未知','2018-12-07 10:07:09'),
@@ -9021,18 +8969,22 @@ INSERT INTO `user_login` (`id`, `user_id`, `user_token`, `login_ip`, `login_addr
 	('249901cda55ca2abbfee1a41a8e7e1a7',1,'d270800d4ff09432c5dfc0ecd1448b50','192.168.31.8','未知','未知','2019-04-08 11:12:33'),
 	('24dc448a2784ede861f320b87f5dcb69',1,'40aed9442b70014f2280b0525eb97a51','171.15.157.122','未知','未知','2018-12-01 20:26:02'),
 	('2536956c94303d36f0f962c8368584a3',1,'2c2fb065d296d5eac3e7a4201d11a699','183.205.191.178','未知','未知','2018-11-08 13:05:53'),
+	('253c884452e04470f95c81ec64c280d8',1,'384a106bcaa7cfaf6653b09fa0ff1e79','192.168.31.8','未知','未知','2019-04-13 08:42:22'),
 	('253d1afd3b21b15336ab0de8aaa73f69',1,'c32ae84d2c119455737d474d34a8510d','192.168.31.8','未知','未知','2019-03-24 10:08:53'),
 	('25b4b35d1c4b3dbcc7808260795c59d5',112,'8024b135e7c210882202dec2d19822c7','223.104.105.46','未知','未知','2018-12-06 12:40:56'),
 	('25b5b0a0189fb0cba607f86aa108fca6',1,'6d965f1f10e18bf4e654d35f62da9519','183.205.191.213','未知','未知','2018-11-07 19:29:08'),
+	('25cfc16d8677bc396a4a0fbc0f9085c6',1,'7c8c31108cbd3199431369f14b1e4d6e','192.168.31.8','未知','未知','2019-04-14 08:21:41'),
 	('26367ac4470e2bf1dfabad8bd88e7527',1,'d4c54e484c3e65bc72618ed4c86938c9','171.15.158.178','未知','未知','2018-11-28 19:37:27'),
 	('26a684b38b232f7c8bc2bd474601c7ce',1,'48e8ee04b48109503cfcef4aa44c4559','192.168.31.15','未知','未知','2019-04-09 02:43:53'),
 	('26c13b2069bb5b8c57c395d780378070',108,'e82486c3599ebab4f9bc2973157547e6','117.136.61.94','未知','未知','2019-01-16 13:59:19'),
+	('26e1f976bf8fa2a9dd2771d868853b1b',1,'bd074cc15229689421abf9d60b4ddcb3','192.168.31.8','未知','未知','2019-04-14 08:20:57'),
 	('2715902cb57656136af638ded87995c9',1,'2782b910a0d44fe2af9648ac837c1afa','171.15.157.150','未知','未知','2018-11-21 00:37:14'),
 	('27bf11ad81c0795b6d53c6f82c8018ca',1,'5eafff4e61cf29481e8ab0942912f68c','171.15.158.178','未知','未知','2018-11-30 20:53:38'),
 	('27dd106a84570b10bfa9ea34a3251dfa',1,'293c2526dd9985f4be5fa8f63d0f51de','171.15.158.180','未知','未知','2018-12-14 22:07:30'),
 	('286fcbc5e0d53a59b0e66b126d0789f3',108,'80b86ca56d4ecb380947cf9f5c81bd99','183.205.191.116','未知','未知','2018-12-02 21:35:07'),
 	('29bb4dd9245feb3249d5441ba21fcd74',1,'d6955cac08aaf214dc9f30562a3927a6','223.88.10.239','未知','未知','2019-01-06 21:56:21'),
 	('2a0d59c2facac89454aa2aa59a760843',109,'1ccc78e3bc912c4a6c3dd6c123b40f70','117.136.36.202','未知','未知','2018-12-07 21:35:23'),
+	('2a3e85b8f260eb85d0b9de094b0a49af',1,'046c7da02410ccf42296933d9a6db42a','192.168.31.8','未知','未知','2019-04-14 08:20:25'),
 	('2a92003dca06b11b18377c8b73ed3b0e',108,'294fea2debe6e5905269554a4bf91ce3','192.168.31.8','未知','未知','2018-10-01 21:47:02'),
 	('2aa14ab53a913959bead8ef019b40a18',1,'7784adca1f4fe76f32f75b06f550ae95','171.15.158.178','未知','未知','2018-11-30 21:19:17'),
 	('2af21a892b77a2cf3300552b38aea2d2',109,'55406a0ee4e435f863b7e1c4e2aa3163','117.136.36.174','未知','未知','2018-12-07 10:10:39'),
@@ -9040,6 +8992,7 @@ INSERT INTO `user_login` (`id`, `user_id`, `user_token`, `login_ip`, `login_addr
 	('2c6a391ff9ff6f3caad42cb59eea7d12',1,'21ac0e7df356b384983315e5d001d2a9','182.119.160.201','未知','未知','2018-11-30 13:03:56'),
 	('2d3fa1c9d3a2b6e0ac01c503cecf5641',1,'1dd14ccef225b8df3dd049e46d8cb8e1','171.15.157.146','未知','未知','2018-12-05 20:09:32'),
 	('2de16f47f4b11d5ab8e212da1089d441',108,'88930cfacfe16d72f23c77e6848e6bdb','117.136.104.15','未知','未知','2018-12-09 22:04:56'),
+	('2dff055c5f7d543da420d887966eda7a',1,'28dce99e4972a5ca74d792fd05c89fea','192.168.31.8','未知','未知','2019-04-14 20:11:48'),
 	('2e221d991b1d800e8484e718a3645d0e',1,'f380f83d670ef87d60c0783a250b6831','171.15.158.178','未知','未知','2018-11-30 21:25:35'),
 	('2e4a504b0fd718bac071497002c1a482',1,'2d2c16d8ade38133329b86b7d8f78012','182.119.166.7','未知','未知','2019-03-23 10:46:18'),
 	('2e5da0716cea37cbbef5446327d292b0',1,'f4a76ad289c6533336539a4493673028','171.15.158.178','未知','未知','2018-11-29 19:44:18'),
@@ -9052,16 +9005,19 @@ INSERT INTO `user_login` (`id`, `user_id`, `user_token`, `login_ip`, `login_addr
 	('304ebac5389edd56d270be31d3a856f0',130,'018dcf6ff715d53648ec8540abe0eece','123.55.49.239','未知','未知','2018-12-16 16:04:58'),
 	('30788dcd7d96e3d99f83e01a05ac64e1',139,'16db86f59c9bdc58bdd5b29e0a771623','223.104.186.221','未知','未知','2018-12-29 10:24:42'),
 	('31259a5462044f76c436271936aad37c',1,'4c3ca794939a80d7f2952aa5a713d079','192.168.31.8','未知','未知','2019-04-08 20:12:04'),
+	('32b176309e43a989cfc57bf7653667b9',1,'235bd4f15887b78f1f1a73c9437856ec','192.168.31.8','未知','未知','2019-04-13 09:46:29'),
 	('32d99606074b3156f91deb5ef54edbf9',1,'62fef2450f2815d3487997d8714c1b97','182.119.163.3','未知','未知','2018-11-07 11:19:36'),
 	('32e2aadf4e4db44934e9715b5cbad1e7',1,'b488758c56901dfffe29b92f8cbaca0b','171.15.159.253','未知','未知','2018-12-17 20:19:27'),
 	('340ceb231e0f1086e247f4b08d9fcab9',1,'4edeb99a199d8d1273e3ac90261296d1','171.15.159.101','未知','未知','2018-12-09 23:32:46'),
 	('3440f0bd25826713eaf1cbd01463c877',1,'1aeb822a368a6c9059e8bcdbdd1ad3ea','171.15.157.150','未知','未知','2018-11-20 21:30:30'),
 	('34697042acb49c4c46c1b4247df5ffd6',1,'4d624eb86abd9e85965baf72284bebcd','182.119.160.208','未知','未知','2018-12-09 09:23:52'),
 	('3519db8f082cdc4714116eb76d493bcd',115,'f777e5f7e347889abdabd8e8b4ac3924','183.205.136.211','未知','未知','2018-12-09 16:17:57'),
+	('360c866ea956225b564f40eeafeab927',1,'2c6ef832284f3873400cae00f0397700','192.168.31.8','未知','未知','2019-04-16 05:43:22'),
 	('365deb7b4d39b35acf0298ed42b73c8d',109,'1a36d4ed20cfd1996f9f4f6bf15f2b68','117.136.104.92','未知','未知','2018-12-03 11:22:57'),
 	('3661341445332b5dad4a9b2be8812b69',109,'a6bf0cc133310d8d71747b19ed6d3d61','117.136.104.15','未知','未知','2018-12-10 08:05:34'),
 	('36fe447dcad9fb92452c1accd3dca54d',1,'19fab400e400c0ee1dc7b082f18e0fa5','221.15.252.167','未知','未知','2018-12-02 08:51:45'),
 	('370b34aa57a7a3330e8cd037a917e54d',113,'1c0c4d2aa55610e7a89bbe1ad8ed0e4c','117.136.104.28','未知','未知','2018-12-09 09:15:21'),
+	('37add9cc52e8b21d8edf5b0012cfce72',1,'5e81bef36ded42aff2f270f65be04a0d','0:0:0:0:0:0:0:1','未知','未知','2019-04-22 09:18:42'),
 	('38595dfb910244e629a5fefb22b34dba',1,'9e2d9d34b78254dd617faf17315a1b3f','171.15.158.178','未知','未知','2018-11-29 20:23:07'),
 	('38f6d2aebf9299e3fd6138bd2bfda83f',108,'c58a530954d2ca9a2c21dcbb69fbe3c2','183.205.191.165','未知','未知','2018-11-22 07:18:38'),
 	('39d1e9348b7b0404dd34356f1efdeb9e',1,'3be90fc6c3891a0814f417847774a022','192.168.31.8','未知','未知','2019-04-09 07:51:46'),
@@ -9088,9 +9044,11 @@ INSERT INTO `user_login` (`id`, `user_id`, `user_token`, `login_ip`, `login_addr
 	('4a70eafe4a47c37edb5ccebd20a534a7',109,'2a8647a9f3b761fc542378ccf9508da5','117.136.36.227','未知','未知','2018-12-26 10:08:01'),
 	('4ac03e409588c2e68a5b41c955e38e8d',120,'e87f49865202da7705428d577715ad44','61.158.146.134','未知','未知','2019-02-16 11:30:55'),
 	('4b2ccefc0f90e8e588a2a8cb4888b2c9',1,'424d11cb754efb4b5480187245cc76c8','192.168.31.8','未知','未知','2018-09-24 19:11:02'),
+	('4bd592311a6ff7504b426407ae4493d2',1,'acfde7e8d45765ad71b01a2c324f6279','192.168.31.8','未知','未知','2019-04-13 09:32:15'),
 	('4c435be9c030a46b165e89e8a93bac45',1,'e621736c26e4836eb92e8eafcb80d6bf','171.15.159.18','未知','未知','2018-11-15 22:57:57'),
 	('4d2034ccb0e39b1fa462f4ebd844953d',1,'c89847a1cdef2d6b586bf30aa6c618dd','39.162.9.98','未知','未知','2018-11-29 21:00:59'),
 	('4d2fa03c805dbe0ba5464e94b80c7fd8',109,'3730740e0472c6e6092a0e5c30142ab8','117.136.104.15','未知','未知','2018-12-09 08:56:59'),
+	('4d6931c7852ffbb70ad2b1686adef7ba',1,'734496abaa87d851eead2004e932e869','192.168.31.8','未知','未知','2019-04-13 07:44:12'),
 	('4e49ffe4dad3f18df907fac466970546',1,'0ca79bd7d645252cd19c07d64c8f5c5c','117.136.104.66','未知','未知','2018-11-23 12:24:59'),
 	('4ed19384824f2929e64553165de4e762',1,'5f00187e497004e4e28b22b577e22085','222.89.212.235','未知','未知','2018-10-31 13:47:08'),
 	('4edc04d1776e23187ee3df9a021dbd6b',109,'573131a2916bfea3edcefdf9ec0a5ee7','117.136.104.167','未知','未知','2018-11-30 08:24:03'),
@@ -9114,6 +9072,7 @@ INSERT INTO `user_login` (`id`, `user_id`, `user_token`, `login_ip`, `login_addr
 	('58a1d13e6f78fca54bb7974a668554ba',109,'ec8ab747533c10faa86a03a13607ba1b','183.205.191.67','未知','未知','2018-11-29 21:10:26'),
 	('59b491a23cae4c81427b9e2107e45597',122,'fb1e5ae605732604cff0639da4af75ed','123.149.140.254','未知','未知','2018-12-20 11:28:59'),
 	('5acee059e371cea98d0341086172e709',109,'36e8554c77bf26722cc9b79cde5d50d9','117.136.104.167','未知','未知','2018-11-30 10:59:48'),
+	('5ae108e76b14d8057b3650b737a90173',1,'b16b04aac0ff6352e21e55b824ba8cef','192.168.31.8','未知','未知','2019-04-14 08:22:17'),
 	('5af5e5f3d367f26af3c44a4d7c5e6cc7',1,'2c12f2db9d50ed34af7dc30e98691541','182.119.166.151','未知','未知','2018-11-24 17:49:23'),
 	('5b0e451efc989af9b7133b3c1430eda9',1,'0c4eb2a4386daadbdc3c0f7a665161fc','171.15.159.101','未知','未知','2018-12-11 15:57:34'),
 	('5b796086eae7be92c6f42c41a2ed7bd7',1,'d9784afb02328a662ef761029947fa38','171.15.157.150','未知','未知','2018-11-21 20:34:26'),
@@ -9163,6 +9122,7 @@ INSERT INTO `user_login` (`id`, `user_id`, `user_token`, `login_ip`, `login_addr
 	('71c2b4f95a206c9d3869ef4eae568122',1,'1f3a7e6a4519a6ef83b4759fce5c4305','171.15.158.146','未知','未知','2018-11-13 18:37:08'),
 	('726ab192128887620e4961db28c8c870',1,'ef87673898af8b2cf435ac457f26a63a','192.168.31.8','未知','未知','2018-09-30 20:44:07'),
 	('73306f3d14f136d4a6a73e55cac27151',142,'e8c052923671c9d8ea13405829ce1170','61.158.147.16','未知','未知','2019-01-09 16:11:38'),
+	('7368c5d2db831311c84d598401ff93bc',1,'376180fa8ffba05ee9839ef06dd71399','192.168.31.8','未知','未知','2019-04-12 07:27:45'),
 	('73821faddd00729ad51b704fe01c7970',109,'c0687eeb5865c83781f6dec7e9e59494','183.205.191.67','未知','未知','2018-11-29 20:37:18'),
 	('7441b71736ee9d66f9abf6082f96d54a',1,'ef7d4fca3a5bdd8912927b4a2ced2cff','192.168.31.8','未知','未知','2019-03-28 09:32:47'),
 	('74af68205e590dd8ce7e899cf0b12d84',121,'f3d5d28b2e2f57dfe5424b50f99a6f77','117.136.44.176','未知','未知','2018-12-10 16:33:07'),
@@ -9177,6 +9137,7 @@ INSERT INTO `user_login` (`id`, `user_id`, `user_token`, `login_ip`, `login_addr
 	('7b04540176a71085fc7617720159ee83',1,'34984c152151c8f4e0330149873171f4','192.168.31.8','未知','未知','2019-03-28 09:17:11'),
 	('7b21a3c9657696fdfdd232f01622759e',109,'efbdb01cd417b876f541eb5662078d28','223.104.105.43','未知','未知','2018-12-26 14:03:43'),
 	('7b4d019404c5cb4b652e3c01bca020e7',1,'3541488f1662882c40b607ec93c8b8db','171.15.159.124','未知','未知','2018-12-13 21:18:24'),
+	('7c0614fdc75754087e80711af5fcab56',1,'849e3921c265a02a2d40a63988166678','192.168.31.8','未知','未知','2019-04-13 09:44:40'),
 	('7db08364a07a702282e7db1d5dbbaab8',144,'db5a64042495830f87a28dcde988ffdc','223.90.205.85','未知','未知','2019-01-09 18:52:56'),
 	('7e877526f4a4cb9b50cd78ecb8743d46',1,'5e56ceaf3fae7a1f1a4acf9a285d5152','171.15.159.124','未知','未知','2018-12-13 21:17:49'),
 	('7f703f2f8ecd114c726166ac4b66e130',109,'89cb08509c6886e690809ab789d2febb','223.104.105.251','未知','未知','2018-12-18 19:50:36'),
@@ -9203,6 +9164,7 @@ INSERT INTO `user_login` (`id`, `user_id`, `user_token`, `login_ip`, `login_addr
 	('8b190cfa2c4413f1e94ff18ce944fb1f',1,'66af196beb898291930d923747287a6d','171.15.158.203','未知','未知','2018-11-27 13:13:44'),
 	('8bab014d993454fc2f506f2427822034',1,'2662b43b4f3992301407022c56ad8c73','117.136.104.45','未知','未知','2018-11-10 12:11:28'),
 	('8c58720a5d8e9f3468effec2a1857b4f',139,'90007951a3c64af7a552766fefe75256','61.158.146.29','未知','未知','2019-02-10 11:52:11'),
+	('8c649e4b7f818f36a77dfcdd8b09a6fa',1,'3b288789151604f9ca514bebc818c6b0','0:0:0:0:0:0:0:1','未知','未知','2019-04-18 06:53:37'),
 	('8c82c2156309bb9dd11a6656eff871b3',1,'e8bc464f902c1643efa6ba78230d4f14','171.15.157.122','未知','未知','2018-12-03 09:55:40'),
 	('8cc0c0e50d54ef4b95cfcbeb7795ae9f',1,'0fcc21522ab654763721329ff312e4a6','192.168.31.8','未知','未知','2018-09-24 19:33:25'),
 	('8cf8479dbf47b0db07d08ad94ffcefe6',1,'58ddb0885cdd18034774520e0a8aef50','117.136.104.66','未知','未知','2018-11-23 17:20:12'),
@@ -9236,6 +9198,7 @@ INSERT INTO `user_login` (`id`, `user_id`, `user_token`, `login_ip`, `login_addr
 	('9c42e8d104141e9b93da37da9bbed797',1,'ca15f1efe0ba4fc3dfd579aec0b219ec','182.119.163.3','未知','未知','2018-11-08 09:55:06'),
 	('9d6d682006f77838cfb7225a7f58fe70',109,'d853c67e42a7489a53dcbf1d62a50e77','223.104.105.251','未知','未知','2018-12-18 19:59:25'),
 	('9dfcc716ab798580171e0a250572956b',1,'62cddce9aefd5d2769b7eb73157905cc','192.168.31.8','未知','未知','2018-09-30 21:30:30'),
+	('9e0a03f29e527d380e7c88802f636831',1,'8e4f26394b823524a0e6a9734bd9e84a','0:0:0:0:0:0:0:1','未知','未知','2019-04-22 07:43:29'),
 	('9e45bec0c60994692efdc132e14cbb79',1,'81101521d2d85335f4205c0f64dfdb89','171.15.158.146','未知','未知','2018-11-13 23:21:31'),
 	('9e710bba7e86d629587f82937a161dcd',1,'332f63a78881f1834c7ff48df363a566','192.168.31.8','未知','未知','2019-04-09 07:55:22'),
 	('9ebd0bfd4420a856c5be659b23edaae7',108,'0f2a3fbca8ecb14edc1a27c323c64fb0','117.136.104.224','未知','未知','2018-11-13 18:43:48'),
@@ -9247,6 +9210,7 @@ INSERT INTO `user_login` (`id`, `user_id`, `user_token`, `login_ip`, `login_addr
 	('a257c1ff1037606bc2958feadd8fa74d',1,'15c6964f66da59867fbc5f42056c9d7f','182.119.160.201','未知','未知','2018-11-30 11:40:51'),
 	('a2675fe49b77c2fd1d4aa7e4e54a275c',147,'d9336b1bc965c0002d1e7b3735272686','115.61.92.79','未知','未知','2019-02-05 17:03:55'),
 	('a2d77141b9452da26bb5e5fcca0a82a1',1,'22c49d0319c03babb607d80939696640','171.15.157.146','未知','未知','2018-12-06 20:51:18'),
+	('a33f94cd88927cf59b3aac9cd2a95bb2',1,'40dd85726df4748baa9d256f8759e556','192.168.31.8','未知','未知','2019-04-13 07:08:42'),
 	('a3d503b12da20a828b9ff23fbc52ee42',1,'9b48d742f3c44471eeb9eeb48399a461','192.168.31.8','未知','未知','2018-10-04 21:14:09'),
 	('a3feec8b17b1d9ba4dd1af3c363c3c99',1,'1c6949251383ba2d093219ac5533bde7','192.168.31.8','未知','未知','2019-04-01 10:04:43'),
 	('a5a7a7a199babee51f4a4cf1a0c3ed80',1,'7c545baccd8616096e7a2c0373b5e8cc','171.15.158.146','未知','未知','2018-11-14 20:01:32'),
@@ -9254,6 +9218,8 @@ INSERT INTO `user_login` (`id`, `user_id`, `user_token`, `login_ip`, `login_addr
 	('a7e6f33d27d5275f60fc310419fced27',1,'bca076c3243ac0d474733fd717f8d3a1','171.15.158.178','未知','未知','2018-11-30 21:14:56'),
 	('a890bf49131a8c23c42dfcfde03ac94f',109,'fa32f1e31c89536b83712b189b97f191','117.136.104.114','未知','未知','2018-12-14 22:39:04'),
 	('a8c85c0daf313064637ad731919230bc',120,'49f38ba01f2c81b5e63a3615947db6ac','61.158.147.251','未知','未知','2018-12-15 08:48:45'),
+	('a8ca26d3e27f834cd160bdd79497a314',1,'7c67799a337e688e6d95bdfc06f14e49','0:0:0:0:0:0:0:1','未知','未知','2019-04-19 06:05:25'),
+	('a8e16cc865b78abba6cf5f61bf6da9a1',1,'768f92c9d24bafeacdd6ac6385e20535','192.168.31.8','未知','未知','2019-04-14 20:15:25'),
 	('a8e741aec2c493d5c56092f4d5c2c501',1,'fdfc077922bde148d6f6d4365e8154bd','171.15.158.180','未知','未知','2018-12-14 22:01:49'),
 	('a975807ffbcaaaa267419b5c4627785d',109,'f054fbfc990d6b0c43121548cd77b26e','183.205.191.67','未知','未知','2018-11-29 20:39:03'),
 	('aa1d31c5199590f9c573b933593f5981',1,'5e11e29ab983827ef3cddfa4fc01726f','117.136.104.66','未知','未知','2018-11-23 12:37:28'),
@@ -9302,6 +9268,7 @@ INSERT INTO `user_login` (`id`, `user_id`, `user_token`, `login_ip`, `login_addr
 	('c3bad75b05d21f7db4af83e18908f8ae',109,'0a06df37ede5f1518c7e7ccd0952af7e','183.205.191.67','未知','未知','2018-11-29 20:19:11'),
 	('c3d63046ad56ffd3bfe1fa998b33d6c1',1,'90c689fd9f01212b5f72ecc424cffb27','192.168.31.8','未知','未知','2019-04-09 07:55:35'),
 	('c421c085b531b977ed1558cc1748e9fa',1,'49652ef7a9a40da73136ad534df953a7','182.119.160.201','未知','未知','2018-11-30 11:41:33'),
+	('c4b091df07397f49ea7a717d03d9ba31',1,'1a9593200bccb6e72a2ee0c173c2ed4f','192.168.31.8','未知','未知','2019-04-14 20:08:43'),
 	('c5883b446e9d00e612e5e172251937a7',137,'b218848bc3ca71cb09aa5f25c275db6e','192.168.31.8','未知','未知','2018-12-27 20:35:23'),
 	('c5f39dcc2f930ba172e2dbe2d5415012',1,'af10be67c12dcb54c8be250678de41c3','192.168.31.8','未知','未知','2019-04-09 07:43:49'),
 	('c64a6a052cd69130ddc656b08793b88b',109,'179907605f038c69cb1992ff5a99bf77','117.136.104.15','未知','未知','2018-12-09 09:20:12'),
@@ -9332,11 +9299,13 @@ INSERT INTO `user_login` (`id`, `user_id`, `user_token`, `login_ip`, `login_addr
 	('d2ed532070aa4c0de64100f4aa28da61',1,'e3c82b85e61afb267dd2088d14b3aa1f','183.205.191.49','未知','未知','2018-11-14 18:03:51'),
 	('d41ae702d0ef03b253b0b7665b3dfdc2',109,'3f77e8ab694728d178c05520b3e11c5b','117.136.36.202','未知','未知','2018-12-07 21:58:22'),
 	('d4501f5d224bc4aad13f67a7f35746f8',108,'47137fde2958ae88bfc949f72bfc6012','117.136.104.81','未知','未知','2018-11-11 17:38:47'),
+	('d4b3428c47e5857c60f331bb3f05cce8',1,'a68b54004b1c0e78fc79747ac1dcad25','192.168.31.8','未知','未知','2019-04-16 05:41:52'),
 	('d52d8676996364a30e70ceab8ff19c30',1,'9ef3d2a4b6ed7d29c00c43b6ade7a79b','223.88.10.244','未知','未知','2019-01-29 09:30:41'),
 	('d605bac07db1e83b06060c7089b7a02d',141,'565641bd1a47e9c9f563258ff5e78e65','222.89.207.24','未知','未知','2019-01-08 14:24:23'),
 	('d6652152ac8aad9142a620c4256c80c3',131,'af35b435b715a58a3717d58b05debe8e','117.136.44.170','未知','未知','2018-12-16 17:01:36'),
 	('d6902ac947d75d0ba78d5022980859ff',108,'da96e178be1fa65ff6a41fa8c5b72ebe','183.205.191.32','未知','未知','2018-11-28 20:16:19'),
 	('d79164aa36d742ec4ede80f6c448f39d',109,'d18a18cbcd0ec5d89c63069db5904e14','117.136.36.202','未知','未知','2018-12-08 20:26:03'),
+	('d85f99822b5c08bbc6e215bfb1c26200',1,'3fdfc42eb4825cea90e87d601c9a62ee','192.168.31.8','未知','未知','2019-04-13 09:42:06'),
 	('d8d1bb0b851f1cfb64afb35bd2d93042',1,'29be2bffb8eb9ecff87ff838953f080f','182.119.160.201','未知','未知','2018-11-30 10:55:41'),
 	('d8f59ab68d4eb958dc5c1f7031cee898',139,'2e3e65e49945156f089fb7d982bae0a4','223.104.186.221','未知','未知','2018-12-29 10:35:10'),
 	('d9aa63ef12250cbb980d099d9950b58c',109,'d37fb6584ff3e599ab822c9636976749','183.205.191.221','未知','未知','2019-01-15 11:04:20'),
@@ -9345,6 +9314,7 @@ INSERT INTO `user_login` (`id`, `user_id`, `user_token`, `login_ip`, `login_addr
 	('db0b8847f3a6edd622b3d6df6ed3d8b5',1,'4f4041115109fd4cdd1fe704197b7056','171.15.158.180','未知','未知','2018-12-14 22:14:13'),
 	('dc330f580e3e35c2a7407ae638f88430',1,'65aca22884807144a4628d57a101b244','171.15.158.180','未知','未知','2018-12-14 22:34:13'),
 	('dc5a631547a1a3b2ef4d2b5cd473f7b9',1,'d4e9c96bd174052a387d26859a00a007','171.15.158.180','未知','未知','2018-12-14 21:32:20'),
+	('dcabe174353273ed046dd72e7a0c2a4e',1,'94dc99dc8742bfebd643d5695429f2ee','192.168.31.8','未知','未知','2019-04-13 09:39:13'),
 	('dce3add0b05f20e9302a1477a6abc4b8',1,'ca3d8e65fd1a6aaa6153ebc61e3673f9','192.168.31.8','未知','未知','2019-04-08 10:08:47'),
 	('dcf3d5f8c9521918355674a9ffe07fcb',1,'fc00ea412db35c481e5ad64655d74a6e','183.205.191.49','未知','未知','2018-11-13 18:42:25'),
 	('dd4a004b6896c0ac70e93d98c245a17d',108,'9b9c03efe2b6e5007f8dc81ced12d1f5','183.205.191.71','未知','未知','2018-12-27 20:11:46'),
@@ -9381,6 +9351,7 @@ INSERT INTO `user_login` (`id`, `user_id`, `user_token`, `login_ip`, `login_addr
 	('ea49a677cc19d1c8177198268d061efe',108,'c7c11282acecc021e3da558dce83457b','183.205.191.165','未知','未知','2018-11-21 07:16:59'),
 	('ec670d0c6c774be6a0f69938887c1ff5',1,'e7370173ee26b09be668246a0274d98e','192.168.31.8','未知','未知','2019-03-28 09:26:51'),
 	('ec813ba898a79098b49cfe768a3a98ed',1,'6d0200e06598770ecdc420cb80de7fdb','221.15.255.186','未知','未知','2018-12-06 10:19:48'),
+	('ec88f1cb694fc8027a753ad2f7fd1d58',1,'3e18840f4cb1f42975c87c0cc7dcf606','192.168.31.8','未知','未知','2019-04-14 20:14:29'),
 	('ec9cd9c645c09b71dd785b37f6ed4b22',122,'0b17d381b8cad42aa39f93e782fceb6f','123.149.140.91','未知','未知','2018-12-10 17:00:36'),
 	('ed1e69d17c084946e35578cdac105a1e',108,'e9ac7452c0e6d4450d245fc2db9ebde7','117.136.104.214','未知','未知','2019-01-22 10:56:28'),
 	('eeac4731b4247a0a2bbc59eb086f9237',1,'d3bd5443eb2e512ae58100e208433797','171.15.158.180','未知','未知','2018-12-14 21:32:27'),

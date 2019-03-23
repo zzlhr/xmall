@@ -25,7 +25,7 @@
 1. 还原数据库
 ```bash
 # 还原
-mysql -uroot -p < ./sql/shop.sql
+mysql -uroot -p < ./sql/xshop.sql
 # Enter password:
 ```
 
