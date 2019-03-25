@@ -102,6 +102,9 @@ public class ClassifyServiceImpl extends BaseServiceImpl implements ClassifyServ
 
     @Override
     public ClassifyVO add(Classify classify, String token) throws XShopException {
+        if (classify.getClName().isEmpty()) {
+            throw new XShopException(ErrEumn.CLASS_NAME_CONNOT_NULL);
+        }
         Integer eid = userService.getUserEnterpriseId(token);
 
         Classify existClassify = classifyMapper.findClassifyByClassName(eid, classify.getClName());
