@@ -4,15 +4,18 @@
 
         <div slot="header" class="clearfix">
             <span>企业列表</span>
-            <el-button style="float: right; padding: 6px 0" type="text" @click="loadData" icon="el-icon-refresh">刷新</el-button>
-            <el-button style="float: right; padding: 6px 0" type="text" @click="addEnterprise" icon="el-icon-circle-plus">添加</el-button>
+            <el-button style="float: right; padding: 6px 0" type="text" @click="loadData" icon="el-icon-refresh">刷新
+            </el-button>
+            <el-button style="float: right; padding: 6px 0" type="text" @click="addEnterprise"
+                       icon="el-icon-circle-plus">添加
+            </el-button>
             <el-form :inline="true" :model="param" class="demo-form-inline">
                 <el-form-item label="企业名">
                     <el-input size="mini" v-model="param.epName" placeholder="可模糊关键字"></el-input>
                 </el-form-item>
                 <el-form-item label="企业类型">
                     <el-select size="mini" v-model="param.epType" value="全部" placeholder="请选择类型">
-                        <el-option label="全部" value="" ></el-option>
+                        <el-option label="全部" value=""></el-option>
                         <el-option label="搅拌站" value="0"></el-option>
                         <el-option label="混凝土" value="1"></el-option>
                     </el-select>
@@ -39,7 +42,7 @@
             <el-table-column
                     type="selection"
                     fixed
-                    width="45" >
+                    width="45">
             </el-table-column>
             <el-table-column
                     prop="eid"
@@ -78,7 +81,7 @@
                     label="操作"
                     fixed="right"
                     width="180"
-                    >
+            >
                 <template slot-scope="scope">
                     <el-button type="primary" size="mini" plain @click="handleClick(scope.row)">查看</el-button>
                     <el-button type="success" size="mini" plain @click="jumpEdit(scope.row)">编辑</el-button>
@@ -94,19 +97,21 @@
                     <el-input size="small" v-model="form.epShortName" placeholder="请输入企业简称"></el-input>
                 </el-form-item>
                 <el-form-item label="联系方式" prop="epLink">
-                    <el-input type="textarea" :autosize="{ minRows: 2, maxRows: 4}" v-model="form.epLink" placeholder="请输入联系方式"></el-input>
+                    <el-input type="textarea" :autosize="{ minRows: 2, maxRows: 4}" v-model="form.epLink"
+                              placeholder="请输入联系方式"></el-input>
                 </el-form-item>
                 <el-form-item label="企业备注" prop="epRemark">
-                    <el-input type="textarea" :autosize="{ minRows: 2, maxRows: 4}" v-model="form.epRemark" placeholder="请输入企业备注"></el-input>
+                    <el-input type="textarea" :autosize="{ minRows: 2, maxRows: 4}" v-model="form.epRemark"
+                              placeholder="请输入企业备注"></el-input>
                 </el-form-item>
-                <el-form-item label="企业类型" prop="epType" >
-                    <el-select size="small" v-model="form.epType"  placeholder="请选择类型" >
+                <el-form-item label="企业类型" prop="epType">
+                    <el-select size="small" v-model="form.epType" placeholder="请选择类型">
                         <el-option label="搅拌站" :value="0"></el-option>
                         <el-option label="混凝土" :value="1"></el-option>
                     </el-select>
                 </el-form-item>
                 <el-form-item label="企业状态" prop="epStatus">
-                    <el-select size="small" v-model="form.epStatus"  placeholder="请选择状态" >
+                    <el-select size="small" v-model="form.epStatus" placeholder="请选择状态">
                         <el-option label="启用" :value="0"></el-option>
                         <el-option label="禁用" :value="1"></el-option>
                     </el-select>
@@ -131,17 +136,18 @@
 
 <script>
     import httpUtil from '../../util/HttpUtil.js';
+
     export default {
         name: "UserList",
         data() {
 
             return {
-                error:{
-                    msg:'暂无消息',
-                    type:'info',
-                    show:'true'
+                error: {
+                    msg: '暂无消息',
+                    type: 'info',
+                    show: 'true'
                 },
-                param:{
+                param: {
                     page: 1,
                     pageSize: 10,
                     epName: '',
@@ -161,50 +167,50 @@
                 totalElements: 0,
                 tableData: [],
                 //弹窗是否显示
-                dialogVisible:false,
+                dialogVisible: false,
                 //弹窗标题
                 dtitle: '添加企业',
                 //添加企业
                 form: {
                     eid: null,
-                    epName:'',
-                    epShortName:'',
-                    epLink:'',
-                    epRemark:'',
+                    epName: '',
+                    epShortName: '',
+                    epLink: '',
+                    epRemark: '',
                     epType: '',
                     epStatus: '',
                     //按钮组是否显示
                     btnShow: true,
                     //表单是否禁止编辑
-                    forbidden:false,
-                    restBtn:true
+                    forbidden: false,
+                    restBtn: true
                 },
                 //添加企业自定义验证
                 rules: {
                     epName: [
-                        { required: true, message: '请输入企业全称', trigger: 'blur' },
-                        { min: 2, max: 50, message: '长度在 2 到 50 个字符', trigger: 'blur' },
-                        { validator:this.Validate.checkSpace, trigger: 'blur' },
-                        { validator: this.Validate.checkIllegal, trigger: 'blur' }
+                        {required: true, message: '请输入企业全称', trigger: 'blur'},
+                        {min: 2, max: 50, message: '长度在 2 到 50 个字符', trigger: 'blur'},
+                        {validator: this.Validate.checkSpace, trigger: 'blur'},
+                        {validator: this.Validate.checkIllegal, trigger: 'blur'}
                     ],
                     epShortName: [
-                        { required: true, message: '请输入企业简称', trigger: 'change' },
-                        { min: 2, max: 20, message: '长度在 2 到 20 个字符', trigger: 'blur' },
-                        { validator:this.Validate.checkSpace, trigger: 'blur' },
-                        { validator: this.Validate.checkIllegal, trigger: 'blur' }
+                        {required: true, message: '请输入企业简称', trigger: 'change'},
+                        {min: 2, max: 20, message: '长度在 2 到 20 个字符', trigger: 'blur'},
+                        {validator: this.Validate.checkSpace, trigger: 'blur'},
+                        {validator: this.Validate.checkIllegal, trigger: 'blur'}
                     ],
                     epLink: [
-                        { required: true, message: '请输入企业联系电话', trigger: 'change' },
-                        { max: 255, message: '长度在 2 到 255 个字符', trigger: 'blur' }
+                        {required: true, message: '请输入企业联系电话', trigger: 'change'},
+                        {max: 255, message: '长度在 2 到 255 个字符', trigger: 'blur'}
                     ],
                     epRemark: [
-                        {  max: 255, message: '长度不得大于255个字', trigger: 'blur' }
+                        {max: 255, message: '长度不得大于255个字', trigger: 'blur'}
                     ],
                     epType: [
-                        { required: true, message: '请选择企业类型', trigger: 'change' }
+                        {required: true, message: '请选择企业类型', trigger: 'change'}
                     ],
                     epStatus: [
-                        { required: true, message: '请选择企业状态', trigger: 'blur' }
+                        {required: true, message: '请选择企业状态', trigger: 'blur'}
                     ]
                 }
             }
@@ -239,7 +245,7 @@
                 this.$set(this.$data, 'loading', true);
                 httpUtil.post(this, 'enterprise', "selectEnterprise", this.$data.param, function (resp) {
                     console.log(resp)
-                    let data = JSON.parse(resp.body.data);
+                    let data = resp.body.data;
                     //转换企业中的企业状态
                     for (let i = 0; i < data.arr.length; i++) {
                         data.arr[i].epStatus = data.arr[i].epStatus == 0 ? "启用" : data.arr[i].epStatus == 1 ? "禁用" : "未知";
@@ -263,7 +269,7 @@
                 this.$data.dtitle = "编辑企业";
                 console.log(this.$data.form.epType);
                 //处理数据
-                this.$data.form.epStatus = this.$data.form.epStatus === '启用' ?  0 : 1;
+                this.$data.form.epStatus = this.$data.form.epStatus === '启用' ? 0 : 1;
 
                 this.dialogVisible = true;
             },
@@ -273,22 +279,25 @@
                 let title = that.$data.dtitle;
                 that.$data.form.btnShow = true;
                 that.$data.form.forbidden = false;
+                delete that.form.createTime;
+                delete that.form.updateTime;
                 this.$refs[formName].validate((valid) => {
                     if (valid) {
-                        httpUtil.post(this, 'enterprise', title === "添加企业" ? "addEnterprise" : "updateEnterprise", this.$data.form, function (resp) {
-                            let code = resp.body.code;
-                            if (code === 0) {
-                                that.$notify({
-                                    title: '成功',
-                                    message: title === "添加企业" ? '企业添加成功！' : '企业信息修改成功',
-                                    type: 'success'
-                                });
-                                //重置表单对象,清空表单内容
-                                that.dialogVisible = false;
-                                that.$refs[formName].resetFields();
-                                that.loadData();
-                            }
-                        });
+                        httpUtil.post(this, 'enterprise', title === "添加企业" ? "addEnterprise" : "updateEnterprise",
+                            this.$data.form, function (resp) {
+                                let code = resp.body.code;
+                                if (code === 0) {
+                                    that.$notify({
+                                        title: '成功',
+                                        message: title === "添加企业" ? '企业添加成功！' : '企业信息修改成功',
+                                        type: 'success'
+                                    });
+                                    //重置表单对象,清空表单内容
+                                    that.dialogVisible = false;
+                                    that.$refs[formName].resetFields();
+                                    that.loadData();
+                                }
+                            });
                     } else {
                         return false;
                     }
@@ -316,34 +325,38 @@
                 this.$data.form.epType = '';
                 this.$data.form.epStatus = '';
             },
-            diaCloseHandle(){
+            diaCloseHandle() {
                 this.loadData();
             }
         },
-        mounted(){
+        mounted() {
             // load data
             this.loadData();
-            this.$set(this.$data, 'totalPages' , 1)
+            this.$set(this.$data, 'totalPages', 1)
         },
 
     }
 </script>
 
 <style>
-    .el-pagination{
+    .el-pagination {
         margin-top: 1rem;
     }
-    .clearfix>span{
+
+    .clearfix > span {
         text-align: left !important;
     }
-    .el-form-item{
+
+    .el-form-item {
         margin-bottom: 0;
         margin-top: 1rem;
     }
-    .box-card{
+
+    .box-card {
         height: 100%;
     }
-    .el-select,.el-select--small {
+
+    .el-select, .el-select--small {
         display: block !important;
     }
 </style>

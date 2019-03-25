@@ -25,12 +25,12 @@
                       @click="() => update(node)">
                 编辑
               </el-button>
-              <!--<el-button-->
-                      <!--type="text"-->
-                      <!--size="mini"-->
-                      <!--@click="() => remove(node)">-->
+                <!--<el-button-->
+                <!--type="text"-->
+                <!--size="mini"-->
+                <!--@click="() => remove(node)">-->
                 <!--删除-->
-              <!--</el-button>-->
+                <!--</el-button>-->
             </span>
           </span>
         </el-tree>
@@ -111,13 +111,13 @@
                 console.log(user);
                 const enterprise = user.enterprise;
                 console.log(enterprise);
-                httpUtil.get(this, "auth", "getMenuList?enterprise="+enterprise, function (resp) {
-                    const d1 = JSON.parse(resp.body.data);
+                httpUtil.get(this, "auth", "getMenuList?enterprise=" + enterprise, function (resp) {
+                    const d1 = resp.body.data;
                     console.log(d1);
                     that.$set(that.$data, 'menuList', d1)
                 })
             },
-            sendMenuForm(){
+            sendMenuForm() {
                 // this.$data.menuForm.$remove('createTime');
                 // this.$data.menuForm.$remove('updateTime')
                 const that = this;
@@ -125,14 +125,14 @@
                     console.log(resp);
                     const respBody = resp.body;
                     console.log(respBody)
-                    if (respBody.code === 0){
+                    if (respBody.code === 0) {
                         that.dialogClose();
                         that.getMenuList();
                         that.successMsg("编辑菜单成功.");
                     }
                 })
             },
-            append(node){
+            append(node) {
                 console.log(node);
                 this.$set(this.$data.dialog, 'show', true);
                 this.$set(this.$data.dialog, 'title', "添加");

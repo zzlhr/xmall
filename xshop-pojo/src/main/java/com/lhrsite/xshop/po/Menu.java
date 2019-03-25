@@ -6,6 +6,7 @@ import lombok.Data;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.sql.Date;
+import java.sql.Timestamp;
 
 /**
  * 菜单实体类
@@ -27,7 +28,7 @@ public class Menu implements Serializable {
     private Integer project;
     private Integer updateUser;
     @Column(insertable = false, updatable = false)
-    private Date createTime;
+    private Timestamp createTime;
     @Column(insertable = false, updatable = false)
-    private Date updateTime;
+    private Timestamp updateTime;
 }

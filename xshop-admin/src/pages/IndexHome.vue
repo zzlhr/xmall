@@ -96,25 +96,26 @@
 <script>
     import httpUtil from '../util/HttpUtil.js';
 
-    import Home from "../components/Home";
-    import UserList from '../components/user/List'
-    import UserInfo from '../components/user/Info'
-    import UserEdit from '../components/user/Edit'
-    import EnterpriseList from '../components/enterprise/List'
-    import EnterpriseEdit from '../components/enterprise/Edit'
-    import MenuList from '../components/auth/MenuList'
-    import AuthGroup from '../components/auth/AuthGroup'
-    import AuthGroupEdit from '../components/auth/AuthGroupEdit'
-    import EditAuthValue from '../components/auth/EditAuthValue'
+    import Home from "./Home";
+    import UserList from './user/List'
+    import UserInfo from './user/Info'
+    import UserEdit from './user/Edit'
+    import EnterpriseList from './enterprise/List'
+    import EnterpriseEdit from './enterprise/Edit'
+    import MenuList from './auth/MenuList'
+    import AuthGroup from './auth/AuthGroup'
+    import AuthGroupEdit from './auth/AuthGroupEdit'
+    import EditAuthValue from './auth/EditAuthValue'
 
-    import GoodsList from '../components/goods/List'
-    import GoodsEdit from '../components/goods/Edit'
-    import GoodsAdd from '../components/goods/Edit'
-    import OrderList from '../components/order/list'
-    import SystemIndex from '../components/system/Index'
-    import SupplierList from '../components/supplier/List'
-    import SupplierEdit from '../components/supplier/Edit'
+    import GoodsList from './goods/List'
+    import GoodsEdit from './goods/Edit'
+    import GoodsAdd from './goods/Edit'
+    import OrderList from './order/list'
+    import SystemIndex from './system/Index'
+    import SupplierList from './supplier/List'
+    import SupplierEdit from './supplier/Edit'
     import Menu from '../config/menu'
+    import LeftMenu from "~/config/LeftMenu";
 
     export default {
         name: "IndexHome",
@@ -149,99 +150,7 @@
                     password: '',
                 },
                 user: {},
-                leftMenu: [
-                    {
-                        menuIndex: 'enterprise',
-                        menuName: '企业管理',
-                        menuItems: [
-                            {
-                                itemIndex: '/enterprise/list',
-                                itemName: '企业列表',
-                                compName: 'enterpriseList'
-                            }
-                        ]
-                    },
-                    {
-                        menuIndex: 'user',
-                        menuName: '用户管理',
-                        menuItems: [
-                            {
-                                itemIndex: '/user/list',
-                                itemName: '用户列表',
-                                compName: 'userList'
-                            }
-                        ]
-                    },
-                    {
-                        menuIndex: 'auth',
-                        menuName: '权限管理',
-                        menuItems: [
-                            {
-                                itemIndex: '/auth/menulist',
-                                itemName: '菜单列表',
-                                compName: 'authMenu'
-                            },
-                            {
-                                itemIndex: '/auth/authgroup',
-                                itemName: '权限组管理',
-                                compName: 'authGroup'
-                            }
-                        ]
-                    },
-                    {
-                        menuIndex: 'goods',
-                        menuName: '商品管理',
-                        menuItems: [
-                            {
-                                itemIndex: '/goods/list',
-                                itemName: '商品列表',
-                                compName: 'goodsList'
-                            },
-                        ]
-                    },
-                    {
-                        menuIndex: 'order',
-                        menuName: '订单管理',
-                        menuItems: [
-                            {
-                                itemIndex: '/order/list',
-                                itemName: '订单列表',
-                                compName: 'orderList'
-                            },
-                        ]
-                    }, {
-                        menuIndex: 'system',
-                        menuName: '系统管理',
-                        menuItems: [
-                            {
-                                itemIndex: '/system/index',
-                                itemName: '系统管理',
-                                compName: 'systemIndex'
-                            },
-                            {
-                                itemIndex: '/supplier/list',
-                                itemName: '供应商列表',
-                                compName: 'supplierList'
-                            },
-                            {
-                                itemIndex: '/message/message',
-                                itemName: '消息通知',
-                                compName: 'message'
-                            }
-                        ]
-                    },
-                    {
-                        menuIndex: 'statistics',
-                        menuName: '统计菜单',
-                        menuItems: [
-                            {
-                                itemIndex: '/statistics/sale',
-                                itemName: '销售统计',
-                                compName: 'SaleStatistics'
-                            }
-                        ]
-                    }
-                ],
+                leftMenu: LeftMenu,
                 activeIndex: 'Home',
                 activeIndex2: 'Home',
                 editableTabsValue2: 'Home',
@@ -267,8 +176,8 @@
         },
         mounted() {
             const token = this.$cookie.get('token');
+            const that = this;
             if (token.length > 10) {
-                const that = this;
                 const sendData = {
                     'token': token
                 }
@@ -277,22 +186,14 @@
                     if (dt.code !== 0) {
                         return;
                     }
-                    const user = JSON.parse(dt.data);
-                    that.$set(that.$data, 'user', user);
-                    //console.log(user)
+                    const user = dt.data;
+                    that.user = user;
                     that.$cookie.set('token', user.token);
-                    that.$set(that.$data, 'user', user);
                     that.$store.commit('loginSuccess', user);
-                    // console.log()
-                    that.$set(that.$data, 'loginWindow', false);
+                    that.loginWindow = false;
                     that.$set(that.$data.store, 'login', 1);
                 })
             }
-            const that = this;
-            that.getNewOrderCount();
-            const timer = setInterval(function () {
-                that.getNewOrderCount();
-            }, 5000)
         },
         methods: {
             goMessagePage() {
@@ -329,7 +230,8 @@
                                 message: '登录成功',
                                 type: 'success'
                             });
-                            const user = JSON.parse(dt.data);
+                            const user = dt.data;
+                            console.log("token = " + user.token)
                             that.$set(that.$data, 'user', user);
                             that.$store.commit('loginSuccess', user);
                             that.$cookie.set('token', user.token);

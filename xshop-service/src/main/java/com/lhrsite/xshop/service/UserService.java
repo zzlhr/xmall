@@ -64,4 +64,6 @@ public interface UserService {
 
     void phoneIsExist(String phone) throws XShopException;
 
+    Integer getUserEnterpriseId(String token) throws XShopException;
+
 }

@@ -4,8 +4,6 @@
 **处于开发阶段，暂时欠缺部分功能**
 
 
-
-
 ## 项目结构
 - xshop-admin vue后台管理
 - xshop-admin-api 后台api
@@ -17,14 +15,17 @@
 - xshop-web-app vue移动端商场页面
 
 ## 如何贡献代码
-参阅 [开发文档-如何贡献代码](./docs/dev.md)
+参阅 [贡献文档](./CONTRIBUTING.md)
+
+## 开发进度
+参阅 [TODO](./docs/todo.md)
 
 
 ## 启动
 1. 还原数据库
 ```bash
 # 还原
-mysql -uroot -p < ./sql/shop.sql
+mysql -uroot -p < ./sql/xshop.sql
 # Enter password:
 ```
 

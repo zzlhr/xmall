@@ -84,6 +84,9 @@ public enum ErrEumn {
     BUY_CAR_IS_NOT_YOUR(-100049, "订单无法对应本人！"),
 
     PLEASE_SELECTED_GOODS(-100050, "请选择商品"),
+
+    CLASS_NAME_CONNOT_NULL(-100051, "分类名称不能为空"),
+
     ;
 
 

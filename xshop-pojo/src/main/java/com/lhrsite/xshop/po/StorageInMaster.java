@@ -9,6 +9,7 @@ import javax.persistence.Table;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.sql.Date;
+import java.sql.Timestamp;
 
 /**
  * 入库单主表(StStorageInMaster)表实体类
@@ -34,9 +35,9 @@ public class StorageInMaster implements Serializable {
     //审核意见
     private String examineRemark;
     //审核时间
-    private Date examineTime;
+    private Timestamp examineTime;
     //入库时间
-    private Date siTime;
+    private Timestamp siTime;
     //入库单状态
     private Integer siStatus;
     //入库单总金额
@@ -51,12 +52,12 @@ public class StorageInMaster implements Serializable {
     private Integer createUser;
     //创建时间
     @Column(insertable = false, updatable = false)
-    private Date createTime;
+    private Timestamp createTime;
     //修改用户
     private Integer updateUser;
     //修改时间
     @Column(insertable = false, updatable = false)
-    private Date updateTime;
+    private Timestamp updateTime;
 
 
 }

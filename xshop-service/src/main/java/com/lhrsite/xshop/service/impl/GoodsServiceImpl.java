@@ -19,6 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityManager;
+import java.sql.Timestamp;
 import java.util.*;
 
 @Service
@@ -167,9 +168,12 @@ public class GoodsServiceImpl extends BaseServiceImpl implements GoodsService {
         long time = 10 * 60 * 1000;
         Date afterDate = new Date(new Date().getTime() - time);//30分钟后的时间
 
+        Timestamp createTime = new Timestamp(
+                (type == 1 ? getStartTimeOfDay(System.currentTimeMillis()) : afterDate)
+                        .getTime());
         return queryFactory.selectFrom(qMessage)
                 .where(qMessage.messageType.eq(2))
-                .where(qMessage.createTime.between(type == 1 ? getStartTimeOfDay(System.currentTimeMillis()) : afterDate, new Date()))
+                .where(qMessage.createTime.between(createTime, new Timestamp(System.currentTimeMillis())))
                 .fetch();
     }
 
@@ -189,6 +193,8 @@ public class GoodsServiceImpl extends BaseServiceImpl implements GoodsService {
     @Override
     public void deleteGoods(String goodsId) {
         goodsRepository.deleteById(goodsId);
-
     }
+
+
+
 }

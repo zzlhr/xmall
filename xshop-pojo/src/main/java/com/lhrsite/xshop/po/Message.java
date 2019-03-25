@@ -5,6 +5,7 @@ import lombok.Data;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.sql.Timestamp;
 import java.util.Date;
 
 @Data
@@ -22,7 +23,7 @@ public class Message implements Serializable {
     // 接收人
     private Integer inceptUser;
     @Column(insertable = false, updatable = false)
-    private Date createTime;
+    private Timestamp createTime;
     @Column(insertable = false, updatable = false)
-    private Date updateTime;
+    private Timestamp updateTime;
 }

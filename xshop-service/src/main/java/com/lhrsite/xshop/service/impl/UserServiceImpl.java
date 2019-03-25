@@ -29,7 +29,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
-import java.util.concurrent.TimeUnit;
 
 
 @Service
@@ -482,6 +481,12 @@ public class UserServiceImpl extends BaseServiceImpl implements UserService {
         if (user != null) {
             throw new XShopException(ErrEumn.ADD_USER_PHONE_EXIST);
         }
+    }
+
+    @Override
+    public Integer getUserEnterpriseId(String token) throws XShopException {
+        User user = tokenGetUser(token);
+        return user.getEnterprise();
     }
 
 }

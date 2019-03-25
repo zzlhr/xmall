@@ -4,7 +4,7 @@ const http = {
   baseurl(name) {
     // const host = "https://xuanhuobang.com/"
     // const baseHost = host + "api/";
-    const baseHost = "http://192.168.31.9:8008/"
+    const baseHost = "http://192.168.31.8:8008/"
     // const host = "http://192.168.31.9:8008/"
     // const baseHost = host;
     switch (name) {
@@ -49,6 +49,7 @@ const http = {
     for (const param in params) {
       formData.append(param, params[param])
     }
+    formData.append("e", 1);
     axios.post(this.baseurl(apiPath) + url, formData)
       .then(function (response) {
         callback(response)

@@ -4,6 +4,7 @@ import lombok.Data;
 
 import java.math.BigDecimal;
 import java.sql.Date;
+import java.sql.Timestamp;
 import java.util.List;
 
 
@@ -18,7 +19,7 @@ public class OrderListVO {
     // 优惠
     private BigDecimal offer;
     private Integer status;
-    private Date createTime;
+    private Timestamp createTime;
     private List<OrderInfoVO> orderInfoVOS;
     private String username;
     private String phone;

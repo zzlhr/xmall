@@ -17,10 +17,11 @@ public class TimeAspect {
     private Object mappingAround(ProceedingJoinPoint joinPoint) throws Throwable {
         long startTime = new Date().getTime();
         Object result = joinPoint.proceed();
-        log.info("【执行耗时】clazz={}, method={},  time={}"
+        log.info("【执行耗时】clazz={}, method={},  time={}, result={}"
                 , joinPoint.getTarget().getClass().getName()
                 , joinPoint.getSignature().getName()
-                , (new Date().getTime() - startTime) + "ms");
+                , (new Date().getTime() - startTime) + "ms",
+                result);
         return result;
     }
 }

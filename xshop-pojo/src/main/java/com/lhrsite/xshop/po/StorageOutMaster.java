@@ -8,6 +8,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import java.io.Serializable;
 import java.sql.Date;
+import java.sql.Timestamp;
 
 /**
  * 出库单主表(StStorageOutMaster)表实体类
@@ -33,15 +34,15 @@ public class StorageOutMaster implements Serializable {
     //出库单状态
     private Integer soStatus;
     //出库时间
-    private Date soTime;
+    private Timestamp soTime;
     //创建时间
     @Column(insertable = false, updatable = false)
-    private Date createTime;
+    private Timestamp createTime;
     //创建用户
     private Integer createUser;
     //更新时间
     @Column(insertable = false, updatable = false)
-    private Date updateTime;
+    private Timestamp updateTime;
     //更新用户
     private Integer updateUser;
     //审核状态，0未审核，1审核通过，2审核未通过
@@ -51,7 +52,7 @@ public class StorageOutMaster implements Serializable {
     //审核备注
     private String examineRemark;
     //审核时间
-    private Date examineTime;
+    private Timestamp examineTime;
 
 
 }

@@ -58,31 +58,24 @@
                     min-width="100">
             </el-table-column>
             <el-table-column
-                    prop="supplierLinkMan"
-                    label="供应商联系人"
-                    min-width="100">
-            </el-table-column>
-            <el-table-column
-                    prop="supplierLinkTel"
+                    prop="supplierTel"
                     label="供应商联系方式"
                     min-width="100">
             </el-table-column>
             <el-table-column
-                    prop="supplierStatus"
-                    label="状态"
-                    :render-header="(h,obj,index) => renderStatus(h,obj,index)"
-                    min-width="70">
-            </el-table-column>
-            <el-table-column
-                    prop="supplierDel"
-                    label="删除否"
-                    :render-header="(h,obj,index) => renderDel(h,obj,index)"
-                    min-width="70">
+                    prop="supplierAddress"
+                    label="供应商地址"
+                    min-width="100">
             </el-table-column>
             <el-table-column
                     prop="createTime"
                     label="创建时间"
                     min-width="100">
+            </el-table-column>
+            <el-table-column
+                    prop="createUserName"
+                    label="创建人"
+                    min-width="70">
             </el-table-column>
             <el-table-column
                     prop="updateTime"
@@ -93,6 +86,12 @@
                     prop="updateUserName"
                     label="更新人"
                     min-width="70">
+            </el-table-column>
+            <el-table-column
+                    prop="rowStatus"
+                    label="删除否"
+                    min-width="70"
+                    :formatter="(row, column, cellValue, index) => statusColumnFormatter(row, column, cellValue, index)">
             </el-table-column>
             <el-table-column
                     fixed="right"
@@ -209,11 +208,15 @@
             }
         },
         methods: {
-            renderStatus(h, { column, $index },index){
+            renderStatus(h, {column, $index}, index) {
                 console.log(column)
             },
-            renderDel(h, { column, $index },index){
-                console.log(column)
+            statusColumnFormatter(row, column, cellValue, index) {
+                if (cellValue === 0) {
+                    return "未删除"
+                } else {
+                    return "删除"
+                }
             },
             addSupplier() {
                 const that = this
@@ -249,7 +252,7 @@
             },
             handleClick(row) {
                 sessionStorage.setItem("userListUID", row.uid)
-                this.$router.push({path:'/user/info/'})
+                this.$router.push({path: '/user/info/'})
 
                 // console.log(row.uid)
             },
@@ -267,28 +270,26 @@
             alertClose(e) {
                 //console.log(e);
             },
-            reloadData(){
+            reloadData() {
                 this.$set(this.$data.selectForm, 'page', 1)
+                this.loadData();
             },
             loadData() {
                 const that = this;
-                this.$set(this.$data, 'loading', true);
+                that.loading = true
                 httpUtil.post(this, 'supplier', "list", this.$data.selectForm, function (resp) {
 
-                    let data = JSON.parse(resp.data.data);
+                    const data = resp.data.data;
                     console.log(data)
-                    // const data = JSON.parse(resp.body.data);
-                    // console.log(data);
-                    that.$set(that.$data, 'tableData', data.arr);
-                    that.$set(that.$data, 'currentNumber', data.currentNumber);
-                    that.$set(that.$data, 'currentPage', data.currentPage);
-                    // that.$set(that.$data, 'pageSize', data.pageSize);
-                    that.$set(that.$data, 'totalCount', data.totalCount);
-                    that.$set(that.$data, 'totalPages', data.totalPage);
-                    //
-                    that.$set(that.$data, 'totalElements', data.totalElements);
-                    that.$set(that.$data.selectForm, 'page', that.$data.selectForm.page + 1)
-                    that.$set(that.$data, 'loading', false);
+                    that.tableData = data.arr
+                    that.currentNumber = data.currentNumber
+                    that.currentPage = data.currentPage
+                    that.totalCount = data.totalCount
+                    that.totalPages = data.totalPages
+                    that.totalElements = data.totalElements
+                    that.page++
+                    that.loading = false
+
                 })
             },
             openDetails(row) {
@@ -321,7 +322,7 @@
                     callback: action => {
                         this.$message({
                             type: 'info',
-                            message: `action: ${ action }`
+                            message: `action: ${action}`
                         });
                     }
                 });

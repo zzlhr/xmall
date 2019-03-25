@@ -49,14 +49,13 @@ const store = new Vuex.Store({
 });
 const router = new VueRouter({
     routes // (缩写) 相当于 routes: routes
-})
+});
 const vum = new Vue({
     el: '#app',
     router,
     store,
     render: h => h(App)
 });
-
 
 Vue.prototype.Validate = Validate;
 

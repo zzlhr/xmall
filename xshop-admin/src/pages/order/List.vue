@@ -322,7 +322,7 @@
                 this.$set(this.$data, "loading", true);
                 httpUtil.post(this, "order", "list", this.$data.param, function (resp) {
                     console.log(resp.body);
-                    let data = JSON.parse(resp.body.data);
+                    let data = resp.body.data;
                     console.log(data);
                     // const data = JSON.parse(resp.body.data);
                     // console.log(data);

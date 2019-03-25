@@ -1,19 +1,48 @@
-<!--suppress ALL -->
-<template >
+<template>
     <el-card class="box-card" shadow="never">
         <div slot="header" class="clearfix">
-            <span>商品列表</span>
+            <span>用户列表</span>
             <template class="noselect_btn" v-if="isSelectItem === 'false'">
-                <el-button style="float: right; padding: 6px 0; margin: 0 10px;" type="text" @click="loadData" icon="el-icon-refresh">刷新</el-button>
-                <el-button style="float: right; padding: 6px 0" type="text" @click="jumpAdd" icon="el-icon-circle-plus">添加</el-button>
+                <el-button style="float: right; padding: 6px 0; margin: 0 10px;" type="text" @click="loadData"
+                           icon="el-icon-refresh">刷新
+                </el-button>
+                <el-button style="float: right; padding: 6px 0" type="text" @click="jumpAdd" icon="el-icon-circle-plus">
+                    添加
+                </el-button>
             </template>
             <template class="select_btn" v-else>
-                <el-button style="float: right; padding: 6px 0" type="text" @click="examine" icon="el-icon-edit-outline">审核</el-button>
+                <el-button style="float: right; padding: 6px 0" type="text" @click="examine"
+                           icon="el-icon-edit-outline">审核
+                </el-button>
             </template>
 
             <el-form :inline="true" :model="param" class="demo-form-inline">
-                <el-form-item label="商品标题">
-                    <el-input size="mini" v-model="param.title" placeholder="可模糊关键字"></el-input>
+                <el-form-item label="用户名">
+                    <el-input size="mini" v-model="param.username" placeholder="可模糊关键字"></el-input>
+                </el-form-item>
+                <el-form-item label="手机号">
+                    <el-input size="mini" v-model="param.phoneNum" placeholder="可模糊关键字"></el-input>
+                </el-form-item>
+                <el-form-item label="邮箱">
+                    <el-input size="mini" v-model="param.email" placeholder="可模糊关键字"></el-input>
+                </el-form-item>
+                <el-form-item label="企业">
+                    <el-select
+                            v-model="param.enterpriseId"
+                            filterable
+                            remote
+                            reserve-keyword
+                            placeholder="请输入关键词"
+                            :remote-method="querySearchAsync"
+                            :loading="loading"
+                            size="mini">
+                        <el-option
+                                v-for="item in enterpriseList"
+                                :key="item.value"
+                                :label="item.label"
+                                :value="item.value">
+                        </el-option>
+                    </el-select>
                 </el-form-item>
                 <el-form-item>
                     <el-button size="mini" type="primary" plain icon="el-icon-search" @click="onSubmit">查询</el-button>
@@ -29,56 +58,37 @@
                 @select="tableItemSelect"
                 @select-all="tableItemSelectAll"
                 highlight-current-row
-                max-height="7000" >
+                max-height="7000">
             <el-table-column
                     type="selection"
-                    width="45" >
+                    width="45">
             </el-table-column>
             <el-table-column
                     fixed
-                    prop="title"
-                    label="商品标题"
-                    min-width="200">
+                    prop="uid"
+                    label="#"
+                    width="70">
             </el-table-column>
             <el-table-column
-                    prop="originalPrice"
-                    label="原价"
-                    width="100" >
+                    fixed
+                    prop="username"
+                    label="用户名"
+                    width="100">
             </el-table-column>
             <el-table-column
-                    prop="salePrice"
-                    label="活动价"
+                    prop="phone"
+                    label="手机号"
                     width="130">
             </el-table-column>
             <el-table-column
-                    prop="saleStatus"
-                    label="活动否"
+                    prop="enterpriseName"
+                    label="所属企业"
                     width="160">
             </el-table-column>
-            <!--<el-table-column-->
-                    <!--prop="cover"-->
-                    <!--label="商品封面"-->
-                    <!--width="200">-->
-            <!--</el-table-column>-->
             <el-table-column
-                    prop="stock"
-                    label="库存"
-                    width="70">
-            </el-table-column>
-            <el-table-column
-                    prop="salesVolume"
-                    label="月销量"
-                    width="70">
-            </el-table-column>
-            <el-table-column
-                    prop="deliveryPlace"
-                    label="发货地"
-                    width="70">
-            </el-table-column>
-            <el-table-column
-                    prop="updateUserName"
-                    label="更新人"
-                    width="70">
+                    prop="email"
+                    label="邮箱"
+                    width="200">
             </el-table-column>
             <el-table-column
                     prop="createTime"
@@ -95,8 +105,8 @@
                     label="操作"
                     width="200">
                 <template slot-scope="scope">
+                    <el-button type="primary" size="mini" plain @click="handleClick(scope.row)">查看</el-button>
                     <el-button type="success" size="mini" plain @click="jumpEdit(scope.row)">编辑</el-button>
-                    <el-button type="warning" size="mini" plain @click="delectGoods(scope.row)">删除</el-button>
                 </template>
             </el-table-column>
         </el-table>
@@ -120,22 +130,26 @@
 
 <script>
     import httpUtil from '../../util/HttpUtil.js';
+
     export default {
-        name: "GoodsList",
+        name: "UserList",
         data() {
             return {
                 information: false,
                 isSelectItem: 'false',
-                selectItem:[],
-                error:{
-                    msg:'暂无消息',
-                    type:'info',
-                    show:'true'
+                selectItem: [],
+                error: {
+                    msg: '暂无消息',
+                    type: 'info',
+                    show: 'true'
                 },
-                param:{
+                param: {
                     page: 1,
                     pageSize: 10,
-                    title: '',
+                    username: '',
+                    phoneNum: '',
+                    email: '',
+                    enterpriseId: '',
                 },
                 formInline: {
                     user: '',
@@ -150,21 +164,13 @@
                 loading: true,
                 //totalElements: 0,
                 tableData: [],
-                enterpriseList:[], //企业列表
+                enterpriseList: [], //企业列表
 
 
             }
         },
         methods: {
-            delectGoods(row){
-                const data = {"goodsId": row.goodsId}
-                const that = this
-                httpUtil.post(this, 'goods', 'deleteGoods', data, function (resp) {
-                    const data = JSON.parse(resp.body.data);
-                    that.loadData();
-                })
 
-            },
             formatterStatus(row) {
                 return row.agStatus === 0 ? '启用' : '禁用';
             },
@@ -174,17 +180,16 @@
                 let phoneNum = this.$data.param.phoneNum;
                 let email = this.$data.param.email;
                 let enterpriseId = this.$data.param.enterpriseId;
-                if(username===''&phoneNum===''&email===''&enterpriseId==='') {
+                if (username === '' & phoneNum === '' & email === '' & enterpriseId === '') {
                     this.information = true
-                }else{
+                } else {
                     this.loadData();
                 }
 
             },
             handleClick(row) {
                 sessionStorage.setItem("userListUID", row.uid)
-                this.$router.push({path:'/user/edit'})
-
+                this.$router.push("/user/info/")
                 // console.log(row.uid)
             },
             handleSizeChange(val) {
@@ -205,10 +210,10 @@
             loadData() {
                 const that = this;
                 this.$set(this.$data, 'loading', true);
-                httpUtil.post(this, 'goods', "list", this.$data.param, function (resp) {
+                httpUtil.post(this, 'user', "userList", this.$data.param, function (resp) {
                     // let aa = JSON.parse(resp.data.data);
                     //  console.log(aa);
-                    const data = JSON.parse(resp.body.data);
+                    const data = resp.body.data;
                     console.log(data);
                     that.$set(that.$data, 'tableData', data.arr);
                     that.$set(that.$data, 'currentNumber', data.currentNumber);
@@ -223,16 +228,17 @@
                 })
             },
             jumpEdit(row) {
-                console.log(row);
+                // console.log(row);
                 // this.clickPhone = row.phone;
                 // console.log(this.clickPhone)
-                sessionStorage.setItem("goodsIdEdit", row.goodsId);
-                this.$router.push({path:'/goods/edit'})
+                sessionStorage.setItem("userListUID", row.uid);
+                sessionStorage.setItem("userListPhone", row.phone);
+                this.$router.push({path: '/user/edit/'})
                 //console.log(row.ui
             },
             jumpAdd(row) {
-                this.$router.push({path:'/goods/edit'})
-
+                sessionStorage.setItem("userListUID", row.uid);
+                this.$router.push({path: '/user/edit/'})
                 // console.log(row.uid)
 
             },
@@ -258,7 +264,7 @@
                     callback: action => {
                         this.$message({
                             type: 'info',
-                            message: `action: ${ action }`
+                            message: `action: ${action}`
                         });
                     }
                 });
@@ -269,15 +275,15 @@
 
             },
             querySearchAsync(query) {
-                if ( query !== "" ){
+                if (query !== "") {
                     const that = this;
                     httpUtil.get(this, 'enterprise', "getEnterpriseDropDown?keyword=" + query, (resp) => {
                         const data = JSON.parse(resp.body.data);
                         let list = [];
-                        for (let i=0; i<data.length; i++){
+                        for (let i = 0; i < data.length; i++) {
                             list.push({
-                                label:data[i].epShortName,
-                                value:data[i].eid
+                                label: data[i].epShortName,
+                                value: data[i].eid
                             });
                         }
                         that.$set(that.$data, 'enterpriseList', list);
@@ -285,7 +291,7 @@
                 }
             },
             handleSelect(item) {
-                console.log("选中项的值为",item);
+                console.log("选中项的值为", item);
             }
 
         },
@@ -299,21 +305,24 @@
 </script>
 
 <style>
-    .el-pagination{
+    .el-pagination {
         margin-top: 1rem;
     }
-    .clearfix>span{
+
+    .clearfix > span {
         text-align: left !important;
     }
-    .el-form-item{
+
+    .el-form-item {
         margin-bottom: 0;
         margin-top: 1rem;
     }
 
-    .box-card{
+    .box-card {
         height: 100%;
     }
-    .el-card__header, .el-card__body{
+
+    .el-card__header, .el-card__body {
         padding: 0.5rem;
     }
 </style>

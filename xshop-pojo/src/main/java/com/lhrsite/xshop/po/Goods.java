@@ -7,6 +7,7 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.sql.Timestamp;
 import java.util.Date;
 
 @Entity
@@ -57,10 +58,10 @@ public class Goods implements Serializable {
     private Integer updateUser;
     /* 创建时间 */
     @Column(insertable = false, updatable = false)
-    private Date createTime;
+    private Timestamp createTime;
     /* 更新时间 */
     @Column(insertable = false, updatable = false)
-    private Date updateTime;
+    private Timestamp updateTime;
     /* 所属分类 */
     private Integer clId;
     /* 所属分类父级 */

@@ -3,7 +3,7 @@ package com.lhrsite.xshop.vo;
 import lombok.Data;
 
 import java.io.Serializable;
-import java.sql.Date;
+import java.sql.Timestamp;
 
 /**
  * 供货商(StSupplier)表实体类
@@ -14,25 +14,31 @@ import java.sql.Date;
 @Data
 public class SupplierVO implements Serializable {
 
-    //供货商id
     private Integer supplierId;
-    //供货商名称
+    /* 供应商名称 */
     private String supplierName;
-    //供货商联系人
-    private String supplierLinkMan;
-    //供货商联系电话
-    private String supplierLinkTel;
-    //状态，0启用，1禁用
-    private Integer supplierStatus;
-    //删除否，0未删除，1删除
-    private Integer supplierDel;
-    //创建时间
-    private Date createTime;
-    //更新人
+    /* 供应商联系电话 */
+    private String supplierTel;
+    /* 供应商地址 */
+    private String supplierAddress;
+    /* 供应商描述 */
+    private String supplierDescribe;
+    /* 供应商描述 */
+    private String supplierRemark;
+    /* 创建人id */
+    private Integer createUser;
+    private String createUserName;
+    /* 修改人id */
     private Integer updateUser;
     private String updateUserName;
-    //更新时间
-    private Date updateTime;
+    /* 创建时间 */
+    private Timestamp createTime;
+    /* 更新时间 */
+    private Timestamp updateTime;
+    /* 所属企业 */
+    private Integer enterprise;
+    /* 删除否 */
+    private Integer rowStatus;
 
 
 }

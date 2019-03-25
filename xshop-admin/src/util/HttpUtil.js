@@ -1,8 +1,10 @@
+import user from "~/util/UserUtil";
+
 const httpUtil = {
     baseurl(name) {
-        const host = "https://xuanhuobang.com/"
-        const baseHost = host + "api/";
-        // const baseHost = "http://192.168.31.8:8008/"
+        const host = "http://localhost:8008/";
+        // const baseHost = host + "api/";
+        const baseHost = "http://localhost:8008/"
         switch (name) {
             case 'home':
                 return baseHost;
@@ -31,15 +33,12 @@ const httpUtil = {
         }
     },
     home() {
-        return "https://xuanhuobang.com/";
-        // return "http://192.168.31.8:8088/";
-
+        return "http://localhost:8088/";
     },
 
     get(that, apiPath, url, callback) {
         console.log(this.baseurl(apiPath) + url);
         that.$http.get(this.baseurl(apiPath) + url).then(response => {
-            //console.log("response => "+response)
             if (response.status !== 200) {
                 that.$notify.error({
                     title: '失败',
@@ -67,7 +66,7 @@ const httpUtil = {
     },
     post(that, apiPath, url, param, callback) {
         if (param.token === undefined) {
-            param.token = that.$store.getters.user.token
+            param.token = user.getToken();
         }
         that.$http.post(this.baseurl(apiPath) + url, param, {emulateJSON: true})
             .then(response => {
@@ -95,6 +94,18 @@ const httpUtil = {
                 });
                 // callback(response)
             })
+    },
+
+    getToken(that) {
+        this.isLogin(that);
+    },
+
+    isLogin(that) {
+        const token = that.$cookie.get("token");
+        if (token === null) {
+            that.$route.push({path: "/"});
+            that.$message.error("请先登录")
+        }
     }
 
 

@@ -8,6 +8,7 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.IdClass;
 import java.io.Serializable;
+import java.sql.Timestamp;
 
 @Data
 @Entity
@@ -21,9 +22,9 @@ public class AuthValue implements Serializable {
     private Integer menuId;
     private Integer value;
     @Column(insertable = false, updatable = false)
-    private java.sql.Timestamp createTime;
+    private Timestamp createTime;
     @Column(insertable = false, updatable = false)
-    private java.sql.Timestamp updateTime;
+    private Timestamp updateTime;
     private Integer updateUser;
 
 
