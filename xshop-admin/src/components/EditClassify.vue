@@ -9,12 +9,15 @@
             </el-form-item>
             <el-form-item v-if="classifyForm.clGrade === 2" label="分类图片">
                 <el-upload
+                        ref="imgUpload"
                         class="upload-demo"
                         drag
                         name="img"
                         :multiple="false"
                         accept="jpg,png"
                         :limit="1"
+                        list-type="picture"
+                        :file-list="fileList"
                         :on-success="(response, file, fileList) => {classifyForm.picture=response.data.fileName}"
                         :on-error="() => {$message.error('上传文件失败！')}"
                         :action="classifyUploadPath">
@@ -68,7 +71,9 @@
         data() {
             return {
                 dialogShow: this.isShow,
-                classifyUploadPath: httpUtil.baseurl('goods') + 'uploadClassifyPicture'
+                classifyUploadPath: httpUtil.baseurl('goods') + 'uploadClassifyPicture',
+                classifyImgPath: httpUtil.baseurl('goods') + 'classifyImg/',
+                fileList: []
             }
         },
         watch: {
@@ -78,9 +83,24 @@
             },
             dialogShow(val) {
                 this.isShowChange(val);
+            },
+            classifyForm(val){
+                this.fileList = [];
+                if (this.editType === 1 && this.classifyForm.clGrade === 2 && this.classifyForm.picture !== "") {
+                    const imgUrl = this.classifyImgPath + this.classifyForm.picture;
+                    this.fileList.push({name: this.classifyForm.picture, url: imgUrl})
+                }
             }
+
+        },
+        mounted() {
+
+
         },
         methods: {
+            closeDialog() {
+                this.dialogShow = false;
+            },
             sendClassifyForm(isNext) {
                 console.log(isNext);
                 const that = this;
@@ -90,6 +110,7 @@
                         if (resp.data.code === 0) {
                             that.$message.success("添加分类成功！");
                             that._editAfter(resp.data.data, isNext);
+                            that.$refs.imgUpload.uploadFiles = []
                         } else {
                             that.$message.error("添加分类失败！");
                         }
@@ -100,11 +121,13 @@
                         if (resp.data.code === 0) {
                             that.$message.success("编辑分类成功！");
                             that._editAfter(resp.data.data, isNext);
+                            that.$refs.imgUpload.uploadFiles = []
                         } else {
                             that.$message.error("编辑分类失败！");
                         }
                     })
                 }
+
 
             },
             _editAfter(data, isNext) {

@@ -68,14 +68,15 @@
         },
         methods: {
             editAfter(data, isNext) {
-                console.log(isNext)
+                console.log('editAfter')
                 if (this.editType === 0) {
                     if (data.clFid === 0) {
                         this.$refs.classifyTree.root.insertChild({data: data}, data.clId, true);
-                        return;
+                    } else {
+                        const fNode = this.$refs.classifyTree.getNode(data.clFid);
+                        this.$refs.classifyTree.append(data, fNode);
                     }
-                    const fNode = this.$refs.classifyTree.getNode(data.clFid);
-                    this.$refs.classifyTree.append(data, fNode);
+
                 } else {
                     const treeNode = this.$refs.classifyTree.getNode(data.clId);
                     treeNode.data = data;
@@ -86,8 +87,8 @@
                 }
                 this.classifyForm = {
                     clName: '',
-                    clGrade: 0,
-                    // clFid: 0,
+                    clGrade: data.clGrade,
+                    clFid: data.clFid,
                     clSerial: 99,
                     picture: '',
                 }
@@ -109,7 +110,7 @@
             append(data, node) {
                 this.classifyForm = {
                     clName: '',
-                    clGrade: 0,
+                    clGrade: data.clGrade + 1,
                     clFid: data.clId,
                     clSerial: 99,
                     picture: '',
