@@ -56,7 +56,7 @@ public class AppController {
     @RequestMapping(value = "/picturesUpload", method = RequestMethod.POST)
     public ResultVO picturesUpload(@RequestParam(value = "file") MultipartFile file)
             throws RuntimeException, XShopException {
-        resultVO.setData(HttpUtil.saveFile(log, picturesUploadDir, file));
+        resultVO.setData(HttpUtil.saveFile(picturesUploadDir, file));
         return resultVO;
     }
 

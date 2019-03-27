@@ -226,8 +226,8 @@
                 console.log(row);
                 // this.clickPhone = row.phone;
                 // console.log(this.clickPhone)
-                sessionStorage.setItem("goodsIdEdit", row.goodsId);
-                this.$router.push({path:'/goods/edit'})
+                // sessionStorage.setItem("goodsIdEdit", row.goodsId);
+                this.$router.push({name:'GoodsEdit', query:{goodsId: row.goodsId}})
                 //console.log(row.ui
             },
             jumpAdd(row) {

@@ -68,8 +68,8 @@ public class GoodsController {
     }
 
     @RequestMapping("/classifyTree")
-    public ResultVO classifyTree(Integer eid) {
-        resultVO.setData(classifyService.getClassifyTree(eid));
+    public ResultVO classifyTree(String token) throws XShopException {
+        resultVO.setData(classifyService.getClassifyTree(token));
         return resultVO;
     }
 
@@ -137,7 +137,7 @@ public class GoodsController {
 
 
     @PostMapping("/uploadClassifyPicture")
-    public ResultVO uploadClassifyPicture(MultipartFile img) throws IOException {
+    public ResultVO uploadClassifyPicture(MultipartFile img) throws XShopException {
         Map<String, String> resultMap = new HashMap<>();
         resultMap.put("fileName", classifyService.uploadClassifyPicture(img));
         resultVO.setData(resultMap);
@@ -156,7 +156,9 @@ public class GoodsController {
         if (file.isEmpty()) {
             throw new XShopException(ErrEumn.UPLOAD_ERROR_FILE_NULL);
         }
-        resultVO.setData(HttpUtil.saveFile(log, coverUploadDir, file));
+        Map<String, String> resultMap = new HashMap<>();
+        resultMap.put("fileName", HttpUtil.saveFile(coverUploadDir, file));
+        resultVO.setData(resultMap);
         return resultVO;
 
     }
@@ -164,8 +166,15 @@ public class GoodsController {
     @RequestMapping(value = "/picturesUpload", method = RequestMethod.POST)
     public ResultVO picturesUpload(@RequestParam(value = "file") MultipartFile file)
             throws RuntimeException, XShopException {
-        resultVO.setData(HttpUtil.saveFile(log, picturesUploadDir, file));
+        Map<String, String> resultMap = new HashMap<>();
+        resultMap.put("fileName", HttpUtil.saveFile(picturesUploadDir, file));
+        resultVO.setData(resultMap);
         return resultVO;
+    }
+    @GetMapping(value = "/pictures_upload/{fileName}")
+    public void getPicturesUpload(@PathVariable(name = "fileName") String fileName, HttpServletResponse response)
+            throws RuntimeException, XShopException {
+        writeImage(response, fileName, picturesUploadDir);
     }
 
     @RequestMapping(value = "/pictures/{fileName}", method = RequestMethod.GET)

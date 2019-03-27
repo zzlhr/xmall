@@ -30,10 +30,10 @@ server:
 app:
   upload:
     shop:
-      cover: /data/xuanhuobang/sites/xuanhuobang.com/www/cover_upload/
-      pictures: /data/xuanhuobang/sites/xuanhuobang.com/www/pictures_upload/
+      cover: /Users/haoranliu/IdeaProjects/xshop/upload/cover_upload/
+      pictures: /Users/haoranliu/IdeaProjects/xshop/upload/pictures_upload/
     home:
-      pictures: /data/xuanhuobang/sites/xuanhuobang.com/www/home_upload/
+      pictures: /Users/haoranliu/IdeaProjects/xshop/upload/home_upload/
     classify:
       pictures: /Users/haoranliu/IdeaProjects/xshop/upload/classify/
 logging:

@@ -35,10 +35,9 @@ public class ClassifyVO {
 
     public static List<ClassifyVO> init(List<Classify> classifies) {
         List<ClassifyVO> classifyVOS = new ArrayList<>();
-        classifies.forEach(classify -> {
-            classifyVOS.add(ClassifyVO.init(classify));
-        });
+        classifies.forEach(classify -> classifyVOS.add(ClassifyVO.init(classify)));
         return classifyVOS;
     }
+
 
 }

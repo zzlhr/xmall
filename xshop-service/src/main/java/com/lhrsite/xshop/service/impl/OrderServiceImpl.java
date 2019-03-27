@@ -746,12 +746,12 @@ public class OrderServiceImpl extends BaseServiceImpl implements OrderService {
             // 计算运费
 
             // 判断是否执行免邮数量
-            if (goods.getExecFreePostageNum() && goods.getFreePostageNum() <= buyCar.getNumber()) {
+            if (goods.getExecFreePostageNum() == 1 && goods.getFreePostageNum() <= buyCar.getNumber()) {
                 break;
             }
 
             // 商品累加并 且累加价格大于0 且购买商品大于1
-            if (goods.getDespatchIsPlus()
+            if (goods.getDespatchIsPlus() == 1
                     && goods.getDespatchPlusMoney().compareTo(new BigDecimal(0)) > 0
                     && buyCar.getNumber() > 1) {
                 // 累加运费 总运费 = 运费价格 + (购买数量 - 1) * 累加价格

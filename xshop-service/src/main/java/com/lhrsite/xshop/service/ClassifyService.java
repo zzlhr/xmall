@@ -12,7 +12,7 @@ import java.util.List;
 
 public interface ClassifyService {
 
-    List<ClassifyVO> getClassifyTree(Integer eid);
+    List<ClassifyVO> getClassifyTree(String token) throws XShopException;
 
     List<ClassifyVO> getClassifyByFid(Integer fid, String token) throws XShopException;
 
@@ -42,9 +42,8 @@ public interface ClassifyService {
      *
      * @param multipartFile 图片文件
      * @return 图片名
-     * @throws IOException io异常
      */
-    String uploadClassifyPicture(MultipartFile multipartFile) throws IOException;
+    String uploadClassifyPicture(MultipartFile multipartFile) throws XShopException;
 
     /**
      * 获取分类图片文件

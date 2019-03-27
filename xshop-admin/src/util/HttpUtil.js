@@ -68,6 +68,7 @@ const httpUtil = {
         if (param.token === undefined) {
             param.token = user.getToken();
         }
+        
         that.$http.post(this.baseurl(apiPath) + url, param, {emulateJSON: true})
             .then(response => {
                 if (response.status !== 200) {

@@ -3,20 +3,11 @@ package com.lhrsite.xshop.core.utils;
 
 import com.lhrsite.xshop.core.exception.ErrEumn;
 import com.lhrsite.xshop.core.exception.XShopException;
-import net.coobird.thumbnailator.Thumbnails;
-import net.coobird.thumbnailator.geometry.Positions;
-import org.json.JSONObject;
-import org.slf4j.Logger;
+import org.apache.commons.io.IOUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
-import java.awt.*;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.OutputStream;
-import java.util.UUID;
+import java.io.*;
 
 public class HttpUtil {
 
@@ -57,51 +48,27 @@ public class HttpUtil {
     /**
      * 单文件上传
      *
-     * @param path 上传路径
-     * @param file 欲上传的文件
+     * @param multipartFile 欲上传的文件
+     * @param path          上传路径
      * @return 文件名称错误代码
      * @throws XShopException 异常
      */
-    public static JSONObject saveFile(Logger log, String path, MultipartFile file) throws XShopException {
-        String fileName = file.getOriginalFilename();
-        log.info("上传的文件名为：" + fileName);
-        // 获取文件的后缀名
-        String suffixName = null;
-        if (fileName != null) {
-            suffixName = fileName.substring(fileName.lastIndexOf("."));
+    public static String saveFile(String path, MultipartFile multipartFile) throws XShopException {
+
+        String newFileName = IdentifyUtil.getIdentify() + "." + MultipartFileUtil.getFileType(multipartFile);
+        System.out.println(newFileName);
+        File filePath = new File(path);
+        if (!filePath.exists()) {
+            filePath.mkdirs();
         }
-        fileName = UUID.randomUUID() + suffixName;
-        log.info("上传的后缀名为：" + suffixName);
-        // 文件上传后的路径
-        // 解决中文问题，liunx下中文路径，图片显示问题
-        // fileName = UUID.randomUUID() + suffixName;
-        File dest = new File(path + fileName);
-        // 检测是否存在目录
-        if (!dest.getParentFile().exists()) {
-            dest.getParentFile().mkdirs();
-        }
+        File file = new File(path + newFileName);
         try {
-            file.transferTo(dest);
-            int angel = PictureRotateUtil.getRotateAngleForPhoto(path + fileName);
-            System.out.println(">>>>>>>>>>>" + angel);
-            if (angel > 0) {
-                dest = PictureRotateUtil.rotateImage(new File(path + fileName), angel);
-            }
-            BufferedImage bi = new BufferedImage(50, 20, BufferedImage.TYPE_INT_RGB);
-            Graphics2D g = bi.createGraphics();
-            g.setColor(Color.LIGHT_GRAY);
-            g.drawRect(0, 0, 50, 20);
-            char[] data = "选货邦".toCharArray();
-            g.drawChars(data, 0, data.length, 3, 10);
-            Thumbnails.of(dest).scale(1f).outputQuality(0.25f).watermark(Positions.BOTTOM_RIGHT, bi, 0.5f).toFile(dest);
-            log.info("上传成功后的文件路径未：" + path + fileName);
-            JSONObject jsonObject = new JSONObject();
-            jsonObject.put("file", fileName);
-            return jsonObject;
-        } catch (IllegalStateException | IOException e) {
+            IOUtils.copy(multipartFile.getInputStream(), new FileOutputStream(file));
+        } catch (IOException e) {
             e.printStackTrace();
+            throw new XShopException(ErrEumn.UPLOAD_ERROR);
         }
-        throw new XShopException(ErrEumn.UPLOAD_ERROR);
+        return file.getName();
 
     }
 

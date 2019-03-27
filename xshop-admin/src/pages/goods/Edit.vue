@@ -25,12 +25,12 @@
                 <el-switch size="mini" v-model="goods.saleStatusShow"></el-switch>
             </el-form-item>
             <el-form-item label="促销分类">
-                 <el-select size="mini" v-model="saleType" :placeholder="saleTypePlaceholder">
+                <el-select size="mini" v-model="saleType" :placeholder="saleTypePlaceholder">
                     <el-option
-                    v-for="item in promotionOptions"
-                    :key="item.value"
-                    :label="item.label"
-                    :value="item.value">
+                            v-for="item in promotionOptions"
+                            :key="item.value"
+                            :label="item.label"
+                            :value="item.value">
                     </el-option>
                 </el-select>
             </el-form-item>
@@ -45,16 +45,13 @@
             <!--</el-form-item>-->
             <el-form-item label="分类">
                 <el-cascader
-                        :placeholder="classifyPlaceholder"
+                        placeholder="请选择分类"
                         :options="classifyOptions"
                         size="mini"
                         change-on-select
                         @change="classifyChange"
                 ></el-cascader>
-                <el-button @click="addClassifyInit" size="mini">添加分类</el-button>
-                <el-button @click="editClassifyInit" size="mini">修改分类</el-button>
-                <el-button @click="delClassifyInit" size="mini">删除分类</el-button>
-
+                <el-button @click="addClassifyInit" size="mini">管理分类</el-button>
             </el-form-item>
             <el-form-item label="库存">
                 <el-input size="mini" v-model="goods.stock" placeholder="库存"></el-input>
@@ -114,91 +111,6 @@
                 <el-button type="primary" size="mini" @click="onSubmit(goods)">提交</el-button>
             </el-form-item>
         </el-form>
-        <el-dialog
-                title="添加分类"
-                :visible.sync="addClassifyShow"
-                width="30%">
-            <div>
-                <el-form ref="addClassify" :model="addClassify" label-width="80px">
-                    <el-form-item size="mini" label="分类名称">
-                        <el-input v-model="addClassify.clName"></el-input>
-                    </el-form-item>
-                    <el-form-item size="mini" label="分类等级">
-                        <el-radio-group v-model="addClassify.clGrade">
-                            <el-radio  label="0">一级</el-radio>
-                            <el-radio  label="1">二级</el-radio>
-                        </el-radio-group>
-                    </el-form-item>
-                    <el-form-item label="父级分类" v-show="addClassify.clGrade === '1'">
-                        <el-select v-model="addClassify.clFid" placeholder="请选择父级分类" value="请选择父级分类">
-                            <el-option :label="classify.clName" :value="classify.clId" :key="classify.clId" v-for="classify in fClassifys"></el-option>
-                        </el-select>
-                    </el-form-item>
-
-                </el-form>
-            </div>
-            <span slot="footer" class="dialog-footer">
-                <el-button @click="addClassifyShow = false">取 消</el-button>
-                <el-button type="primary" @click="addClassifyForm()">添加</el-button>
-            </span>
-        </el-dialog>
-        <el-dialog
-                title="删除分类"
-                :visible.sync="delClassifyShow"
-                width="30%">
-            <div>
-                <el-form ref="addClassify" :model="delClassifyForm" label-width="80px">
-                    <el-form-item label="父级分类">
-                        <el-select v-model="delClassifyForm.clFid" @change="delClassifyFidChange" placeholder="请选择父级分类" value="请选择父级分类">
-                            <el-option :label="classify.clName" :value="classify.clId" :key="classify.clId" v-for="classify in classifyOptions"></el-option>
-                        </el-select>
-                    </el-form-item>
-                    <el-form-item label="子分类">
-                        <el-select v-model="delClassifyForm.clId" @change="delClassifyIdChange" placeholder="请选择子分类" value="请选择子分类">
-                            <el-option :label="classify.clName" :value="classify.clId" :key="classify.clId" v-for="classify in delClassifyId"></el-option>
-                        </el-select>
-                    </el-form-item>
-                </el-form>
-
-
-            </div>
-            <span slot="footer" class="dialog-footer">
-                <el-button @click="addClassifyShow = false">取 消</el-button>
-                <el-button type="danger" @click="onDelClassify()">删除</el-button>
-            </span>
-        </el-dialog>
-        <el-dialog
-                title="修改分类"
-                :visible.sync="editClassifyShow"
-                width="30%">
-            <div>
-                <el-tree
-                        :data="classifyOptions"
-                        show-checkbox
-                        node-key="id"
-                        default-expand-all
-                        :expand-on-click-node="false">
-                  <span class="custom-tree-node" slot-scope="{ node, data }">
-                    <!--<el-input size="mini" type="text">{{ node.label }}</el-input>-->
-                    <span>{{node.label}}</span>
-                    <span>
-                      <el-button
-                              type="text"
-                              size="mini"
-                                @click="() => editClassClick(data)">
-                        编辑
-                      </el-button>
-                    </span>
-                  </span>
-                </el-tree>
-
-
-            </div>
-            <span slot="footer" class="dialog-footer">
-                <el-button @click="addClassifyShow = false">取 消</el-button>
-                <el-button type="danger" @click="onDelClassify()">删除</el-button>
-            </span>
-        </el-dialog>
     </el-card>
 </template>
 
@@ -207,84 +119,51 @@
     import {quillEditor, Quill} from 'vue-quill-editor'
     import {container, ImageExtend, QuillWatch} from 'quill-image-extend-module'
 
-    Quill.register('modules/ImageExtend', ImageExtend)
+    Quill.register('modules/ImageExtend', ImageExtend);
 
     export default {
         name: "GoodsEdit",
         components: {quillEditor},
         data() {
-
-            /* 验证密码 */
-            const validatePass2 = (rule, value, callback) => {
-                if (value !== this.user.password) {
-                    callback(new Error('两次输入密码不一致!'));
-                } else {
-                    callback();
-                }
-            };
-            // 验证手机号是否存在
-            const checkPhone = (rule, value, callback) => {
-                // console.log(this.currPhone,'>>>>>',value);
-                // 点击用户自己的手机号注册不做已经注册处理
-                if (this.currPhone === value) {
-                    callback();
-                } else {
-                    httpUtil.post(this, 'user', 'phoneIsExist', {"phone": value}, function (resp) {
-                        if (resp.body.code === 0) {
-                            console.log("okok");
-                            callback();
-                        } else {
-                            callback(new Error('手机号已存在!'));
-                        }
-                    })
-                }
-            };
-
             return {
                 saleMessageShow: false,
                 saleType: '请选择',
                 promotionOptions: [{
                     value: '0',
                     label: '请选择促销分类'
-                    }, {
+                }, {
                     value: '1',
                     label: '活动商品'
-                    }, {
+                }, {
                     value: '2',
                     label: '精选商品'
-                    }, {
+                }, {
                     value: '3',
                     label: '包邮商品'
-                    }, {
+                }, {
                     value: '4',
                     label: '新店必备'
-                    }],
+                }],
                 saleTypePlaceholder: '请选择促销分类',
-                editClassClick(row){
-                    console.log(row)
-                    this.$data.editStatus[row.clId]
-
-                },
-                editStatus:{},
+                editStatus: {},
                 delClassifyForm: {
-                    clFid:0,
-                    clId:0,
+                    clFid: 0,
+                    clId: 0,
                 },
                 editClassifyShow: false,
                 delClassifyShow: false,
                 delClassifyFid: [],
-                delClassifyId:[],
-                classifyPlaceholder: '请选择分类',
+                delClassifyId: [],
                 addClassifyShow: false,
-                fClassifys:[],
+                fClassifys: [],
                 classifyOptions: [],
                 content: null,
                 addClassify: {
                     clId: null,
                     clName: '',
                     clGrade: '0',
-                    clFid:0,
-                    clDel:0,
+                    clFid: 0,
+                    clDel: 0,
                 },
                 editorOption: {
                     modules: {
@@ -294,7 +173,7 @@
                             action: httpUtil.baseurl("goods") + 'picturesUpload',
                             response: (res) => {
                                 console.log(res)
-                                return httpUtil.host + 'pictures_upload/' + JSON.parse(res.data).file;
+                                return httpUtil.baseurl('goods') + 'pictures_upload/' + res.data.fileName;
                             }
                         },
                         toolbar: {
@@ -314,10 +193,10 @@
                 },
                 imageUrl: '',
                 disable: false,
-                coverUploadUrl: httpUtil.baseurl() + 'goods/coverUpload',
-                picturesUploadUrl: httpUtil.baseurl() + 'goods/picturesUpload',
-                coverUrl: httpUtil.host + 'cover_upload/',
-                picturesUrl: httpUtil.host + 'pictures_upload/',
+                coverUploadUrl: httpUtil.baseurl('goods') + 'coverUpload',
+                picturesUploadUrl: httpUtil.baseurl('goods') + 'picturesUpload',
+                coverUrl: httpUtil.baseurl('goods') + 'cover_upload/',
+                picturesUrl: httpUtil.baseurl('goods') + 'pictures_upload/',
                 loading: true,
                 title: '',
                 message: '',
@@ -349,49 +228,45 @@
                     content: '',
                     clId: 0,
                     clFid: 0,
-                    saleMessage:'',
+                    saleMessage: '',
 
                 }
             }
         },
         mounted() {
-            // this.titleSelect();
 
-            this.titleSelect()
-            this.fClassLoad()
-            this.loadClassifyTree()
+            this.titleSelect();
+            this.loadClassifyTree();
             const cacheGoods = sessionStorage.getItem("cacheGoods");
-            console.log("cacheGoods:" + cacheGoods)
-            console.log(cacheGoods)
             // 加载缓存数据
             if (cacheGoods !== null && cacheGoods !== "" && cacheGoods !== undefined) {
                 console.log('edit')
                 this.$set(this.$data, "goods", JSON.parse(cacheGoods))
                 this.$set(this.$data, "picturesImages", this.$data.goods.picturesImages)
                 this.$set(this.$data, "coverImages", this.$data.goods.coverImages)
-            }else{
+            } else {
                 console.log('add')
                 const goods = {
                     title: "",
-                        describe: "",
-                        originalPrice: 0.00,
-                        salePrice: 0.00,
-                        saleStatus: 0,
-                        saleStatusShow: false,
-                        status: 0,
-                        statusShow: true,
-                        stock: 0,
-                        saleType: 0,
-                        deliveryPlace: "本地",
-                        despatchMoney: 0.00,
-                        coverImages: "",
-                        cover: '',
-                        pictures: '',
-                        picturesImages: [],
-                        content: '',
-                        clId: 0,
-                        clFid: 0,
-                }
+                    describe: "",
+                    originalPrice: 0.00,
+                    salePrice: 0.00,
+                    saleStatus: 0,
+                    saleStatusShow: false,
+                    status: 0,
+                    statusShow: true,
+                    stock: 0,
+                    saleType: 0,
+                    deliveryPlace: "本地",
+                    despatchMoney: 0.00,
+                    coverImages: "",
+                    cover: '',
+                    pictures: '',
+                    picturesImages: [],
+                    content: '',
+                    clId: 0,
+                    clFid: 0,
+                };
                 this.$set(this.$data, "goods", goods)
             }
         },
@@ -400,97 +275,27 @@
                 return this.$refs.myQuillEditor.quill
             }
         },
-        watch:{
-            saleType(val){
-                if(val === "1" || val === "2" || val === "3" || val === "4" || val === "0"){
+        watch: {
+            saleType(val) {
+                if (val === "1" || val === "2" || val === "3" || val === "4" || val === "0") {
                     this.$set(this.$data.goods, 'saleType', val)
                 }
             }
         },
         methods: {
-            editClassifyInit(){
-                this.$set(this.$data, "editClassifyShow", true)
+            addClassifyInit() {
+                window.open('/#/goods/classify')
             },
-            delClassifyIdChange(selected){
-                this.$set(this.$data.delClassifyForm, "clId", selected)
-
-            },
-            onDelClassify(){
-                console.log(this.$data.delClassifyForm)
+            loadClassifyTree() {
                 const that = this;
-                httpUtil.post(this, 'goods', 'delClassify', this.$data.delClassifyForm, function (resp) {
-                    const data = resp.body
-                    console.log(data)
-                    if (data.code === 0){
-                        that.$message("删除成功!")
-                        that.fClassLoad()
-                        that.loadClassifyTree()
-                    }
-                })
-            },
-            delClassifyFidChange(selected){
-                console.log(selected)
-                this.$set(this.$data.delClassifyForm, "clFid", selected)
-                for (var i=0; i < this.$data.classifyOptions.length; i++){
-                    if (this.$data.classifyOptions[i].clId === selected){
-                        console.log(this.$data.classifyOptions[i].clId)
-                        console.log(this.$data.classifyOptions[i].children)
-                        this.$set(this.$data, 'delClassifyId', this.$data.classifyOptions[i].children);
-                    }
-                }
-            },
-            delClassifyInit(){
-                this.$set(this.$data, 'delClassifyShow', true)
-                console.log(this.$data.classifyOptions)
-            },
-            addClassifyInit(){
-                const classifyForm ={
-                    clId: null,
-                        clName: '',
-                        clGrade: '0',
-                        clFid:0,
-                        clDel:0,
-                }
-                this.$set(this.$data, 'addClassify', classifyForm)
-                this.$set(this.$data, 'addClassifyShow' ,true)
-            },
-            loadClassifyTree(){
-                const that = this;
-                httpUtil.get(this, 'goods', 'classifyTree', function (resp) {
-                    console.log(resp);
-                    const data = JSON.parse(resp.body.data)
-                    that.$set(that.$data,"classifyOptions", data)
-                    let editStatus = [];
-                    that.$set(that.$data, "editStatus", [])
-                    for (let i = 0 ; i < data.length; i++){
-                        const d = {clId:data.clId, status: false};
-                        editStatus.push(d)
-                    }
-                    that.$set(that.$data, "editStatus", editStatus)
-
+                httpUtil.post(this, "goods", "classifyTree", {}, function (resp) {
+                    that.classifyOptions = resp.data.data;
                 })
 
-            },
-            fClassLoad(){
-                const that = this;
-                httpUtil.get(this, 'goods', 'fClassify', function (resp) {
-                    console.log(resp);
-                    const data = JSON.parse(resp.body.data)
-                    that.$set(that.$data,"fClassifys", data)
-                })
-            },
-            addClassifyForm(){
-                const that = this;
-                httpUtil.post(this, 'goods', 'addClassify', this.addClassify, function (resp) {
-                    that.successMsg("添加分类成功！")
-                    that.fClassLoad()
-                    that.loadClassifyTree()
-                })
             },
             classifyChange(e) {
-                console.log(e)
-                this.$set(this.$data.goods, "clFid", e[0])
-                this.$set(this.$data.goods, "clId", e[1])
+                console.log(e);
+                this.$data.goods.clId = e[1];
             },
             beforePicturesUpload(file) {
                 return this.imgUploadRule(file)
@@ -522,7 +327,7 @@
 
             },
             handleCoverImagesRemove(file, fileList) {
-                const list = []
+                const list = [];
                 for (var i = 0; i < fileList.length; i++) {
                     if (fileList[i].uid !== file.uid) {
                         list.push(fileList[i])
@@ -532,7 +337,7 @@
                 this.$set(this.$data.goods, "coverImages", list);
             },
             handlePicturesImagesRemove(file, fileList) {
-                const list = []
+                const list = [];
                 for (var i = 0; i < fileList.length; i++) {
                     if (fileList[i].uid !== file.uid) {
                         list.push(fileList[i])
@@ -548,31 +353,26 @@
             onEditorChange() {//内容改变事件
             },
             coverSuccess(response, file, fileList) {
-                console.log("=====================")
-                console.log(response)
-                console.log(file)
-                console.log(fileList)
-                console.log("=====================")
-                const data = JSON.parse(response.data);
+                const data = response.data;
                 this.coverImages.push({
-                    name: data.file,
-                    url: "https://xuanhuobang.com/cover_upload/" + data.file,
+                    name: data.fileName,
+                    url: httpUtil.baseurl('goods') + "cover/" + data.fileName,
                 });
 
             },
             picturesSuccess(response, file, fileList) {
-                const data = JSON.parse(response.data);
+                const data = response.data;
 
                 this.picturesImages.push({
-                    name: data.file,
-                    url: "https://xuanhuobang.com/pictures_upload/" + data.file,
+                    name: data.fileName,
+                    url: httpUtil.baseurl('goods') + "pictures_upload/" + data.fileName,
                 });
 
 
             },
             // 根据点击添加用户或者编辑用户，标题的替换。
             titleSelect() {
-                const goodsId = sessionStorage.getItem("goodsIdEdit");
+                const goodsId = this.$route.query.goodsId;
                 console.log("goodsId:" + goodsId)
 
                 this.$set(this.$data.goods, 'goodsId', goodsId === 'undefined' ? null : goodsId);
@@ -592,9 +392,7 @@
             },
             // 企业关键词搜索，下拉
             loadAll() {
-                //console.log('loadAll');
                 const that = this;
-                //console.log(this.$data.user.epShortname);
                 if (this.$data.user.epShortname !== undefined && this.$data.user.epShortname.length > 0) {
                     httpUtil.post(this, 'goods', "info", this.$data.goods.goodsId, function (resp) {
                         let epArr = JSON.parse(resp.body.data);
@@ -647,7 +445,7 @@
                         // 添加成功清楚缓存
                         sessionStorage.setItem("cacheGoods", "");
                     })
-                }else {
+                } else {
                     // 缓存表单，如果出现提交失败还原表单
                     console.log(this.picturesImages)
                     this.$set(this.$data.goods, "coverImages", this.coverImages === undefined ?
@@ -700,7 +498,7 @@
                             content: '',
                             clId: 0,
                             clFid: 0,
-                        }
+                        };
                         this.$set(this.$data, "goods", goods)
                     })
                 }
@@ -708,9 +506,10 @@
             loadData() {
                 const that = this;
                 this.$set(this.$data, 'loading', true);
-                const goodsIdEdit = sessionStorage.getItem("goodsIdEdit");
+                const goodsIdEdit = this.$route.query['goodsId'];
+                console.log(goodsIdEdit)
                 httpUtil.post(this, 'goods', "info", {goodsId: goodsIdEdit}, function (resp) {
-                    const data = JSON.parse(resp.body.data);
+                    const data = resp.body.data;
                     that.$set(that.$data, "goods", data)
                     const coverD = [{'url': data.cover, 'uid': new Date().getTime(), 'name': '封面'}];
                     const pictureD = JSON.parse(data.pictures);
@@ -721,19 +520,19 @@
                     that.$set(that.$data.goods, "saleStatusShow", that.$data.goods.saleStatus === 1)
                     that.$set(that.$data.goods, "statusShow", that.$data.goods.status === 0)
                     that.$set(that.$data.goods, "updateUser", that.$store.getters.user.uid)
-                    if(that.$data.goods.saleType === 0){
+                    if (that.$data.goods.saleType === 0) {
                         that.$set(that.$data, 'saleType', '请选择促销分类')
                     }
-                    if(that.$data.goods.saleType === 1){
+                    if (that.$data.goods.saleType === 1) {
                         that.$set(that.$data, 'saleType', '活动商品')
                     }
-                    if(that.$data.goods.saleType === 2){
+                    if (that.$data.goods.saleType === 2) {
                         that.$set(that.$data, 'saleType', '精选商品')
                     }
-                    if(that.$data.goods.saleType === 3){
+                    if (that.$data.goods.saleType === 3) {
                         that.$set(that.$data, 'saleType', '包邮商品')
                     }
-                    if(that.$data.goods.saleType === 4){
+                    if (that.$data.goods.saleType === 4) {
                         that.$set(that.$data, 'saleType', '新店必备')
                     }
                     console.log(that.$data.classifyOptions)
@@ -742,17 +541,17 @@
                     let timer = window.setInterval(function () {
                         console.log("interval----------")
 
-                        if(that.$data.classifyOptions !== []){
+                        if (that.$data.classifyOptions !== []) {
                             let f = "";
                             let j1 = "";
-                            for (let i = 0; i < that.$data.classifyOptions.length; i++){
+                            for (let i = 0; i < that.$data.classifyOptions.length; i++) {
 
-                                if (that.$data.goods.clFid === that.$data.classifyOptions[i].value){
+                                if (that.$data.goods.clFid === that.$data.classifyOptions[i].value) {
                                     f = that.$data.classifyOptions[i].label
-                                    for (let j = 0; j < that.$data.classifyOptions[i].children.length; j++){
+                                    for (let j = 0; j < that.$data.classifyOptions[i].children.length; j++) {
                                         console.log(that.$data.goods.clId)
                                         console.log(that.$data.classifyOptions[i].children[j].value)
-                                        if (that.$data.goods.clId === that.$data.classifyOptions[i].children[j].value){
+                                        if (that.$data.goods.clId === that.$data.classifyOptions[i].children[j].value) {
                                             j1 = that.$data.classifyOptions[i].children[j].label
                                         }
                                     }
@@ -762,7 +561,7 @@
                             clearInterval(timer);
                         }
 
-                    },1000);
+                    }, 1000);
 
                 })
             },
@@ -796,10 +595,12 @@
         font-size: 16px;
         cursor: pointer;
     }
-    .quill-editor{
+
+    .quill-editor {
         height: 250px;
     }
-    .el-card__body{
+
+    .el-card__body {
         height: calc(100% - 39px);
         /*overflow: scroll;*/
     }

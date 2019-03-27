@@ -19,6 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityManager;
+import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.util.*;
 
@@ -115,6 +116,18 @@ public class GoodsServiceImpl extends BaseServiceImpl implements GoodsService {
                 .where(qGoods.title.eq(goods.getTitle()))
                 .fetchCount() > 0) {
             throw new XShopException(ErrEumn.GOODS_EXIST);
+        }
+        if (goods.getDespatchIsPlus() == null){
+            goods.setDespatchIsPlus(0);
+        }
+        if (goods.getDespatchPlusMoney() == null){
+            goods.setDespatchPlusMoney(new BigDecimal(0));
+        }
+        if (goods.getExecFreePostageNum() == null){
+            goods.setExecFreePostageNum(0);
+        }
+        if (goods.getFreePostageNum() == null){
+            goods.setFreePostageNum(0);
         }
         return goodsRepository.save(goods);
     }

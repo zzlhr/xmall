@@ -68,6 +68,7 @@ const routes = [
             },
             {
                 path: '/goods/edit',
+                name: 'GoodsEdit',
                 component: GoodsEdit
             },
 

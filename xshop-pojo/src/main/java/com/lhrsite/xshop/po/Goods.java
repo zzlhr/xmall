@@ -8,7 +8,6 @@ import javax.persistence.Id;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.sql.Timestamp;
-import java.util.Date;
 
 @Entity
 @Data
@@ -43,13 +42,13 @@ public class Goods implements Serializable {
     /* 快递费 */
     private BigDecimal despatchMoney;
     /* 快递费是否累加 */
-    private Boolean despatchIsPlus;
+    private Integer despatchIsPlus;
     /* 运费累加单价 */
     private BigDecimal despatchPlusMoney;
     /* 免邮费数量，购买数到达该数量免邮费*/
     private Integer freePostageNum;
     /* 是否执行免邮数量 */
-    private Boolean execFreePostageNum;
+    private Integer execFreePostageNum;
     /* 内容 */
     private String content;
     /* banner图 */

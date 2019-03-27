@@ -2,8 +2,7 @@ package com.lhrsite.xshop.service.impl;
 
 import com.lhrsite.xshop.core.exception.ErrEumn;
 import com.lhrsite.xshop.core.exception.XShopException;
-import com.lhrsite.xshop.core.utils.IdentifyUtil;
-import com.lhrsite.xshop.core.utils.MultipartFileUtil;
+import com.lhrsite.xshop.core.utils.HttpUtil;
 import com.lhrsite.xshop.mapper.ClassifyMapper;
 import com.lhrsite.xshop.po.Classify;
 import com.lhrsite.xshop.repository.ClassifyRepository;
@@ -23,7 +22,6 @@ import javax.persistence.EntityManager;
 import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -52,17 +50,58 @@ public class ClassifyServiceImpl extends BaseServiceImpl implements ClassifyServ
     }
 
     @Override
-    public List<ClassifyVO> getClassifyTree(Integer eid) {
-
+    public List<ClassifyVO> getClassifyTree(String token) throws XShopException {
+        Integer eid = userService.getUserEnterpriseId(token);
         List<Classify> classifies = classifyMapper.findAllClassify(eid);
 
-        List<ClassifyVO> classifyVOS = ClassifyVO.init(classifies);
+        return classifyVOSToTree(ClassifyVO.init(classifies));
 
-        List<ClassifyVO> resultVO = new ArrayList<>();
+    }
 
-        classifyToVO(classifyVOS, resultVO);
+    /**
+     * 把classify对象封装成树结构
+     *
+     * @param classifyVOS classify对象
+     * @return 树
+     */
+    private List<ClassifyVO> classifyVOSToTree(List<ClassifyVO> classifyVOS) {
+        // 因为有三级分类，所以从第二级开始找
+        List<ClassifyVO> classifyVOS2 = new ArrayList<>();
+        for (int i = 0; i < classifyVOS.size(); i++) {
+            ClassifyVO classifyItem = classifyVOS.get(i);
+            if (classifyItem.getClGrade() == 1) {
+                // 找二级菜单的子菜单
+                for (ClassifyVO classifyVO : classifyVOS) {
+                    if (classifyVO.getClFid().equals(classifyItem.getClId())) {
+                        if (classifyItem.getChildren() == null) {
+                            classifyItem.setChildren(new ArrayList<>());
+                        }
+                        // 设置三级菜单的children为null
+                        if (classifyVO.getClGrade() == 2) {
+                            classifyVO.setChildren(null);
+                        }
+                        classifyItem.getChildren().add(classifyVO);
+                    }
+                }
+                classifyVOS2.add(classifyItem);
+            }
+        }
+        List<ClassifyVO> classifyVOS0 = new ArrayList<>();
+        // 最后所有二级菜单放入一级菜单children中
+        for (ClassifyVO classifyVO : classifyVOS) {
+            if (classifyVO.getClGrade() == 0) {
+                for (ClassifyVO classifyVO2 : classifyVOS2) {
+                    if (classifyVO.getClId().equals(classifyVO2.getClFid())) {
+                        classifyVO.getChildren().add(classifyVO2);
+                    }
+                }
+                classifyVOS0.add(classifyVO);
+            }
+        }
 
-        return resultVO;
+        return classifyVOS0;
+
+
     }
 
     @Override
@@ -154,17 +193,8 @@ public class ClassifyServiceImpl extends BaseServiceImpl implements ClassifyServ
     }
 
     @Override
-    public String uploadClassifyPicture(MultipartFile multipartFile) throws IOException {
-
-        String newFileName = IdentifyUtil.getIdentify() + "." + MultipartFileUtil.getFileType(multipartFile);
-        System.out.println(newFileName);
-        File filePath = new File(uploadPicturePath);
-        if (!filePath.exists()) {
-            filePath.mkdirs();
-        }
-        File file = new File(uploadPicturePath + newFileName);
-        IOUtils.copy(multipartFile.getInputStream(), new FileOutputStream(file));
-        return file.getName();
+    public String uploadClassifyPicture(MultipartFile multipartFile) throws XShopException {
+        return HttpUtil.saveFile(uploadPicturePath, multipartFile);
     }
 
     @Override
