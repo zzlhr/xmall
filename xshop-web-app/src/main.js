@@ -23,7 +23,7 @@ import {far} from '@fortawesome/free-regular-svg-icons'
 import {fab} from '@fortawesome/free-brands-svg-icons'
 import {FontAwesomeIcon, FontAwesomeLayers, FontAwesomeLayersText}
     from '@fortawesome/vue-fontawesome'
-
+// import './styles/xshop.scss'
 library.add(fas, far, fab);
 
 Vue.component('font-awesome-icon', FontAwesomeIcon);
@@ -49,6 +49,7 @@ Vue.component('x-number', XNumber);
 Vue.use(AjaxPlugin);
 Vue.use(VueRouter);
 Vue.use(Vuex);
+
 const store = new Vuex.Store({
     state: {
         login: 0,

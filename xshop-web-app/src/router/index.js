@@ -11,7 +11,6 @@ import Address from '../pages/Address'
 import ClassCommodity from '../pages/ClassCommodity'
 import UpPwd from '../pages/UpPwd'
 import Regist from '../pages/Regist'
-import Regist1 from '../pages/Regist1'
 import About from '../pages/About'
 import SaleList from '../pages/SaleList'
 import Login from "../pages/Login";
@@ -88,10 +87,6 @@ export default new Router({
             path: '/sale',
             name: 'SaleList',
             component: SaleList
-        }, {
-            path: '/regist1',
-            name: 'Regist1',
-            component: Regist1,
         }, {
             path: '/login',
             name: 'Login',

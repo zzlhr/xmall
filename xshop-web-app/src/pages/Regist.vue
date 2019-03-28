@@ -4,22 +4,6 @@
     <group>
       <x-input title="手机号" v-model="registForm.phone"></x-input>
     </group>
-    <!--<group>-->
-    <!--<x-button typeof="primary">下一步</x-button>-->
-    <!--</group>-->
-    <!--<group>-->
-    <!--<x-button type="primary" v-show="nextSendTime<=0" @click.native="sendAuthCode">{{nextSendTime <= 0 ? '发送验证码' : nextSendTime}}</x-button>-->
-    <!--</group>-->
-    <!--<group>-->
-    <!--<x-input title="验证码" v-model="registForm.code"></x-input>-->
-    <!--</group>-->
-    <!--<group>-->
-    <!--<x-input title="用户名" v-model="registForm.username"></x-input>-->
-    <!--</group>-->
-    <!--<group>-->
-    <!--<x-input title="密码" type="password" v-model="registForm.password"></x-input>-->
-    <!--</group>-->
-
     <group style="margin: 10px">
       <x-button type="primary" action-type="button" @click.native="next">下一步</x-button>
     </group>

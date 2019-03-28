@@ -3,7 +3,7 @@
         <x-header :left-options="{preventGoBack: true}" @on-click-back="goBack()">确认订单</x-header>
         <div class="confirm_order_address">
             <div class="confirm_order_address_logo">
-                <font-awesome-icon icon="address-card"></font-awesome-icon>
+                <vuxesome-icon icon="address-card"></vuxesome-icon>
             </div>
             <div class="confirm_order_address_content" @click="selectAddress">
                 <p class="confirm_order_address_consignee">
