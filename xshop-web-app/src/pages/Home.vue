@@ -3,8 +3,8 @@
         <s-search></s-search>
         <div class="scrollerWrap">
             <main>
-                <swiper class="home_swiper" :auto="true" :list="demo01_list" v-model="demo01_index"></swiper>
-                <card :header="cardTitle">
+                <swiper class="home_swiper" :auto="true" :list="swiperList" v-model="swiperIndex"></swiper>
+                <div :header="cardTitle">
                     <div slot="header" class="weui-panel__hd">{{cardTitle.title}}</div>
                     <grid :show-lr-borders="false">
                         <grid-item label="活动商品" @click.native="goSale(1)">
@@ -20,7 +20,7 @@
                             <img slot="icon" src="../assets/home_new.png" alt="新店必备">
                         </grid-item>
                     </grid>
-                </card>
+                </div>
                 <group style="margin-bottom: 10px">
                     <cell title='通知' value-align="left">
                         <slot>
@@ -70,11 +70,11 @@
         Tab,
         TabItem,
     } from "vux";
-    import SSearch from './search'
+    import SSearch from '../components/search'
     import {Search} from "vux";
     import http from "../util/HttpUtil";
 
-    import ShopTabbar from './ShopTabbar'
+    import ShopTabbar from '../components/ShopTabbar'
 
     export default {
         name: "Home",
@@ -102,9 +102,9 @@
             return {
                 shopList: [],
                 cardTitle: {title: "推荐频道"},
-                demo01_list: [],
+                swiperList: [],
                 swiperItemIndex: 1,
-                demo01_index: 0,
+                swiperIndex: 0,
                 goodsParams: {
                     page: 1,
                     title: ""
@@ -244,7 +244,7 @@
     };
 </script>
 
-<style>
+<style lang="scss" scoped>
     .scrollerWrap {
         position: absolute;
         top: 46px;

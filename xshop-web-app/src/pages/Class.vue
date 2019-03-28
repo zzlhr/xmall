@@ -46,7 +46,7 @@
     import XHr from "vux/src/components/x-hr/index";
     import XButton from 'vux/src/components/x-button/index'
     import http from '../util/HttpUtil'
-    import ShopTabbar from './ShopTabbar'
+    import ShopTabbar from '../components/ShopTabbar'
 
     export default {
         name: "Class",

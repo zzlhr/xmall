@@ -42,7 +42,7 @@
   import {XInput} from 'vux'
   import XHr from "vux/src/components/x-hr/index";
   import http from '../util/HttpUtil'
-  import BuyCarItem from "./BuyCarItem";
+  import BuyCarItem from "../components/BuyCarItem";
   import {Popover, Group, XButton} from 'vux'
 
   export default {

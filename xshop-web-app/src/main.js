@@ -22,7 +22,7 @@ import {fas} from '@fortawesome/free-solid-svg-icons'
 import {far} from '@fortawesome/free-regular-svg-icons'
 import {fab} from '@fortawesome/free-brands-svg-icons'
 import {FontAwesomeIcon, FontAwesomeLayers, FontAwesomeLayersText}
-  from '@fortawesome/vue-fontawesome'
+    from '@fortawesome/vue-fontawesome'
 
 library.add(fas, far, fab);
 
@@ -50,28 +50,28 @@ Vue.use(AjaxPlugin);
 Vue.use(VueRouter);
 Vue.use(Vuex);
 const store = new Vuex.Store({
-  state: {
-    login: 0,
-    user: {},
-    buyCars: {},
-  },
-  mutations: {
-    loginSuccess(state, user) {
-      state.login = 1;
-      state.user = user;
+    state: {
+        login: 0,
+        user: {},
+        buyCars: {},
     },
-    setBuyCars(state, buyCars) {
-      state.buyCars = buyCars;
+    mutations: {
+        loginSuccess(state, user) {
+            state.login = 1;
+            state.user = user;
+        },
+        setBuyCars(state, buyCars) {
+            state.buyCars = buyCars;
+        },
     },
-  },
-  getters: {
-    login(state) {
-      return state.login;
+    getters: {
+        login(state) {
+            return state.login;
+        },
+        user(state) {
+            return state.user;
+        }
     },
-    user(state) {
-      return state.user;
-    }
-  },
 
 });
 FastClick.attach(document.body);
@@ -80,7 +80,7 @@ Vue.config.productionTip = false;
 
 /* eslint-disable no-new */
 new Vue({
-  store,
-  router,
-  render: h => h(App),
+    store,
+    router,
+    render: h => h(App),
 }).$mount('#app-box')

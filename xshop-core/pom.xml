@@ -6,17 +6,13 @@
         <groupId>com.lhrsite</groupId>
         <artifactId>xshop</artifactId>
         <version>0.0.1</version>
-         <!-- lookup parent from repository -->
+        <!-- lookup parent from repository -->
     </parent>
     <groupId>com.lhrsite.xshop</groupId>
     <artifactId>xshop-core</artifactId>
     <version>0.0.1</version>
     <name>xshop-core</name>
     <description>Demo project for Spring Boot</description>
-
-    <properties>
-        <java.version>8</java.version>
-    </properties>
 
     <dependencies>
 

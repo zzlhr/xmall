@@ -71,11 +71,11 @@
     import {InlineXNumber} from 'vux'
     import XHr from "vux/src/components/x-hr/index";
     import http from '../util/HttpUtil'
-    import BuyCarItem from "./BuyCarItem";
+    import BuyCarItem from "../components/BuyCarItem";
     import {Popover} from 'vux'
     import {XDialog} from 'vux'
     import {Radio, Card, Group} from 'vux'
-    import ShopTabbar from './ShopTabbar'
+    import ShopTabbar from '../components/ShopTabbar'
     import {CheckIcon} from 'vux'
 
     export default {
