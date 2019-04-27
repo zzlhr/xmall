@@ -7,6 +7,7 @@ import com.lhrsite.xshop.core.exception.XShopException;
 import com.lhrsite.xshop.repository.AppRepository;
 import com.lhrsite.xshop.service.AppService;
 import com.lhrsite.xshop.service.UserService;
+import org.json.JSONArray;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -28,8 +29,10 @@ public class AppServiceImpl extends BaseServiceImpl implements AppService {
 
     @Override
     public String getPicture() {
-        App app = appRepository.findById(1).get();
-
+        App app = appRepository.findById(1).orElse(new App());
+        if (app.getPicture() == null){
+            app.setPicture(new JSONArray().toString());
+        }
         return app.getPicture();
     }
 

@@ -15,14 +15,12 @@
     <delete id="delClassify">
         delete
         from classify
-        where eid = #{eid}
-          and (cl_id = #{id} or cl_fid = #{id})
+        where (cl_id = #{id} or cl_fid = #{id})
     </delete>
     <delete id="delFoundNotFidClassify">
         delete
         from classify
-        where eid = #{eid}
-        and cl_id in (<include refid='getNullFClassify'/>)
+        where cl_id in (<include refid='getNullFClassify'/>)
     </delete>
     <sql id="getNullFClassify">
         select e.cl_id
@@ -36,7 +34,6 @@
         select
         <include refid="classifyColumns"/>
         from classify
-        where eid = #{eid}
         order by cl_grade desc,cl_serial asc
     </select>
 
@@ -44,8 +41,7 @@
         select
         <include refid="classifyColumns"/>
         from classify
-        where cl_fid=#{fid} and
-        eid = #{eid}
+        where cl_fid=#{fid}
         order by cl_grade desc
     </select>
 
@@ -62,7 +58,7 @@
     <select id="findClassifyByClassName" resultType="com.lhrsite.xshop.po.Classify">
         select
         <include refid="classifyColumns"/>
-        from classify where eid = #{eid} and cl_name=#{className}
+        from classify where cl_name=#{className}
     </select>
 
 </mapper>

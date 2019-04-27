@@ -68,39 +68,39 @@ public class GoodsController {
     }
 
     @RequestMapping("/classifyTree")
-    public ResultVO classifyTree(String token) throws XShopException {
-        resultVO.setData(classifyService.getClassifyTree(token));
+    public ResultVO classifyTree() throws XShopException {
+        resultVO.setData(classifyService.getClassifyTree());
         return resultVO;
     }
 
     @RequestMapping("/fClassify")
-    public ResultVO fClassify(@RequestParam("e") Integer eid) {
-        resultVO.setData(classifyService.getFClassify(eid));
+    public ResultVO fClassify() {
+        resultVO.setData(classifyService.getFClassify());
         return resultVO;
     }
 
     @RequestMapping("/classifyByFid")
-    public ResultVO classifyByFid(Integer fid, String token) throws XShopException {
-        resultVO.setData(classifyService.getClassifyByFid(fid, token));
+    public ResultVO classifyByFid(Integer fid) throws XShopException {
+        resultVO.setData(classifyService.getClassifyByFid(fid));
         return resultVO;
     }
 
 
     @PostMapping("/addClassify")
-    public ResultVO add(Classify classify, String token) throws XShopException {
-        resultVO.setData(classifyService.add(classify, token));
+    public ResultVO add(Classify classify) throws XShopException {
+        resultVO.setData(classifyService.add(classify));
         return resultVO;
     }
 
     @PostMapping("/updateClassify")
-    public ResultVO updateClassify(Classify classify, String token) throws XShopException {
-        resultVO.setData(classifyService.update(classify, token));
+    public ResultVO updateClassify(Classify classify) throws XShopException {
+        resultVO.setData(classifyService.update(classify));
         return resultVO;
     }
 
     @PostMapping("/delClassify")
-    public ResultVO delClassify(Integer clId, String token) throws XShopException {
-        classifyService.del(clId, token);
+    public ResultVO delClassify(Integer clId) throws XShopException {
+        classifyService.del(clId);
         return resultVO;
     }
 
@@ -171,6 +171,7 @@ public class GoodsController {
         resultVO.setData(resultMap);
         return resultVO;
     }
+
     @GetMapping(value = "/pictures_upload/{fileName}")
     public void getPicturesUpload(@PathVariable(name = "fileName") String fileName, HttpServletResponse response)
             throws RuntimeException, XShopException {

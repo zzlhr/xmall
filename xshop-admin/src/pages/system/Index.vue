@@ -1,5 +1,8 @@
 <template>
-    <div>
+    <el-card class="box-card" shadow="never">
+        <div slot="header" class="clearfix">
+            <span>系统配置</span>
+        </div>
         <el-form ref="form" :model="form" label-width="80px">
             <el-form-item label="联系方式">
                 <el-input type="textarea" v-model="form.link"></el-input>
@@ -80,7 +83,7 @@
                 </el-form-item>
             </el-form-item>
         </el-form>
-    </div>
+    </el-card>
 
 </template>
 

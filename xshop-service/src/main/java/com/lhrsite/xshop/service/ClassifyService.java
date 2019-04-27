@@ -12,21 +12,20 @@ import java.util.List;
 
 public interface ClassifyService {
 
-    List<ClassifyVO> getClassifyTree(String token) throws XShopException;
+    List<ClassifyVO> getClassifyTree() throws XShopException;
 
-    List<ClassifyVO> getClassifyByFid(Integer fid, String token) throws XShopException;
+    List<ClassifyVO> getClassifyByFid(Integer fid) throws XShopException;
 
-    List<ClassifyVO> getFClassify(Integer eid);
+    List<ClassifyVO> getFClassify();
 
+    ClassifyVO add(Classify classify) throws XShopException;
 
-    ClassifyVO add(Classify classify, String token) throws XShopException;
-
-    ClassifyVO update(Classify classify, String token) throws XShopException;
+    ClassifyVO update(Classify classify) throws XShopException;
 
     Classify findById(Integer clId) throws XShopException;
 
 
-    void del(Integer clId, String token) throws XShopException;
+    void del(Integer clId) throws XShopException;
 
 
     /**

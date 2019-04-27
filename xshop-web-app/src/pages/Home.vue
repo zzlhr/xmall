@@ -1,53 +1,37 @@
 <template>
-    <div>
+    <div class="main">
         <s-search></s-search>
-        <div class="scrollerWrap">
-            <main>
-                <swiper class="home_swiper" :auto="true" :list="swiperList" v-model="swiperIndex"></swiper>
-                <div :header="cardTitle">
-                    <div slot="header" class="weui-panel__hd">{{cardTitle.title}}</div>
-                    <grid :show-lr-borders="false">
-                        <grid-item label="活动商品" @click.native="goSale(1)">
-                            <img slot="icon" src="../assets/home_active.png" alt="活动商品">
-                        </grid-item>
-                        <grid-item label="精选商品" @click.native="goSale(2)">
-                            <img slot="icon" src="../assets/home_boutique.png" alt="精选商品">
-                        </grid-item>
-                        <grid-item label="包邮商品" @click.native="goSale(3)">
-                            <img slot="icon" src="../assets/home_freepostage.png" alt="包邮商品">
-                        </grid-item>
-                        <grid-item label="新店必备" @click.native="goSale(4)">
-                            <img slot="icon" src="../assets/home_new.png" alt="新店必备">
-                        </grid-item>
-                    </grid>
-                </div>
-                <group style="margin-bottom: 10px">
-                    <cell title='通知' value-align="left">
-                        <slot>
-                            <marquee>
-                                <marquee-item v-for="message in messageList.arr" :key="message.msgId"
-                                              @click.native="clickMessage(message)">
-                                    {{message.messageValue.split("|")[0]}}
-                                </marquee-item>
-                            </marquee>
-                        </slot>
-                    </cell>
-                </group>
-                <tab bar-active-color="#668599" :line-width="1">
-                    <tab-item v-for="item in fClassify" :key="item.clId" :selected="selectedClassify===item.clId"
-                              @click.native="selectedClassify=item.clId">{{item.clName}}
-                    </tab-item>
-                </tab>
-                <div style="margin-bottom: 60px">
-                    <group>
-                        <cell v-for="(item, index) in priceRange" :key="index" :title="item.clName"
-                              :link="'class1c/'+item.clId"
-                              :inline-desc='"￥"+item.min+"-"+item.max'></cell>
-                    </group>
-                </div>
-            </main>
+        <swiper class="home_swiper" :auto="true" :list="swiperList" v-model="swiperIndex"></swiper>
+        <div :header="cardTitle">
+            <div slot="header" class="weui-panel__hd">{{cardTitle.title}}</div>
+            <grid :show-lr-borders="false">
+                <grid-item label="活动商品" @click.native="goSale(1)">
+                    <img slot="icon" src="../assets/home_active.png" alt="活动商品">
+                </grid-item>
+                <grid-item label="精选商品" @click.native="goSale(2)">
+                    <img slot="icon" src="../assets/home_boutique.png" alt="精选商品">
+                </grid-item>
+                <grid-item label="包邮商品" @click.native="goSale(3)">
+                    <img slot="icon" src="../assets/home_freepostage.png" alt="包邮商品">
+                </grid-item>
+                <grid-item label="新店必备" @click.native="goSale(4)">
+                    <img slot="icon" src="../assets/home_new.png" alt="新店必备">
+                </grid-item>
+            </grid>
         </div>
-
+        <group style="margin-bottom: 10px">
+            <cell title='通知' value-align="left">
+                <slot>
+                    <marquee>
+                        <marquee-item v-for="message in messageList.arr" :key="message.msgId"
+                                      @click.native="clickMessage(message)">
+                            {{message.messageValue.split("|")[0]}}
+                        </marquee-item>
+                    </marquee>
+                </slot>
+            </cell>
+        </group>
+        <shop-list class="shop-list"></shop-list>
         <shop-tabbar selected="home"></shop-tabbar>
 
     </div>
@@ -75,6 +59,7 @@
     import http from "../util/HttpUtil";
 
     import ShopTabbar from '../components/ShopTabbar'
+    import ShopList from '../components/ShopList'
 
     export default {
         name: "Home",
@@ -96,7 +81,8 @@
             Cell,
             Tab,
             TabItem,
-            ShopTabbar
+            ShopTabbar,
+            ShopList
         },
         data() {
             return {
@@ -137,8 +123,8 @@
                 this.$router.push({name: 'SaleList', params: {cid: saleType}})
             },
             loadGoodsListSearch() {
-                this.$set(this.$data.goodsParams, "page", 1);
-                this.$set(this.$data, "shopList", []);
+                this.goodsParams.page = 1;
+                this.$data.shopList = [];
                 this.loadGoodsList();
             },
             loadGoodsList(done) {
@@ -187,12 +173,13 @@
                 http.get(this, "app", "picture", function (data) {
                     const dt = data.data;
                     const picture = JSON.parse(dt.data);
+                    console.log(picture)
                     for (let i = 0; i < picture.length; i++) {
                         picture[i].img = picture[i].picture;
                         picture[i].url = "/commodity/" + picture[i].url;
                     }
                     sessionStorage.setItem("index_p", picture);
-                    that.$set(that.$data, "demo01_list", picture);
+                    that.swiperList = picture;
                 });
             }
         },
@@ -245,6 +232,13 @@
 </script>
 
 <style lang="scss" scoped>
+    .main{
+        clear: bottom;
+    }
+    .shop-list {
+        margin-bottom: 60px;
+    }
+
     .scrollerWrap {
         position: absolute;
         top: 46px;
@@ -263,6 +257,10 @@
 
     main {
         height: 100%;
+    }
+
+    .home_swiper {
+        margin-top: 47px;
     }
 
     .home_swiper > .vux-swiper {
@@ -304,6 +302,6 @@
     }
 
     .weui-grid:before {
-        border-right: 0px;
+        border-right: 0;
     }
 </style>

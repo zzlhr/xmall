@@ -324,8 +324,6 @@ public class UserServiceImpl extends BaseServiceImpl implements UserService {
     @Override
     public User tokenGetUser(String token) throws XShopException {
 
-//        UserLogin userLogin =
-//                userLoginRepository.findByUserToken(token);
         User user = redisUtil.hashGet("login", token);
 
         if (user == null) {

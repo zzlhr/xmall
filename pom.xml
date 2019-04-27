@@ -32,6 +32,7 @@
         <module>xshop-web-api</module>
         <module>xshop-admin-api</module>
         <module>xshop-pojo</module>
+        <module>xshop-app-api</module>
     </modules>
 
 

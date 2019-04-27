@@ -12,19 +12,17 @@ public interface ClassifyMapper {
     /**
      * 查询所有分类
      *
-     * @param eid 企业id
      * @return 分类列表
      */
-    List<Classify> findAllClassify(Integer eid);
+    List<Classify> findAllClassify();
 
     /**
      * 通过父id查询
      *
      * @param fid 父id
-     * @param eid 企业id
      * @return 分类列表
      */
-    List<Classify> findClassifyByFid(Integer fid, Integer eid);
+    List<Classify> findClassifyByFid(Integer fid);
 
     /**
      * 获取某个分类的价格区间
@@ -39,28 +37,25 @@ public interface ClassifyMapper {
     /**
      * 通过分类名称查询分类
      *
-     * @param eid       企业id
      * @param className 分类名称
      * @return 分类
      */
-    Classify findClassifyByClassName(Integer eid, String className);
+    Classify findClassifyByClassName(String className);
 
     /**
      * 删除分类，会删除id为传入id以及fid为传入id的数据
      *
-     * @param id  分类id
-     * @param eid 企业id
+     * @param id 分类id
      */
-    void delClassify(Integer id, Integer eid);
+    void delClassify(Integer id);
 
 
     /**
      * 删除全部找不到父类的分类
-     *
+     * <p>
      * 用于删除分类后调用删除子类。
-     *
-     * @param eid 企业id
+     * </p>
      */
-    void delFoundNotFidClassify(Integer eid);
+    void delFoundNotFidClassify();
 
 }

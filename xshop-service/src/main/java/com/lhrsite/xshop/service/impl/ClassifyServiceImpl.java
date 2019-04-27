@@ -50,12 +50,9 @@ public class ClassifyServiceImpl extends BaseServiceImpl implements ClassifyServ
     }
 
     @Override
-    public List<ClassifyVO> getClassifyTree(String token) throws XShopException {
-        Integer eid = userService.getUserEnterpriseId(token);
-        List<Classify> classifies = classifyMapper.findAllClassify(eid);
-
+    public List<ClassifyVO> getClassifyTree() throws XShopException {
+        List<Classify> classifies = classifyMapper.findAllClassify();
         return classifyVOSToTree(ClassifyVO.init(classifies));
-
     }
 
     /**
@@ -105,16 +102,15 @@ public class ClassifyServiceImpl extends BaseServiceImpl implements ClassifyServ
     }
 
     @Override
-    public List<ClassifyVO> getClassifyByFid(Integer fid, String token) throws XShopException {
-        Integer eid = userService.getUserEnterpriseId(token);
-        List<Classify> classifies = classifyMapper.findClassifyByFid(fid, eid);
+    public List<ClassifyVO> getClassifyByFid(Integer fid) throws XShopException {
+        List<Classify> classifies = classifyMapper.findClassifyByFid(fid);
         return ClassifyVO.init(classifies);
     }
 
     @Override
-    public List<ClassifyVO> getFClassify(Integer eid) {
+    public List<ClassifyVO> getFClassify() {
 
-        List<Classify> classifies = classifyMapper.findClassifyByFid(0, eid);
+        List<Classify> classifies = classifyMapper.findClassifyByFid(0);
 
         List<ClassifyVO> classifyVOS = ClassifyVO.init(classifies);
 
@@ -140,26 +136,23 @@ public class ClassifyServiceImpl extends BaseServiceImpl implements ClassifyServ
     }
 
     @Override
-    public ClassifyVO add(Classify classify, String token) throws XShopException {
+    public ClassifyVO add(Classify classify) throws XShopException {
         if (classify.getClName().isEmpty()) {
             throw new XShopException(ErrEumn.CLASS_NAME_CONNOT_NULL);
         }
-        Integer eid = userService.getUserEnterpriseId(token);
 
-        Classify existClassify = classifyMapper.findClassifyByClassName(eid, classify.getClName());
+        Classify existClassify = classifyMapper.findClassifyByClassName(classify.getClName());
 
         if (existClassify != null) {
             throw new XShopException(ErrEumn.CLASSIFY_IS_EXIST);
         }
         classify.setClSerial(0);
-        classify.setEid(eid);
+        classify.setEid(0);
         return ClassifyVO.init(classifyRepository.save(classify));
     }
 
     @Override
-    public ClassifyVO update(Classify classify, String token) throws XShopException {
-        Integer eid = userService.getUserEnterpriseId(token);
-        classify.setEid(eid);
+    public ClassifyVO update(Classify classify) {
         classify.setClSerial(0);
         return ClassifyVO.init(classifyRepository.save(classify));
     }
@@ -179,12 +172,10 @@ public class ClassifyServiceImpl extends BaseServiceImpl implements ClassifyServ
     }
 
     @Override
-    public void del(Integer clId, String token) throws XShopException {
-        Integer eid = userService.getUserEnterpriseId(token);
+    public void del(Integer clId) throws XShopException {
 
-
-        classifyMapper.delClassify(clId, eid);
-        classifyMapper.delFoundNotFidClassify(eid);
+        classifyMapper.delClassify(clId);
+        classifyMapper.delFoundNotFidClassify();
     }
 
     @Override

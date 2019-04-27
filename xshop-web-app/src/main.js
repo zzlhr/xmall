@@ -8,12 +8,9 @@ import {AjaxPlugin} from 'vux'
 import router from './router'
 import {TransferDom} from 'vux'
 import {XHeader} from 'vux'
-import {XButton, Divider, Tabbar, TabbarItem,} from 'vux'
+import {XButton, Divider, Tabbar, TabbarItem,Toast,XNumber,ToastPlugin} from 'vux'
 import Vuex from 'vuex'
-import {Toast} from 'vux'
-import {XNumber} from 'vux'
 import VueScroller from 'vue-scroller'
-import {ToastPlugin} from 'vux'
 import axios from 'axios';
 import VueAxios from 'vue-axios';
 //font awesome依赖
@@ -23,6 +20,9 @@ import {far} from '@fortawesome/free-regular-svg-icons'
 import {fab} from '@fortawesome/free-brands-svg-icons'
 import {FontAwesomeIcon, FontAwesomeLayers, FontAwesomeLayersText}
     from '@fortawesome/vue-fontawesome'
+import Vant from 'vant';
+import 'vant/lib/index.css';
+
 // import './styles/xshop.scss'
 library.add(fas, far, fab);
 
@@ -49,6 +49,7 @@ Vue.component('x-number', XNumber);
 Vue.use(AjaxPlugin);
 Vue.use(VueRouter);
 Vue.use(Vuex);
+Vue.use(Vant);
 
 const store = new Vuex.Store({
     state: {

@@ -50,6 +50,7 @@
                         size="mini"
                         change-on-select
                         @change="classifyChange"
+                        @visible-change="classifyVisibleChange"
                 ></el-cascader>
                 <el-button @click="addClassifyInit" size="mini">管理分类</el-button>
             </el-form-item>
@@ -236,7 +237,7 @@
         mounted() {
 
             this.titleSelect();
-            this.loadClassifyTree();
+            // this.loadClassifyTree();
             const cacheGoods = sessionStorage.getItem("cacheGoods");
             // 加载缓存数据
             if (cacheGoods !== null && cacheGoods !== "" && cacheGoods !== undefined) {
@@ -278,11 +279,17 @@
         watch: {
             saleType(val) {
                 if (val === "1" || val === "2" || val === "3" || val === "4" || val === "0") {
-                    this.$set(this.$data.goods, 'saleType', val)
+                    this.goods.saleType = val
                 }
             }
         },
         methods: {
+            classifyVisibleChange(e) {
+                console.log(e);
+                if (e) {
+                    this.loadClassifyTree();
+                }
+            },
             addClassifyInit() {
                 window.open('/#/goods/classify')
             },
@@ -379,11 +386,11 @@
 
                 if (goodsId !== 'undefined' && goodsId !== '' && goodsId !== undefined) {
                     //this.$set(this.$data.user, 'uid', uid);
-                    this.$set(this.$data, 'title', '编辑商品')
+                    this.title = '编辑商品';
                     this.loadData();
                 } else {
-                    this.$set(this.$data, 'title', '添加商品')
-                    this.$set(this.$data.goods, 'goodsId', null)
+                    this.title = '添加商品';
+                    this.goods.goodsId = null
                 }
 
                 // clear goodsIdEdit
@@ -396,18 +403,15 @@
                 if (this.$data.user.epShortname !== undefined && this.$data.user.epShortname.length > 0) {
                     httpUtil.post(this, 'goods', "info", this.$data.goods.goodsId, function (resp) {
                         let epArr = JSON.parse(resp.body.data);
-                        that.$set(that.$data, 'eqData', epArr);
-                        console.log(that.eqData)
-                        console.log(epArr)
+                        that.eqData = epArr;
                     })
                 }
             },
             // 下拉选择某一项
             changeone(index) {
-                this.$data.user.enterprise = this.eqData[index].eid;
-                this.$data.user.epShortname = this.eqData[index].epShortName;
-                this.$data.user.eid = this.eqData[index].eid;
-                console.log(this.eqData)
+                this.user.enterprise = this.eqData[index].eid;
+                this.user.epShortname = this.eqData[index].epShortName;
+                this.user.eid = this.eqData[index].eid;
                 this.eqData = [];
             },
 
@@ -499,7 +503,7 @@
                             clId: 0,
                             clFid: 0,
                         };
-                        this.$set(this.$data, "goods", goods)
+                        this.goods = goods;
                     })
                 }
             },
@@ -514,45 +518,48 @@
                     const coverD = [{'url': data.cover, 'uid': new Date().getTime(), 'name': '封面'}];
                     const pictureD = JSON.parse(data.pictures);
                     that.$set(that.$data, "coverImages", coverD)
-                    that.$set(that.$data.goods, "coverImages", coverD);
+                    that.$set(that.goods, "coverImages", coverD);
                     that.$set(that.$data, "picturesImages", pictureD)
-                    that.$set(that.$data.goods, "picturesImages", pictureD);
-                    that.$set(that.$data.goods, "saleStatusShow", that.$data.goods.saleStatus === 1)
-                    that.$set(that.$data.goods, "statusShow", that.$data.goods.status === 0)
-                    that.$set(that.$data.goods, "updateUser", that.$store.getters.user.uid)
-                    if (that.$data.goods.saleType === 0) {
-                        that.$set(that.$data, 'saleType', '请选择促销分类')
+                    that.$set(that.goods, "picturesImages", pictureD);
+                    that.$set(that.goods, "saleStatusShow", that.goods.saleStatus === 1)
+                    that.$set(that.goods, "statusShow", that.goods.status === 0)
+                    that.$set(that.goods, "updateUser", that.$store.getters.user.uid)
+                    if (that.goods.saleType === 0) {
+                        that.saleType = '请选择促销分类';
                     }
-                    if (that.$data.goods.saleType === 1) {
-                        that.$set(that.$data, 'saleType', '活动商品')
+                    if (that.goods.saleType === 1) {
+                        that.saleType = '活动商品';
+
                     }
-                    if (that.$data.goods.saleType === 2) {
-                        that.$set(that.$data, 'saleType', '精选商品')
+                    if (that.goods.saleType === 2) {
+                        that.saleType = '精选商品';
+
                     }
-                    if (that.$data.goods.saleType === 3) {
-                        that.$set(that.$data, 'saleType', '包邮商品')
+                    if (that.goods.saleType === 3) {
+                        that.saleType = '包邮商品';
+
                     }
-                    if (that.$data.goods.saleType === 4) {
-                        that.$set(that.$data, 'saleType', '新店必备')
+                    if (that.goods.saleType === 4) {
+                        that.saleType = '新店必备';
                     }
-                    console.log(that.$data.classifyOptions)
-                    console.log(that.$data.goods);
+                    console.log(that.classifyOptions)
+                    console.log(that.goods);
                     // 重现分类
                     let timer = window.setInterval(function () {
                         console.log("interval----------")
 
-                        if (that.$data.classifyOptions !== []) {
+                        if (that.classifyOptions !== []) {
                             let f = "";
                             let j1 = "";
-                            for (let i = 0; i < that.$data.classifyOptions.length; i++) {
+                            for (let i = 0; i < that.classifyOptions.length; i++) {
 
-                                if (that.$data.goods.clFid === that.$data.classifyOptions[i].value) {
-                                    f = that.$data.classifyOptions[i].label
-                                    for (let j = 0; j < that.$data.classifyOptions[i].children.length; j++) {
-                                        console.log(that.$data.goods.clId)
-                                        console.log(that.$data.classifyOptions[i].children[j].value)
-                                        if (that.$data.goods.clId === that.$data.classifyOptions[i].children[j].value) {
-                                            j1 = that.$data.classifyOptions[i].children[j].label
+                                if (that.goods.clFid === that.classifyOptions[i].value) {
+                                    f = that.classifyOptions[i].label;
+                                    for (let j = 0; j < that.classifyOptions[i].children.length; j++) {
+                                        console.log(that.goods.clId);
+                                        console.log(that.classifyOptions[i].children[j].value)
+                                        if (that.goods.clId === that.classifyOptions[i].children[j].value) {
+                                            j1 = that.classifyOptions[i].children[j].label
                                         }
                                     }
                                 }

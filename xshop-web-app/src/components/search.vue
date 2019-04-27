@@ -30,6 +30,7 @@
     @import "../styles/xshop";
 
     .s-search {
+        z-index: 1000;
         position: absolute;
         top: 0;
         height: 46px;
@@ -38,7 +39,6 @@
         width: 100%;
         display: flex;
         flex-flow: row nowrap;
-
     }
 
     .search-main {

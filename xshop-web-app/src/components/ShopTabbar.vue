@@ -32,6 +32,6 @@
 
 <style scoped>
   .weui-tabbar {
-    position: fixed
+    position: fixed;
   }
 </style>
