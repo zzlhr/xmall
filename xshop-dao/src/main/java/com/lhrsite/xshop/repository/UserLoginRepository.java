@@ -11,5 +11,8 @@ public interface UserLoginRepository
     UserLogin findByUserToken(String userToken);
 
 
+    void removeByUserToken(String userToken);
+
+
 
 }

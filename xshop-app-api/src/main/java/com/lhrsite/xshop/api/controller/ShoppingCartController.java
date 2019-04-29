@@ -1,10 +1,16 @@
 package com.lhrsite.xshop.api.controller;
 
+import com.lhrsite.xshop.core.exception.XShopException;
+import com.lhrsite.xshop.po.BuyCar;
+import com.lhrsite.xshop.service.impl.BuyCarServiceImpl;
+import com.lhrsite.xshop.vo.BuyCarVO;
 import com.lhrsite.xshop.vo.ResultVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 /**
  * 购物车
@@ -16,11 +22,16 @@ public class ShoppingCartController {
     private ResultVO resultVO;
 
     @Autowired
-    public ShoppingCartController() {
+    public ShoppingCartController(BuyCarServiceImpl buyCarService) {
         resultVO = new ResultVO();
         resultVO.setCode(0);
         resultVO.setMsg("ok");
+        this.buyCarService =buyCarService;
     }
+
+
+    private BuyCarServiceImpl buyCarService;
+
 
     /**
      * 获取购物车列表
@@ -29,7 +40,11 @@ public class ShoppingCartController {
      * @return 购物车列表
      */
     @PostMapping("/shoppingCartList")
-    public ResultVO shoppingCartList(String token) {
+    public ResultVO shoppingCartList(String token) throws XShopException {
+        List<BuyCarVO> buyCars = buyCarService.getBuyCar(token);
+
+        resultVO.setData(buyCars);
+
         return resultVO;
     }
 
@@ -44,7 +59,10 @@ public class ShoppingCartController {
      */
     @PostMapping("/addShoppingCart")
     public ResultVO addShoppingCart(String token, String goodsId,
-                                    Integer num, Integer standardId) {
+                                    Integer num, Integer standardId) throws XShopException {
+
+        BuyCar buyCar = buyCarService.addBuyCar(token, goodsId, num, standardId);
+        resultVO.setData(buyCar);
         return resultVO;
     }
 

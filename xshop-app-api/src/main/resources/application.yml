@@ -11,7 +11,7 @@ spring:
     template-loader-path: classpath:/templates/
   jackson:
     date-format: yyyy-MM-dd HH:mm:ss
-  #    time-zone: GMT+8
+    time-zone: GMT+8
   redis:
     database: 0
     host: localhost

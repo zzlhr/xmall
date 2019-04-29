@@ -1,10 +1,15 @@
 package com.lhrsite.xshop.api.controller;
 
+import com.lhrsite.xshop.core.exception.XShopException;
+import com.lhrsite.xshop.service.impl.UserServiceImpl;
 import com.lhrsite.xshop.vo.ResultVO;
+import com.lhrsite.xshop.vo.UserVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * 用户控制器
@@ -15,12 +20,17 @@ import org.springframework.web.bind.annotation.RestController;
 public class UserController {
     private ResultVO resultVO;
 
+    private UserServiceImpl userService;
+
     @Autowired
-    public UserController() {
+    public UserController(UserServiceImpl userService) {
         resultVO = new ResultVO();
         resultVO.setCode(0);
         resultVO.setMsg("ok");
+        this.userService=userService;
     }
+
+
 
 
     /**
@@ -31,7 +41,9 @@ public class UserController {
      * @return 用户信息和登录token
      */
     @PostMapping("/login")
-    public ResultVO login(String userName, String password) {
+    public ResultVO login(String userName, String password, HttpServletRequest request) throws XShopException {
+        UserVO userVO = userService.login(userName, password, "", request);
+        resultVO.setData(userVO);
         return resultVO;
     }
 
@@ -44,7 +56,8 @@ public class UserController {
      */
     @PostMapping("/loginOut")
     public ResultVO loginOut(String token) {
-        return resultVO;
+        userService.logOut(token);
+        return new ResultVO(0,"退出成功",null);
     }
 
 

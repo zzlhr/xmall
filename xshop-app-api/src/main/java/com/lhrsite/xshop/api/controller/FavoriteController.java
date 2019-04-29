@@ -1,5 +1,7 @@
 package com.lhrsite.xshop.api.controller;
 
+import com.lhrsite.xshop.core.exception.XShopException;
+import com.lhrsite.xshop.service.impl.FavoriteServiceImpl;
 import com.lhrsite.xshop.vo.ResultVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -15,11 +17,13 @@ public class FavoriteController {
 
     private ResultVO resultVO;
 
+    private FavoriteServiceImpl favoriteService;
     @Autowired
-    public FavoriteController() {
+    public FavoriteController(FavoriteServiceImpl favoriteService) {
         resultVO = new ResultVO();
         resultVO.setCode(0);
         resultVO.setMsg("ok");
+        this.favoriteService=favoriteService;
     }
 
     /**
@@ -30,7 +34,9 @@ public class FavoriteController {
      * @return resultVO
      */
     @PostMapping("/addFavorite")
-    public ResultVO addFavorite(String goodsId, String token) {
+    public ResultVO addFavorite(String goodsId, String token) throws XShopException {
+        favoriteService.addFavorite(goodsId,token);
+
         return resultVO;
     }
 

@@ -1,10 +1,16 @@
 package com.lhrsite.xshop.api.controller;
 
+import com.lhrsite.xshop.core.exception.XShopException;
+import com.lhrsite.xshop.service.impl.OrderServiceImpl;
+import com.lhrsite.xshop.vo.OrderListVO;
 import com.lhrsite.xshop.vo.ResultVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 /**
  * 订单控制器
@@ -14,12 +20,13 @@ import org.springframework.web.bind.annotation.RestController;
 public class OrderController {
 
     private ResultVO resultVO;
-
+    private OrderServiceImpl orderService;
     @Autowired
-    public OrderController() {
+    public OrderController(OrderServiceImpl orderService) {
         resultVO = new ResultVO();
         resultVO.setCode(0);
         resultVO.setMsg("ok");
+        this.orderService =orderService;
     }
 
     /**
@@ -30,7 +37,12 @@ public class OrderController {
      * @return 订单列表
      */
     @PostMapping("/orderList")
-    public ResultVO orderList(String token, Integer orderStatus) {
+    public ResultVO orderList(String token,@RequestParam(required = false) Integer orderStatus,
+                              @RequestParam(defaultValue = "1") Long page,
+                              @RequestParam(defaultValue = "5") Long pageSize) throws XShopException {
+
+        List<OrderListVO> orderListVOS = orderService.orderListByUser(token, "", orderStatus, page, pageSize);
+        resultVO.setData(orderListVOS);
         return resultVO;
     }
 

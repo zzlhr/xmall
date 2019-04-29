@@ -84,4 +84,6 @@ public interface OrderService {
 
 
     BigDecimal getTotalPrice(String[] buyCarIdList);
+
+    List<OrderVO> geOrderList(String token, Integer page, Integer pageSize, Integer orderStatus) throws XShopException;
 }

@@ -25,7 +25,7 @@ public class BuyCarController {
 
     @RequestMapping("/add")
     public ResultVO add(String token, String goodsId, Integer number) throws XShopException {
-        resultVO.setData(buyCarService.addBuyCar(token, goodsId, number));
+        resultVO.setData(buyCarService.addBuyCar(token, goodsId, 1, number));
         return resultVO;
     }
 

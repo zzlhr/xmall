@@ -20,6 +20,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.servlet.http.HttpServletRequest;
@@ -485,6 +486,15 @@ public class UserServiceImpl extends BaseServiceImpl implements UserService {
     public Integer getUserEnterpriseId(String token) throws XShopException {
         User user = tokenGetUser(token);
         return user.getEnterprise();
+    }
+
+    @Override
+    @Transactional
+    public void logOut(String token) {
+        //此操作为先查询再根据id删除,需要加事务
+        userLoginRepository.removeByUserToken(token);
+        redisUtil.hashRemove("login",token);
+
     }
 
 }

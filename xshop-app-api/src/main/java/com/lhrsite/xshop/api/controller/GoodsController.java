@@ -1,5 +1,8 @@
 package com.lhrsite.xshop.api.controller;
 
+import com.lhrsite.xshop.service.impl.GoodsServiceImpl;
+import com.lhrsite.xshop.vo.GoodsListVO;
+import com.lhrsite.xshop.vo.PageVO;
 import com.lhrsite.xshop.vo.ResultVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -15,9 +18,9 @@ import org.springframework.web.bind.annotation.RestController;
 public class GoodsController {
 
     private ResultVO resultVO;
-
+    private GoodsServiceImpl goodsService;
     @Autowired
-    public GoodsController() {
+    public GoodsController(GoodsServiceImpl goodsService) {
         resultVO = new ResultVO();
         resultVO.setCode(0);
         resultVO.setMsg("ok");
@@ -32,7 +35,11 @@ public class GoodsController {
      * @return 商品列表
      */
     @PostMapping("/goodsList")
-    public ResultVO goodsList(String goodsName, Integer goodsClassify, String orderBy) {
+    public ResultVO goodsList(String goodsName, Integer goodsClassify, Integer orderBy,Long page,Long pageSize) {
+
+        PageVO<GoodsListVO> goodsList = goodsService.getGoodsList(goodsName, goodsClassify, orderBy, page, pageSize);
+        resultVO.setData(goodsList);
+
         return resultVO;
     }
 

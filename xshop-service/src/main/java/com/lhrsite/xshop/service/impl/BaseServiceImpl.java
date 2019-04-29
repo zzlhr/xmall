@@ -20,4 +20,7 @@ public abstract class BaseServiceImpl {
         return queryFactory;
     }
 
+    public EntityManager getEntityManager() {
+        return entityManager;
+    }
 }
