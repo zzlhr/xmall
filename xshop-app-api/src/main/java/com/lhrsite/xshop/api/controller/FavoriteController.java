@@ -2,6 +2,7 @@ package com.lhrsite.xshop.api.controller;
 
 import com.lhrsite.xshop.core.exception.XShopException;
 import com.lhrsite.xshop.service.impl.FavoriteServiceImpl;
+import com.lhrsite.xshop.vo.PageVO;
 import com.lhrsite.xshop.vo.ResultVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -35,7 +36,13 @@ public class FavoriteController {
      */
     @PostMapping("/addFavorite")
     public ResultVO addFavorite(String goodsId, String token) throws XShopException {
-        favoriteService.addFavorite(goodsId,token);
+        Boolean aBoolean = favoriteService.addFavorite(goodsId, token);
+        if (aBoolean) {
+            resultVO.setMsg("添加收藏成功");
+        }else {
+            resultVO.setCode(-1);
+            resultVO.setMsg("收藏失败,您已经收藏过");
+        }
 
         return resultVO;
     }
@@ -48,7 +55,10 @@ public class FavoriteController {
      * @return 结果vo resultVO
      */
     @PostMapping("/delFavorite")
-    public ResultVO delFavorite(String goodsId, String token) {
+    public ResultVO delFavorite(String goodsId, String token) throws XShopException {
+
+        favoriteService.deleteFavo(token,goodsId);
+
         return resultVO;
     }
 
@@ -60,7 +70,10 @@ public class FavoriteController {
      * @return 收藏列表
      */
     @PostMapping("/favoriteList")
-    public ResultVO favoriteList(String token) {
+    public ResultVO favoriteList(String token,Integer page,Integer pageSize) throws XShopException {
+        PageVO pageVO = favoriteService.queryFavoList(token, page, pageSize);
+        resultVO.setData(pageVO);
+
         return resultVO;
     }
 
