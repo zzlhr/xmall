@@ -28,5 +28,6 @@ public interface GoodsMapper extends Mapper<Goods> {
 
     @Select("select * from goods where goods_id in (${goodsId})")
      List<Goods> selectGoodsbyIds(@Param("goodsId") String goodsId);
-
+    @Select("select g.* from fav_goods fg inner join goods g on g.goods_id=fg.goods_id where fg.user_id=#{uid}")
+    List<Goods> selectGoodsbyUserid(Integer uid);
 }
