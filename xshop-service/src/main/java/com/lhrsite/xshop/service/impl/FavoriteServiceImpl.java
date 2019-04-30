@@ -4,7 +4,9 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.lhrsite.xshop.core.exception.ErrEumn;
 import com.lhrsite.xshop.core.exception.XShopException;
+import com.lhrsite.xshop.mapper.FavoriteGoodsMapper;
 import com.lhrsite.xshop.mapper.GoodsMapper;
+import com.lhrsite.xshop.po.FavoriteGoods;
 import com.lhrsite.xshop.po.Goods;
 import com.lhrsite.xshop.po.User;
 import com.lhrsite.xshop.service.FavoriteService;
@@ -14,91 +16,84 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Map;
 
 /**
- * @Description: TODO
- * @Auther: guandaowei
- * @Date: 2019/4/28
+ * 用户收藏服务实现
+ *
+ * @author : guandaowei
+ * @date: 2019/4/28
  */
 @Service
 public class FavoriteServiceImpl implements FavoriteService {
 
     private UserServiceImpl userService;
-    private GoodsMapper goodsMapper;
+    private final GoodsMapper goodsMapper;
+    private final FavoriteGoodsMapper favoriteGoodsMapper;
 
     @Autowired
-    public FavoriteServiceImpl(UserServiceImpl userService, GoodsMapper goodsMapper) {
+    public FavoriteServiceImpl(UserServiceImpl userService, GoodsMapper goodsMapper,
+                               FavoriteGoodsMapper favoriteGoodsMapper) {
         this.userService = userService;
         this.goodsMapper = goodsMapper;
+        this.favoriteGoodsMapper = favoriteGoodsMapper;
     }
 
     @Override
     @Transactional
-    public Boolean addFavorite(String goodsId, String token) throws XShopException {
-
-       User user = userService.tokenGetUser(token);
+    public void addFavorite(String goodsId, String token) throws XShopException {
+        User user = userService.tokenGetUser(token);
         if (user == null) {
-            throw  new XShopException(ErrEumn.USER_NO_EXIST);
+            throw new XShopException(ErrEumn.USER_NO_EXIST);
         }
-        List<Map<String, Object>> map = goodsMapper.selectFavo(user.getUid(), goodsId);
-        if (map == null) {
-            Integer integer = goodsMapper.insertFavoGoods(user.getUid(), goodsId);
-            return integer > 0;
+        // 验证是否已经添加过该收藏了
+        if (isFavorite(token, goodsId)) {
+            throw new XShopException(ErrEumn.ALREADY_ADD_FAVORITE);
         }
-        return false;
 
+        favoriteGoodsMapper.insertFavoriteGoods(user.getUid(), goodsId);
 
     }
 
     @Override
-    public PageVO queryFavoList(String token, Integer page, Integer pageSize) throws XShopException {
-         User user = userService.tokenGetUser(token);
+    public boolean isFavorite(String token, String goodsId) throws XShopException {
+        User user = userService.tokenGetUser(token);
+        if (user == null) {
+            throw new XShopException(ErrEumn.USER_NO_EXIST);
+        }
+        FavoriteGoods favoriteGoods = favoriteGoodsMapper.getUserFavoriteByGoodsId(user.getUid(), goodsId);
+        return favoriteGoods != null;
+    }
+
+    @Override
+    public PageVO<Goods> getFavoriteList(String token, Integer page, Integer pageSize) throws XShopException {
+        User user = userService.tokenGetUser(token);
         if (user == null) {
             throw new XShopException(ErrEumn.USER_NO_EXIST);
         }
 
-        PageVO pageVO = new PageVO();
+        PageVO<Goods> pageVO = new PageVO<>();
         PageHelper.startPage(page, pageSize);
-        List<Goods> goodsList = goodsMapper.selectGoodsbyUserid(1);
-
-        PageInfo pageInfo = new PageInfo<Goods>(goodsList);
+        List<String> goodsIdList = favoriteGoodsMapper.getFavoriteGoodsIdList(user.getUid());
+        List<Goods> goods = goodsMapper.getGoodsByGoodsIds(goodsIdList);
+        PageInfo pageInfo = new PageInfo<>(goods);
         pageVO.setTotalCount(pageInfo.getTotal());
         pageVO.setTotalPage(pageInfo.getPages());
-        pageVO.setArr(pageInfo.getList());
+        pageVO.setArr(goods);
         pageVO.setPageSize(pageInfo.getPageSize());
 
         return pageVO;
     }
 
-    public List<String> getFavoGoodsIdList(Integer uid) {
-        List<String> goodsIdList = goodsMapper.getFavoGoodsIdList(uid);
-        return goodsIdList;
-    }
 
     @Override
-    public void deleteFavo(String token, String goodsId) throws XShopException {
+    public void deleteFavorite(Integer fgId, String token) throws XShopException {
         User user = userService.tokenGetUser(token);
         if (user == null) {
             throw new XShopException(ErrEumn.USER_NO_EXIST);
         }
-        goodsMapper.deleteFavoByUserIdAndGoodsId(user.getUid(), goodsId);
+        favoriteGoodsMapper.deleteFavoriteByFgId(fgId, user.getUid());
     }
 
-    public String listToString(List list, char separator) {
-        StringBuilder sb = new StringBuilder();
-
-        for (int i = 0; i < list.size(); i++) {
-            sb.append("'");
-            sb.append(list.get(i));
-            sb.append("'");
-            if (i < list.size() - 1) {
-                sb.append(separator);
-            }
-        }
-        System.out.println(sb.toString());
-        return sb.toString() ;
-    }
 
 }
 

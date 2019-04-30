@@ -21,12 +21,13 @@ public class OrderController {
 
     private ResultVO resultVO;
     private OrderServiceImpl orderService;
+
     @Autowired
     public OrderController(OrderServiceImpl orderService) {
         resultVO = new ResultVO();
         resultVO.setCode(0);
         resultVO.setMsg("ok");
-        this.orderService =orderService;
+        this.orderService = orderService;
     }
 
     /**
@@ -37,7 +38,7 @@ public class OrderController {
      * @return 订单列表
      */
     @PostMapping("/orderList")
-    public ResultVO orderList(String token,@RequestParam(required = false) Integer orderStatus,
+    public ResultVO orderList(String token, @RequestParam(required = false) Integer orderStatus,
                               @RequestParam(defaultValue = "1") Long page,
                               @RequestParam(defaultValue = "5") Long pageSize) throws XShopException {
 
@@ -86,13 +87,14 @@ public class OrderController {
 
     /**
      * 退货
+     *
      * @param orderId 订单id
-     * @param token token
-     * @param msg 原因
+     * @param token   token
+     * @param msg     原因
      * @return resultVO
      */
     @PostMapping("/returnOrder")
-    public ResultVO returnOrder(String orderId, String token, String msg){
+    public ResultVO returnOrder(String orderId, String token, String msg) {
         return resultVO;
     }
 

@@ -27,10 +27,8 @@ public class UserController {
         resultVO = new ResultVO();
         resultVO.setCode(0);
         resultVO.setMsg("ok");
-        this.userService=userService;
+        this.userService = userService;
     }
-
-
 
 
     /**
@@ -57,8 +55,21 @@ public class UserController {
     @PostMapping("/loginOut")
     public ResultVO loginOut(String token) {
         userService.logOut(token);
-        return new ResultVO(0,"退出成功",null);
+        return resultVO;
     }
 
-
+    /**
+     * 修改密码
+     *
+     * @param token       用户令牌
+     * @param oldPassword 老的密码
+     * @param newPassword 新的密码
+     * @return 修改结果
+     * @throws XShopException
+     */
+    @PostMapping("/updatePassword")
+    public ResultVO updatePassword(String token, String oldPassword, String newPassword) throws XShopException {
+        resultVO.setData(userService.upPassword(token, oldPassword, newPassword));
+        return resultVO;
+    }
 }

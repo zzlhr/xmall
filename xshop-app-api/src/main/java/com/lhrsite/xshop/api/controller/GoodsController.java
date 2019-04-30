@@ -19,6 +19,7 @@ public class GoodsController {
 
     private ResultVO resultVO;
     private GoodsServiceImpl goodsService;
+
     @Autowired
     public GoodsController(GoodsServiceImpl goodsService) {
         resultVO = new ResultVO();
@@ -35,8 +36,7 @@ public class GoodsController {
      * @return 商品列表
      */
     @PostMapping("/goodsList")
-    public ResultVO goodsList(String goodsName, Integer goodsClassify, Integer orderBy,Long page,Long pageSize) {
-
+    public ResultVO goodsList(String goodsName, Integer goodsClassify, Integer orderBy, Long page, Long pageSize) {
         PageVO<GoodsListVO> goodsList = goodsService.getGoodsList(goodsName, goodsClassify, orderBy, page, pageSize);
         resultVO.setData(goodsList);
 

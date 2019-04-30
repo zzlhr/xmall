@@ -1,17 +1,22 @@
 package com.lhrsite.xshop.service;
 
 import com.lhrsite.xshop.core.exception.XShopException;
+import com.lhrsite.xshop.po.Goods;
 import com.lhrsite.xshop.vo.PageVO;
 
 /**
- * @Description: TODO
- * @Auther: guandaowei
- * @Date: 2019/4/28
+ * 用户收藏服务
+ *
+ * @author : guandaowei
+ * @date: 2019/4/28
  */
 public interface FavoriteService {
-    Boolean addFavorite(String goodsId, String token) throws XShopException;
+    void addFavorite(String goodsId, String token) throws XShopException;
 
-    void deleteFavo(String token, String goodsId) throws XShopException;
+    boolean isFavorite(String token, String goodsId) throws XShopException;
 
-    PageVO queryFavoList(String token, Integer page, Integer pageSize) throws XShopException;
+    PageVO<Goods> getFavoriteList(String token, Integer page, Integer pageSize) throws XShopException;
+
+
+    void deleteFavorite(Integer fgId, String token) throws XShopException;
 }

@@ -26,7 +26,7 @@ public class ShoppingCartController {
         resultVO = new ResultVO();
         resultVO.setCode(0);
         resultVO.setMsg("ok");
-        this.buyCarService =buyCarService;
+        this.buyCarService = buyCarService;
     }
 
 

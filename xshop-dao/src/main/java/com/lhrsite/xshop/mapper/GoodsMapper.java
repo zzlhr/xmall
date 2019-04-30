@@ -1,33 +1,20 @@
 package com.lhrsite.xshop.mapper;
 
 import com.lhrsite.xshop.po.Goods;
-import org.apache.ibatis.annotations.Delete;
-import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Param;
-import org.apache.ibatis.annotations.Select;
 import tk.mybatis.mapper.common.Mapper;
 
 import java.util.List;
-import java.util.Map;
-
 
 public interface GoodsMapper extends Mapper<Goods> {
 
+    /**
+     * 更新库存
+     *
+     * @param goods 商品列表
+     */
     void updateGoodsSalesVolumeAndStock(@Param("goods") List<Goods> goods);
 
+    List<Goods> getGoodsByGoodsIds(List<String> goodsIds);
 
-    @Insert("insert into fav_goods values(null,#{userId},#{goodsId})")
-    Integer insertFavoGoods(@Param("userId")Integer userId,@Param("goodsId")String goodsId);
-
-    @Select("select * from fav_goods where user_id=#{uid} and goods_id=#{goodsId}")
-    List<Map<String,Object>> selectFavo(Integer uid, String goodsId);
-    @Delete("delete from fav_goods where user_id=#{uid} and goods_id=#{goodsId}")
-    void deleteFavoByUserIdAndGoodsId(Integer uid, String goodsId);
-    @Select("select goods_id from fav_goods where user_id=#{uid}")
-    List<String> getFavoGoodsIdList(Integer uid);
-
-    @Select("select * from goods where goods_id in (${goodsId})")
-     List<Goods> selectGoodsbyIds(@Param("goodsId") String goodsId);
-    @Select("select g.* from fav_goods fg inner join goods g on g.goods_id=fg.goods_id where fg.user_id=#{uid}")
-    List<Goods> selectGoodsbyUserid(Integer uid);
 }
