@@ -11,7 +11,7 @@
  Target Server Version : 50725
  File Encoding         : 65001
 
- Date: 27/04/2019 10:27:42
+ Date: 30/04/2019 21:34:17
 */
 
 SET NAMES utf8mb4;
@@ -3836,6 +3836,18 @@ CREATE TABLE `enterprise` (
 BEGIN;
 INSERT INTO `enterprise` VALUES (1, 'xshop', 'xshop', 'qq:2388399752', '0', 0, 0, '2019-04-19 23:23:47', '2019-04-19 23:23:47');
 COMMIT;
+
+-- ----------------------------
+-- Table structure for favorite_goods
+-- ----------------------------
+DROP TABLE IF EXISTS `favorite_goods`;
+CREATE TABLE `favorite_goods` (
+  `fg_id` int(11) NOT NULL AUTO_INCREMENT COMMENT '收藏id',
+  `uid` int(11) NOT NULL COMMENT '用户id',
+  `goods_id` varchar(32) NOT NULL COMMENT '商品id',
+  `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  PRIMARY KEY (`fg_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- ----------------------------
 -- Table structure for goods
@@ -8925,6 +8937,7 @@ INSERT INTO `user_login` VALUES ('198d6ba328c5ccffe4064dc0101f0e25', 1, 'ad41817
 INSERT INTO `user_login` VALUES ('19faa4c53398954761f523d949f04f1b', 118, 'eaf3dfdb7bd51f564e343730a694055a', '183.205.191.28', '未知', '未知', '2019-04-19 23:23:49', '2018-12-10 14:54:41');
 INSERT INTO `user_login` VALUES ('1a16e5812d2689e89b7d568ba00830db', 1, 'dfaf309c1ed0304ddfcc21b15a6708ee', '182.119.160.134', '未知', '未知', '2019-04-19 23:23:49', '2018-11-14 09:19:46');
 INSERT INTO `user_login` VALUES ('1a53d457b06f495bf54f12dad483d613', 109, '41f2643c582a91862f2c0e4aa8aea02a', '117.136.104.167', '未知', '未知', '2019-04-19 23:23:49', '2018-11-30 11:00:40');
+INSERT INTO `user_login` VALUES ('1abccfb62dd54bfb427b0ed09d91ea4b', 1, '9fa8c46e774f521f7df14ca4a2e02d3b', '192.168.31.8', '未知', '未知', '2019-04-29 20:24:54', '2019-05-29 07:24:55');
 INSERT INTO `user_login` VALUES ('1b2b72fe9b38bc895589085e5a7efe99', 109, '6a0eb7bbd96397c4b07a27fe5322e85e', '117.136.36.202', '未知', '未知', '2019-04-19 23:23:49', '2018-12-08 20:24:26');
 INSERT INTO `user_login` VALUES ('1b2d41c4d546992a66623714996ec7d2', 108, '7981561994e2e0af2d8f1600051ac1d8', '183.205.191.116', '未知', '未知', '2019-04-19 23:23:49', '2018-12-02 21:17:48');
 INSERT INTO `user_login` VALUES ('1b8b6b4cb64121345298c87e1fbc5cf5', 1, 'bf9652e157581add465552cb71de0dc8', '171.15.159.242', '未知', '未知', '2019-04-19 23:23:49', '2018-12-09 23:03:01');
