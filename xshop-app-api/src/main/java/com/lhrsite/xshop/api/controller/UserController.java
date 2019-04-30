@@ -34,13 +34,13 @@ public class UserController {
     /**
      * 用户登录
      *
-     * @param userName 用户名
+     * @param phoneNumber 手机号
      * @param password 密码
      * @return 用户信息和登录token
      */
     @PostMapping("/login")
-    public ResultVO login(String userName, String password, HttpServletRequest request) throws XShopException {
-        UserVO userVO = userService.login(userName, password, "", request);
+    public ResultVO login(String phoneNumber, String password, HttpServletRequest request) throws XShopException {
+        UserVO userVO = userService.login(phoneNumber, password, "", request);
         resultVO.setData(userVO);
         return resultVO;
     }

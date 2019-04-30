@@ -95,6 +95,7 @@ public class UserServiceImpl extends BaseServiceImpl implements UserService {
     @Override
     public UserVO login(String phoneNumber, String password, String smsCode,
                         HttpServletRequest request) throws XShopException {
+        log.info("【用户登录】phoneNumber={}, password={}", phoneNumber, password);
         User user = userRepository.findByPhone(phoneNumber);
         if (user == null) {
             throw new XShopException(ErrEumn.USER_NO_EXIST);
@@ -493,7 +494,7 @@ public class UserServiceImpl extends BaseServiceImpl implements UserService {
     public void logOut(String token) {
         //此操作为先查询再根据id删除,需要加事务
         userLoginRepository.removeByUserToken(token);
-        redisUtil.hashRemove("login",token);
+        redisUtil.hashRemove("login", token);
 
     }
 
