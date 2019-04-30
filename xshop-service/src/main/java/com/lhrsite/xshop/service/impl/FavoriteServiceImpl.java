@@ -57,10 +57,10 @@ public class FavoriteServiceImpl implements FavoriteService {
         if (user == null) {
             throw new XShopException(ErrEumn.USER_NO_EXIST);
         }
-        List<String> GoodsIdList = getFavoGoodsIdList(user.getUid());
+
         PageVO pageVO = new PageVO();
         PageHelper.startPage(page, pageSize);
-        List<Goods> goodsList = goodsMapper.selectGoodsbyIds(listToString(GoodsIdList,','));
+        List<Goods> goodsList = goodsMapper.selectGoodsbyUserid(1);
 
         PageInfo pageInfo = new PageInfo<Goods>(goodsList);
         pageVO.setTotalCount(pageInfo.getTotal());
