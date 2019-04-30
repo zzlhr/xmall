@@ -72,4 +72,6 @@ public class UserController {
         resultVO.setData(userService.upPassword(token, oldPassword, newPassword));
         return resultVO;
     }
+
+
 }
