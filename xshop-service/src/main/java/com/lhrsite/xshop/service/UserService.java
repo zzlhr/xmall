@@ -66,4 +66,5 @@ public interface UserService {
 
     Integer getUserEnterpriseId(String token) throws XShopException;
 
+    void logOut(String token);
 }

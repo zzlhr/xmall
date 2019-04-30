@@ -13,7 +13,7 @@ public interface BuyCarService {
 
     List<BuyCarVO> getBuyCar(String token) throws XShopException;
 
-    BuyCar addBuyCar(String token, String goodsId, Integer number) throws XShopException;
+    BuyCar addBuyCar(String token, String goodsId, Integer num, Integer standardId) throws XShopException;
 
     BuyCar minusBuyCar(String token, String goodsId, Integer number) throws XShopException;
 

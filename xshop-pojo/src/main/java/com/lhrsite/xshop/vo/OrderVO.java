@@ -11,7 +11,5 @@ public class OrderVO {
 
     private Order order;
     private List<OrderDetails> orderDetails;
-
-
-
+    
 }

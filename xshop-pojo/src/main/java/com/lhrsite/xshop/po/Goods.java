@@ -2,15 +2,14 @@ package com.lhrsite.xshop.po;
 
 import lombok.Data;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.sql.Timestamp;
 
 @Entity
 @Data
+@Table(name="goods")
 public class Goods implements Serializable {
 
     @Id

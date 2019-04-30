@@ -19,13 +19,16 @@ import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -709,6 +712,25 @@ public class OrderServiceImpl extends BaseServiceImpl implements OrderService {
         List<String> buyIdsList = new ArrayList<>(Arrays.asList(buyCarIdList));
         List<BuyCarVO> buyCars = buyCarService.getBuyCarByIds(buyIdsList);
         return totoalPrice(buyCars);
+    }
+    //或取用户所有订单和该订单详情
+    @Override
+    @Transactional
+    public List<OrderVO> geOrderList(String token, Integer page, Integer pageSize, Integer orderStatus) throws XShopException {
+        //User user = userService.tokenGetUser(token);
+        /*if (user == null) {
+            throw  new XShopException(ErrEumn.USER_NO_EXIST);
+        }*/
+        List<Order> orderList = orderRepository.findByUserIdAndStatus(1, orderStatus, PageRequest.of(page, pageSize));
+
+        List<OrderVO> orderVOList = orderList.stream().map(order -> {
+            List<OrderDetails> orderDetailsList = orderDetailsRepository.findByOrderId(order.getOrderId());
+            OrderVO orderVO = new OrderVO();
+            orderVO.setOrder(order);
+            orderVO.setOrderDetails(orderDetailsList);
+            return orderVO;
+        }).collect(Collectors.toList());
+        return orderVOList;
     }
 
     /**

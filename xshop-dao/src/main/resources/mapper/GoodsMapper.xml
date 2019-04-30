@@ -8,4 +8,10 @@
             WHERE `goods_id`=#{item.goodsId}
         </foreach>
     </update>
+    <select id="getGoodsByGoodsIds" resultType="com.lhrsite.xshop.po.Goods">
+        select * from goods where goods_id in
+        <foreach item="item" index="index" collection="goodsIds" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </select>
 </mapper>

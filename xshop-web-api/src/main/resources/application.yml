@@ -26,7 +26,7 @@ spring:
     active: xshop-core
     include: xshop-dao
 server:
-  port: 8008
+  port: 8009
 app:
   upload:
     shop:

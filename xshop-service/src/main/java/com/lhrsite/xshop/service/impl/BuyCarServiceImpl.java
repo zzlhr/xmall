@@ -62,18 +62,19 @@ public class BuyCarServiceImpl extends BaseServiceImpl implements BuyCarService 
     }
 
     @Override
-    public BuyCar addBuyCar(String token, String goodsId, Integer number) throws XShopException {
-        log.info("【number】number={}", number);
+    public BuyCar addBuyCar(String token, String goodsId, Integer num, Integer standardId) throws XShopException {
+        log.info("【number】number={}", standardId);
         User user = userService.tokenGetUser(token);
 
         BuyCar buyCar = buyCarReository.findByUserIdAndGoodsId(user.getUid(), goodsId);
         if (buyCar != null) {
-            buyCar.setNumber(buyCar.getNumber() + number);
+            buyCar.setNumber(buyCar.getNumber() + num);
+
         } else {
             buyCar = new BuyCar();
             buyCar.setUserId(user.getUid());
             buyCar.setGoodsId(goodsId);
-            buyCar.setNumber(number);
+            buyCar.setNumber(num);
             buyCar.setId(createBuyCarId());
         }
 

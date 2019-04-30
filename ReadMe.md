@@ -4,6 +4,16 @@
 **处于开发阶段，暂时欠缺部分功能**
 
 
+
+## 贡献者列表
+
+感谢所有代码贡献者
+
+如何贡献代码参照 [如何贡献代码](./CONTRIBUTING.md)
+
+- guandw
+
+
 ## 项目结构
 - xshop-admin vue后台管理
 - xshop-admin-api 后台api
@@ -13,6 +23,7 @@
 - xshop-service service层
 - xshop-web-api webapp api
 - xshop-web-app vue移动端商场页面
+- Xshop-app-api flutter app api部分
 
 ## 如何贡献代码
 参阅 [贡献文档](./CONTRIBUTING.md)
@@ -50,3 +61,6 @@ cd xshop-web-app
 npm install
 npm run dev
 ```
+
+
+
