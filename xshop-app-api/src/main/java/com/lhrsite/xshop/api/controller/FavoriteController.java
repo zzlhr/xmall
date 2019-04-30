@@ -7,6 +7,7 @@ import com.lhrsite.xshop.vo.ResultVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -70,7 +71,8 @@ public class FavoriteController {
      * @return 收藏列表
      */
     @PostMapping("/favoriteList")
-    public ResultVO favoriteList(String token,Integer page,Integer pageSize) throws XShopException {
+    public ResultVO favoriteList(String token, @RequestParam(defaultValue = "1") Integer page,
+                                 @RequestParam(defaultValue = "10") Integer pageSize) throws XShopException {
         PageVO pageVO = favoriteService.queryFavoList(token, page, pageSize);
         resultVO.setData(pageVO);
 
