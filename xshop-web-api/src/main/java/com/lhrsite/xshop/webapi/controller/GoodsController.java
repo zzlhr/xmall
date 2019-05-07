@@ -47,10 +47,11 @@ public class GoodsController {
     @PostMapping("/list")
     public ResultVO list(@RequestParam(required = false) String title,
                          @RequestParam(required = false) Integer cid,
+                         @RequestParam(required = false) String orderBy,
                          @RequestParam(required = false) Integer saleType,
-                         @RequestParam(defaultValue = "1") long page,
-                         @RequestParam(defaultValue = "10") long pageSize) {
-        resultVO.setData(goodsService.getGoodsList(title, cid, saleType, page, pageSize));
+                         @RequestParam(defaultValue = "1") Integer page,
+                         @RequestParam(defaultValue = "10") Integer pageSize) {
+        resultVO.setData(goodsService.getGoodsList(title, cid, orderBy, saleType, page, pageSize));
         return resultVO;
     }
 

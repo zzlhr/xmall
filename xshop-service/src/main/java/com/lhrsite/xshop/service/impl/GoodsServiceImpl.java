@@ -1,15 +1,15 @@
 package com.lhrsite.xshop.service.impl;
 
-import com.lhrsite.xshop.vo.GoodsListVO;
-import com.lhrsite.xshop.vo.GoodsPullDown;
-import com.lhrsite.xshop.vo.PageVO;
-import com.lhrsite.xshop.po.*;
 import com.lhrsite.xshop.core.exception.ErrEumn;
 import com.lhrsite.xshop.core.exception.XShopException;
+import com.lhrsite.xshop.core.utils.EncryptUtil;
+import com.lhrsite.xshop.po.*;
 import com.lhrsite.xshop.repository.GoodsRepository;
 import com.lhrsite.xshop.repository.MessageRepositroy;
 import com.lhrsite.xshop.service.GoodsService;
-import com.lhrsite.xshop.core.utils.EncryptUtil;
+import com.lhrsite.xshop.vo.GoodsListVO;
+import com.lhrsite.xshop.vo.GoodsPullDown;
+import com.lhrsite.xshop.vo.PageVO;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQuery;
@@ -41,7 +41,8 @@ public class GoodsServiceImpl extends BaseServiceImpl implements GoodsService {
     }
 
     @Override
-    public PageVO<GoodsListVO> getGoodsList(String title, Integer cid, Integer saleType, long page, long pageSize) {
+    public PageVO<GoodsListVO> getGoodsList(String title, Integer cid, String orderBy, Integer saleType,
+                                            Integer page, Integer pageSize) {
 
         QGoods qGoods = QGoods.goods;
         QUser quser = QUser.user;
@@ -50,8 +51,9 @@ public class GoodsServiceImpl extends BaseServiceImpl implements GoodsService {
         if (title != null && !title.equals("")) {
             builder.and(qGoods.title.like("%" + title + "%"));
         }
+
         // 判断如果saleType不为0或者null说明查询了某个促销类型
-        if (saleType != null && saleType != 0) {
+        if (saleType != null) {
             builder.and(qGoods.saleType.eq(saleType));
         }
         if (cid != null) {
@@ -117,16 +119,16 @@ public class GoodsServiceImpl extends BaseServiceImpl implements GoodsService {
                 .fetchCount() > 0) {
             throw new XShopException(ErrEumn.GOODS_EXIST);
         }
-        if (goods.getDespatchIsPlus() == null){
+        if (goods.getDespatchIsPlus() == null) {
             goods.setDespatchIsPlus(0);
         }
-        if (goods.getDespatchPlusMoney() == null){
+        if (goods.getDespatchPlusMoney() == null) {
             goods.setDespatchPlusMoney(new BigDecimal(0));
         }
-        if (goods.getExecFreePostageNum() == null){
+        if (goods.getExecFreePostageNum() == null) {
             goods.setExecFreePostageNum(0);
         }
-        if (goods.getFreePostageNum() == null){
+        if (goods.getFreePostageNum() == null) {
             goods.setFreePostageNum(0);
         }
         return goodsRepository.save(goods);
@@ -207,7 +209,6 @@ public class GoodsServiceImpl extends BaseServiceImpl implements GoodsService {
     public void deleteGoods(String goodsId) {
         goodsRepository.deleteById(goodsId);
     }
-
 
 
 }

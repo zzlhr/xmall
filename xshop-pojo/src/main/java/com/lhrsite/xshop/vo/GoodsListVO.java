@@ -4,7 +4,6 @@ import lombok.Data;
 
 import java.math.BigDecimal;
 import java.sql.Timestamp;
-import java.util.Date;
 
 @Data
 public class GoodsListVO {
@@ -25,6 +24,7 @@ public class GoodsListVO {
     private Integer saleType;
 
     private String cover;
+
     /**
      * 状态
      */
@@ -33,7 +33,6 @@ public class GoodsListVO {
      * 库存
      */
     private Integer stock;
-
 
     /**
      * 月销量

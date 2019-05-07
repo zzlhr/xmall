@@ -36,8 +36,10 @@ public class GoodsController {
      * @return 商品列表
      */
     @PostMapping("/goodsList")
-    public ResultVO goodsList(String goodsName, Integer goodsClassify, Integer orderBy, Long page, Long pageSize) {
-        PageVO<GoodsListVO> goodsList = goodsService.getGoodsList(goodsName, goodsClassify, orderBy, page, pageSize);
+    public ResultVO goodsList(String goodsName, Integer goodsClassify,
+                              String orderBy, Integer page, Integer saleType, Integer pageSize) {
+        PageVO<GoodsListVO> goodsList = goodsService.getGoodsList(goodsName, goodsClassify,
+                orderBy, saleType, page, pageSize);
         resultVO.setData(goodsList);
 
         return resultVO;

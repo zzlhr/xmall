@@ -35,7 +35,7 @@ public class UserController {
      * 用户登录
      *
      * @param phoneNumber 手机号
-     * @param password 密码
+     * @param password    密码
      * @return 用户信息和登录token
      */
     @PostMapping("/login")
@@ -69,7 +69,13 @@ public class UserController {
      */
     @PostMapping("/updatePassword")
     public ResultVO updatePassword(String token, String oldPassword, String newPassword) throws XShopException {
-        resultVO.setData(userService.upPassword(token, oldPassword, newPassword));
+        resultVO.setData(userService.updatePasswordByOldPassword(token, oldPassword, newPassword));
+        return resultVO;
+    }
+
+    @PostMapping("/userInfo")
+    public ResultVO userInfo(String token) throws XShopException {
+        resultVO.setData(userService.tokenGetUser(token));
         return resultVO;
     }
 

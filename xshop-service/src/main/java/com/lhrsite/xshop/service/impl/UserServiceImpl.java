@@ -335,8 +335,9 @@ public class UserServiceImpl extends BaseServiceImpl implements UserService {
 
     }
 
+
     @Override
-    public User upPassword(String token, String smsCode, String newPassword) throws XShopException {
+    public User upPasswordBySms(String token, String smsCode, String newPassword) throws XShopException {
         if (newPassword.length() < 6) {
             throw new XShopException(ErrEumn.PASSWORD_NOT6);
         }
@@ -358,6 +359,25 @@ public class UserServiceImpl extends BaseServiceImpl implements UserService {
         } else {
             throw new XShopException(ErrEumn.AUTH_CODE_ERROR);
         }
+        return userRepository.save(user);
+    }
+
+    @Override
+    public User updatePasswordByOldPassword(String token, String oldPassword, String newPassword) throws XShopException {
+        if (newPassword.length() < 6) {
+            throw new XShopException(ErrEumn.PASSWORD_NOT6);
+        }
+        User user = this.tokenGetUser(token);
+        log.info("【修改前的用户】userPassword={}, oldPassword={}",
+                user.getPassword(), EncryptUtil.encryptPassword(oldPassword));
+
+        if (!user.getPassword().equals(EncryptUtil.encryptPassword(oldPassword))) {
+            throw new XShopException(ErrEumn.PASSWORD_ERROR);
+        }
+
+        user.setPassword(EncryptUtil.encryptPassword(newPassword));
+        log.info("【修改后的用户】user={}", user);
+        redisUtil.hashPut("login", token, user);
         return userRepository.save(user);
     }
 

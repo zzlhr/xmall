@@ -215,7 +215,7 @@ public class UserController {
 
     @PostMapping("/upPassword")
     public ResultVO upPassword(String token, String smsCode, String newPassword) throws XShopException {
-        resultVO.setData(userService.upPassword(token, smsCode, newPassword));
+        resultVO.setData(userService.upPasswordBySms(token, smsCode, newPassword));
         return resultVO;
     }
 

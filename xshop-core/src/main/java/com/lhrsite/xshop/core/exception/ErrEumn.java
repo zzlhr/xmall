@@ -88,6 +88,8 @@ public enum ErrEumn {
     CLASS_NAME_CONNOT_NULL(-100051, "分类名称不能为空"),
 
     ALREADY_ADD_FAVORITE(-100052, "您已经添加过该收藏了"),
+
+    PASSWORD_ERROR(-100053, "密码错误！"),
     ;
 
 

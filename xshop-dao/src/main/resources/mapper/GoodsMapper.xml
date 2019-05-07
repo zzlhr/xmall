@@ -14,4 +14,8 @@
             #{item}
         </foreach>
     </select>
+    <select id="getGoods" resultType="com.lhrsite.xshop.vo.GoodsListVO">
+
+
+    </select>
 </mapper>

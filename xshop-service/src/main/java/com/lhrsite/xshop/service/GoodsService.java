@@ -12,7 +12,19 @@ import java.util.List;
 public interface GoodsService {
 
 
-    PageVO<GoodsListVO> getGoodsList(String title, Integer cid, Integer saleType, long page, long pageSize);
+    /**
+     * 获取商品列表
+     *
+     * @param title    标题 模糊查询
+     * @param cid      分类id
+     * @param orderBy  排序方式 使用 字段名|desc/asc形式
+     * @param saleType 促销否
+     * @param page     页码
+     * @param pageSize 每页数量
+     * @return 商品列表
+     */
+    PageVO<GoodsListVO> getGoodsList(String title, Integer cid, String orderBy,
+                                     Integer saleType, Integer page, Integer pageSize);
 
     Goods addGoods(Goods goods, String msg) throws XShopException;
 
