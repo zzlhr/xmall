@@ -1,12 +1,12 @@
 package com.lhrsite.xshop.service;
 
 
-import com.lhrsite.xshop.vo.AddressVO;
-import com.lhrsite.xshop.po.Address;
 import com.lhrsite.xshop.core.exception.XShopException;
+import com.lhrsite.xshop.po.Address;
+import com.lhrsite.xshop.vo.AddressVO;
+import com.lhrsite.xshop.vo.PageVO;
 
 import javax.validation.ConstraintViolationException;
-import java.util.List;
 
 /**
  * (Address)表服务接口
@@ -51,7 +51,7 @@ public interface AddressService {
      */
     void delAddr(String token, Integer addrId) throws XShopException;
 
-    List<AddressVO> getAddress(String token) throws XShopException;
+    PageVO<AddressVO> getAddress(String token, Integer page, Integer pageSize) throws XShopException;
 
     Address getDefaultAddress(String token) throws XShopException;
 

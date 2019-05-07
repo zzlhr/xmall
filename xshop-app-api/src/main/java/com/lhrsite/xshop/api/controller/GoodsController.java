@@ -25,6 +25,7 @@ public class GoodsController {
         resultVO = new ResultVO();
         resultVO.setCode(0);
         resultVO.setMsg("ok");
+        resultVO.setData(null);
     }
 
     /**

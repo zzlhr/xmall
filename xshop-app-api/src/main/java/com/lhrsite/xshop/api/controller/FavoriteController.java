@@ -26,6 +26,7 @@ public class FavoriteController {
         resultVO = new ResultVO();
         resultVO.setCode(0);
         resultVO.setMsg("ok");
+        resultVO.setData(null);
         this.favoriteService = favoriteService;
     }
 

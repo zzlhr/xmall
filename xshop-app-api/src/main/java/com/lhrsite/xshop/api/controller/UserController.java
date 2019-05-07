@@ -27,6 +27,7 @@ public class UserController {
         resultVO = new ResultVO();
         resultVO.setCode(0);
         resultVO.setMsg("ok");
+        resultVO.setData(null);
         this.userService = userService;
     }
 

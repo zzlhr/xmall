@@ -1,6 +1,8 @@
 package com.lhrsite.xshop.api.controller;
 
+import com.lhrsite.xshop.core.exception.XShopException;
 import com.lhrsite.xshop.po.Address;
+import com.lhrsite.xshop.service.AddressService;
 import com.lhrsite.xshop.vo.ResultVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -11,12 +13,15 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/address")
 public class AddressController {
     private ResultVO resultVO;
+    private final AddressService addressService;
 
     @Autowired
-    public AddressController() {
+    public AddressController(AddressService addressService) {
+        this.addressService = addressService;
         resultVO = new ResultVO();
         resultVO.setCode(0);
         resultVO.setMsg("ok");
+        resultVO.setData(null);
     }
 
     /**
@@ -27,7 +32,8 @@ public class AddressController {
      * @return 收货地址集合
      */
     @PostMapping("/getAddress")
-    public ResultVO getAddress(Integer page, Integer pageSize) {
+    public ResultVO getAddress(String token, Integer page, Integer pageSize) throws XShopException {
+        resultVO.setData(addressService.getAddress(token, page, pageSize));
         return resultVO;
     }
 

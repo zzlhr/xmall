@@ -61,8 +61,8 @@ public class AddressController {
     }
 
     @PostMapping("/getAddress")
-    public ResultVO getAddress(String token) throws XShopException {
-        resultVO.setData(addressService.getAddress(token));
+    public ResultVO getAddress(String token, Integer page, Integer pageSize) throws XShopException {
+        resultVO.setData(addressService.getAddress(token, page, pageSize));
         return resultVO;
     }
 

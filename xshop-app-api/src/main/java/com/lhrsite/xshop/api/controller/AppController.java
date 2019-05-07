@@ -17,6 +17,7 @@ public class AppController {
         resultVO = new ResultVO();
         resultVO.setCode(0);
         resultVO.setMsg("ok");
+        resultVO.setData(null);
     }
 
     @PostMapping("/getIndexSwiper")

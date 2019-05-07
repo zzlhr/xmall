@@ -1,15 +1,18 @@
 package com.lhrsite.xshop.service.impl;
 
-import com.lhrsite.xshop.vo.AddressVO;
-import com.lhrsite.xshop.po.Address;
-import com.lhrsite.xshop.po.QAddress;
-import com.lhrsite.xshop.po.User;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.lhrsite.xshop.core.exception.ErrEumn;
 import com.lhrsite.xshop.core.exception.XShopException;
 import com.lhrsite.xshop.mapper.AddressMapper;
+import com.lhrsite.xshop.po.Address;
+import com.lhrsite.xshop.po.QAddress;
+import com.lhrsite.xshop.po.User;
 import com.lhrsite.xshop.repository.AddressRepository;
 import com.lhrsite.xshop.service.AddressService;
 import com.lhrsite.xshop.service.UserService;
+import com.lhrsite.xshop.vo.AddressVO;
+import com.lhrsite.xshop.vo.PageVO;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -55,9 +58,6 @@ public class AddressServiceImpl extends BaseServiceImpl implements AddressServic
     public Address add(Address address, String token) throws XShopException, ConstraintViolationException {
         User user = userService.tokenGetUser(token);
         address.setUid(user.getUid());
-        if (address.getDefaultStatus() == 0 && this.getAddress(token).size() == 0) {
-            address.setDefaultStatus(1);
-        }
         log.info("【save address】addr={}", address);
         Address address1;
         try {
@@ -118,19 +118,25 @@ public class AddressServiceImpl extends BaseServiceImpl implements AddressServic
     public void delAddr(String token, Integer addrId) throws XShopException {
         User user = userService.tokenGetUser(token);
         Optional<Address> addressOptional = addressRepository.findById(addrId);
-        if (addressOptional.isPresent()) {
-            throw new XShopException(ErrEumn.ADDRESS_NOT_EXIST);
-        }
-        if (!user.getUid().equals(addressOptional.get().getUid())) {
+        if (!user.getUid().equals(
+                addressOptional.orElseThrow(() -> new XShopException(ErrEumn.ADDRESS_NOT_EXIST)).getUid())) {
             throw new XShopException(ErrEumn.ONLY_DELETE_YOUERSELF_ADDRESS);
         }
         addressRepository.deleteById(addrId);
     }
 
     @Override
-    public List<AddressVO> getAddress(String token) throws XShopException {
+    public PageVO<AddressVO> getAddress(String token, Integer page, Integer pageSize) throws XShopException {
         User user = userService.tokenGetUser(token);
-        return addressMapper.getAddress(user.getUid());
+        PageHelper.startPage(page, pageSize);
+        PageInfo<AddressVO> pageInfo = new PageInfo<>(addressMapper.getAddress(user.getUid()));
+        PageVO<AddressVO> pageVO = new PageVO<>();
+        pageVO.setTotalCount(pageInfo.getTotal());
+        pageVO.setTotalPage(pageInfo.getPages());
+        pageVO.setArr(pageInfo.getList());
+        pageVO.setPageSize(pageInfo.getPageSize());
+        log.info("【获取收货地址】page={}, pageVO={}", page, pageVO);
+        return pageVO;
     }
 
     @Override
