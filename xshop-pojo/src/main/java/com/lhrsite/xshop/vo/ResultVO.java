@@ -15,4 +15,13 @@ public class ResultVO {
     @JsonInclude(JsonInclude.Include.NON_NULL)//转json时data为null时不系列化
     private Object data;
 
+
+    public static ResultVO create(Object data) {
+        ResultVO resultVO = new ResultVO();
+        resultVO.setCode(0);
+        resultVO.setMsg("ok");
+        resultVO.setData(data);
+        return resultVO;
+    }
+
 }
