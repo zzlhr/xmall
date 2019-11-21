@@ -6,7 +6,6 @@ import com.lhrsite.xshop.core.exception.ErrEumn;
 import com.lhrsite.xshop.core.exception.XShopException;
 import com.lhrsite.xshop.mapper.AddressMapper;
 import com.lhrsite.xshop.po.Address;
-import com.lhrsite.xshop.po.QAddress;
 import com.lhrsite.xshop.po.User;
 import com.lhrsite.xshop.repository.AddressRepository;
 import com.lhrsite.xshop.service.AddressService;
@@ -19,7 +18,6 @@ import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityManager;
 import javax.validation.ConstraintViolationException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -75,32 +73,8 @@ public class AddressServiceImpl extends BaseServiceImpl implements AddressServic
     @Override
     public Address updateDefaultAddr(String token, Integer addrId) throws XShopException {
         User user = userService.tokenGetUser(token);
-        // 取消该用户现有默认地址
-        QAddress qAddress = QAddress.address;
-        List<Address> addresses =
-                queryFactory.selectFrom(qAddress)
-                        .where(qAddress.uid.eq(user.getUid())
-                                .and(qAddress.defaultStatus.eq(1)))
-                        .fetch();
-
-        List<Address> addressesUpDefault = new ArrayList<>();
-        addresses.forEach(address -> {
-            address.setDefaultStatus(0);
-            addressesUpDefault.add(address);
-        });
-        if (addressesUpDefault.size() > 0) {
-            addressRepository.saveAll(addressesUpDefault);
-        }
-
-        // 修改欲要修改的地址
-        Optional<Address> addressOptional = addressRepository.findById(addrId);
-        if (!addressOptional.isPresent()) {
-            throw new XShopException(ErrEumn.ADDRESS_NOT_EXIST);
-        }
-        Address address = addressOptional.get();
-        address.setDefaultStatus(1);
-        addressRepository.save(address);
-        return address;
+        addressMapper.setDefaultAddress(user.getUid(), addrId);
+        return addressRepository.getOne(addrId);
     }
 
     @Override
@@ -129,7 +103,7 @@ public class AddressServiceImpl extends BaseServiceImpl implements AddressServic
     public PageVO<AddressVO> getAddress(String token, Integer page, Integer pageSize) throws XShopException {
         User user = userService.tokenGetUser(token);
         PageHelper.startPage(page, pageSize);
-        PageInfo<AddressVO> pageInfo = new PageInfo<>(addressMapper.getAddress(user.getUid()));
+        PageInfo<AddressVO> pageInfo = new PageInfo<>(addressMapper.getAddresses(user.getUid()));
         PageVO<AddressVO> pageVO = new PageVO<>();
         pageVO.setTotalCount(pageInfo.getTotal());
         pageVO.setTotalPage(pageInfo.getPages());
@@ -140,17 +114,9 @@ public class AddressServiceImpl extends BaseServiceImpl implements AddressServic
     }
 
     @Override
-    public Address getDefaultAddress(String token) throws XShopException {
-
+    public List<AddressVO> getDefaultAddress(String token) throws XShopException {
         User user = userService.tokenGetUser(token);
-        QAddress qAddress = QAddress.address;
-
-        return queryFactory.selectFrom(qAddress)
-                .where(
-                        qAddress.uid.eq(user.getUid())
-                                .and(qAddress.defaultStatus.eq(1))
-                )
-                .fetchOne();
+        return addressMapper.getAddresses(user.getUid(), 1);
     }
 
     @Override

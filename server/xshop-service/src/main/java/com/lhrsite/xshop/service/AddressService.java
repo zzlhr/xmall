@@ -7,6 +7,7 @@ import com.lhrsite.xshop.vo.AddressVO;
 import com.lhrsite.xshop.vo.PageVO;
 
 import javax.validation.ConstraintViolationException;
+import java.util.List;
 
 /**
  * (Address)表服务接口
@@ -53,7 +54,7 @@ public interface AddressService {
 
     PageVO<AddressVO> getAddress(String token, Integer page, Integer pageSize) throws XShopException;
 
-    Address getDefaultAddress(String token) throws XShopException;
+    List<AddressVO> getDefaultAddress(String token) throws XShopException;
 
     Address getAddressById(Integer addressId) throws XShopException;
 
