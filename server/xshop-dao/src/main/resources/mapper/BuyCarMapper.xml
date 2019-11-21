@@ -48,5 +48,11 @@
         and bc.number > 0
         order by bc.create_time desc
     </select>
+    <select id="getBuyCarByUidAndGoodsId" resultType="com.lhrsite.xshop.po.BuyCar">
+        select *
+        from buy_car
+        where user_id = #{uid}
+          and goods_id = #{goodsId}
+    </select>
 
 </mapper>

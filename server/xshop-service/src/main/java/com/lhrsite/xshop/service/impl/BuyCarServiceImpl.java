@@ -3,7 +3,6 @@ package com.lhrsite.xshop.service.impl;
 import com.lhrsite.xshop.core.exception.XShopException;
 import com.lhrsite.xshop.mapper.BuyCarMapper;
 import com.lhrsite.xshop.po.BuyCar;
-import com.lhrsite.xshop.po.QBuyCar;
 import com.lhrsite.xshop.po.User;
 import com.lhrsite.xshop.repository.BuyCarReository;
 import com.lhrsite.xshop.service.BuyCarService;
@@ -85,13 +84,7 @@ public class BuyCarServiceImpl extends BaseServiceImpl implements BuyCarService 
     @Override
     public BuyCar minusBuyCar(String token, String goodsId, Integer number) throws XShopException {
         User user = userService.tokenGetUser(token);
-
-        QBuyCar qBuyCar = QBuyCar.buyCar;
-        List<BuyCar> buyCars = queryFactory.selectFrom(qBuyCar)
-                .where(
-                        qBuyCar.userId.eq(user.getUid())
-                                .and(qBuyCar.goodsId.eq(goodsId))
-                ).fetch();
+        List<BuyCar> buyCars = buyCarMapper.getBuyCarByUidAndGoodsId(user.getUid(), goodsId);
         BuyCar buyCar = buyCars.get(0);
 
         buyCar.setNumber(buyCar.getNumber() - number);

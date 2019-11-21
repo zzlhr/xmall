@@ -1,8 +1,8 @@
 package com.lhrsite.xshop.service.impl;
 
 import com.aliyuncs.exceptions.ClientException;
+import com.lhrsite.xshop.mapper.AuthCodeMapper;
 import com.lhrsite.xshop.po.AuthCode;
-import com.lhrsite.xshop.po.QAuthCode;
 import com.lhrsite.xshop.core.exception.ErrEumn;
 import com.lhrsite.xshop.core.exception.XShopException;
 import com.lhrsite.xshop.repository.AuthCodeRepository;
@@ -25,22 +25,22 @@ public class AuthCodeServiceImpl extends BaseServiceImpl implements AuthCodeServ
     private final AuthCodeRepository authCodeRepository;
     private JPAQueryFactory queryFactory;
     private final UserService userService;
+    private final AuthCodeMapper authCodeMapper;
 
     @Autowired
-    public AuthCodeServiceImpl(AuthCodeRepository authCodeRepository, UserService userService, EntityManager entityManager) {
+    public AuthCodeServiceImpl(AuthCodeRepository authCodeRepository, UserService userService,
+                               EntityManager entityManager, AuthCodeMapper authCodeMapper) {
         super(entityManager);
         this.authCodeRepository = authCodeRepository;
         this.userService = userService;
+        this.authCodeMapper = authCodeMapper;
         this.queryFactory = getQueryFactory();
     }
 
     @Override
     public void sendMessage(String phone, Integer type) throws XShopException {
         // 发送前首先删除所有需要发送类型的验证码
-        QAuthCode qAuthCode = QAuthCode.authCode;
-        List<AuthCode> authCodes = queryFactory.selectFrom(qAuthCode)
-                .where(qAuthCode.type.eq(type).and(qAuthCode.phoneNumber.eq(phone)))
-                .fetch();
+        List<AuthCode> authCodes = authCodeMapper.getAuthCodes(type, phone);
         try {
             authCodeRepository.deleteAll(authCodes);
         } catch (Exception e) {
@@ -65,10 +65,7 @@ public class AuthCodeServiceImpl extends BaseServiceImpl implements AuthCodeServ
         String phone = userService.tokenGetUser(token).getPhone();
         int type = 2;
         // 发送前首先删除所有需要发送类型的验证码
-        QAuthCode qAuthCode = QAuthCode.authCode;
-        List<AuthCode> authCodes = queryFactory.selectFrom(qAuthCode)
-                .where(qAuthCode.type.eq(type).and(qAuthCode.phoneNumber.eq(phone)))
-                .fetch();
+        List<AuthCode> authCodes = authCodeMapper.getAuthCodes(type, phone);
         try {
             authCodeRepository.deleteAll(authCodes);
         } catch (Exception e) {

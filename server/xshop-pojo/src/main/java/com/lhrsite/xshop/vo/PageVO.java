@@ -1,7 +1,9 @@
 package com.lhrsite.xshop.vo;
 
+import com.github.pagehelper.PageInfo;
 import com.querydsl.jpa.impl.JPAQuery;
 import lombok.Data;
+import org.omg.CORBA.INTERNAL;
 
 import java.util.List;
 
@@ -41,6 +43,15 @@ public class PageVO<T> {
         if (totalCount % pageSize > 0){
             this.totalPage += 1;
         }
+    }
+
+    public static PageVO init(PageInfo pageInfo, List data){
+        PageVO pageVO = new PageVO();
+        pageVO.setTotalCount(pageInfo.getTotal());
+        pageVO.setTotalPage(pageInfo.getPages());
+        pageVO.setArr(data);
+        pageVO.setPageSize(pageInfo.getPageSize());
+        return pageVO;
     }
 
 

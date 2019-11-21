@@ -15,14 +15,14 @@ import javax.persistence.EntityManager;
 
 
 @Service
-public class AppServiceImpl extends BaseServiceImpl implements AppService {
+public class AppServiceImpl implements AppService {
     private final UserService userService;
 
     private final AppRepository appRepository;
+
     @Autowired
-    public AppServiceImpl(EntityManager entityManager, UserService userService,
+    public AppServiceImpl(UserService userService,
                           AppRepository appRepository) {
-        super(entityManager);
         this.userService = userService;
         this.appRepository = appRepository;
     }
@@ -30,7 +30,7 @@ public class AppServiceImpl extends BaseServiceImpl implements AppService {
     @Override
     public String getPicture() {
         App app = appRepository.findById(1).orElse(new App());
-        if (app.getPicture() == null){
+        if (app.getPicture() == null) {
             app.setPicture(new JSONArray().toString());
         }
         return app.getPicture();
@@ -38,7 +38,7 @@ public class AppServiceImpl extends BaseServiceImpl implements AppService {
 
     @Override
     public String getLink() {
-        App app = appRepository.findById(1).get();
+        App app = appRepository.findAll().get(0);
 
         return app.getLink();
     }
@@ -46,7 +46,7 @@ public class AppServiceImpl extends BaseServiceImpl implements AppService {
     @Override
     public void edit(App app, String token) throws XShopException {
         User user = userService.tokenGetUser(token);
-        if (user == null || user.getAdmin() != 1){
+        if (user == null || user.getAdmin() != 1) {
             throw new XShopException(ErrEumn.ONLY_ADMIN_CAN_DO);
         }
         app.setId(1);

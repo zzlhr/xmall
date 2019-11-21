@@ -18,6 +18,9 @@ public interface MessageService {
                                  long page, long pageSize) throws XShopException;
 
 
+    PageVO<MessageVO> getMessage(String token, Integer messageType,
+                                 Integer page, Integer pageSize) throws XShopException;
+
     void delMessage(String msgId) throws XShopException;
 
     long getMessageNoReadCount(String token, Integer messageType) throws XShopException;

@@ -1,5 +1,8 @@
 package com.lhrsite.xshop.service.impl;
 
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
+import com.lhrsite.xshop.mapper.MessageMapper;
 import com.lhrsite.xshop.vo.MessageVO;
 import com.lhrsite.xshop.vo.PageVO;
 import com.lhrsite.xshop.po.Message;
@@ -20,23 +23,21 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityManager;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
 @Service
 @Slf4j
-public class MessageServiceImpl extends BaseServiceImpl implements MessageService {
+public class MessageServiceImpl implements MessageService {
 
     private final MessageRepositroy messageRepositroy;
-    private JPAQueryFactory queryFactory;
-
+    private MessageMapper messageMapper;
     private final UserService userService;
 
-    public MessageServiceImpl(MessageRepositroy messageRepositroy, EntityManager entityManager, UserService userService) {
-        super(entityManager);
+    public MessageServiceImpl(MessageRepositroy messageRepositroy, UserService userService) {
         this.messageRepositroy = messageRepositroy;
         this.userService = userService;
-        this.queryFactory = getQueryFactory();
     }
 
     @Override
@@ -76,40 +77,14 @@ public class MessageServiceImpl extends BaseServiceImpl implements MessageServic
 
     @Override
     public PageVO<MessageVO> getMessage(String token, Integer messageType,
-                                        long page, long pageSize) throws XShopException {
+                                        Integer page, Integer pageSize) throws XShopException {
         User user = userService.tokenGetUser(token);
-        QMessage qMessage = QMessage.message;
+        PageHelper.startPage(page, pageSize);
+        List<MessageVO> messageVOs = messageMapper.getMessageList(user.getUid(), messageType);
+        PageInfo<MessageVO> info = new PageInfo<>(messageVOs);
 
-        BooleanBuilder builder = new BooleanBuilder();
-        if (messageType == 1) {
-            builder.and(qMessage.inceptUser.eq(user.getUid()));
-            builder.and(qMessage.messageType.eq(messageType));
-        } else {
-            builder.and(qMessage.messageType.eq(messageType));
-        }
+        PageVO<MessageVO> result = PageVO.init(info, messageVOs);
 
-        QUser qUser = QUser.user;
-        JPAQuery<MessageVO> messageVOJPAQuery = queryFactory.select(
-                Projections.bean(
-                        MessageVO.class,
-                        qMessage.msgId,
-                        qMessage.createTime,
-                        qMessage.inceptUser,
-                        qMessage.updateTime,
-                        qMessage.messageStatus,
-                        qMessage.messageValue,
-                        qMessage.sendUser,
-                        qUser.username.as("sendUserName")
-                )
-        ).from(qMessage).leftJoin(qUser).on(qMessage.sendUser.eq(qUser.uid))
-                .where(builder)
-                .orderBy(qMessage.messageStatus.asc())
-                .offset((page - 1) * pageSize)
-                .limit(pageSize);
-
-
-        PageVO<MessageVO> result = new PageVO<>();
-        result.init(messageVOJPAQuery, pageSize);
         for (MessageVO messageVO : result.getArr()) {
             messageVO.setSendUserName("系统消息");
         }

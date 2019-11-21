@@ -29,26 +29,18 @@ import java.util.Optional;
  */
 @Service
 @Slf4j
-public class AddressServiceImpl extends BaseServiceImpl implements AddressService {
+public class AddressServiceImpl implements AddressService {
 
     private final UserService userService;
 
     private final AddressRepository addressRepository;
     private final AddressMapper addressMapper;
-    //实体管理者
-    private final EntityManager entityManager;
-    //JPA查询工厂
-    private JPAQueryFactory queryFactory;
 
-    public AddressServiceImpl(EntityManager entityManager,
-                              UserService userService,
+    public AddressServiceImpl(UserService userService,
                               AddressRepository addressRepository, AddressMapper addressMapper) {
-        super(entityManager);
         this.userService = userService;
         this.addressRepository = addressRepository;
-        this.entityManager = entityManager;
         this.addressMapper = addressMapper;
-        queryFactory = getQueryFactory();
 
     }
 
