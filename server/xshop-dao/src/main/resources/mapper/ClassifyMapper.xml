@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lhrsite.xshop.mapper.ClassifyMapper">
+
+    <sql id="classifyColumns">
+        cl_id,
+        cl_name,
+        cl_grade,
+        cl_fid,
+        cl_serial,
+        picture,
+        eid
+    </sql>
+
+    <delete id="delClassify">
+        delete
+        from classify
+        where (cl_id = #{id} or cl_fid = #{id})
+    </delete>
+    <delete id="delFoundNotFidClassify">
+        delete
+        from classify
+        where cl_id in (<include refid='getNullFClassify'/>)
+    </delete>
+    <sql id="getNullFClassify">
+        select e.cl_id
+        from (select c.cl_id
+              from classify c
+                       left join classify f on c.cl_fid = f.cl_id
+              where f.cl_name is null
+                and f.cl_fid != 0) e
+    </sql>
+    <select id="findAllClassify" resultType="com.lhrsite.xshop.po.Classify">
+        select
+        <include refid="classifyColumns"/>
+        from classify
+        order by cl_grade desc,cl_serial asc
+    </select>
+
+    <select id="findClassifyByFid" resultType="com.lhrsite.xshop.po.Classify">
+        select
+        <include refid="classifyColumns"/>
+        from classify
+        where cl_fid=#{fid}
+        order by cl_grade desc
+    </select>
+
+    <select id="getClassifyPriceRange" resultType="com.lhrsite.xshop.vo.ClassifyPriceRange">
+        select c.cl_id, c.cl_name, max(g.original_price) max, min(original_price) min
+        from goods g
+                 inner join classify c on g.cl_id = c.cl_id
+        where g.status = 0
+          and eid = #{eid}
+          and c.cl_fid = #{fid}
+        group by c.cl_name
+    </select>
+
+    <select id="findClassifyByClassName" resultType="com.lhrsite.xshop.po.Classify">
+        select
+        <include refid="classifyColumns"/>
+        from classify where cl_name=#{className}
+    </select>
+
+</mapper>

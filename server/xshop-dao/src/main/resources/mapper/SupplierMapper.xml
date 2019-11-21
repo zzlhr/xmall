@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lhrsite.xshop.mapper.SupplierMapper">
+    <sql id="supplierColumns">
+        supplier_id,
+        supplier_name,
+        supplier_tel,
+        supplier_address,
+        supplier_describe,
+        supplier_remark,
+        supplier.create_user,
+        supplier.update_user,
+        supplier.create_time,
+        supplier.update_time,
+        supplier.enterprise,
+        supplier.row_status,
+        upu.username updateUserName,
+        cpu.username createUserName
+    </sql>
+    <select id="supplierList" resultType="com.lhrsite.xshop.vo.SupplierVO">
+        select
+        <include refid="supplierColumns"/>
+        from supplier
+        left join user upu on update_user=upu.uid
+        left join user cpu on create_user=cpu.uid
+    </select>
+</mapper>

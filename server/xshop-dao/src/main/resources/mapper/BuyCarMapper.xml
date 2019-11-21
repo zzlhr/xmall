@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lhrsite.xshop.mapper.BuyCarMapper">
+
+    <resultMap id="buyCarVO" type="com.lhrsite.xshop.vo.BuyCarVO">
+        <id column="id" jdbcType="VARCHAR" property="id"/>
+        <result column="user_id" jdbcType="VARCHAR" property="userId"/>
+        <result column="number" jdbcType="INTEGER" property="number"/>
+        <result column="create_time" jdbcType="DATE" property="createTime"/>
+        <association property="goods" resultMap="buyCarGoods"/>
+    </resultMap>
+
+    <resultMap id="buyCarGoods" type="com.lhrsite.xshop.po.Goods">
+        <id column="goods_id" jdbcType="VARCHAR" property="goodsId"/>
+        <result column="title" jdbcType="VARCHAR" property="title"/>
+        <result column="original_price" jdbcType="DECIMAL" property="originalPrice"/>
+        <result column="sale_price" jdbcType="DECIMAL" property="salePrice"/>
+        <result column="sale_status" jdbcType="INTEGER" property="saleStatus"/>
+        <result column="cover" jdbcType="VARCHAR" property="cover"/>
+        <result column="status" jdbcType="INTEGER" property="status"/>
+        <result column="stock" jdbcType="INTEGER" property="stock"/>
+        <result column="delivery_place" jdbcType="VARCHAR" property="deliveryPlace"/>
+        <result column="sale_type" jdbcType="VARCHAR" property="saleType"/>
+        <result column="despatch_money" jdbcType="DECIMAL" property="despatchMoney"/>
+        <result column="despatch_is_plus" jdbcType="BOOLEAN" property="despatchIsPlus"/>
+        <result column="despatch_plus_money" jdbcType="INTEGER" property="despatchPlusMoney"/>
+        <result column="exec_free_postage_num" jdbcType="BOOLEAN" property="execFreePostageNum"/>
+        <result column="free_postage_num" jdbcType="INTEGER" property="freePostageNum"/>
+    </resultMap>
+    <select id="getBuyCar" parameterType="integer" resultMap="buyCarVO">
+        select g.*, bc.*
+        from buy_car bc
+                 left join goods g on bc.goods_id = g.goods_id
+        where bc.user_id = #{uid}
+          and g.title is not null
+          and bc.number > 0
+        order by bc.create_time desc
+    </select>
+    <select id="getBuyCarByIds" resultMap="buyCarVO">
+        select g.*, bc.*
+        from buy_car bc
+        left join goods g on bc.goods_id = g.goods_id
+        where bc.id in
+        <foreach collection="ids" index="index" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+        and g.title is not null
+        and bc.number > 0
+        order by bc.create_time desc
+    </select>
+
+</mapper>
