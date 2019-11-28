@@ -105,8 +105,6 @@ public class UserController {
         user.setPhone(phoneNum);
         user.setEmail(email);
 
-
-
         return ResultVO.create(userService.getUser(user, page, pageSize));
     }
 
