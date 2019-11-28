@@ -2,12 +2,12 @@ package com.lhrsite.xshop.mapper;
 
 import com.lhrsite.xshop.po.Goods;
 import com.lhrsite.xshop.vo.GoodsListVO;
+import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
-import tk.mybatis.mapper.common.Mapper;
-
 import java.util.List;
 
-public interface GoodsMapper extends Mapper<Goods> {
+@Mapper
+public interface GoodsMapper{
 
     /**
      * 更新库存

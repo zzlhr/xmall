@@ -12,11 +12,9 @@ import com.lhrsite.xshop.service.AddressService;
 import com.lhrsite.xshop.service.UserService;
 import com.lhrsite.xshop.vo.AddressVO;
 import com.lhrsite.xshop.vo.PageVO;
-import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import javax.persistence.EntityManager;
 import javax.validation.ConstraintViolationException;
 import java.util.List;
 import java.util.Optional;

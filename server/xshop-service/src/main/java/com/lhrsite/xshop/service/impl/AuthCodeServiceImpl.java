@@ -20,21 +20,18 @@ import java.util.Random;
 
 @Service
 @Slf4j
-public class AuthCodeServiceImpl extends BaseServiceImpl implements AuthCodeService {
+public class AuthCodeServiceImpl implements AuthCodeService {
 
     private final AuthCodeRepository authCodeRepository;
-    private JPAQueryFactory queryFactory;
     private final UserService userService;
     private final AuthCodeMapper authCodeMapper;
 
     @Autowired
     public AuthCodeServiceImpl(AuthCodeRepository authCodeRepository, UserService userService,
-                               EntityManager entityManager, AuthCodeMapper authCodeMapper) {
-        super(entityManager);
+                               AuthCodeMapper authCodeMapper) {
         this.authCodeRepository = authCodeRepository;
         this.userService = userService;
         this.authCodeMapper = authCodeMapper;
-        this.queryFactory = getQueryFactory();
     }
 
     @Override

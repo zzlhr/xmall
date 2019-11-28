@@ -8,8 +8,7 @@ import java.util.List;
 @Mapper
 public interface SupplierMapper {
 
-    List<SupplierVO> supplierList(String supplierName, String supplierTel,
-                                  Integer enterprise, Integer rowStatus,
+    List<SupplierVO> supplierList(String supplierName, String supplierTel, Integer rowStatus,
                                   long page, long pageSize);
 
 }

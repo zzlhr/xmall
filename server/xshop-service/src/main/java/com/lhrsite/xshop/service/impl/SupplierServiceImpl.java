@@ -46,12 +46,12 @@ public class SupplierServiceImpl extends BaseServiceImpl implements SupplierServ
     }
 
     @Override
-    public PageVO<SupplierVO> list(String supplierName, String supplierTel, Integer rowStatus, Integer enterprise,
+    public PageVO<SupplierVO> list(String supplierName, String supplierTel, Integer rowStatus,
                                    Integer page, Integer pageSize) {
 
         PageHelper.startPage(page, pageSize);
-        List<SupplierVO> supplierVOList = supplierMapper.supplierList(supplierName, supplierTel,
-                enterprise, rowStatus, page, pageSize);
+        List<SupplierVO> supplierVOList = supplierMapper.supplierList(supplierName,
+                supplierTel, rowStatus, page, pageSize);
 
         PageInfo<SupplierVO> pageInfo = new PageInfo<>(supplierVOList);
 

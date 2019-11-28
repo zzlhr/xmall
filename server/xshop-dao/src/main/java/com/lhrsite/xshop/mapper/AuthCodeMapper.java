@@ -9,5 +9,5 @@ import java.util.List;
 public interface AuthCodeMapper {
 
     List<AuthCode> getAuthCodes(Integer type, String phone);
-
+    AuthCode getAuthCode(Integer type, String phone);
 }

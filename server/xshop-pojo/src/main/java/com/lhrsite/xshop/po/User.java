@@ -21,7 +21,6 @@ public class User implements Serializable {
     private String password;
     private String phone;
     private String email;
-    private Integer enterprise;
     private String header;
     private Integer authGroup;
     private Integer status;
@@ -31,6 +30,6 @@ public class User implements Serializable {
     private java.sql.Timestamp updateTime;
     private Integer admin = 0;
 
-    private String wechatOpenid;
+    private String weChatOpenid;
 
 }

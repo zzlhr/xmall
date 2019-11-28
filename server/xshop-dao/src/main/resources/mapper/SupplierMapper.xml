@@ -12,7 +12,6 @@
         supplier.update_user,
         supplier.create_time,
         supplier.update_time,
-        supplier.enterprise,
         supplier.row_status,
         upu.username updateUserName,
         cpu.username createUserName

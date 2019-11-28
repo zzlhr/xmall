@@ -1,9 +1,13 @@
 package com.lhrsite.xshop.service.impl;
 
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.lhrsite.xshop.core.enums.UserStatusEnums;
 import com.lhrsite.xshop.core.exception.ErrEumn;
 import com.lhrsite.xshop.core.exception.XShopException;
 import com.lhrsite.xshop.core.utils.*;
+import com.lhrsite.xshop.mapper.AuthCodeMapper;
+import com.lhrsite.xshop.mapper.UserMapper;
 import com.lhrsite.xshop.po.*;
 import com.lhrsite.xshop.repository.AuthGroupRepository;
 import com.lhrsite.xshop.repository.EnterpriseRepository;
@@ -15,16 +19,13 @@ import com.lhrsite.xshop.vo.UserVO;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.Tuple;
 import com.querydsl.jpa.impl.JPAQuery;
-import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.EntityManager;
 import javax.servlet.http.HttpServletRequest;
-import java.io.IOException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
@@ -34,7 +35,7 @@ import java.util.UUID;
 
 @Service
 @Slf4j
-public class UserServiceImpl extends BaseServiceImpl implements UserService {
+public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
 
@@ -43,54 +44,27 @@ public class UserServiceImpl extends BaseServiceImpl implements UserService {
     private final AuthGroupRepository authGroupRepository;
 
     private final UserLoginRepository userLoginRepository;
+    private final AuthCodeMapper authCodeMapper;
     private final RedisUtil<String, User> redisUtil;
 
     //JPA查询工厂
-    private JPAQueryFactory queryFactory;
+    private final UserMapper userMapper;
 
     @Autowired
     public UserServiceImpl(UserRepository userRepository,
                            EnterpriseRepository enterpriseRepository,
                            AuthGroupRepository authGroupRepository,
                            UserLoginRepository userLoginRepository,
-                           EntityManager entityManager, RedisUtil<String, User> redisUtil) {
-        super(entityManager);
+                           AuthCodeMapper authCodeMapper, RedisUtil<String, User> redisUtil, UserMapper userMapper) {
         this.userRepository = userRepository;
         this.enterpriseRepository = enterpriseRepository;
         this.authGroupRepository = authGroupRepository;
         this.userLoginRepository = userLoginRepository;
+        this.authCodeMapper = authCodeMapper;
         this.redisUtil = redisUtil;
-        this.queryFactory = getQueryFactory();
+        this.userMapper = userMapper;
     }
 
-
-    @Override
-    public UserVO bindWeChat(String code, String token) throws IOException, XShopException {
-
-        User user = tokenGetUser(token);
-
-        String openId = WeChatUtil.getOpenId(code);
-
-        user.setWechatOpenid(openId);
-
-        userRepository.save(user);
-
-        return userToUserVO(user, true);
-    }
-
-    @Override
-    public UserVO weChatLogin(HttpServletRequest request, String openId) throws XShopException {
-
-        QUser qUser = QUser.user;
-        User user = queryFactory.selectFrom(qUser)
-                .where(qUser.wechatOpenid.eq(openId))
-                .fetchOne();
-        if (user == null) {
-            throw new XShopException(ErrEumn.NOE_USER_BING_THIS_WECHAT);
-        }
-
-        return createUserLogin(request, user);
-    }
 
     @Override
     public UserVO login(String phoneNumber, String password, String smsCode,
@@ -102,11 +76,8 @@ public class UserServiceImpl extends BaseServiceImpl implements UserService {
         }
         if (!"".equals(smsCode)) {
             // 短信登录
-            QAuthCode qAuthCode = QAuthCode.authCode;
-            AuthCode authCode = queryFactory.selectFrom(qAuthCode)
-                    .where(qAuthCode.phoneNumber.eq(phoneNumber))
-                    .where(qAuthCode.type.eq(1))
-                    .fetchOne();
+            PageHelper.orderBy("createTime desc");
+            AuthCode authCode = authCodeMapper.getAuthCode(1, phoneNumber);
             if (authCode == null) {
                 throw new XShopException(ErrEumn.AUTH_CODE_ERROR);
             }
@@ -174,48 +145,13 @@ public class UserServiceImpl extends BaseServiceImpl implements UserService {
     }
 
     @Override
-    public PageVO<UserVO> getUser(User user, int page, int pageSize) {
-        QUser qUser = QUser.user;
-        QEnterprise qEnterprise = QEnterprise.enterprise;
+    public PageVO<UserVO> getUser(User user, Integer page, Integer pageSize) {
 
-        BooleanBuilder builder = new BooleanBuilder();
-        builder.and(qUser.status.eq(0));
-
-        if (user.getUsername() != null && !user.getUsername().isEmpty()) {
-            builder.and(qUser.username.like("%" + user.getUsername() + "%"));
-        }
-        if (user.getPhone() != null && !user.getPhone().equals("")) {
-            builder.and(qUser.phone.like("%" + user.getPhone() + "%"));
-        }
-        if (user.getEmail() != null && !user.getEmail().equals("")) {
-            builder.and(qUser.email.like("%" + user.getEmail() + "%"));
-
-        }
-        if (user.getEnterprise() != null && user.getEnterprise() != 0) {
-            builder.and(qUser.enterprise.eq(user.getEnterprise()));
-        }
-
-        JPAQuery<Tuple> tupleJPAQuery = queryFactory
-                .select(qUser.uid, qUser.username,
-                        qUser.phone, qUser.email,
-                        qEnterprise.epName, qEnterprise.epShortName,
-                        qUser.header, qUser.createTime,
-                        qUser.updateTime, qUser.status)
-                .from(qUser).leftJoin(qEnterprise)
-                .on(qUser.enterprise.eq(qEnterprise.eid))
-                .where(builder)
-                .offset((page - 1) * pageSize)
-                .limit(pageSize)
-                .orderBy(qUser.uid.asc());
-
-        List<Tuple> userList = tupleJPAQuery.fetch();
-
-        List<UserVO> userVOS = new ArrayList<>();
-        userList.forEach(userItem -> UserVO.tupleToUserVO(userItem, userVOS));
+        PageHelper.startPage(page, pageSize, "createTime asc");
+        List<UserVO> userList = userMapper.getUsers(user.getEmail(), user.getPhone(),
+                user.getUsername(), user.getStatus());
         PageVO<UserVO> pageVO = new PageVO<>();
-
-        pageVO.init(tupleJPAQuery.fetchCount(), page, userVOS);
-
+        pageVO.init(new PageInfo<>(userList));
         return pageVO;
     }
 
@@ -235,10 +171,7 @@ public class UserServiceImpl extends BaseServiceImpl implements UserService {
 
     @Override
     public User findByPhone(String phone) {
-        QUser qUser = QUser.user;
-        return queryFactory.selectFrom(qUser)
-                .where(qUser.phone.eq(phone))
-                .fetchOne();
+        return userRepository.findByPhone(phone);
     }
 
     @Override
@@ -343,12 +276,8 @@ public class UserServiceImpl extends BaseServiceImpl implements UserService {
         }
         User user = this.tokenGetUser(token);
 
-        QAuthCode qAuthCode = QAuthCode.authCode;
         log.info("【userPhone】userPhone={}", user.getPhone());
-        AuthCode authCode = queryFactory.selectFrom(qAuthCode)
-                .where(qAuthCode.type.eq(2))
-                .where(qAuthCode.phoneNumber.eq(user.getPhone()))
-                .fetchFirst();
+        AuthCode authCode = authCodeMapper.getAuthCode(2, user.getPhone());
         log.info("【authCode】authCode={}", authCode);
         if (authCode == null) {
             throw new XShopException(ErrEumn.AUTH_CODE_ERROR);
@@ -400,17 +329,12 @@ public class UserServiceImpl extends BaseServiceImpl implements UserService {
             userVOS.add(userVO);
         }
 
-        userList.forEach(item ->
-                getEnterpriseIds(item, enterpriseIds, authGroupIds));
 
         List<Enterprise> enterprises =
                 enterpriseRepository.findAllById(enterpriseIds);
         List<AuthGroup> authGroups =
                 authGroupRepository.findAllById(authGroupIds);
 
-
-        userVOS.forEach(item ->
-                putName(item, enterprises, authGroups));
 
 
         // 当不显示手机号时隐藏中间几位手机号
@@ -445,47 +369,6 @@ public class UserServiceImpl extends BaseServiceImpl implements UserService {
     }
 
 
-    /**
-     * 为一组用户的所有item进行赋值其所属的企业名称和权限组名称
-     *
-     * @param userVO      用户vo对象
-     * @param enterprises 企业集合
-     * @param authGroups  权限组集合
-     */
-    private void putName(
-            UserVO userVO, List<Enterprise> enterprises,
-            List<AuthGroup> authGroups) {
-
-        // 遍历企业对用户所属企业进行匹配
-        enterprises.stream()
-                .filter(item -> item.getEid().equals(userVO.getEnterprise()))
-                .forEach(item -> userVO.setEnterpriseName(item.getEpShortName()));
-
-
-        // 遍历权限组为用户所属的权限组赋值。
-        authGroups.stream()
-                .filter(authGroup -> authGroup.getAgid().equals(userVO.getAuthGroup()))
-                .forEach(
-                        item -> userVO.setAuthGroupName(item.getAgName())
-                );
-
-    }
-
-    /**
-     * 获取一批用户的所有包含企业和权限组。
-     *
-     * @param user          用户列表
-     * @param enterpriseIds 存放企业id的集合
-     * @param authGroupIds  存放权限组id的集合
-     */
-    private void getEnterpriseIds(
-            User user,
-            List<Integer> enterpriseIds,
-            List<Integer> authGroupIds) {
-
-        enterpriseIds.add(user.getEnterprise());
-        authGroupIds.add(user.getAuthGroup());
-    }
 
 
     /**
@@ -501,12 +384,6 @@ public class UserServiceImpl extends BaseServiceImpl implements UserService {
         if (user != null) {
             throw new XShopException(ErrEumn.ADD_USER_PHONE_EXIST);
         }
-    }
-
-    @Override
-    public Integer getUserEnterpriseId(String token) throws XShopException {
-        User user = tokenGetUser(token);
-        return user.getEnterprise();
     }
 
     @Override

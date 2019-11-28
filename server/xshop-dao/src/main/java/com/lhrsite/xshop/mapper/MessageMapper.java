@@ -9,4 +9,6 @@ import java.util.List;
 public interface MessageMapper {
 
     List<MessageVO> getMessageList(Integer uid, Integer messageType);
+    Integer getNoReadMessageCount(Integer uid, Integer messageStatus);
+
 }

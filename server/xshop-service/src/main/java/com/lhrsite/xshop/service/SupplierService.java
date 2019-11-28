@@ -28,12 +28,11 @@ public interface SupplierService {
      * @param supplierName 供应商名称
      * @param rowStatus    删除否
      * @param supplierTel  供应商联系方式
-     * @param enterprise   企业id
      * @param page         页数
      * @param pageSize     每页数量
      * @return 供应商分页对象
      */
-    PageVO<SupplierVO> list(String supplierName, String supplierTel, Integer enterprise, Integer rowStatus,
+    PageVO<SupplierVO> list(String supplierName, String supplierTel, Integer rowStatus,
                             Integer page, Integer pageSize);
 
     /**

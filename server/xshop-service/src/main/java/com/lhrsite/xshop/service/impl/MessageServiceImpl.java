@@ -6,23 +6,16 @@ import com.lhrsite.xshop.mapper.MessageMapper;
 import com.lhrsite.xshop.vo.MessageVO;
 import com.lhrsite.xshop.vo.PageVO;
 import com.lhrsite.xshop.po.Message;
-import com.lhrsite.xshop.po.QMessage;
-import com.lhrsite.xshop.po.QUser;
 import com.lhrsite.xshop.po.User;
 import com.lhrsite.xshop.core.exception.ErrEumn;
 import com.lhrsite.xshop.core.exception.XShopException;
 import com.lhrsite.xshop.repository.MessageRepositroy;
 import com.lhrsite.xshop.service.MessageService;
 import com.lhrsite.xshop.service.UserService;
-import com.querydsl.core.BooleanBuilder;
-import com.querydsl.core.types.Projections;
-import com.querydsl.jpa.impl.JPAQuery;
-import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
-import javax.persistence.EntityManager;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -32,11 +25,13 @@ import java.util.UUID;
 public class MessageServiceImpl implements MessageService {
 
     private final MessageRepositroy messageRepositroy;
-    private MessageMapper messageMapper;
+    private final MessageMapper messageMapper;
     private final UserService userService;
 
-    public MessageServiceImpl(MessageRepositroy messageRepositroy, UserService userService) {
+    public MessageServiceImpl(MessageRepositroy messageRepositroy, MessageMapper messageMapper,
+                              UserService userService) {
         this.messageRepositroy = messageRepositroy;
+        this.messageMapper = messageMapper;
         this.userService = userService;
     }
 
@@ -83,8 +78,8 @@ public class MessageServiceImpl implements MessageService {
         List<MessageVO> messageVOs = messageMapper.getMessageList(user.getUid(), messageType);
         PageInfo<MessageVO> info = new PageInfo<>(messageVOs);
 
-        PageVO<MessageVO> result = PageVO.init(info, messageVOs);
-
+        PageVO<MessageVO> result = new PageVO<>();
+        result.init(info);
         for (MessageVO messageVO : result.getArr()) {
             messageVO.setSendUserName("系统消息");
         }
@@ -102,13 +97,8 @@ public class MessageServiceImpl implements MessageService {
     }
 
     @Override
-    public long getMessageNoReadCount(String token, Integer messageType) throws XShopException {
+    public long getMessageNoReadCount(String token) throws XShopException {
         User user = userService.tokenGetUser(token);
-        QMessage qMessage = QMessage.message;
-
-        return queryFactory.selectFrom(qMessage)
-                .where(qMessage.messageStatus.eq(0))
-                .where(qMessage.inceptUser.eq(user.getUid()))
-                .fetchCount();
+        return messageMapper.getNoReadMessageCount(user.getUid(), 0);
     }
 }

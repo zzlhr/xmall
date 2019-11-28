@@ -7,4 +7,12 @@
         where type = #{type}
           and phone_number = #{phone}
     </select>
+    <select id="getAuthCode" resultType="com.lhrsite.xshop.po.AuthCode">
+        select *
+        from auth_code
+        where type = #{type}
+          and phone_number = #{phone}
+        order by create_time desc
+        limit 0, 1
+    </select>
 </mapper>

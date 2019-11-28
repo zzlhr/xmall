@@ -3,7 +3,6 @@ package com.lhrsite.xshop.vo;
 import com.github.pagehelper.PageInfo;
 import com.querydsl.jpa.impl.JPAQuery;
 import lombok.Data;
-import org.omg.CORBA.INTERNAL;
 
 import java.util.List;
 
@@ -45,13 +44,12 @@ public class PageVO<T> {
         }
     }
 
-    public static PageVO init(PageInfo pageInfo, List data){
-        PageVO pageVO = new PageVO();
-        pageVO.setTotalCount(pageInfo.getTotal());
-        pageVO.setTotalPage(pageInfo.getPages());
-        pageVO.setArr(data);
-        pageVO.setPageSize(pageInfo.getPageSize());
-        return pageVO;
+    public PageVO<T> init(PageInfo<T> pageInfo){
+        this.setTotalCount(pageInfo.getTotal());
+        this.setTotalPage(pageInfo.getPages());
+        this.setArr(pageInfo.getList());
+        this.setPageSize(pageInfo.getPageSize());
+        return this;
     }
 
 

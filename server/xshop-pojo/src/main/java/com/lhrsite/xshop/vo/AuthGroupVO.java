@@ -3,7 +3,6 @@ package com.lhrsite.xshop.vo;
 import lombok.Data;
 
 import java.sql.Timestamp;
-import java.util.Date;
 
 @Data
 public class AuthGroupVO {
@@ -18,8 +17,6 @@ public class AuthGroupVO {
 
     /** 所属企业 */
     private String epShortName;
-
-    private Integer enterprise;
 
     /** 所属项目 */
     private Integer project;

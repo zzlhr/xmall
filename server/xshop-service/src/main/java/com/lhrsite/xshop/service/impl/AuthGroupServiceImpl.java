@@ -1,8 +1,11 @@
 package com.lhrsite.xshop.service.impl;
 
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.lhrsite.xshop.core.enums.AuthGroupEnums;
 import com.lhrsite.xshop.core.exception.ErrEumn;
 import com.lhrsite.xshop.core.exception.XShopException;
+import com.lhrsite.xshop.mapper.AuthGroupMapper;
 import com.lhrsite.xshop.po.*;
 import com.lhrsite.xshop.repository.AuthGroupRepository;
 import com.lhrsite.xshop.repository.AuthValueRepository;
@@ -15,13 +18,10 @@ import com.lhrsite.xshop.vo.AuthGroupVO;
 import com.lhrsite.xshop.vo.AuthValueVO;
 import com.lhrsite.xshop.vo.PageVO;
 import com.querydsl.core.BooleanBuilder;
-import com.querydsl.core.types.Projections;
-import com.querydsl.jpa.impl.JPAQuery;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.persistence.EntityManager;
 import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -29,38 +29,36 @@ import java.util.List;
 
 
 @Service
-public class AuthGroupServiceImpl extends BaseServiceImpl implements AuthGroupService {
+public class AuthGroupServiceImpl implements AuthGroupService {
 
     private final AuthGroupRepository authGroupRepository;
 
     private final AuthValueRepository authValueRepository;
 
     private final MenuRepository menuRepository;
-    //实体管理者
-    private final EntityManager entityManager;
-
+    private final AuthGroupMapper authGroupMapper;
     private final UserService userService;
     private final MenuService menuService;
 
+
     @Autowired
     public AuthGroupServiceImpl(AuthGroupRepository authGroupRepository,
-                                AuthValueRepository authValueRepository, MenuRepository menuRepository, EntityManager entityManager, UserService userService, MenuService menuService) {
-        super(entityManager);
+                                AuthValueRepository authValueRepository, MenuRepository menuRepository,
+                                AuthGroupMapper authGroupMapper, UserService userService, MenuService menuService) {
         this.authGroupRepository = authGroupRepository;
         this.authValueRepository = authValueRepository;
         this.menuRepository = menuRepository;
-        this.entityManager = entityManager;
+        this.authGroupMapper = authGroupMapper;
         this.userService = userService;
         this.menuService = menuService;
     }
 
     @Override
-    public List<AuthGroupDropDownVO> getAuthGroupDropDown(Integer enterprise) {
+    public List<AuthGroupDropDownVO> getAuthGroupDropDown() {
 
         List<AuthGroupDropDownVO> authGroupDropDownVOS = new ArrayList<>();
 
-        List<AuthGroup> authGroups = authGroupRepository
-                .findAllByEnterpriseAndAgStatus(enterprise, 0);
+        List<AuthGroup> authGroups = authGroupRepository.findAllByAgStatus(1);
 
 
         authGroups.forEach(authGroup ->
@@ -71,58 +69,14 @@ public class AuthGroupServiceImpl extends BaseServiceImpl implements AuthGroupSe
     }
 
     @Override
-    public PageVO<AuthGroupVO> selectAuthGroup(
-            long page, long pageSize,
-            String agName, Integer agStatus,
-            Integer enterprise) {
-        QAuthGroup qAuthGroup = QAuthGroup.authGroup;
-        QUser qUser = QUser.user;
-        QEnterprise qEnterprise = QEnterprise.enterprise;
+    public PageVO<AuthGroupVO> selectAuthGroup(Integer page, Integer pageSize, String agName, Integer agStatus) {
+        PageHelper.startPage(page, pageSize);
 
-        BooleanBuilder builder = new BooleanBuilder();
+        List<AuthGroupVO> authGroupList = authGroupMapper.getAuthGroupVOList(agName, agStatus);
 
-        if (agName != null && !"".equals(agName)) {
-            builder.and(qAuthGroup.agName.like("%" + agName + "%"));
-        }
-        if (agStatus != null) {
-            builder.and(qAuthGroup.agStatus.eq(agStatus));
-        }
-        if (enterprise != null) {
-            builder.and(qAuthGroup.enterprise.eq(enterprise));
-        }
-
-        JPAQuery<AuthGroupVO> select = getQueryFactory()
-                .select(
-                        Projections.bean(
-                                AuthGroupVO.class,
-                                qAuthGroup.agid,
-                                qAuthGroup.agName,
-                                qAuthGroup.enterprise,
-                                qAuthGroup.agStatus,
-                                qAuthGroup.createTime,
-                                qAuthGroup.updateTime,
-                                qAuthGroup.project,
-                                qAuthGroup.updateUser,
-                                qUser.username,
-                                qEnterprise.epShortName
-                        )
-                ).from(qAuthGroup)
-                .innerJoin(qEnterprise)
-                .on(qAuthGroup.enterprise.eq(qEnterprise.eid))
-                .innerJoin(qUser)
-                .on(qAuthGroup.updateUser.eq(qUser.uid))
-                .where(builder)
-                .offset((page - 1) * pageSize)
-                .limit(pageSize);
-
-        List<AuthGroupVO> authGroupList =
-                select.fetch();
-
-
+        PageInfo<AuthGroupVO> pageInfo = new PageInfo<>(authGroupList);
         PageVO<AuthGroupVO> authGroupVOPageVO = new PageVO<>();
-        authGroupVOPageVO.init(select.fetchCount(), page, authGroupList);
-
-
+        authGroupVOPageVO = authGroupVOPageVO.init(pageInfo);
         return authGroupVOPageVO;
     }
 
@@ -137,8 +91,7 @@ public class AuthGroupServiceImpl extends BaseServiceImpl implements AuthGroupSe
             if (authGroup.getAgid() == null ||
                     "".equals(authGroup.getAgid()) ||
                     0 == authGroup.getAgid()) {
-                List<Menu> menus = menuRepository
-                        .findAllByEnterpriseIn(Arrays.asList(authGroup1.getEnterprise(), 0));
+                List<Menu> menus = menuRepository.findAll();
 
                 List<AuthValue> initAuthValues = new ArrayList<>();
                 for (Menu menu : menus) {
@@ -161,41 +114,15 @@ public class AuthGroupServiceImpl extends BaseServiceImpl implements AuthGroupSe
     }
 
     @Override
-    public List<AuthGroup> getAuthGroup(Integer enterpriseId) {
+    public List<AuthGroup> getAuthGroup() {
 
         return authGroupRepository
-                .findAllByEnterpriseAndAgStatus(enterpriseId,
-                        AuthGroupEnums.USE.getCode());
+                .findAllByAgStatus(AuthGroupEnums.USE.getCode());
     }
 
     @Override
     public List<AuthValueVO> getAuthValue(Integer groupId) {
-        QAuthValue qAuthValue = QAuthValue.authValue;
-        QAuthGroup qAuthGroup = QAuthGroup.authGroup;
-        QMenu qMenu = QMenu.menu;
-
-
-        return getQueryFactory()
-                .select(
-                        Projections.bean(
-                                AuthValueVO.class,
-                                qAuthGroup.agid,
-                                qAuthGroup.agName,
-                                qAuthGroup.enterprise,
-                                qMenu.mid,
-                                qMenu.menuName,
-                                qMenu.menuUrl,
-                                qMenu.menuApi,
-                                qMenu.menuFmid,
-                                qMenu.menuStatus
-                        )
-                ).from(qAuthValue)
-                .innerJoin(qAuthGroup)
-                .on(qAuthValue.groupId.eq(qAuthGroup.agid))
-                .innerJoin(qMenu)
-                .on(qAuthValue.menuId.eq(qMenu.mid))
-                .where(qAuthValue.groupId.eq(groupId))
-                .fetch();
+        return authGroupMapper.getAuthValueVOSByGroupId(groupId);
     }
 
     @Override
@@ -204,11 +131,10 @@ public class AuthGroupServiceImpl extends BaseServiceImpl implements AuthGroupSe
                                          Integer groupId, String token) throws XShopException {
 
         User user = userService.tokenGetUser(token);
-        QAuthValue qAuthValue = QAuthValue.authValue;
 
         List<AuthValue> avs = new ArrayList<>();
         List<Menu> menuList =
-                menuService.getMenusByEnterprise(
+                menuService.getMenus(
                         authGroupRepository
                                 .findById(groupId)
                                 .orElseThrow(() -> new XShopException(ErrEumn.MENU_NOT_FIND))
@@ -225,49 +151,9 @@ public class AuthGroupServiceImpl extends BaseServiceImpl implements AuthGroupSe
 
         authValueRepository.saveAll(avs);
 
-
-//        getQueryFactory()
-//                .update(qAuthValue)
-//                .set(qAuthValue.value, 0)
-//                .where(qAuthValue.groupId.eq(groupId))
-//                .execute();
-
-
-        BooleanBuilder builder = new BooleanBuilder();
-        builder.and(qAuthValue.groupId.eq(groupId));
-        BooleanBuilder builder1 = new BooleanBuilder();
-        for (Integer menu : menuIds) {
-            builder1.or(qAuthValue.menuId.eq(menu));
-        }
-        builder.and(builder1);
-
-
-        getQueryFactory().update(qAuthValue)
-                .set(qAuthValue.value, 1)
-                .set(qAuthValue.updateUser, user.getUid())
-                .where(builder)
-                .execute();
-
-
-        return authValueRepository.findAllByGroupId(groupId);
+        return authGroupMapper.getAuthValuesByGroupId(groupId);
     }
 
-    @Override
-    public Integer[] getOpenAuth(Integer groupId) {
-        QAuthValue qAuthValue = QAuthValue.authValue;
-        List<AuthValue> authValues = getQueryFactory().selectFrom(qAuthValue)
-                .where(qAuthValue.groupId.eq(groupId))
-                .where(qAuthValue.value.eq(1))
-                .fetch();
-        Integer[] resultIds = new Integer[authValues.size()];
-        final int[] i = {0};
-        authValues.forEach(authValue -> {
-            resultIds[i[0]] = authValue.getMenuId();
-            i[0]++;
-        });
-
-        return resultIds;
-    }
 
     private void makeDropDown(
             List<AuthGroupDropDownVO> result, AuthGroup authGroup) {

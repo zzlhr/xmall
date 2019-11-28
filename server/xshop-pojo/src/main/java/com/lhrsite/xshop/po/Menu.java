@@ -15,17 +15,18 @@ import java.sql.Timestamp;
 @Data
 public class Menu implements Serializable {
 
+    public static final Integer ENABLE = 1; // 启用
+    public static final Integer DISABLE = 0; // 禁用
+
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer mid;
     private String menuName;
-    private String menuUrl;
-    private String menuApi;
+    private String menuCode;
     private Integer menuFmid;
     private Integer menuStatus;
     private Integer menuLevel;
-    private Integer enterprise;
-    private Integer project;
     private Integer updateUser;
     @Column(insertable = false, updatable = false)
     private Timestamp createTime;

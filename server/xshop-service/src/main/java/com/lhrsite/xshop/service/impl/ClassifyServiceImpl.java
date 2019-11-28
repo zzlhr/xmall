@@ -29,7 +29,7 @@ import java.util.Optional;
 
 @Service
 @Slf4j
-public class ClassifyServiceImpl extends BaseServiceImpl implements ClassifyService {
+public class ClassifyServiceImpl implements ClassifyService {
 
     private final ClassifyRepository classifyRepository;
     private JPAQueryFactory queryFactory;
@@ -40,13 +40,11 @@ public class ClassifyServiceImpl extends BaseServiceImpl implements ClassifyServ
     private final UserService userService;
 
     @Autowired
-    public ClassifyServiceImpl(EntityManager entityManager, ClassifyRepository classifyRepository,
+    public ClassifyServiceImpl(ClassifyRepository classifyRepository,
                                ClassifyMapper classifyMapper, UserService userService) {
-        super(entityManager);
         this.classifyRepository = classifyRepository;
         this.classifyMapper = classifyMapper;
         this.userService = userService;
-        queryFactory = getQueryFactory();
     }
 
     @Override

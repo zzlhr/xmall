@@ -16,24 +16,21 @@ import java.util.Arrays;
 import java.util.List;
 
 @Service
-public class MenuServiceImpl extends BaseServiceImpl implements MenuService {
+public class MenuServiceImpl implements MenuService {
 
     private final MenuRepository menuRepository;
-    private JPAQueryFactory queryFactory;
 
     @Autowired
     public MenuServiceImpl(MenuRepository menuRepository,
                            EntityManager entityManager) {
-        super(entityManager);
-        queryFactory = getQueryFactory();
         this.menuRepository = menuRepository;
     }
 
 
     @Override
-    public List<MenuListVO> getMenuTree(Integer enterprise) {
+    public List<MenuListVO> getMenuTree() {
 
-        List<Menu> menus = this.getMenusByEnterprise(enterprise);
+        List<Menu> menus = this.getMenus(Menu.ENABLE);
 
         List<MenuListVO> menuListVOS = new ArrayList<>();
 
@@ -42,53 +39,36 @@ public class MenuServiceImpl extends BaseServiceImpl implements MenuService {
         });
         List<MenuListVO> result = new ArrayList<>();
 
-
         menuListVOS.forEach(menuListVO -> {
-            if (menuListVO.getFid() == 0){
+            if (menuListVO.getFid() == 0) {
                 result.add(menuListVO);
-            }else{
+            } else {
                 // Client
                 menuListVOS.forEach(m -> {
-                    if (m.getId() == menuListVO.getFid()){
+                    if (m.getId() == menuListVO.getFid()) {
                         m.getChildren().add(menuListVO);
                     }
                 });
             }
-
         });
 
         return result;
     }
 
     @Override
-    public List<Menu> getMenusByEnterprise(Integer eid, Integer status) {
-
-        return menuRepository
-                .findAllByMenuStatusAndEnterpriseIn(status, Arrays.asList(eid, 0), Sort.by(Sort.Direction.DESC,
-                                "menuLevel"));
+    public List<Menu> getMenus(Integer status) {
+        return menuRepository.findAllByMenuStatus(status, Sort.by(Sort.Direction.DESC, "menuLevel"));
     }
 
-    @Override
-    public List<Menu> getMenusByEnterprise(Integer eid) {
 
-        return menuRepository
-                .findAllByEnterpriseIn(Arrays.asList(eid, 0), Sort.by(Sort.Direction.DESC,
-                        "menuLevel"));
-    }
     @Override
     public Menu getMenuById(Integer mid) {
-        return menuRepository.findById(mid).get();
+        return menuRepository.findById(mid).orElse(null);
     }
 
     @Override
     public Menu saveMenu(Menu menu) {
-        if (menu.getEnterprise() == null){
-            menu.setEnterprise(0);
-        }
-        if (menu.getProject() == null){
-            menu.setProject(0);
-        }
-        if (menu.getUpdateUser() == null){
+        if (menu.getUpdateUser() == null) {
             menu.setUpdateUser(1);
         }
 
@@ -96,11 +76,11 @@ public class MenuServiceImpl extends BaseServiceImpl implements MenuService {
         return menuRepository.save(menu);
     }
 
-    private void addTopMenu(List<MenuListVO> menuListVOS, Menu menu){
+    private void addTopMenu(List<MenuListVO> menuListVOS, Menu menu) {
         menuListVOS.add(makeMenuListVO(menu));
     }
 
-    private MenuListVO makeMenuListVO(Menu menu){
+    private MenuListVO makeMenuListVO(Menu menu) {
         MenuListVO menuListVO = new MenuListVO();
         menuListVO.setId(menu.getMid());
         menuListVO.setLabel(menu.getMenuName());
@@ -110,12 +90,12 @@ public class MenuServiceImpl extends BaseServiceImpl implements MenuService {
         return menuListVO;
     }
 
-    private List<MenuListVO> getClient(List<Menu> menus, Integer fid, int addTime){
+    private List<MenuListVO> getClient(List<Menu> menus, Integer fid, int addTime) {
         List<MenuListVO> menuListVOS = new ArrayList<>();
 
 
         menus.forEach(menu -> {
-            if (fid.equals(menu.getMenuFmid())){
+            if (fid.equals(menu.getMenuFmid())) {
                 menuListVOS.add(makeMenuListVO(menu));
             }
         });

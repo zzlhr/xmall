@@ -20,13 +20,12 @@ public interface EntepriseService {
      * @param pageSize      每页数量
      * @return              pagevo对象
      */
+
     PageVO<Enterprise> selectEnterprise(String epName,
                                         Integer epType,
                                         Integer epStatus,
-                                        long page,
-                                        long pageSize);
-
-
+                                        Integer page,
+                                        Integer pageSize);
 
     Enterprise addEnterprise(Enterprise enterprise);
 

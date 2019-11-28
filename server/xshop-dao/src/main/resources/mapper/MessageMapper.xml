@@ -11,4 +11,11 @@
         </if>
         order by message_status
     </select>
+    <select id="getNoReadMessageCount" resultType="java.lang.Integer">
+        select count(*)
+        from message
+        where 1 = 1
+          and incept_user = #{uid}
+          and message_status = #{messageStatus}
+    </select>
 </mapper>

@@ -20,11 +20,6 @@ public class UserVO {
     /** 用户邮箱 */
     private String email;
 
-    /** 企业代号 */
-    private Integer enterprise;
-    /** 企业名称 */
-    private String enterpriseName;
-
     /** 用户登录令牌 */
     private String token;
     /** 用户头像 */
@@ -44,19 +39,6 @@ public class UserVO {
     private String updateTime;
 
 
-    public static void tupleToUserVO(Tuple tuple, List<UserVO> userVOS){
-        UserVO userVO = new UserVO();
-        userVO.setUid(tuple.get(0, Integer.class));
-        userVO.setUsername(tuple.get(1, String.class));
-        userVO.setPhone(tuple.get(2, String.class));
-        userVO.setEmail(tuple.get(3, String.class));
-        userVO.setEnterpriseName(tuple.get(5, String.class));
-        userVO.setHeader(tuple.get(6, String.class));
-        userVO.setCreateTime(tuple.get(7, Timestamp.class).toLocalDateTime().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
-        userVO.setUpdateTime(tuple.get(8, Timestamp.class).toLocalDateTime().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
-        userVO.setStatus(tuple.get(9, Integer.class));
-        userVOS.add(userVO);
-    }
 
 
 }

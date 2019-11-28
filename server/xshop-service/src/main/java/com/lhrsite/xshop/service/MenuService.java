@@ -8,13 +8,10 @@ import java.util.List;
 
 public interface MenuService {
 
+    List<MenuListVO> getMenuTree();
 
+    List<Menu> getMenus(Integer status);
 
-    List<MenuListVO> getMenuTree(Integer enterprise);
-
-    List<Menu> getMenusByEnterprise(Integer eid, Integer status);
-
-    List<Menu> getMenusByEnterprise(Integer eid);
 
     Menu getMenuById(Integer mid);
 

@@ -10,14 +10,6 @@ import java.util.List;
 public interface MenuRepository
         extends BaseRepository<Menu, Integer> {
 
-
-    List<Menu> findAllByMenuStatusAndEnterpriseIn(Integer status, List<Integer> enterprises, Sort sort);
-
-    List<Menu> findAllByEnterpriseIn(List<Integer> enterprises);
-
-    List<Menu> findAllByEnterpriseIn(List<Integer> enterprises, Sort sort);
-
-
-
+    List<Menu> findAllByMenuStatus(Integer status, Sort sort);
 
 }

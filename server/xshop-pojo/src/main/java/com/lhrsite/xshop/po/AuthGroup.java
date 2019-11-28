@@ -34,11 +34,6 @@ public class AuthGroup implements Serializable {
     private Integer agStatus;
 
     /**
-     * 所属企业
-     */
-    private Integer enterprise;
-
-    /**
      * 所属项目
      */
     private Integer project;

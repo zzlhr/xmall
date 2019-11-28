@@ -21,18 +21,15 @@
         <xshop.dao.version>0.0.1</xshop.dao.version>
         <xshop.entity.version>0.0.1</xshop.entity.version>
         <xshop.service.version>0.0.1</xshop.service.version>
-        <xshop.web.api.version>0.0.1</xshop.web.api.version>
-        <xshop.admin.api.version>0.0.1</xshop.admin.api.version>
+        <xshop.api.version>0.0.1</xshop.api.version>
         <xshop.pojo.version>0.0.2</xshop.pojo.version>
     </properties>
     <modules>
         <module>xshop-core</module>
         <module>xshop-dao</module>
         <module>xshop-service</module>
-        <module>xshop-web-api</module>
-        <module>xshop-admin-api</module>
+        <module>xshop-api</module>
         <module>xshop-pojo</module>
-        <module>xshop-app-api</module>
     </modules>
 
 
@@ -55,13 +52,8 @@
             </dependency>
             <dependency>
                 <groupId>com.lhrsite.xshop</groupId>
-                <artifactId>xshop-web-api</artifactId>
-                <version>${xshop.web.api.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.lhrsite.xshop</groupId>
-                <artifactId>xshop-admin-api</artifactId>
-                <version>${xshop.admin.api.version}</version>
+                <artifactId>xshop-api</artifactId>
+                <version>${xshop.api.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.lhrsite.xshop</groupId>

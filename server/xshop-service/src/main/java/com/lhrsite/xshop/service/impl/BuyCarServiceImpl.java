@@ -19,20 +19,17 @@ import java.util.List;
 
 @Service
 @Slf4j
-public class BuyCarServiceImpl extends BaseServiceImpl implements BuyCarService {
+public class BuyCarServiceImpl implements BuyCarService {
 
 
     private final BuyCarReository buyCarReository;
-    private JPAQueryFactory queryFactory;
     private final UserService userService;
     private final BuyCarMapper buyCarMapper;
 
     @Autowired
-    public BuyCarServiceImpl(EntityManager entityManager, BuyCarReository buyCarReository, UserService userService, BuyCarMapper buyCarMapper) {
-        super(entityManager);
+    public BuyCarServiceImpl(BuyCarReository buyCarReository, UserService userService, BuyCarMapper buyCarMapper) {
         this.userService = userService;
         this.buyCarMapper = buyCarMapper;
-        this.queryFactory = getQueryFactory();
         this.buyCarReository = buyCarReository;
     }
 

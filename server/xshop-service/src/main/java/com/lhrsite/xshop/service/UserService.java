@@ -16,10 +16,6 @@ import java.io.IOException;
 public interface UserService {
 
 
-    UserVO bindWeChat(String code, String token) throws IOException, XShopException;
-
-    UserVO weChatLogin(HttpServletRequest request, String openId) throws XShopException;
-
     UserVO login(String phoneNumber, String password, String smsCode,
                  HttpServletRequest request) throws XShopException;
 
@@ -46,8 +42,7 @@ public interface UserService {
      * @param page page number, page size default 10
      * @return UserVO list and pagination data
      */
-    PageVO<UserVO> getUser(User user, int page, int pageSize);
-
+    PageVO<UserVO> getUser(User user, Integer page, Integer pageSize);
 
     UserVO findUserById(Integer userId, boolean showPhoneNumber) throws XShopException;
 
@@ -78,7 +73,6 @@ public interface UserService {
 
     void phoneIsExist(String phone) throws XShopException;
 
-    Integer getUserEnterpriseId(String token) throws XShopException;
 
     void logOut(String token);
 }

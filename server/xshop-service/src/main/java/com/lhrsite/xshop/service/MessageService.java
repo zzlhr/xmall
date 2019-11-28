@@ -14,15 +14,11 @@ public interface MessageService {
     MessageVO readMessage(String msgId) throws XShopException;
 
 
-    PageVO<MessageVO> getMessage(String token, Integer messageType,
-                                 long page, long pageSize) throws XShopException;
-
 
     PageVO<MessageVO> getMessage(String token, Integer messageType,
                                  Integer page, Integer pageSize) throws XShopException;
 
     void delMessage(String msgId) throws XShopException;
 
-    long getMessageNoReadCount(String token, Integer messageType) throws XShopException;
-
+    long getMessageNoReadCount(String token) throws XShopException;
 }

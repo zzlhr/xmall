@@ -10,24 +10,14 @@ public class AuthValueVO {
     /** 权限组名称 */
     private String agName;
 
-    private Integer enterprise;
-
     private Integer mid;
 
     private String menuName;
 
-    private String menuUrl;
-
-    private String menuApi;
+    private String menuCode;
 
     private Integer menuFmid;
 
     private Integer menuStatus;
-
-
-
-
-
-
 
 }

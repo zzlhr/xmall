@@ -40,8 +40,6 @@ public class Supplier implements Serializable{
     private Timestamp createTime;
     /* 更新时间 */
     private Timestamp updateTime;
-    /* 所属企业 */
-    private Integer enterprise;
     /* 删除否 */
     private Integer rowStatus;
 
