@@ -1,6 +1,7 @@
 import request from '@/utils/request';
+import {baseHost} from '@/services/host'
 export async function fakeAccountLogin(params) {
-  return request('/api/login/account', {
+  return request(`${baseHost}/api/login/account`, {
     method: 'POST',
     data: params,
   });
