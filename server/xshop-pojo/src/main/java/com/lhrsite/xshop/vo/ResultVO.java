@@ -23,5 +23,12 @@ public class ResultVO {
         resultVO.setData(data);
         return resultVO;
     }
+    public static ResultVO create() {
+        ResultVO resultVO = new ResultVO();
+        resultVO.setCode(0);
+        resultVO.setMsg("ok");
+        resultVO.setData(null);
+        return resultVO;
+    }
 
 }

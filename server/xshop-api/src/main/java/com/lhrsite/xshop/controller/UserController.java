@@ -28,46 +28,40 @@ import java.util.Map;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/user")
 @Slf4j
+@RequestMapping("/user")
 public class UserController {
 
     private final UserService userService;
-    private ResultVO resultVO;
     private final AuthCodeService authCodeService;
     private AuthCodeRepository authCodeRepository;
 
     @Autowired
     public UserController(UserService userService, AuthCodeService authCodeService, AuthCodeRepository authCodeRepository) {
         this.authCodeService = authCodeService;
-        resultVO = new ResultVO();
-        resultVO.setCode(0);
-        resultVO.setMsg("ok");
-        resultVO.setData(null);
         this.userService = userService;
         this.authCodeRepository = authCodeRepository;
     }
-
 
 
     @PostMapping("/sendCode")
     public ResultVO sendCode(String phoneNumber) throws XShopException {
         log.info(phoneNumber);
         authCodeService.sendMessage(phoneNumber, 0);
-        return resultVO;
+        return ResultVO.create();
     }
 
     @PostMapping("/sendUpPwdCode")
     public ResultVO sendUpPwdCode(String token) throws XShopException {
         authCodeService.sendUpPwdMessage(token);
-        return resultVO;
+        return ResultVO.create();
     }
 
 
     @PostMapping("/sendLoginCode")
     public ResultVO sendLoginCode(String phoneNumber) throws XShopException {
         authCodeService.sendMessage(phoneNumber, 1);
-        return resultVO;
+        return ResultVO.create();
     }
 
 
@@ -78,8 +72,7 @@ public class UserController {
                           HttpServletRequest request)
             throws XShopException {
         log.info("【登录】phone={}, password={}", phone, password);
-        resultVO.setData(userService.login(phone, password, smsCode, request));
-        return resultVO;
+        return ResultVO.create(userService.login(phone, password, smsCode, request));
     }
 
 
@@ -89,16 +82,13 @@ public class UserController {
                                HttpServletRequest request)
             throws XShopException {
         log.info("【登录】phone={}, password={}", phone, password);
-        resultVO.setData(userService.loginAdmin(phone, password, request));
-        return resultVO;
+        return ResultVO.create(userService.loginAdmin(phone, password, request));
     }
 
     @PostMapping("/tokenUse")
     public ResultVO tokenUse(String token) throws XShopException {
         log.info("【验证token是否可用】token={}", token);
-
-        resultVO.setData(userService.tokenCanUse(token));
-        return resultVO;
+        return ResultVO.create(userService.tokenCanUse(token));
     }
 
     @PostMapping("/userList")
@@ -115,9 +105,9 @@ public class UserController {
         user.setPhone(phoneNum);
         user.setEmail(email);
 
-        resultVO.setData(userService.getUser(user, page, pageSize));
 
-        return resultVO;
+
+        return ResultVO.create(userService.getUser(user, page, pageSize));
     }
 
     @PostMapping("/getUser")
@@ -128,9 +118,7 @@ public class UserController {
         if (uid == null) {
             throw new XShopException(ErrEumn.PARAM_IS_NULL);
         }
-        resultVO.setData(userService.findUserById(uid, showPhone == 1));
-
-        return resultVO;
+        return ResultVO.create(userService.findUserById(uid, showPhone == 1));
     }
 
 
@@ -178,17 +166,14 @@ public class UserController {
             throw new XShopException(ErrEumn.AUTH_CODE_ERROR);
         }
 
-        resultVO.setData(userService.addUser(user));
         authCodeRepository.delete(authCode);
         UserVO userVO = userService.createUserLogin(request, user);
-        resultVO.setData(userVO);
-        return resultVO;
+        return ResultVO.create(userVO);
     }
 
     @PostMapping("/upPassword")
     public ResultVO upPassword(String token, String smsCode, String newPassword) throws XShopException {
-        resultVO.setData(userService.upPasswordBySms(token, smsCode, newPassword));
-        return resultVO;
+        return ResultVO.create(userService.upPasswordBySms(token, smsCode, newPassword));
     }
 
     @PostMapping("/editUser")
@@ -219,14 +204,13 @@ public class UserController {
         if (user.getAuthGroup() != null) {
             oldUser.setAuthGroup(user.getAuthGroup());
         }
-        resultVO.setData(userService.updateUser(user));
-        return resultVO;
+        return ResultVO.create(userService.updateUser(user));
     }
 
     @PostMapping("/phoneIsExist")
     public ResultVO phoneIsExist(String phone) throws XShopException {
         userService.phoneIsExist(phone);
-        return resultVO;
+        return ResultVO.create();
     }
 
     @GetMapping("/authCode")
