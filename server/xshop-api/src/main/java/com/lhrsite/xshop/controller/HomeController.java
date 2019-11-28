@@ -1,4 +1,4 @@
-package com.lhrsite.xshop.webapi.controller;
+package com.lhrsite.xshop.controller;
 
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;

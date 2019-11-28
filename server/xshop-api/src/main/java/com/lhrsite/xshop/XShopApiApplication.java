@@ -8,7 +8,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 @SpringBootApplication(scanBasePackages = {"com.lhrsite.xshop.service",
         "com.lhrsite.xshop.mapper", "com.lhrsite.xshop.repository", "com.lhrsite.xshop.po",
         "com.lhrsite.xshop.core", "com.lhrsite.xshop.config",
-        "com.lhrsite.xshop.webapi.controller"})
+        "com.lhrsite.xshop.controller"})
 @EnableJpaRepositories("com.lhrsite.xshop.repository")
 @EntityScan("com.lhrsite.xshop.po")
 public class XShopApiApplication {

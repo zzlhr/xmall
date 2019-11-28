@@ -1,4 +1,4 @@
-package com.lhrsite.xshop.webapi.controller;
+package com.lhrsite.xshop.controller;
 
 import com.lhrsite.xshop.vo.ResultVO;
 import com.lhrsite.xshop.service.CityService;
