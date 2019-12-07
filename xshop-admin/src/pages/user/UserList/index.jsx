@@ -46,7 +46,7 @@ class UserList extends Component {
   render() {
     return (
 
-      <PageHeaderWrapper content="这是一个新页面，从这里进行开发！" className={styles.main}>
+      <PageHeaderWrapper className={styles.main}>
         <SearchUsers handleSearch={this.handleSearch}/>
         <UsersTable data={this.state.list} total={this.state.total} current={this.state.current}
                     pageSize={this.state.pageSize} onChange={this.onPageChange}/>
