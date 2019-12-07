@@ -13,7 +13,7 @@ import java.util.Date;
 @Slf4j
 public class TimeAspect {
 
-    @Around("execution(* com.lhrsite.xshop.webapi.controller.*.*(..))")
+    @Around("execution(* com.lhrsite.xshop.controller.*.*(..))")
     private Object mappingAround(ProceedingJoinPoint joinPoint) throws Throwable {
         long startTime = new Date().getTime();
         Object result = joinPoint.proceed();
