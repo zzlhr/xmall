@@ -1,5 +1,5 @@
 import React from 'react';
-import {Table, Pagination} from 'antd';
+import {Table, Button} from 'antd';
 import styles from './index.less';
 
 const columns = [
@@ -54,11 +54,18 @@ const columns = [
     width: 150,
   },
   {
-    title: 'Action',
+    title: '操作',
     key: 'operation',
     // fixed: 'right',
-    width: 100,
-    render: () => <a>action</a>,
+    width: 200,
+    render: () => {
+      return(
+        <div>
+          <Button type="link">修改</Button>
+          <Button type="link">禁止登陆</Button>
+        </div>
+      )
+    },
   },
 ];
 

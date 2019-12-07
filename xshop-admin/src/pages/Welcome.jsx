@@ -13,17 +13,13 @@ const CodePreview = ({ children }) => (
 );
 
 export default () => (
-  <PageHeaderWrapper>
+  <PageHeaderWrapper className={styles.pageHeaderWrapper}>
     <Card>
       <Alert
         message="umi ui 现已发布，欢迎使用 npm run ui 启动体验。"
         type="success"
         showIcon
         banner
-        style={{
-          margin: -12,
-          marginBottom: 24,
-        }}
       />
       <Typography.Text strong>
         <a target="_blank" rel="noopener noreferrer" href="https://pro.ant.design/docs/block">
