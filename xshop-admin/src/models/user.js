@@ -14,7 +14,7 @@ const UserModel = {
     },
 
     *fetchCurrent(_, { call, put }) {
-      let user = localStorage.getItem("user");
+      let user = JSON.parse(localStorage.getItem("user"));
       yield put({
         type: 'saveCurrentUser',
         payload: user,
