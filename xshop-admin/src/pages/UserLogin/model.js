@@ -1,7 +1,7 @@
 import { routerRedux } from 'dva/router';
-import { fakeAccountLogin, getFakeCaptcha } from './service';
+import { adminLogin, getFakeCaptcha } from './service';
 import { getPageQuery, setAuthority } from './utils/utils';
-
+import { notification } from 'antd';
 const Model = {
   namespace: 'userLogin',
   state: {
@@ -9,13 +9,17 @@ const Model = {
   },
   effects: {
     *login({ payload }, { call, put }) {
-      const response = yield call(fakeAccountLogin, payload);
+      const response = yield call(adminLogin, payload);
       yield put({
         type: 'changeLoginStatus',
         payload: response,
       }); // Login successfully
-
-      if (response.status === 'ok') {
+      console.log(response);
+      // if (response.code !== 0){
+      //
+      //   return;
+      // }
+      if (response.code === 0) {
         const urlParams = new URL(window.location.href);
         const params = getPageQuery();
         let { redirect } = params;
@@ -45,7 +49,19 @@ const Model = {
   },
   reducers: {
     changeLoginStatus(state, { payload }) {
-      setAuthority(payload.currentAuthority);
+      console.log(payload);
+      console.log(state);
+      if (payload.code !== 0){
+        state.status = "error";
+        notification.error({
+          message: `请求错误 ${payload.code}`,
+          description: payload.msg,
+        });
+      }else{
+        // 成功设置权限
+        console.log("登录成功！");
+        setAuthority(payload.data);
+      }
       return { ...state, status: payload.status, type: payload.type };
     },
   },

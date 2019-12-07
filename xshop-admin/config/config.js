@@ -98,7 +98,7 @@ export default {
         {
           path: '/',
           component: '../layouts/BasicLayout',
-          authority: ['admin', 'user'],
+          authority: ['admin', 'user', 'superAdmin'],
           routes: [
             {
               path: '/',
@@ -115,7 +115,7 @@ export default {
               name: 'admin',
               icon: 'crown',
               component: './Admin',
-              authority: ['admin'],
+              authority: ['admin', 'superAdmin'],
             },
             {
               component: './404',

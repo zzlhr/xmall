@@ -30,6 +30,6 @@ public class User implements Serializable {
     private java.sql.Timestamp updateTime;
     private Integer admin = 0;
 
-    private String weChatOpenid;
+    private String wechatOpenid;
 
 }

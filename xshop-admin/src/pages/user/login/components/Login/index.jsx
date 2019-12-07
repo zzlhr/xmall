@@ -85,7 +85,6 @@ class Login extends Component {
     const { active = {}, type = '' } = this.state;
     const { form, onSubmit } = this.props;
     const activeFields = active[type] || [];
-
     if (form) {
       form.validateFields(
         activeFields,

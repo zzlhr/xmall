@@ -39,7 +39,6 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
 
-    private final EnterpriseRepository enterpriseRepository;
 
     private final AuthGroupRepository authGroupRepository;
 
@@ -52,12 +51,10 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     public UserServiceImpl(UserRepository userRepository,
-                           EnterpriseRepository enterpriseRepository,
                            AuthGroupRepository authGroupRepository,
                            UserLoginRepository userLoginRepository,
                            AuthCodeMapper authCodeMapper, RedisUtil<String, User> redisUtil, UserMapper userMapper) {
         this.userRepository = userRepository;
-        this.enterpriseRepository = enterpriseRepository;
         this.authGroupRepository = authGroupRepository;
         this.userLoginRepository = userLoginRepository;
         this.authCodeMapper = authCodeMapper;
@@ -120,15 +117,14 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserVO loginAdmin(String phoneNumber, String password, HttpServletRequest request) throws XShopException {
-        User user = userRepository.findByPhone(phoneNumber);
+        UserVO user = userMapper.getAdmin(phoneNumber, EncryptUtil.encryptPassword(password));
+        if (user == null){
+            throw new XShopException(ErrEumn.LOGIN_ERR);
+        }
         if (user.getAdmin() == 0) {
             throw new XShopException(ErrEumn.NOT_ADMIN);
         }
-        if (user.getPassword().equals(EncryptUtil.encryptPassword(password))) {
-            return createUserLogin(request, user);
-        } else {
-            throw new XShopException(ErrEumn.LOGIN_ERR);
-        }
+        return user;
     }
 
     @Override
@@ -319,7 +315,6 @@ public class UserServiceImpl implements UserService {
      * @return userVO集合
      */
     private List<UserVO> userToUserVO(List<User> userList, boolean showPhoneNumber) {
-        List<Integer> enterpriseIds = new ArrayList<>();
         List<Integer> authGroupIds = new ArrayList<>();
 
         List<UserVO> userVOS = new ArrayList<>();
@@ -330,12 +325,10 @@ public class UserServiceImpl implements UserService {
         }
 
 
-        List<Enterprise> enterprises =
-                enterpriseRepository.findAllById(enterpriseIds);
+
         List<AuthGroup> authGroups =
                 authGroupRepository.findAllById(authGroupIds);
-
-
+        
 
         // 当不显示手机号时隐藏中间几位手机号
         if (!showPhoneNumber) {

@@ -53,4 +53,14 @@ const request = extend({
   // 默认错误处理
   credentials: 'include', // 默认请求是否带上cookie
 });
+
+const baseUrl = "http://localhost:8009";
+// 全局拦截器直接使用 request 实例中的方法
+request.interceptors.request.use((url, options) => {
+  return {
+    url: baseUrl+url,
+    options: { ...options, interceptors: true },
+  };
+}, { global: false }); // 第二个参数不传默认为 { global: true }
+
 export default request;
