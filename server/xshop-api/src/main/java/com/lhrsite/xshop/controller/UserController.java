@@ -99,13 +99,8 @@ public class UserController {
             @RequestParam(required = false, defaultValue = "1") Integer page,
             @RequestParam(required = false, defaultValue = "10") Integer pageSize,
             HttpServletRequest request) {
-        log.info("【查询用户】params={}", request.getParameterMap());
-        User user = new User();
-        user.setUsername(username);
-        user.setPhone(phoneNum);
-        user.setEmail(email);
 
-        return ResultVO.create(userService.getUser(user, page, pageSize));
+        return ResultVO.create(userService.getUsers(username, phoneNum, email, page, pageSize));
     }
 
     @PostMapping("/getUser")

@@ -79,7 +79,7 @@ public class MessageServiceImpl implements MessageService {
         PageInfo<MessageVO> info = new PageInfo<>(messageVOs);
 
         PageVO<MessageVO> result = new PageVO<>();
-        result.init(info);
+        result.init(info, page);
         for (MessageVO messageVO : result.getArr()) {
             messageVO.setSendUserName("系统消息");
         }

@@ -37,12 +37,13 @@ public interface UserService {
     /**
      * get user list ande select user list
      *
-     * @param user you can use username, phone, email, enterpriseId query,
-     *             and username,phone, email is "like query"
+     * @param username search username
+     * @param email search email
+     * @param phone search phone
      * @param page page number, page size default 10
      * @return UserVO list and pagination data
      */
-    PageVO<UserVO> getUser(User user, Integer page, Integer pageSize);
+    PageVO<UserVO> getUsers(String username, String phone, String email, Integer page, Integer pageSize);
 
     UserVO findUserById(Integer userId, boolean showPhoneNumber) throws XShopException;
 

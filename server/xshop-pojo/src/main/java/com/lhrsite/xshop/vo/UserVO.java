@@ -27,9 +27,11 @@ public class UserVO {
 
     /** 用户权限组 */
     private Integer authGroup;
+    private String authCode;
     /** 用户权限组名称 */
     private String authGroupName;
 
+    private Integer admin;
     /** 用户状态 */
     private Integer status;
 

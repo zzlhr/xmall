@@ -14,6 +14,9 @@ import java.io.Serializable;
 @Data
 public class User implements Serializable {
 
+    public static Integer USER_STATUS_ENABLE = 1;
+    public static Integer USER_STATUS_DISABLE = 0;
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer uid;

@@ -3,20 +3,28 @@
 <mapper namespace="com.lhrsite.xshop.mapper.UserMapper">
 
     <select id="getUsers" resultType="com.lhrsite.xshop.vo.UserVO">
-        select *
-        from user
+        select u.*,ag.ag_name authGroupName,ag.agid authGroup, ag.ag_code authCode
+        from user u
+            left join auth_group ag on u.auth_group = ag.agid
         where 1=1
         <if test="userName != null">
-            and username like '%'#{userName}'%'
-        </if>
-        <if test="email != null">
-            and email like '%'#{email}'%'
-        </if>
-        <if test="email != null">
-            and email like '%'#{email}'%'
+            and `username` like #{userName}
         </if>
         <if test="phone != null">
-            and phone like '%'#{phone}'%'
+            and phone like #{phone}
         </if>
+        <if test="email != null">
+            and email like #{email}
+        </if>
+        <if test="userStatus != null">
+            and status = #{userStatus}
+        </if>
+
+    </select>
+    <select id="getAdmin" resultType="com.lhrsite.xshop.vo.UserVO">
+        select u.*, ag.ag_name authGroupName,ag.agid authGroup, ag.ag_code authCode
+        from `user` u
+            left join auth_group ag on u.auth_group = ag.agid
+        where phone = #{phoneNumber} and admin=1 and password=#{password}
     </select>
 </mapper>

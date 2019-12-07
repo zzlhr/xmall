@@ -23,6 +23,7 @@ public class AuthGroup implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer agid;
 
+    private String agCode;
     /**
      * 权限组名称
      */
@@ -32,11 +33,6 @@ public class AuthGroup implements Serializable {
      * 权限组状态
      */
     private Integer agStatus;
-
-    /**
-     * 所属项目
-     */
-    private Integer project;
 
     /**
      * 创建时间

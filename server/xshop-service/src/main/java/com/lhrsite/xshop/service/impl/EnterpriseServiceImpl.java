@@ -54,7 +54,7 @@ public class EnterpriseServiceImpl implements EntepriseService {
         List<Enterprise> enterprises = enterpriseMapper.getEnterprises(epName, epType, epStatus);
         PageInfo<Enterprise> pageInfo = new PageInfo<>(enterprises);
         PageVO<Enterprise> pageVO = new PageVO<>();
-        pageVO = pageVO.init(pageInfo);
+        pageVO = pageVO.init(pageInfo, page);
         return pageVO;
     }
 

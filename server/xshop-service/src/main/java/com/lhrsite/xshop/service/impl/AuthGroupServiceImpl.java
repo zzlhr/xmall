@@ -76,7 +76,7 @@ public class AuthGroupServiceImpl implements AuthGroupService {
 
         PageInfo<AuthGroupVO> pageInfo = new PageInfo<>(authGroupList);
         PageVO<AuthGroupVO> authGroupVOPageVO = new PageVO<>();
-        authGroupVOPageVO = authGroupVOPageVO.init(pageInfo);
+        authGroupVOPageVO = authGroupVOPageVO.init(pageInfo, page);
         return authGroupVOPageVO;
     }
 

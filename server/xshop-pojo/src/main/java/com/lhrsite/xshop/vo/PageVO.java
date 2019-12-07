@@ -44,11 +44,12 @@ public class PageVO<T> {
         }
     }
 
-    public PageVO<T> init(PageInfo<T> pageInfo){
+    public PageVO<T> init(PageInfo<T> pageInfo, Integer page){
         this.setTotalCount(pageInfo.getTotal());
         this.setTotalPage(pageInfo.getPages());
         this.setArr(pageInfo.getList());
         this.setPageSize(pageInfo.getPageSize());
+        this.currentPage = page;
         return this;
     }
 

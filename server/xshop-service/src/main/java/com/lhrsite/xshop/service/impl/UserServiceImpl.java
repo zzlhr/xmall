@@ -141,13 +141,14 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public PageVO<UserVO> getUser(User user, Integer page, Integer pageSize) {
+    public PageVO<UserVO> getUsers(String username, String phone, String email, Integer page, Integer pageSize) {
 
-        PageHelper.startPage(page, pageSize, "createTime asc");
-        List<UserVO> userList = userMapper.getUsers(user.getEmail(), user.getPhone(),
-                user.getUsername(), user.getStatus());
+        PageHelper.startPage(page, pageSize, "create_time asc");
+        List<UserVO> userList = userMapper.getUsers(SQLUtil.toFuzzySearchVal(email), SQLUtil.toFuzzySearchVal(phone),
+                SQLUtil.toFuzzySearchVal(username), User.USER_STATUS_ENABLE);
         PageVO<UserVO> pageVO = new PageVO<>();
-        pageVO.init(new PageInfo<>(userList));
+        pageVO.init(new PageInfo<>(userList), page);
+
         return pageVO;
     }
 
