@@ -59,7 +59,7 @@ const baseUrl = "http://localhost:8009";
 request.interceptors.request.use((url, options) => {
   return {
     url: baseUrl+url,
-    options: { ...options, interceptors: true },
+    options: { ...options, interceptors: true, requestType: "form"},
   };
 }, { global: false }); // 第二个参数不传默认为 { global: true }
 

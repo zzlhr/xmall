@@ -64,6 +64,7 @@ if (isAntDesignProPreview) {
   ]);
   plugins.push(['umi-plugin-antd-theme', themePluginConfig]);
 }
+
 import aliyunTheme from '@ant-design/aliyun-theme';
 import darkTheme from '@ant-design/dark-theme';
 export default {
@@ -118,7 +119,17 @@ export default {
               authority: ['admin', 'superAdmin'],
             },
             {
-              component: './404',
+              name: 'users',
+              path: '/users',
+              authority: ['admin', 'user', 'superAdmin'],
+              routes: [
+                {
+                  name: 'list',
+                  icon: 'smile',
+                  path: '/users/list',
+                  component: './user/UserList',
+                },
+              ],
             },
           ],
         },

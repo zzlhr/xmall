@@ -49,8 +49,6 @@ const Model = {
   },
   reducers: {
     changeLoginStatus(state, { payload }) {
-      console.log(payload);
-      console.log(state);
       if (payload.code !== 0){
         state.status = "error";
         notification.error({
