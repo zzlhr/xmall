@@ -1,20 +1,25 @@
 import {PageHeaderWrapper} from '@ant-design/pro-layout';
 import React, {Component} from 'react';
-import {Spin} from 'antd';
+import {Spin, Button, Modal} from 'antd';
 import styles from './index.less';
 import SearchUsers from './SearchUsers';
 import UsersTable from "@/pages/user/UserList/UsersTable";
 import {connect} from 'dva'
-
-@connect(() => ({}))
+import SaveUserModel from './SaveUserModel'
+@connect(state => ({}))
 class UserList extends Component {
-  state = {
-    list: [],
-    total: 0, // 总条数
-    current: 1, // 当前页
-    pageSize: 10,
-    searchVal: {},
-  };
+  constructor(props) {
+    super(props);
+    this.props = props;
+    this.state = {
+      list: [],
+      total: 0, // 总条数
+      current: 1, // 当前页
+      pageSize: 10,
+      searchVal: {},
+      userModelData: {}, // userModel数据
+    }
+  }
 
   queryUsers = () => {
     const {dispatch} = this.props;
@@ -43,10 +48,20 @@ class UserList extends Component {
 
     this.setState({searchVal:searchVal, current: 1,}, ()=>this.queryUsers());
   };
+
+
+
+
   render() {
     return (
-
-      <PageHeaderWrapper className={styles.main}>
+      <PageHeaderWrapper className={styles.main} content={(
+        <div>
+          <div>
+            {/*userModel 用于编辑和添加用户*/}
+            <SaveUserModel type={1} />
+          </div>
+        </div>
+      )}>
         <SearchUsers handleSearch={this.handleSearch}/>
         <UsersTable data={this.state.list} total={this.state.total} current={this.state.current}
                     pageSize={this.state.pageSize} onChange={this.onPageChange}/>

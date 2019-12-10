@@ -1,6 +1,7 @@
 import React from 'react';
 import {Table, Button} from 'antd';
 import styles from './index.less';
+import SaveUserModel from "@/pages/user/UserList/SaveUserModel";
 
 const columns = [
   {
@@ -61,7 +62,7 @@ const columns = [
     render: () => {
       return(
         <div>
-          <Button type="link">修改</Button>
+          <SaveUserModel type={2}/>
           <Button type="link">禁止登陆</Button>
         </div>
       )
