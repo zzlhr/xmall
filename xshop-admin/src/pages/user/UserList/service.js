@@ -19,3 +19,19 @@ export async function getUserByUid(params) {
     data: params
   },);
 }
+
+
+export async function addUser(params) {
+  return request('/user/addUser', {
+    method: "POST",
+    data: params
+  },);
+}
+
+
+export async function editUser(params) {
+  return request('/user/editUser', {
+    method: "POST",
+    data: params
+  },);
+}

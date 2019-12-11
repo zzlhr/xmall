@@ -15,6 +15,7 @@ class SaveUserModel extends Component {
         password: "",
         phone: "",
         username: "",
+        defaultAuthGroupValue: [],
       },
       authGroups: []
     }
@@ -48,6 +49,14 @@ class SaveUserModel extends Component {
         console.log("resp:", resp.data);
         const respData = resp.data;
         const {form: {setFieldsValue}} = that.props;
+        const authGroups = respData.authGroups;
+        const defaultAuthValues = []; // 回显权限组变量
+        for (let i = 0; i < authGroups.length; i++) {
+          defaultAuthValues.push({key: authGroups[i].agid});
+        }
+        that.setState({defaultAuthGroupValue: defaultAuthValues});
+        console.log("defaultAuthValues：",defaultAuthValues);
+        // console.log("respData:",respData);
         setFieldsValue(respData);
       })
 
@@ -64,6 +73,27 @@ class SaveUserModel extends Component {
     this.props.form.validateFields((err, values) => {
       if (!err) {
         console.log("onUserModelSubmit:", values);
+        const {dispatch} = this.props;
+        const authGroups = [];
+        for (let i = 0; i < values.authGroup.length; i++) {
+          authGroups.push(values.authGroup[i].key);
+        }
+
+        if (this.props.type === 1){
+
+          dispatch({
+            type:"userList/addUser",
+            payload: {...values, authGroup: authGroups}
+          });
+        }
+
+        if (this.props.type === 2){
+          dispatch({
+            type:"userList/editUser",
+            payload: {...values, uid: this.props.uid, authGroup: authGroups}
+          });
+        }
+
         this.hideModelHandler();
         this.cleanModelHandler();
       }
@@ -96,11 +126,15 @@ class SaveUserModel extends Component {
               })(<Input/>)}
             </Form.Item>
 
-            <Form.Item label="密码">
-              {getFieldDecorator('password', {
-                rules: [{required: true, message: '请输入密码'}],
-              })(<Input.Password/>)}
-            </Form.Item>
+            {
+              this.props.type === 1 &&
+              <Form.Item label="密码">
+                {getFieldDecorator('password', {
+                  rules: [{required: true, message: '请输入密码'}],
+                })(<Input.Password/>)}
+              </Form.Item>
+            }
+
 
             <Form.Item label="手机号">
               {getFieldDecorator('phone', {
@@ -115,11 +149,12 @@ class SaveUserModel extends Component {
             </Form.Item>
             <Form.Item label="选择权限组">
               {getFieldDecorator('authGroup', {
+                initialValue: this.state.defaultAuthGroupValue,
                 rules: [
                   {required: true, message: '请选择权限组!', type: 'array'},
                 ],
               })(
-                <Select mode="multiple" placeholder="请选择权限组">
+                <Select labelInValue mode="multiple" placeholder="请选择权限组">
                   {authGroupOptions}
                 </Select>
               )}

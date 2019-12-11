@@ -1,4 +1,4 @@
-import {getAuthGroups, getUserByUid, queryUsers} from "@/pages/user/UserList/service";
+import {addUser, editUser, getAuthGroups, getUserByUid, queryUsers} from "@/pages/user/UserList/service";
 import {notification} from 'antd'
 
 const Model = {
@@ -39,7 +39,31 @@ const Model = {
           description: response.msg,
         });
       }
-    }
+    },
+
+    *addUser({payload}, {call, put}){
+      const response = yield call(addUser, payload);
+      if (response.code === 0) {
+        return response;
+      } else {
+        notification.error({
+          message: `请求错误 ${response.code}`,
+          description: response.msg,
+        });
+      }
+    },
+    *editUser({payload}, {call, put}){
+      const response = yield call(editUser, payload);
+      if (response.code === 0) {
+        return response;
+      } else {
+        notification.error({
+          message: `请求错误 ${response.code}`,
+          description: response.msg,
+        });
+      }
+    },
+
   },
   reducers: {
   },

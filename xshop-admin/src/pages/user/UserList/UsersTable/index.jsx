@@ -42,7 +42,7 @@ const columns = [
         const authGroup = authGroups[i];
         console.log("authGroup:",authGroup);
         authGroupLabels.push(
-          <label key={i}>{authGroup.agName}</label>
+          <label key={i}>{authGroup.agName}&nbsp;&nbsp;</label>
         )
       }
       return(
