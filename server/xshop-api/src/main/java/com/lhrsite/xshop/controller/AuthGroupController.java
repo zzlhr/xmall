@@ -39,13 +39,13 @@ public class AuthGroupController {
     }
 
     @GetMapping("/getAuthGroupDropDown")
-    public ResultVO getAuthGroupDropDown(Integer enterprise) {
+    public ResultVO getAuthGroupDropDown() {
         resultVO.setData(authGroupService.getAuthGroupDropDown());
         return resultVO;
     }
 
     @GetMapping("/getMenuList")
-    public ResultVO getMenuList(Integer enterprise) {
+    public ResultVO getMenuList() {
         resultVO.setData(menuService.getMenuTree());
         return resultVO;
     }

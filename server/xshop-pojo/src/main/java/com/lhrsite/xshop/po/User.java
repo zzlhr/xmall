@@ -25,7 +25,7 @@ public class User implements Serializable {
     private String phone;
     private String email;
     private String header;
-    private Integer authGroup;
+    private String authGroup;
     private Integer status;
     @Column(insertable = false, updatable = false)
     private java.sql.Timestamp createTime;

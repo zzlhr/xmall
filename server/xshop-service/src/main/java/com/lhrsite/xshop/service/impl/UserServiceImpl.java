@@ -16,9 +16,6 @@ import com.lhrsite.xshop.repository.UserRepository;
 import com.lhrsite.xshop.service.UserService;
 import com.lhrsite.xshop.vo.PageVO;
 import com.lhrsite.xshop.vo.UserVO;
-import com.querydsl.core.BooleanBuilder;
-import com.querydsl.core.Tuple;
-import com.querydsl.jpa.impl.JPAQuery;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -117,14 +114,15 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserVO loginAdmin(String phoneNumber, String password, HttpServletRequest request) throws XShopException {
-        UserVO user = userMapper.getAdmin(phoneNumber, EncryptUtil.encryptPassword(password));
-        if (user == null){
+        User user = userMapper.getAdmin(phoneNumber, EncryptUtil.encryptPassword(password));
+        UserVO userVO = userToUserVO(user, false);
+        if (userVO == null) {
             throw new XShopException(ErrEumn.LOGIN_ERR);
         }
         if (user.getAdmin() == 0) {
             throw new XShopException(ErrEumn.NOT_ADMIN);
         }
-        return user;
+        return userVO;
     }
 
     @Override
@@ -144,10 +142,12 @@ public class UserServiceImpl implements UserService {
     public PageVO<UserVO> getUsers(String username, String phone, String email, Integer page, Integer pageSize) {
 
         PageHelper.startPage(page, pageSize, "create_time asc");
-        List<UserVO> userList = userMapper.getUsers(SQLUtil.toFuzzySearchVal(email), SQLUtil.toFuzzySearchVal(phone),
-                SQLUtil.toFuzzySearchVal(username), User.USER_STATUS_ENABLE);
-        PageVO<UserVO> pageVO = new PageVO<>();
+        List<User> userList = userMapper.getUsers(SQLUtil.toFuzzySearchVal(email), SQLUtil.toFuzzySearchVal(phone),
+                SQLUtil.toFuzzySearchVal(username), null);
+
+        PageVO pageVO = new PageVO<>();
         pageVO.init(new PageInfo<>(userList), page);
+        pageVO.setArr(userToUserVO(userList, false));
 
         return pageVO;
     }
@@ -155,9 +155,10 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserVO findUserById(Integer userId,
                                boolean showPhoneNumber) throws XShopException {
-        return userToUserVO(
-                userRepository.findById(userId).orElseThrow(() -> new XShopException(ErrEumn.USER_NO_EXIST)),
-                showPhoneNumber);
+
+        User user = userRepository.getOne(userId);
+
+        return userToUserVO(user, true);
 
     }
 
@@ -191,7 +192,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserVO updateUser(User user) throws XShopException {
 
-        if (user == null || user.getUid() <= 0) {
+        if (user == null || user.getUid() == null || user.getUid() <= 0) {
             //当修改用户或找不到该用户的id时
             throw new XShopException(ErrEumn.UPDATE_USER_PARAMS_ERR);
         }
@@ -202,10 +203,10 @@ public class UserServiceImpl implements UserService {
         if (user.getUsername() != null) {
             oldUser.setUsername(user.getUsername());
         }
-        if (user.getPassword() != null) {
-            oldUser.setPassword(EncryptUtil.encryptPassword(user.getPassword()));
-        }
-        if (user.getPhone() != null) {
+//        if (user.getPassword() != null) {
+//            oldUser.setPassword(EncryptUtil.encryptPassword(user.getPassword()));
+//        }
+        if (user.getPhone() != null && !user.getPhone().equals(oldUser.getPhone())) {
             // 当修改手机号时判断手机号是否存在
             phoneIsExist(user.getPhone());
             oldUser.setPhone(user.getPhone());
@@ -316,28 +317,41 @@ public class UserServiceImpl implements UserService {
      * @return userVO集合
      */
     private List<UserVO> userToUserVO(List<User> userList, boolean showPhoneNumber) {
-        List<Integer> authGroupIds = new ArrayList<>();
 
         List<UserVO> userVOS = new ArrayList<>();
+
+        List<AuthGroup> authGroups = authGroupRepository.findAll();
+
         for (User user : userList) {
             UserVO userVO = new UserVO();
             BeanUtils.copyProperties(user, userVO);
+
+            // 处理用户权限组
+            String authGroupIds = user.getAuthGroup();
+            String[] ags = authGroupIds.split(","); // 分割获取用户权限组id
+            List<AuthGroup> userAuthGroup = new ArrayList<>();
+            // 循环将权限组加入用户权限集合
+            for (String ag : ags) {
+                for (AuthGroup authGroup : authGroups) {
+                    if (ag.equals(authGroup.getAgid().toString())) {
+                        userAuthGroup.add(authGroup);
+                    }
+                }
+            }
+            userVO.setAuthGroups(userAuthGroup);
+
+
+            // 当不显示手机号时隐藏中间几位手机号
+            if (!showPhoneNumber){
+                userVO.setPhone(userVO.getPhone()
+                        .replaceAll("(\\d{3})\\d{4}(\\d{4})",
+                                "$1****$2"));
+
+            }
+
             userVOS.add(userVO);
         }
 
-
-
-        List<AuthGroup> authGroups =
-                authGroupRepository.findAllById(authGroupIds);
-        
-
-        // 当不显示手机号时隐藏中间几位手机号
-        if (!showPhoneNumber) {
-            userList.forEach(item ->
-                    item.setPhone(item.getPhone()
-                            .replaceAll("(\\d{3})\\d{4}(\\d{4})",
-                                    "$1****$2")));
-        }
 
 
         return userVOS;
@@ -361,8 +375,6 @@ public class UserServiceImpl implements UserService {
         List<UserVO> userVOS = userToUserVO(users, showPhoneNumber);
         return userVOS.get(0);
     }
-
-
 
 
     /**

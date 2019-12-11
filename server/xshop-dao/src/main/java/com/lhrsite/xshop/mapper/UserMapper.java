@@ -8,7 +8,9 @@ import java.util.List;
 
 @Mapper
 public interface UserMapper {
-    List<UserVO> getUsers(String email, String phone, String userName, Integer userStatus);
+    List<User> getUsers(String email, String phone, String userName, Integer userStatus);
 
-    UserVO getAdmin(String phoneNumber, String password);
+    User getAdmin(String phoneNumber, String password);
+
+    void getUserVO(Integer uid);
 }

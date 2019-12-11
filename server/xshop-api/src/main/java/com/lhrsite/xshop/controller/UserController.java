@@ -34,13 +34,11 @@ public class UserController {
 
     private final UserService userService;
     private final AuthCodeService authCodeService;
-    private AuthCodeRepository authCodeRepository;
 
     @Autowired
-    public UserController(UserService userService, AuthCodeService authCodeService, AuthCodeRepository authCodeRepository) {
+    public UserController(UserService userService, AuthCodeService authCodeService) {
         this.authCodeService = authCodeService;
         this.userService = userService;
-        this.authCodeRepository = authCodeRepository;
     }
 
 
@@ -115,10 +113,15 @@ public class UserController {
     }
 
 
+    /**
+     * 管理员添加用户
+     * @param user 用户对象
+     * @return 返回对象
+     * @throws XShopException xshop exception
+     */
     @PostMapping("/addUser")
-    public ResultVO addUser(HttpServletRequest request, User user, String code) throws XShopException {
+    public ResultVO addUser(User user) throws XShopException {
 
-        log.info("【添加用户】user={},code={}", user, code);
         if (user == null) {
             throw new XShopException(ErrEumn.ADD_USER_IS_NULL);
         }
@@ -133,7 +136,6 @@ public class UserController {
         }
         if (user.getStatus() == null) {
             user.setStatus(0);
-
         }
         if (user.getHeader() == null) {
             user.setHeader("");
@@ -142,26 +144,13 @@ public class UserController {
             user.setEmail("");
         }
         if (user.getAuthGroup() == null) {
-            user.setAuthGroup(0);
+            user.setAuthGroup("");
         }
         if (user.getAdmin() == null) {
             user.setAdmin(0);
         }
-        Optional<AuthCode> authCodeOptional = authCodeRepository.findById(user.getPhone());
-        AuthCode authCode;
-        if (authCodeOptional.isPresent()) {
-            authCode = authCodeOptional.get();
-        } else {
-            throw new XShopException(ErrEumn.AUTH_CODE_ERROR);
-        }
 
-        if (!authCode.getCode().equals(code)) {
-            throw new XShopException(ErrEumn.AUTH_CODE_ERROR);
-        }
-
-        authCodeRepository.delete(authCode);
-        UserVO userVO = userService.createUserLogin(request, user);
-        return ResultVO.create(userVO);
+        return ResultVO.create(userService.addUser(user));
     }
 
     @PostMapping("/upPassword")
@@ -174,28 +163,6 @@ public class UserController {
         log.info("【修改用户】user={}", user);
         if (user == null) {
             throw new XShopException(ErrEumn.ADD_USER_IS_NULL);
-        }
-        if (user.getUid() == null || user.getUid() == 0) {
-            throw new XShopException(ErrEumn.ADD_USER_UID_IS_NULL);
-        }
-        User oldUser = userService.findById(user.getUid());
-        if (user.getUsername() != null) {
-            oldUser.setUsername(user.getUsername());
-        }
-        if (user.getPassword() != null) {
-            oldUser.setPassword(EncryptUtil.encryptPassword(user.getPassword()));
-        }
-        if (user.getPhone() != null) {
-            oldUser.setPhone(user.getPhone());
-        }
-        if (user.getHeader() != null) {
-            oldUser.setHeader(user.getHeader());
-        }
-        if (user.getEmail() != null) {
-            oldUser.setEmail(user.getEmail());
-        }
-        if (user.getAuthGroup() != null) {
-            oldUser.setAuthGroup(user.getAuthGroup());
         }
         return ResultVO.create(userService.updateUser(user));
     }

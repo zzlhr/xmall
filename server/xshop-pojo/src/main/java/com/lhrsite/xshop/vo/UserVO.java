@@ -1,6 +1,7 @@
 package com.lhrsite.xshop.vo;
 
 
+import com.lhrsite.xshop.po.AuthGroup;
 import com.querydsl.core.Tuple;
 import lombok.Data;
 
@@ -26,10 +27,7 @@ public class UserVO {
     private String header;
 
     /** 用户权限组 */
-    private Integer authGroup;
-    private String authCode;
-    /** 用户权限组名称 */
-    private String authGroupName;
+    private List<AuthGroup> authGroups;
 
     private Integer admin;
     /** 用户状态 */
