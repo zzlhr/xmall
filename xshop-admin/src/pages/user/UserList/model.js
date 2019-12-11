@@ -1,4 +1,4 @@
-import {getAuthGroups, queryUsers} from "@/pages/user/UserList/service";
+import {getAuthGroups, getUserByUid, queryUsers} from "@/pages/user/UserList/service";
 import {notification} from 'antd'
 
 const Model = {
@@ -21,6 +21,17 @@ const Model = {
     * getAuthGroups({payload}, {call, put}){
       const response = yield call(getAuthGroups);
       if (response.code === 0){
+        return response;
+      } else {
+        notification.error({
+          message: `请求错误 ${response.code}`,
+          description: response.msg,
+        });
+      }
+    },
+    *getUserByUid({payload}, {call, put}){
+      const response = yield call(getUserByUid, payload);
+      if (response.code === 0) {
         return response;
       } else {
         notification.error({

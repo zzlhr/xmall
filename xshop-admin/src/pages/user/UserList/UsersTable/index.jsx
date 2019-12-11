@@ -32,15 +32,35 @@ const columns = [
   },
   {
     title: '权限组',
-    dataIndex: 'authGroupName',
-    key: 'authGroupName',
+    // dataIndex: 'authGroupName',
+    key: 'authGroups',
     width: 150,
+    render: (text, obj) => {
+      const {authGroups} = obj;
+      const authGroupLabels = [];
+      for (let i = 0; i < authGroups.length; i++){
+        const authGroup = authGroups[i];
+        console.log("authGroup:",authGroup);
+        authGroupLabels.push(
+          <label key={i}>{authGroup.agName}</label>
+        )
+      }
+      return(
+        authGroupLabels
+      )
+    },
   },
   {
     title: '是否管理员',
-    dataIndex: 'admin',
     key: 'admin',
     width: 150,
+    render: (text, obj) =>{
+      if (obj.admin === 1){
+        return <label>是</label>
+      }else{
+        return <label>否</label>
+      }
+    }
   },
   {
     title: '创建时间',
@@ -59,11 +79,10 @@ const columns = [
     key: 'operation',
     // fixed: 'right',
     width: 200,
-    render: () => {
+    render: (text, obj) => {
       return(
-        <div>
-          <SaveUserModel type={2}/>
-          <Button type="link">禁止登陆</Button>
+        <div className="xshopTableOption">
+          <SaveUserModel type={2} uid={obj.uid}/>
         </div>
       )
     },
@@ -75,6 +94,7 @@ export default ({data, current, pageSize, total, onChange}) => (
   <div className={styles.container}>
     <div id="components-table-demo-fixed-columns-header">
       <Table
+        size="small"
         columns={columns}
         dataSource={data}
         pagination={{

@@ -12,3 +12,10 @@ export async function getAuthGroups() {
     method: "GET",
   },);
 }
+
+export async function getUserByUid(params) {
+  return request('/user/getUser', {
+    method: "POST",
+    data: params
+  },);
+}

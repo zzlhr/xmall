@@ -25,20 +25,32 @@ class SaveUserModel extends Component {
     this.props.form.resetFields();
   };
 
-  showModelHandler = (uid) => {
+  showModelHandler = () => {
     const {dispatch} = this.props;
     const that = this;
     dispatch({
       type: "userList/getAuthGroups",
-      payload:{}
+      payload: {}
     }).then((resp) => {
       console.log("getAuthGroups:", resp.data);
       that.setState({authGroups: resp.data})
     });
     // 清理userModelData
     // this.cleanUserModel();
-    if (uid !== null) {
+    const {uid} = this.props;
+    if (this.props.type === 2) {
       // 查询用户
+      console.log("uid:", uid);
+      dispatch({
+        type: "userList/getUserByUid",
+        payload: {uid: uid}
+      }).then((resp) => {
+        console.log("resp:", resp.data);
+        const respData = resp.data;
+        const {form: {setFieldsValue}} = that.props;
+        setFieldsValue(respData);
+      })
+
     }
     this.setState({userModelVisible: true})
   };
@@ -62,9 +74,9 @@ class SaveUserModel extends Component {
     const {getFieldDecorator} = this.props.form;
 
     const authGroupOptions = [];
-    for (let authGroup of this.state.authGroups){
+    for (let authGroup of this.state.authGroups) {
       authGroupOptions.push(
-        <Option value={authGroup.agid}>{authGroup.agName}</Option>
+        <Option key={authGroup.agid} value={authGroup.agid}>{authGroup.agName}</Option>
       )
     }
     return (
@@ -102,12 +114,12 @@ class SaveUserModel extends Component {
               })(<Input/>)}
             </Form.Item>
             <Form.Item label="选择权限组">
-              {getFieldDecorator('authGroups', {
+              {getFieldDecorator('authGroup', {
                 rules: [
                   {required: true, message: '请选择权限组!', type: 'array'},
                 ],
               })(
-                <Select mode="multiple" placeholder="Please select favourite colors">
+                <Select mode="multiple" placeholder="请选择权限组">
                   {authGroupOptions}
                 </Select>
               )}
