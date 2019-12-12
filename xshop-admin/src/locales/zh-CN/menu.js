@@ -50,4 +50,9 @@ export default {
   'menu.editor.koni': '拓扑编辑器',
   'menu.users': "用户管理",
   'menu.users.list': "用户列表",
+  'menu.users.authGroup': "权限组管理",
+  'menu.goods': "商品管理",
+  'menu.goods.GoodsList': '商品列表',
+  'menu.goods.GoodsCategory': '商品类目'
+
 };

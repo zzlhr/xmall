@@ -129,6 +129,31 @@ export default {
                   path: '/users/list',
                   component: './user/UserList',
                 },
+                {
+                  name: 'authGroup',
+                  icon: 'smile',
+                  path: '/users/authGroup',
+                  component: './user/AuthGroup',
+                },
+              ],
+            },
+            {
+              name: 'goods',
+              path: '/goods',
+              authority: ['admin', 'user', 'superAdmin'],
+              routes: [
+                {
+                  name: 'GoodsList',
+                  icon: 'smile',
+                  path: '/goods/list',
+                  component: './goods/GoodsList',
+                },
+                {
+                  name: 'GoodsCategory',
+                  icon: 'smile',
+                  path: '/goods/category',
+                  component: './goods/GoodsCategory',
+                },
               ],
             },
           ],

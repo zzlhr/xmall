@@ -10,7 +10,6 @@ import com.lhrsite.xshop.mapper.AuthCodeMapper;
 import com.lhrsite.xshop.mapper.UserMapper;
 import com.lhrsite.xshop.po.*;
 import com.lhrsite.xshop.repository.AuthGroupRepository;
-import com.lhrsite.xshop.repository.EnterpriseRepository;
 import com.lhrsite.xshop.repository.UserLoginRepository;
 import com.lhrsite.xshop.repository.UserRepository;
 import com.lhrsite.xshop.service.UserService;
