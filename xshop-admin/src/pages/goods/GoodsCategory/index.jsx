@@ -2,7 +2,8 @@ import {PageHeaderWrapper} from '@ant-design/pro-layout';
 import styles from './index.less';
 import React, {Component} from 'react';
 import {connect} from 'dva';
-import {Tree} from 'antd';
+import {Tree, Button} from 'antd';
+import WrappedGoodsCategoryForm from "@/pages/goods/GoodsCategory/GoodsCategoryForm";
 
 const {TreeNode} = Tree;
 
@@ -23,7 +24,7 @@ class GoodsCategory extends Component {
       type: 'goodsCategory/getGoodsCategory',
       payload: {fid: 0}
     }).then(resp => {
-      if (resp === undefined){
+      if (resp === undefined) {
         return;
       }
       this.setState({
@@ -37,7 +38,7 @@ class GoodsCategory extends Component {
       type: 'goodsCategory/getGoodsCategory',
       payload: {fid: treeNode.props.dataRef.categoryId}
     }).then(resp => {
-      if (resp === undefined){
+      if (resp === undefined) {
         return;
       }
       treeNode.props.dataRef.children = resp.data;
@@ -62,29 +63,26 @@ class GoodsCategory extends Component {
       }
       this.getGoodsCategoryChildren(treeNode, resolve);
     });
-  renderTreeNodes = data =>
-    data.map(item => {
-      // console.log("item:",item);
-      if (item.children) {
-        return (
-          <TreeNode title={item.categoryName} key={item.categoryId} dataRef={item}>
-            {this.renderTreeNodes(item.children)}
-          </TreeNode>
-        );
-      }
-      return <TreeNode title={item.categoryName} key={item.categoryId} dataRef={item}/>;
-    });
+  renderTreeNodes = data => data.map(item => {
+    if (item.children) {
+      return (
+        <TreeNode title={
+          <WrappedGoodsCategoryForm item={item}/>
+        } key={item.categoryId} dataRef={item}>
+          {this.renderTreeNodes(item.children)}
+        </TreeNode>
+      );
+    }
+    return <TreeNode title={
+        <WrappedGoodsCategoryForm item={item}/>
+    } key={item.categoryId} dataRef={item}/>;
+  });
 
   render() {
 
     return (
       <PageHeaderWrapper content="这是一个新页面，从这里进行开发！" className={styles.main}>
-        <div
-          style={{
-            paddingTop: 100,
-            textAlign: 'center',
-          }}
-        >
+        <div>
           <Tree loadData={this.onLoadData}>{this.renderTreeNodes(this.state.list)}</Tree>
           {/*<Spin spinning={loading} size="large"></Spin>*/}
         </div>
