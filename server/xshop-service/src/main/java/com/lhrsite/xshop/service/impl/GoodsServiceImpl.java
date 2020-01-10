@@ -1,8 +1,10 @@
 package com.lhrsite.xshop.service.impl;
 
+import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.lhrsite.xshop.mapper.GoodsCategoryMapper;
+import com.lhrsite.xshop.mapper.GoodsMapper;
 import com.lhrsite.xshop.po.GoodsCategory;
 import com.lhrsite.xshop.repository.GoodsCategoryRepository;
 import com.lhrsite.xshop.service.GoodsService;
@@ -19,10 +21,12 @@ public class GoodsServiceImpl implements GoodsService {
 
     private final GoodsCategoryMapper goodsCategoryMapper;
     private final GoodsCategoryRepository goodsCategoryRepository;
+    private final GoodsMapper goodsMapper;
     @Autowired
-    public GoodsServiceImpl(GoodsCategoryMapper goodsCategoryMapper, GoodsCategoryRepository goodsCategoryRepository) {
+    public GoodsServiceImpl(GoodsCategoryMapper goodsCategoryMapper, GoodsCategoryRepository goodsCategoryRepository, GoodsMapper goodsMapper) {
         this.goodsCategoryMapper = goodsCategoryMapper;
         this.goodsCategoryRepository = goodsCategoryRepository;
+        this.goodsMapper = goodsMapper;
     }
 
 
@@ -37,7 +41,13 @@ public class GoodsServiceImpl implements GoodsService {
     }
 
     @Override
-    public PageVO<GoodsListVO> getGoodsList(String goodsKeyword, Integer goodsCategoryId, Integer page, Integer pageSize) {
-        return null;
+    public PageVO<GoodsListVO> getGoodsList(String goodsKeyword, Integer goodsCategoryId,
+                                            Integer page, Integer pageSize) {
+        PageHelper.startPage(page, pageSize);
+        Page<GoodsListVO> goodsListVOPage = goodsMapper.getGoodsList(goodsKeyword, goodsCategoryId);
+        PageInfo<GoodsListVO> pageInfo = new PageInfo<>(goodsListVOPage);
+        PageVO<GoodsListVO> pageVO = new PageVO<>();
+        pageVO.init(pageInfo, page);
+        return pageVO;
     }
 }

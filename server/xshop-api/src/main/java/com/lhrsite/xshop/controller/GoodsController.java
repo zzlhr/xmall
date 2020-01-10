@@ -29,4 +29,9 @@ public class GoodsController {
         return ResultVO.create(goodsService.saveGoodsCategory(goodsCategory));
     }
 
+    @PostMapping("/getGoodsList")
+    public ResultVO getGoodsList(String goodsKeyword, Integer goodsCategoryId, Integer page, Integer pageSize){
+        return ResultVO.create(goodsService.getGoodsList(goodsKeyword, goodsCategoryId, page, pageSize));
+    }
+
 }

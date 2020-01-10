@@ -9,3 +9,13 @@ export async function getGoodsCategory(payload) {
     }
   )
 }
+
+
+export async function saveGoodsCategory(payload) {
+  return request('/goods/saveGoodsCategory',
+    {
+      method:"POST",
+      data: payload
+    }
+  )
+}

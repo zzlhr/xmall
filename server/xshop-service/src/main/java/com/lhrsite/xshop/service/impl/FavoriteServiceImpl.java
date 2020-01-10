@@ -72,14 +72,14 @@ public class FavoriteServiceImpl implements FavoriteService {
         }
 
         PageVO<Goods> pageVO = new PageVO<>();
-        PageHelper.startPage(page, pageSize);
-        List<String> goodsIdList = favoriteGoodsMapper.getFavoriteGoodsIdList(user.getUid());
-        List<Goods> goods = goodsMapper.getGoodsByGoodsIds(goodsIdList);
-        PageInfo pageInfo = new PageInfo<>(goods);
-        pageVO.setTotalCount(pageInfo.getTotal());
-        pageVO.setTotalPage(pageInfo.getPages());
-        pageVO.setArr(goods);
-        pageVO.setPageSize(pageInfo.getPageSize());
+//        PageHelper.startPage(page, pageSize);
+//        List<String> goodsIdList = favoriteGoodsMapper.getFavoriteGoodsIdList(user.getUid());
+//        List<Goods> goods = goodsMapper.getGoodsByGoodsIds(goodsIdList);
+//        PageInfo pageInfo = new PageInfo<>(goods);
+//        pageVO.setTotalCount(pageInfo.getTotal());
+//        pageVO.setTotalPage(pageInfo.getPages());
+//        pageVO.setArr(goods);
+//        pageVO.setPageSize(pageInfo.getPageSize());
 
         return pageVO;
     }

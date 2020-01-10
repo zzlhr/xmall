@@ -2,22 +2,11 @@ import {getGoodsCategory, saveGoodsCategory} from "@/pages/goods/GoodsCategory/s
 import {notification} from 'antd'
 
 const Model = {
-  namespace: "goodsCategory",
+  namespace: "goodsList",
   state: {},
   effects: {
-    * getGoodsCategory({payload}, {call, put}) {
+    *getGoodsList({payload}, {call, put}) {
       const response = yield call(getGoodsCategory, payload);
-      if (response.code === 0) {
-        return response;
-      } else {
-        notification.error({
-          message: `请求错误 ${response.code}`,
-          description: response.msg,
-      });
-      }
-    },
-    *saveGoodsCategory({payload}, {call, put}){
-      const response = yield call(saveGoodsCategory, payload);
       if (response.code === 0) {
         return response;
       } else {

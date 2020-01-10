@@ -18,6 +18,11 @@ import {
 
 @connect(state => ({}))
 class GoodsCategoryForm extends Component {
+
+
+  ADD_TYPE_ADD_PEER = 1;
+  ADD_TYPE_ADD_CHILDREN = 2;
+
   constructor(props) {
     super(props);
     this.props = props;
@@ -25,6 +30,13 @@ class GoodsCategoryForm extends Component {
       modelName: "",
       visible: false, // 控制model显示隐藏
       categoryOptions: [],
+      categoryFormData: {
+        categoryId: null,
+        categoryFid: null,
+        categoryName: null,
+        categoryStatus: 1, // 0默认启用
+        categorySort: 0,
+      }
     }
   }
 
@@ -102,8 +114,28 @@ class GoodsCategoryForm extends Component {
 
   };
 
-  addModelShow = () => {
+  addModelShow = (type) => {
+    let fid = 0;
+    if (type === this.ADD_TYPE_ADD_CHILDREN) {
+      const {item} = this.props;
+      fid = item.categoryFid;
+    }
     this.setState({visible: true, modelName: "添加类目"})
+  };
+
+
+  saveGoodsCategory = () =>{
+    this.props.form.validateFieldsAndScroll((err, values) => {
+      if (!err) {
+        const {dispatch} = this.props;
+
+        dispatch({
+          type: 'goodsCategory/saveGoodsCategory',
+          payload: {}
+        })
+
+      }
+    });
   };
 
   categoryLoadData = selectedOptions => {
@@ -140,8 +172,12 @@ class GoodsCategoryForm extends Component {
       <div>
         <span>{item.categoryName}</span>
         <Button type="link" onClick={this.editModelShow}>修改</Button>
-        <Button type="link" onClick={this.addModelShow}>添加</Button>
-        <Button type="link" onClick={this.addModelShow}>添加子类目</Button>
+        <Button type="link" onClick={() => {
+          this.addModelShow(this.ADD_TYPE_ADD_PEER)
+        }}>添加</Button>
+        <Button type="link" onClick={() => {
+          this.addModelShow(this.ADD_TYPE_ADD_CHILDREN)
+        }}>添加子类目</Button>
 
         <Modal
           title={this.state.modelName}
@@ -151,7 +187,7 @@ class GoodsCategoryForm extends Component {
         >
           <Form {...formItemLayout}>
             <Form.Item label="上级类目">
-              {getFieldDecorator('category_fid', {
+              {getFieldDecorator('categoryFid', {
                 rules: [
                   {
                     required: true,
@@ -166,7 +202,7 @@ class GoodsCategoryForm extends Component {
               />)}
             </Form.Item>
             <Form.Item label="类目名称">
-              {getFieldDecorator('category_name', {
+              {getFieldDecorator('categoryName', {
                 rules: [
                   {
                     required: true,
@@ -176,7 +212,7 @@ class GoodsCategoryForm extends Component {
               })(<Input/>)}
             </Form.Item>
             <Form.Item label="是否启用">
-              {getFieldDecorator('category_status', {valuePropName: 'checked'})(<Switch/>)}
+              {getFieldDecorator('categoryStatus', {valuePropName: 'checked'})(<Switch/>)}
             </Form.Item>
           </Form>
         </Modal>
