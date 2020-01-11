@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>2.1.3.RELEASE</version>
+        <relativePath/> <!-- lookup parent from repository -->
+    </parent>
+    <groupId>com.lhrsite</groupId>
+    <artifactId>xshop</artifactId>
+    <version>0.0.1</version>
+    <name>xshop</name>
+    <packaging>pom</packaging>
+    <description>Demo project for Spring Boot</description>
+
+    <properties>
+        <java.version>11</java.version>
+        <xshop.core.version>0.0.1</xshop.core.version>
+        <xshop.dao.version>0.0.1</xshop.dao.version>
+        <xshop.entity.version>0.0.1</xshop.entity.version>
+        <xshop.service.version>0.0.1</xshop.service.version>
+        <xshop.api.version>0.0.1</xshop.api.version>
+        <xshop.pojo.version>0.0.2</xshop.pojo.version>
+    </properties>
+    <modules>
+        <module>xshop-core</module>
+        <module>xshop-dao</module>
+        <module>xshop-service</module>
+        <module>xshop-api</module>
+        <module>xshop-pojo</module>
+    </modules>
+
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>com.lhrsite.xshop</groupId>
+                <artifactId>xshop-core</artifactId>
+                <version>${xshop.core.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.lhrsite.xshop</groupId>
+                <artifactId>xshop-dao</artifactId>
+                <version>${xshop.dao.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.lhrsite.xshop</groupId>
+                <artifactId>xshop-service</artifactId>
+                <version>${xshop.service.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.lhrsite.xshop</groupId>
+                <artifactId>xshop-api</artifactId>
+                <version>${xshop.api.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.lhrsite.xshop</groupId>
+                <artifactId>xshop-pojo</artifactId>
+                <version>${xshop.pojo.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.projectlombok</groupId>
+                <artifactId>lombok</artifactId>
+                <version>1.18.6</version>
+            </dependency>
+            <dependency>
+                <groupId>com.fasterxml.jackson.core</groupId>
+                <artifactId>jackson-annotations</artifactId>
+                <version>2.9.0</version>
+            </dependency>
+            <!--mapper-->
+            <dependency>
+                <groupId>tk.mybatis</groupId>
+                <artifactId>mapper-spring-boot-starter</artifactId>
+                <version>2.1.5</version>
+            </dependency>
+            <!--pagehelper-->
+            <dependency>
+                <groupId>com.github.pagehelper</groupId>
+                <artifactId>pagehelper-spring-boot-starter</artifactId>
+                <version>1.2.9</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+    <dependencies>
+        <!-- 热部署模块 -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-devtools</artifactId>
+            <optional>true</optional>
+        </dependency>
+        <!-- 测试模块 -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>com.vaadin.external.google</groupId>
+                    <artifactId>android-json</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+    </dependencies>
+
+</project>

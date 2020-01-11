@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lhrsite.xshop.mapper.MessageMapper">
+    <select id="getMessageList" resultType="com.lhrsite.xshop.vo.MessageVO">
+        select m.*, u.username sendUserName
+        from message m
+        left join user u on m.send_user = u.uid
+        where 1=1 and m.message_type = #{messaegType}
+        <if test="messageType == 1">
+            and m.incept_user = #{uid}
+        </if>
+        order by message_status
+    </select>
+    <select id="getNoReadMessageCount" resultType="java.lang.Integer">
+        select count(*)
+        from message
+        where 1 = 1
+          and incept_user = #{uid}
+          and message_status = #{messageStatus}
+    </select>
+</mapper>

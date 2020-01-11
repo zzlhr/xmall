@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lhrsite.xshop.mapper.AddressMapper">
+    <update id="updateUserAddressNotDefault">
+        update address set default_status = 0 where uid=#{uid}
+    </update>
+    <update id="setDefaultAddress">
+                update address set default_status = 0 where uid=#{uid};
+                update address set defalut_status = 1 where id=#{addrId};
+    </update>
+    <select id="getAddresses" resultType="com.lhrsite.xshop.vo.AddressVO">
+        SELECT addr.id,
+        addr.uid,
+        addr.province,
+        addr.city,
+        addr.country,
+        addr.town,
+        addr.addr,
+        addr.consignee,
+        addr.link_tel linkTel,
+        addr.default_status defaultStatus,
+        user.username,
+        city.name cityName,
+        province.name provinceName,
+        country.name countryName,
+        town.name townName
+        FROM address addr
+        left join city on addr.city = city.city_id
+        left join province on addr.province = province.province_id
+        left join country on addr.country = country.country_id
+        left join town on addr.town = town.town_id
+        left join user on addr.uid = user.uid
+        WHERE addr.uid = #{uid} and addr.address_status=1
+        <if test="status != null">
+            and addr.default_status = #{defaultStatus}
+        </if>
+        <!--        <if test status != null>-->
+        <!--        </if>-->
+    </select>
+</mapper>

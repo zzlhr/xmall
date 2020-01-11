@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lhrsite.xshop.mapper.AuthCodeMapper">
+    <select id="getAuthCodes" resultType="com.lhrsite.xshop.po.AuthCode">
+        select *
+        from auth_code
+        where type = #{type}
+          and phone_number = #{phone}
+    </select>
+    <select id="getAuthCode" resultType="com.lhrsite.xshop.po.AuthCode">
+        select *
+        from auth_code
+        where type = #{type}
+          and phone_number = #{phone}
+        order by create_time desc
+        limit 0, 1
+    </select>
+</mapper>
