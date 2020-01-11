@@ -154,6 +154,12 @@ export default {
                   path: '/goods/category',
                   component: './goods/GoodsCategory',
                 },
+                {
+                  name: 'AddGoods',
+                  icon: 'smile',
+                  path: '/goods/add',
+                  component: './goods/GoodsForm',
+                },
               ],
             },
           ],

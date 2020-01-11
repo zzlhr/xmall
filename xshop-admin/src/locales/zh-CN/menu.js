@@ -53,6 +53,6 @@ export default {
   'menu.users.authGroup': "权限组管理",
   'menu.goods': "商品管理",
   'menu.goods.GoodsList': '商品列表',
-  'menu.goods.GoodsCategory': '商品类目'
-
+  'menu.goods.GoodsCategory': '商品类目',
+  'menu.goods.AddGoods': '添加商品'
 };

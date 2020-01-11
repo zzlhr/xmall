@@ -1,32 +1,27 @@
 import React, {Component} from 'react';
 import {connect} from 'dva';
-import {Tree, Button, Modal} from 'antd';
+import {Button, Modal} from 'antd';
 import {
   Form,
   Input,
-  Tooltip,
-  Icon,
-  Cascader,
-  Select,
   Switch,
-  Row,
-  Col,
-  Checkbox,
-  AutoComplete,
 } from 'antd';
+import CategoryCascader from "@/components/CategoryCascader";
 
 
 @connect(state => ({}))
 class GoodsCategoryForm extends Component {
 
 
-  ADD_TYPE_ADD_PEER = 1;
-  ADD_TYPE_ADD_CHILDREN = 2;
+  ADD_TYPE_ADD_PEER = 1; // 添加同级
+  ADD_TYPE_ADD_CHILDREN = 2; // 添加子级
+  ADD_TYPE_EDIT = 3; // 编辑
 
   constructor(props) {
     super(props);
     this.props = props;
     this.state = {
+      type: 0,
       modelName: "",
       visible: false, // 控制model显示隐藏
       categoryOptions: [],
@@ -34,73 +29,31 @@ class GoodsCategoryForm extends Component {
         categoryId: null,
         categoryFid: null,
         categoryName: null,
-        categoryStatus: 1, // 0默认启用
+        categoryStatus: 1, // 1默认启用
         categorySort: 0,
       }
     }
   }
 
-  componentDidMount() {
-    this.getGoodsCategory();
-  }
-
-  getGoodsCategory = () => {
-    const {dispatch} = this.props;
-    dispatch({
-      type: 'goodsCategory/getGoodsCategory',
-      payload: {fid: 0}
-    }).then(resp => {
-      if (resp === undefined) {
-        return;
-      }
-      let _categoryOptions = [];
-      for (let i = 0; i < resp.data.length; i++) {
-        const option = {
-          value: resp.data[i]['categoryId'],
-          label: resp.data[i]['categoryName'],
-          isLeaf: false,
-        };
-        _categoryOptions.push(option);
-      }
-      this.setState({
-        categoryOptions: _categoryOptions,
-      })
-    });
-  };
-
-  getGoodsCategoryChildren = (targetOption) => {
-    const {dispatch} = this.props;
-    dispatch({
-      type: 'goodsCategory/getGoodsCategory',
-      payload: {fid: targetOption.value}
-    }).then(resp => {
-      targetOption.loading = false;
-      if (resp === undefined) {
-        return;
-      }
-      if (resp.data.length === 0) {
-        targetOption.isLeaf = true;
-        return;
-      }
-      let _categoryOptions = [];
-      for (let i = 0; i < resp.data.length; i++) {
-        const option = {
-          value: resp.data[i]['categoryId'],
-          label: resp.data[i]['categoryName'],
-          isLeaf: false,
-        };
-        _categoryOptions.push(option);
-      }
-      targetOption.children = _categoryOptions;
-    });
-  };
-
 
   handleOk = () => {
+    const {dispatch} = this.props;
     this.props.form.validateFieldsAndScroll((err, values) => {
+      console.log("save val:", values);
       if (!err) {
         console.log('Received values of form: ', values);
         this.setState({visible: false});
+        let categoryId = null;
+        if (this.state.type === this.ADD_TYPE_EDIT) {
+          categoryId = this.state.categoryFormData.categoryId
+        }
+        dispatch({
+          type: "goodsCategory/saveGoodsCategory",
+          payload: {categoryId: categoryId, categoryFid: this.state.categoryFormData.categoryFid, ...values}
+        }).then(resp => {
+          const {onChange} = this.props;
+          onChange();
+        })
       }
     });
 
@@ -108,47 +61,62 @@ class GoodsCategoryForm extends Component {
   handleCancel = () => {
     this.setState({visible: false})
   };
-
+  cleanModelData = () => {
+    const {form} = this.props;
+    form.setFieldsValue({
+      categoryId: null,
+      categoryFid: null,
+      categoryName: null,
+      categoryStatus: false,
+      categorySort: 0,
+    });
+  };
   editModelShow = () => {
-    this.setState({visible: true, modelName: "编辑类目"})
+    this.setState({
+      visible: true, modelName: "编辑类目", type: this.ADD_TYPE_EDIT,
+    });
+    const {item, form} = this.props;
+    this.cleanModelData();
+    form.setFieldsValue({
+      categoryId: item.categoryId,
+      categoryFid: item.categoryFid,
+      categoryName: item.categoryName,
+      categoryStatus: item.categoryStatus === 1,
+      categorySort: item.categorySort,
+    });
+    this.setState({
+      categoryFormData: {
+        categoryId: item.categoryId,
+        categoryFid: item.categoryFid,
+        categoryName: item.categoryName,
+        categoryStatus: item.categoryStatus === 1,
+        categorySort: item.categorySort,
+      }
+    })
+
 
   };
 
   addModelShow = (type) => {
+
+    this.setState({visible: true, modelName: "添加类目", type: type});
+    this.cleanModelData();
+
     let fid = 0;
-    if (type === this.ADD_TYPE_ADD_CHILDREN) {
-      const {item} = this.props;
+    const {item, form} = this.props;
+
+    if (type === this.ADD_TYPE_ADD_PEER) {
       fid = item.categoryFid;
+
     }
-    this.setState({visible: true, modelName: "添加类目"})
+    if (type === this.ADD_TYPE_ADD_CHILDREN) {
+      fid = item.categoryId;
+    }
+
+    this.setState({categoryFormData: {categoryFid: fid}})
+
   };
 
-
-  saveGoodsCategory = () =>{
-    this.props.form.validateFieldsAndScroll((err, values) => {
-      if (!err) {
-        const {dispatch} = this.props;
-
-        dispatch({
-          type: 'goodsCategory/saveGoodsCategory',
-          payload: {}
-        })
-
-      }
-    });
-  };
-
-  categoryLoadData = selectedOptions => {
-    const targetOption = selectedOptions[selectedOptions.length - 1];
-    targetOption.loading = true;
-    console.log(targetOption);
-    // load options lazily
-    targetOption.loading = false;
-    this.getGoodsCategoryChildren(targetOption);
-    this.setState({
-      categoryOptions: [...this.state.categoryOptions],
-    });
-  };
 
   onCategoryChange = (value, selectedOptions) => {
     console.log(value, selectedOptions);
@@ -186,21 +154,18 @@ class GoodsCategoryForm extends Component {
           onCancel={this.handleCancel}
         >
           <Form {...formItemLayout}>
-            <Form.Item label="上级类目">
-              {getFieldDecorator('categoryFid', {
-                rules: [
-                  {
-                    required: true,
-                    message: '请选择父级',
-                  },
-                ],
-              })(<Cascader
-                options={this.state.categoryOptions}
-                loadData={this.categoryLoadData}
-                onChange={this.onCategoryChange}
-                changeOnSelect
-              />)}
-            </Form.Item>
+            {/*<Form.Item label="上级类目">*/}
+            {/*  {getFieldDecorator('categoryFid', {*/}
+            {/*    rules: [*/}
+            {/*      {*/}
+            {/*        required: false,*/}
+            {/*        message: '请选择父级',*/}
+            {/*      },*/}
+            {/*    ],*/}
+            {/*  })(<CategoryCascader*/}
+            {/*    disabled={this.state.type === this.ADD_TYPE_ADD_PEER || this.state.type === this.ADD_TYPE_EDIT}*/}
+            {/*    onChange={this.onCategoryChange}/>)}*/}
+            {/*</Form.Item>*/}
             <Form.Item label="类目名称">
               {getFieldDecorator('categoryName', {
                 rules: [

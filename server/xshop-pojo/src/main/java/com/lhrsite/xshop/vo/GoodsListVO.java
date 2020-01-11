@@ -15,7 +15,6 @@ public class GoodsListVO {
 
     private String updateUserName;
 
-
     private Timestamp createTime;
     private Timestamp updateTime;
 

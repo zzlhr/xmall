@@ -1,7 +1,8 @@
 import React, {Component} from 'react';
-import { Table, Divider, Tag } from 'antd';
+import {Table, Divider, Tag} from 'antd';
 import styles from './index.less';
 import {connect} from 'dva'
+
 const columns = [
   {
     title: "商品图片",
@@ -46,7 +47,7 @@ const columns = [
     render: (text, record) => (
       <span>
         <a>Invite {record.name}</a>
-        <Divider type="vertical" />
+        <Divider type="vertical"/>
         <a>Delete</a>
       </span>
     ),
@@ -56,37 +57,25 @@ const columns = [
 export default class GoodsTable extends Component {
 
   constructor(props) {
+
     super(props);
     this.props = props;
-    this.state = {
-      list: [],
-      // searchVal: {},
-    }
-  }
-  componentDidMount() {
-    this.loadGoodsList();
   }
 
-  loadGoodsList(){
-    const {dispatch} = this.props;
-    dispatch({
-      type: 'goodsList/getGoodsList',
-      payload: {}
-    }).then(resp => {
-      if (resp === undefined) {
-        return;
-      }
-      this.setState({
-        list: resp.data,
-      })
-    });
-  }
 
-  render(){
+
+  render() {
+    const {list, onChange, current, pageSize, total} = this.props;
     return (
       <div className={styles.container}>
         <div id="components-table-demo-basic">
-          <Table columns={columns} dataSource={this.state.list} />
+          <Table columns={columns} dataSource={list} pagination={{
+            current: current, pageSize: pageSize, total: total,
+            showTotal: ((total) => {
+              return `共 ${total} 条`
+            }),
+            onChange: onChange
+          }}/>
         </div>
       </div>
     );

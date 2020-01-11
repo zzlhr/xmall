@@ -7,7 +7,7 @@ export function getPageQuery() {
 export function setAuthority(user) {
   // 保存user
   localStorage.setItem('user', JSON.stringify(user));
-  
+
   const proAuthority = [];
   for (let i = 0; i < user.authGroups.length; i++) {
     proAuthority[i] = user.authGroups[i].agCode;

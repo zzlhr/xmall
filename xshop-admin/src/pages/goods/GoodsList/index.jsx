@@ -4,6 +4,7 @@ import {Spin} from 'antd';
 import styles from './index.less';
 import {connect} from "dva"
 import GoodsTable from './GoodsTable'
+
 @connect(state => ({}))
 export default class GoodsList extends Component {
 
@@ -12,8 +13,36 @@ export default class GoodsList extends Component {
     this.props = props;
     this.state = {
       // searchVal: {},
-    }
+      list: [],
+      current: 1,
+      pageSize: 10,
+      total: 0
+    };
   }
+  componentDidMount() {
+    this.loadGoodsList();
+  }
+
+  loadGoodsList() {
+    const {dispatch} = this.props;
+    dispatch({
+      type: 'goodsList/getGoodsList',
+      payload: {page: this.state.current, pageSize: this.state.pageSize}
+    }).then(resp => {
+      if (resp === undefined) {
+        return;
+      }
+      this.setState({
+        list: resp.data.arr,
+        total: resp.data.totalCount,
+        current: resp.data.currentPage,
+      })
+    });
+  }
+
+  onPageChange = (page, pageSize) => {
+    this.setState({pageSize: pageSize, current: page}, () => this.loadGoodsList());
+  };
 
   render() {
     return (
@@ -24,7 +53,9 @@ export default class GoodsList extends Component {
             textAlign: 'center',
           }}
         >
-          <GoodsTable className="GoodsTable"/>
+          <GoodsTable className="GoodsTable" list={this.state.list} onChange={this.onPageChange}
+                      current={this.state.current}
+                      pageSize={this.state.pageSize} total={this.state.total}/>
           {/*<Spin spinning={loading} size="large"/>*/}
         </div>
       </PageHeaderWrapper>
