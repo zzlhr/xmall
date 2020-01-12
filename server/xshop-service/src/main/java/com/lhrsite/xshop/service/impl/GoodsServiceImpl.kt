@@ -1,6 +1,5 @@
 package com.lhrsite.xshop.service.impl
 
-import ch.qos.logback.core.joran.util.beans.BeanUtil
 import com.github.pagehelper.PageHelper
 import com.github.pagehelper.PageInfo
 import com.lhrsite.xshop.mapper.GoodsCategoryMapper
@@ -18,16 +17,13 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 
 @Service
-class GoodsServiceImpl : GoodsService {
+class GoodsServiceImpl
+@Autowired constructor(private val goodsCategoryMapper: GoodsCategoryMapper,
+                       private val goodsCategoryRepository: GoodsCategoryRepository,
+                       private val goodsMapper: GoodsMapper,
+                       private val goodsMasterRepository: GoodsMasterRepository
+) : GoodsService {
 
-    @Autowired
-    lateinit var goodsCategoryMapper: GoodsCategoryMapper
-    @Autowired
-    lateinit var goodsCategoryRepository: GoodsCategoryRepository
-    @Autowired
-    lateinit var goodsMapper: GoodsMapper
-    @Autowired
-    lateinit var goodsMasterRepository: GoodsMasterRepository
 
     override fun getGoodsCategory(fid: Int?, status: Int?): List<GoodsCategory> {
         return goodsCategoryMapper.getGoodsCategory(fid, status)
@@ -46,14 +42,10 @@ class GoodsServiceImpl : GoodsService {
             goodsCategoryVO.children = goodsCategoryChildren as MutableList<GoodsCategoryVO>
         }
 
-        print(goodsCategoryVOS.filter { it.categoryFid == 0 })
         return goodsCategoryVOS.filter { it.categoryFid == 0 }
     }
 
     override fun saveGoodsCategory(goodsCategory: GoodsCategory): GoodsCategory {
-        if (goodsCategory.categorySort == null) {
-            goodsCategory.categorySort = 1
-        }
         return goodsCategoryRepository.save(goodsCategory)
     }
 

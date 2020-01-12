@@ -28,16 +28,18 @@ spring:
 server:
   port: 8009
 app:
+  workspace: /Users/haoranliu/xshop/
   upload:
+    rootDir: ${app.workspace}upload/
     shop:
-      cover: /Users/haoranliu/IdeaProjects/xshop/upload/cover_upload/
-      pictures: /Users/haoranliu/IdeaProjects/xshop/upload/pictures_upload/
+      cover: ${app.upload.rootDir}cover_upload/
+      pictures: ${app.upload.rootDir}pictures_upload/
     home:
-      pictures: /Users/haoranliu/IdeaProjects/xshop/upload/home_upload/
+      pictures: ${app.upload.rootDir}home_upload/
     classify:
-      pictures: /Users/haoranliu/IdeaProjects/xshop/upload/classify/
+      pictures: ${app.upload.rootDir}classify/
 logging:
-  path: /data/xuanhuobang_springboot/logs/
+  path: ${app.workspace}/logs/
   level:
     root: info
 mybatis:

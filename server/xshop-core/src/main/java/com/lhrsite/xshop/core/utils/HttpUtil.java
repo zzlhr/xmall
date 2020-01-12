@@ -55,7 +55,7 @@ public class HttpUtil {
      */
     public static String saveFile(String path, MultipartFile multipartFile) throws XShopException {
 
-        String newFileName = IdentifyUtil.getIdentify() + "." + MultipartFileUtil.getFileType(multipartFile);
+        String newFileName = IdentifyUtil.getIdentify() + "." + MultipartFileUtil.Companion.getFileType(multipartFile);
         System.out.println(newFileName);
         File filePath = new File(path);
         if (!filePath.exists()) {

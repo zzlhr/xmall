@@ -2,8 +2,9 @@
  * request 网络请求工具
  * 更详细的 api 文档: https://github.com/umijs/umi-request
  */
-import { extend } from 'umi-request';
-import { notification } from 'antd';
+import {extend} from 'umi-request';
+import {notification} from 'antd';
+
 const codeMessage = {
   200: '服务器成功返回请求的数据。',
   201: '新建或修改数据成功。',
@@ -26,11 +27,11 @@ const codeMessage = {
  */
 
 const errorHandler = error => {
-  const { response } = error;
+  const {response} = error;
 
   if (response && response.status) {
     const errorText = codeMessage[response.status] || response.statusText;
-    const { status, url } = response;
+    const {status, url} = response;
     notification.error({
       message: `请求错误 ${status}: ${url}`,
       description: errorText,
@@ -58,9 +59,9 @@ const baseUrl = "http://localhost:8009";
 // 全局拦截器直接使用 request 实例中的方法
 request.interceptors.request.use((url, options) => {
   return {
-    url: baseUrl+url,
-    options: { ...options, interceptors: true, requestType: "form"},
+    url: baseUrl + url,
+    options: {...options, interceptors: true, requestType: "form"},
   };
-}, { global: false }); // 第二个参数不传默认为 { global: true }
+}, {global: false}); // 第二个参数不传默认为 { global: true }
 
-export default request;
+export {baseUrl, request};

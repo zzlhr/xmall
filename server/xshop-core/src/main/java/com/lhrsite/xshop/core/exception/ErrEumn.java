@@ -90,6 +90,10 @@ public enum ErrEumn {
     ALREADY_ADD_FAVORITE(-100052, "您已经添加过该收藏了"),
 
     PASSWORD_ERROR(-100053, "密码错误！"),
+
+
+    UPLOAD_FILE_TYPE_ERROR(-100054, "上传文件类型错误."),
+    LOAD_FILE_FAILED(-100055, "加载文件失败"),
     ;
 
 
