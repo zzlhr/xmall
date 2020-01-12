@@ -37,9 +37,11 @@ class GoodsEditForm extends React.Component {
         console.log('Received values of form: ', values);
         // values.goodsCover =
         // 处理 goodsCover
+        const sendData = values;
+        sendData.goodsCover = this.state.goodsFormData.goodsCover;
+        sendData.goodsBanner = this.state.goodsFormData.goodsBanner;
 
-
-        console.log()
+        console.log(sendData)
       }
     });
   };
@@ -91,11 +93,31 @@ class GoodsEditForm extends React.Component {
         picturesLoading: true,
       })
     } else if (info.file.status === 'done') {
-      console.log("done imageUrl:", baseUrl + "/goods/goodsPicture/" + info.file.response.data.fileName);
+      console.log("done imageUrl:",);
       // Get this url from response in real world.
+      console.log(info.fileList);
+      let goodsBanner = [];
+      for (let i = 0; i < info.fileList.length; i++) {
+        const item = info.fileList[i];
+        let respData = item.response;
+        if (respData === undefined){
+          break;
+        }
+        let data = respData.data;
+        if (data === undefined){
+          break;
+        }
+        let fileName = data.fileName;
+        if (fileName === undefined){
+          break;
+        }
+        goodsBanner = [goodsBanner,...[fileName]]
+      }
       this.setState({
         picturesLoading: false,
-        //   // goodsFormData: {goodsCover: baseUrl + "/goods/goodsCover/" + info.file.response.data.fileName}
+        goodsFormData: {
+          goodsBanner: goodsBanner
+        }
       });
     }
     // this.state.goodsBannerFileList.push(info);
