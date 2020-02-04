@@ -35,7 +35,7 @@ class GoodsController @Autowired constructor(private val goodsService: GoodsServ
     }
 
     @PostMapping("/getGoodsList")
-    fun getGoodsList(goodsKeyword: String, goodsCategoryId: Int,
+    fun getGoodsList(goodsKeyword: String?, goodsCategoryId: Int?,
                      @RequestParam(defaultValue = "1") page: Int,
                      @RequestParam(defaultValue = "10") pageSize: Int): ResultVO {
         return ResultVO.create(goodsService.getGoodsList(goodsKeyword, goodsCategoryId, page, pageSize))
@@ -67,18 +67,14 @@ class GoodsController @Autowired constructor(private val goodsService: GoodsServ
 
     @PostMapping("/uploadGoodsPicture")
     @Throws(XShopException::class)
-    fun uploadGoodsPicture(imgs: Array<MultipartFile>): ResultVO {
-        if (imgs.isEmpty()) {
+    fun uploadGoodsPicture(img: MultipartFile?): ResultVO {
+        if (img == null) {
             throw XShopException(ErrEumn.UPLOAD_ERROR_FILE_NULL)
         }
-        val fileNames = ArrayList<Map<String, String>>()
-        for (img in imgs) {
-            val fileName = saveImage(img, picturePath)
-            val resultMap: MutableMap<String, String> = HashMap()
-            resultMap["fileName"] = fileName
-            fileNames.add(resultMap)
-        }
-        return ResultVO.create(fileNames)
+        val fileName = saveImage(img, picturePath)
+        val resultMap: MutableMap<String, String> = HashMap()
+        resultMap["fileName"] = fileName
+        return ResultVO.create(resultMap)
     }
 
 
