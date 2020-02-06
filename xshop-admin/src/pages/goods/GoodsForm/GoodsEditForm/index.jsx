@@ -13,6 +13,7 @@ import {
 import styles from './index.less';
 import {connect} from 'dva';
 import {baseUrl} from '@/utils/request'
+import {baseHost} from "@/services/host";
 
 @connect(state => ({}))
 class GoodsEditForm extends React.Component {
@@ -34,14 +35,25 @@ class GoodsEditForm extends React.Component {
     e.preventDefault();
     this.props.form.validateFieldsAndScroll((err, values) => {
       if (!err) {
-        console.log('Received values of form: ', values);
-        // values.goodsCover =
-        // 处理 goodsCover
         const sendData = values;
-        sendData.goodsCover = this.state.goodsFormData.goodsCover;
-        sendData.goodsBanner = this.state.goodsFormData.goodsBanner;
-
-        console.log(sendData)
+        console.log(this.state.goodsBannerFileList.length);
+        // 处理上传数据
+        let bannerFiles = [];
+        for (let i = 0; i < this.state.goodsBannerFileList.length; i++) {
+          console.log("itemii:", i);
+          const item = this.state.goodsBannerFileList[i];
+          console.log("item", item);
+          console.log("fileName:", item.response.data.fileName);
+          bannerFiles.push(item.response.data.fileName)
+        }
+        if (this.state.goodsCoverFileList.length !== 1) {
+          message.error('封面不能为空!', 20);
+        }
+        sendData.goodsCover = this.state.goodsCoverFileList[0].response.data.fileName;
+        sendData.goodsBanner = bannerFiles;
+        console.log(sendData);
+      } else {
+        console.log(err)
       }
     });
   };
@@ -66,58 +78,40 @@ class GoodsEditForm extends React.Component {
       })
     });
   }
-
   handleCoverChange = async info => {
-    console.log(info);
+
+    console.log("handleCoverChange:", info);
+
     if (info.file.state === "uploading") {
       this.setState({
         coverLoading: true,
       })
-    } else if (info.file.status === 'done') {
-      console.log("done imageUrl:", baseUrl + "/goods/goodsCover/" + info.file.response.data.fileName);
-      // Get this url from response in real world.
+    }
+    if (info.file.status === 'done') {
       this.setState({
         coverLoading: false,
-        goodsFormData: {goodsCover: baseUrl + "/goods/goodsCover/" + info.file.response.data.fileName}
       });
     }
-    this.setState({
-      goodsCoverFileList: [info.file],
-    })
+    // this.state.goodsBannerFileList.push(info);
+    console.log(info.fileList.length);
+    if (info.fileList.length === 1){
+      this.setState({
+        goodsCoverFileList: info.fileList,
+      })
+    }
   };
   handlePicturesChange = async info => {
-    console.log(info);
+
+    console.log("handlePicturesChange:", info);
 
     if (info.file.state === "uploading") {
       this.setState({
         picturesLoading: true,
       })
-    } else if (info.file.status === 'done') {
-      console.log("done imageUrl:",);
-      // Get this url from response in real world.
-      console.log(info.fileList);
-      let goodsBanner = [];
-      for (let i = 0; i < info.fileList.length; i++) {
-        const item = info.fileList[i];
-        let respData = item.response;
-        if (respData === undefined){
-          break;
-        }
-        let data = respData.data;
-        if (data === undefined){
-          break;
-        }
-        let fileName = data.fileName;
-        if (fileName === undefined){
-          break;
-        }
-        goodsBanner = [goodsBanner,...[fileName]]
-      }
+    }
+    if (info.file.status === 'done') {
       this.setState({
         picturesLoading: false,
-        goodsFormData: {
-          goodsBanner: goodsBanner
-        }
       });
     }
     // this.state.goodsBannerFileList.push(info);
@@ -125,7 +119,12 @@ class GoodsEditForm extends React.Component {
       goodsBannerFileList: info.fileList,
     })
   };
-  beforeUpload = (file) => {
+
+  beforeCoverUpload = (file) => {
+    const isMax = this.state.goodsCoverFileList.length <= 1;
+    if (this.state.goodsCoverFileList.length >= 1){
+      message.error("最多上传1个封面图片!");
+    }
     const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png';
     if (!isJpgOrPng) {
       message.error('只能上传JPG/PNG格式.');
@@ -134,7 +133,22 @@ class GoodsEditForm extends React.Component {
     if (!isLt2M) {
       message.error('图片大小不得大于2MB.');
     }
-    return isJpgOrPng && isLt2M;
+    return isJpgOrPng && isLt2M && isMax;
+  };
+  beforePictureUpload = (file) => {
+    const isMax = this.state.goodsBannerFileList.length <= 6;
+    if (this.state.goodsBannerFileList.length >= 6){
+      message.error("最多上传6个轮播图片!");
+    }
+    const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png';
+    if (!isJpgOrPng) {
+      message.error('只能上传JPG/PNG格式.');
+    }
+    const isLt2M = file.size / 1024 / 1024 < 2;
+    if (!isLt2M) {
+      message.error('图片大小不得大于2MB.');
+    }
+    return isJpgOrPng && isLt2M && isMax;
   };
 
   render() {
@@ -208,6 +222,7 @@ class GoodsEditForm extends React.Component {
             rules: [
               {
                 required: false,
+
               },
             ],
           })(<Checkbox>上架</Checkbox>)}
@@ -217,6 +232,7 @@ class GoodsEditForm extends React.Component {
             rules: [
               {
                 required: true,
+                message: '请选择产品所属分类!',
               },
             ],
           })(<Cascader
@@ -236,15 +252,14 @@ class GoodsEditForm extends React.Component {
               name="img"
               listType="picture-card"
               className="avatar-uploader"
-              showUploadList={false}
+              showUploadList={true}
               action={baseUrl + "/goods/uploadGoodsCover"}
-              beforeUpload={this.beforeUpload}
+              beforeUpload={this.beforeCoverUpload}
               multiple={false}
+              openFileDialogOnClick={this.state.goodsCoverFileList.length === 0} // 限制上传数量,只能上传一张
               fileList={this.state.goodsCoverFileList}
             >
-              {this.state.goodsCoverFileList.length > 0 && !this.state.coverLoading ?
-                <img src={this.state.goodsFormData.goodsCover} alt="avatar"
-                     style={{width: '100%'}}/> : coverUploadButton}
+              {coverUploadButton}
             </Upload>)}
         </Form.Item>
 
@@ -256,14 +271,16 @@ class GoodsEditForm extends React.Component {
             <Upload
               name="img"
               listType="picture-card"
-              action={baseUrl + "/goods/uploadGoodsCover"}
-              beforeUpload={this.beforeUpload}
+              action={baseUrl + "/goods/uploadGoodsPicture"}
+              beforeUpload={this.beforePictureUpload}
               multiple={true}
+              //TODO: 最大轮播图数量应该通过变量控制,并且需要在多选图片时限制数量
+              openFileDialogOnClick={this.state.goodsBannerFileList.length <= 5} // 限制上传数量,只能上传6张
               showUploadList={true}
               fileList={this.state.goodsBannerFileList}
             >
               {/*TODO: 最大轮播图数量应该通过变量控制*/}
-              {this.state.goodsBannerFileList >= 5 ? null : picturesUploadButton}
+              {picturesUploadButton}
             </Upload>)}
         </Form.Item>
         <Form.Item {...tailFormItemLayout}>
