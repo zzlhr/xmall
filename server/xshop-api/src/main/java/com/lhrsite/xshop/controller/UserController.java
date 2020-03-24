@@ -92,13 +92,13 @@ public class UserController {
     @PostMapping("/userList")
     public ResultVO userList(
             @RequestParam(required = false) String username,
-            @RequestParam(required = false) String phoneNum,
+            @RequestParam(required = false) String phone,
             @RequestParam(required = false) String email,
             @RequestParam(required = false, defaultValue = "1") Integer page,
             @RequestParam(required = false, defaultValue = "10") Integer pageSize,
             HttpServletRequest request) {
 
-        return ResultVO.create(userService.getUsers(username, phoneNum, email, page, pageSize));
+        return ResultVO.create(userService.getUsers(username, phone, email, page, pageSize));
     }
 
     @PostMapping("/getUser")

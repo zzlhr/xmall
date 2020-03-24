@@ -18,8 +18,10 @@ open class GoodsCategory(
         open var updateTime: Timestamp?
 ) {
     constructor() : this(null, 0, "", 0, 0,
-            null, null) {
+            null, null)
 
+    override fun toString(): String {
+        return "GoodsCategory(categoryId=$categoryId, categoryFid=$categoryFid, categoryName='$categoryName', categoryStatus=$categoryStatus, categorySort=$categorySort, createTime=$createTime, updateTime=$updateTime)"
     }
 
 

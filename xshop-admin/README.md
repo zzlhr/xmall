@@ -8,7 +8,6 @@ Install `node_modules`:
 
 ```bash
 npm install
-npm install @ant-design/aliyun-theme
 ```
 
 or

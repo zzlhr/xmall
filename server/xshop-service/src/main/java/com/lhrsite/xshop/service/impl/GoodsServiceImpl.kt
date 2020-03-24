@@ -2,13 +2,17 @@ package com.lhrsite.xshop.service.impl
 
 import com.github.pagehelper.PageHelper
 import com.github.pagehelper.PageInfo
+import com.lhrsite.xshop.mapper.GoodsAttrMapper
 import com.lhrsite.xshop.mapper.GoodsCategoryMapper
 import com.lhrsite.xshop.mapper.GoodsMapper
+import com.lhrsite.xshop.po.GoodsAttrKey
+import com.lhrsite.xshop.po.GoodsAttrVal
 import com.lhrsite.xshop.po.GoodsCategory
 import com.lhrsite.xshop.po.GoodsMaster
 import com.lhrsite.xshop.repository.GoodsCategoryRepository
 import com.lhrsite.xshop.repository.GoodsMasterRepository
 import com.lhrsite.xshop.service.GoodsService
+import com.lhrsite.xshop.vo.GoodsCategoryAttr
 import com.lhrsite.xshop.vo.GoodsCategoryVO
 import com.lhrsite.xshop.vo.GoodsListVO
 import com.lhrsite.xshop.vo.PageVO
@@ -21,7 +25,8 @@ class GoodsServiceImpl
 @Autowired constructor(private val goodsCategoryMapper: GoodsCategoryMapper,
                        private val goodsCategoryRepository: GoodsCategoryRepository,
                        private val goodsMapper: GoodsMapper,
-                       private val goodsMasterRepository: GoodsMasterRepository
+                       private val goodsMasterRepository: GoodsMasterRepository,
+                       private val goodsAttrMapper: GoodsAttrMapper
 ) : GoodsService {
 
 
@@ -60,6 +65,20 @@ class GoodsServiceImpl
 
     override fun saveGoods(goods: GoodsMaster): GoodsMaster {
         return goodsMasterRepository.save(goods)
+    }
+
+    override fun getGoodsCategoryAttrKeyAndVal(goodsCategoryId: Int): List<GoodsCategoryAttr> {
+        val keys: List<GoodsAttrKey> = goodsAttrMapper.getGoodsAttrKeys(goodsCategoryId)
+        val vals: List<GoodsAttrVal> = goodsAttrMapper.getGoodsAttrVals(goodsCategoryId)
+
+        val goodsCategoryAttrs = ArrayList<GoodsCategoryAttr>()
+        for (key in keys){
+            val goodsCategoryAttr: GoodsCategoryAttr = GoodsCategoryAttr()
+            BeanUtils.copyProperties(key, goodsCategoryAttr)
+            goodsCategoryAttr.vals = vals.filter { it.goodsAttrKeyId==key.goodsAttrKeyId }
+            goodsCategoryAttrs.add(goodsCategoryAttr)
+        }
+        return goodsCategoryAttrs
     }
 
 }

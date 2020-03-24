@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lhrsite.xshop.mapper.GoodsAttrMapper">
+    <select id="getGoodsAttrKeys" resultType="com.lhrsite.xshop.po.GoodsAttrKey">
+        select goods_attr_key_id,
+               goods_category_id,
+               goods_attr_key_name,
+               goods_attr_key_sort,
+               create_time,
+               update_time
+        from goods_attr_key
+        where goods_category_id = #{goodsCategoryId}
+    </select>
+    <select id="getGoodsAttrVals" resultType="com.lhrsite.xshop.po.GoodsAttrVal">
+        select goods_attr_val_id, goods_attr_key_id,
+               goods_attr_val, goods_attr_val_sort,
+               create_time, update_time
+        from goods_attr_val
+        where goods_attr_key_id in
+              (select goods_attr_key_id from goods_attr_key where goods_category_id = #{goodsCategoryId})
+    </select>
+</mapper>

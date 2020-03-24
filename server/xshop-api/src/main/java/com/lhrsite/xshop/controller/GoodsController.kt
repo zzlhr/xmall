@@ -41,9 +41,19 @@ class GoodsController @Autowired constructor(private val goodsService: GoodsServ
         return ResultVO.create(goodsService.getGoodsList(goodsKeyword, goodsCategoryId, page, pageSize))
     }
 
-    @PostMapping("/saveGoods")
+    @PostMapping("/saveGoodsMaster")
     fun saveGoods(goods: GoodsMaster): ResultVO {
         return ResultVO.create(goodsService.saveGoods(goods))
+    }
+
+    /**
+     * 获取商品分类下的所有attrKey和attrVal
+     * @param goodsCategoryId 商品分类代号
+     * @return GoodsCategoryAttrs对象包含该分类下的所有key和val
+     */
+    @PostMapping("/getGoodsCategoryAttrs")
+    fun getGoodsCategoryAttrs(goodsCategoryId: Int): ResultVO{
+        return ResultVO.create(goodsService.getGoodsCategoryAttrKeyAndVal(goodsCategoryId));
     }
 
     @PostMapping("/uploadGoodsCover")
@@ -67,10 +77,7 @@ class GoodsController @Autowired constructor(private val goodsService: GoodsServ
 
     @PostMapping("/uploadGoodsPicture")
     @Throws(XShopException::class)
-    fun uploadGoodsPicture(img: MultipartFile?): ResultVO {
-        if (img == null) {
-            throw XShopException(ErrEumn.UPLOAD_ERROR_FILE_NULL)
-        }
+    fun uploadGoodsPicture(img: MultipartFile): ResultVO {
         val fileName = saveImage(img, picturePath)
         val resultMap: MutableMap<String, String> = HashMap()
         resultMap["fileName"] = fileName

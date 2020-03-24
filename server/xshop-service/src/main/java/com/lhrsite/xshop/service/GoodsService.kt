@@ -1,7 +1,9 @@
 package com.lhrsite.xshop.service
 
+import com.lhrsite.xshop.po.GoodsAttrKey
 import com.lhrsite.xshop.po.GoodsCategory
 import com.lhrsite.xshop.po.GoodsMaster
+import com.lhrsite.xshop.vo.GoodsCategoryAttr
 import com.lhrsite.xshop.vo.GoodsCategoryVO
 import com.lhrsite.xshop.vo.GoodsListVO
 import com.lhrsite.xshop.vo.PageVO
@@ -42,4 +44,10 @@ interface GoodsService {
     fun getGoodsList(goodsKeyword: String?, goodsCategoryId: Int?, page: Int, pageSize: Int): PageVO<GoodsListVO>
 
     fun saveGoods(goods: GoodsMaster): GoodsMaster
+    /**
+     * 获取商品分类下的所有attrKey和attrVal
+     * @param goodsCategoryId 商品分类代号
+     * @return GoodsCategoryAttrs 对象包含该分类下的所有key和val
+     */
+    fun getGoodsCategoryAttrKeyAndVal(goodsCategoryId: Int): List<GoodsCategoryAttr>
 }
