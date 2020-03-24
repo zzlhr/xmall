@@ -145,7 +145,7 @@ public class UserServiceImpl implements UserService {
                 SQLUtil.toFuzzySearchVal(username), null);
 
         PageVO pageVO = new PageVO<>();
-        pageVO.init(new PageInfo<>(userList), page);
+        pageVO = pageVO.init(new PageInfo<>(userList), page);
         pageVO.setArr(userToUserVO(userList, false));
 
         return pageVO;
