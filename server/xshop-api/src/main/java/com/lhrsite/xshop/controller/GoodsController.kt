@@ -46,6 +46,11 @@ class GoodsController @Autowired constructor(private val goodsService: GoodsServ
         return ResultVO.create(goodsService.saveGoods(goods))
     }
 
+    @PostMapping("/getGoodsDetail")
+    fun getGoodsDetail(goodsId: String): ResultVO{
+        return ResultVO.create(goodsService.getGoodsDetail(goodsId))
+    }
+
     /**
      * 获取商品分类下的所有attrKey和attrVal
      * @param goodsCategoryId 商品分类代号

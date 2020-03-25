@@ -25,4 +25,9 @@
             and g.category_id=#{categoryId}
         </if>
     </select>
+    <select id="getGoodsDetail" resultType="com.lhrsite.xshop.vo.GoodsDetailVO">
+        select *
+        from goods_master
+        where goods_id = #{goodsId}
+    </select>
 </mapper>

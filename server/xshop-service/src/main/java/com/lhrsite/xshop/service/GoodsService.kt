@@ -3,10 +3,7 @@ package com.lhrsite.xshop.service
 import com.lhrsite.xshop.po.GoodsAttrKey
 import com.lhrsite.xshop.po.GoodsCategory
 import com.lhrsite.xshop.po.GoodsMaster
-import com.lhrsite.xshop.vo.GoodsCategoryAttr
-import com.lhrsite.xshop.vo.GoodsCategoryVO
-import com.lhrsite.xshop.vo.GoodsListVO
-import com.lhrsite.xshop.vo.PageVO
+import com.lhrsite.xshop.vo.*
 
 interface GoodsService {
     /**
@@ -42,6 +39,8 @@ interface GoodsService {
      * @return 商品列表
      */
     fun getGoodsList(goodsKeyword: String?, goodsCategoryId: Int?, page: Int, pageSize: Int): PageVO<GoodsListVO>
+
+    fun getGoodsDetail(goodsId: String): GoodsDetailVO
 
     fun saveGoods(goods: GoodsMaster): GoodsMaster
     /**

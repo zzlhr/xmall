@@ -2,6 +2,7 @@ package com.lhrsite.xshop.mapper;
 
 import com.github.pagehelper.Page;
 import com.lhrsite.xshop.po.Goods;
+import com.lhrsite.xshop.vo.GoodsDetailVO;
 import com.lhrsite.xshop.vo.GoodsListVO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -12,4 +13,5 @@ public interface GoodsMapper{
 
     Page<GoodsListVO> getGoodsList(String title, Integer cid);
 
+    GoodsDetailVO getGoodsDetail(String goodsId);
 }

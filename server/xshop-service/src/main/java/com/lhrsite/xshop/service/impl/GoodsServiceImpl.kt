@@ -12,10 +12,7 @@ import com.lhrsite.xshop.po.GoodsMaster
 import com.lhrsite.xshop.repository.GoodsCategoryRepository
 import com.lhrsite.xshop.repository.GoodsMasterRepository
 import com.lhrsite.xshop.service.GoodsService
-import com.lhrsite.xshop.vo.GoodsCategoryAttr
-import com.lhrsite.xshop.vo.GoodsCategoryVO
-import com.lhrsite.xshop.vo.GoodsListVO
-import com.lhrsite.xshop.vo.PageVO
+import com.lhrsite.xshop.vo.*
 import org.springframework.beans.BeanUtils
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
@@ -61,6 +58,10 @@ class GoodsServiceImpl
         val pageVO = PageVO<GoodsListVO>()
         pageVO.init(pageInfo, page)
         return pageVO
+    }
+
+    override fun getGoodsDetail(goodsId: String): GoodsDetailVO {
+        return goodsMapper.getGoodsDetail(goodsId)
     }
 
     override fun saveGoods(goods: GoodsMaster): GoodsMaster {

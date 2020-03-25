@@ -6,7 +6,6 @@ import {UserListStateType} from "@/pages/user/UserList/model";
 import {User} from "@/pages/user/UserList/data";
 import {PaginationConfig} from 'antd/lib/pagination';
 import {AnyAction} from 'redux';
-import {Key, SorterResult} from 'antd/lib/table/interface';
 
 
 const columns = [
@@ -27,11 +26,19 @@ const columns = [
     dataIndex: 'email',
   },
   {
+    title: '创建时间',
+    dataIndex: 'createTime'
+  },
+  {
+    title: '更新时间',
+    dataIndex: 'updateTime'
+  },
+  {
     title: '操作',
     dataIndex: 'option',
     render: (_: any, record: User) => (
       <>
-        <Button>编辑</Button>
+        <Button>查看账单</Button>
       </>
     ),
   }

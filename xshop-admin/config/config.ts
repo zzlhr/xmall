@@ -149,6 +149,21 @@ export default {
               ]
             },
             {
+              path: '/goods',
+              name: 'goods',
+              icon: 'crown',
+              // component: './UserList'
+              routes: [
+                {
+                  path: '/goods/list',
+                  name: 'list',
+                  icon: 'smile',
+                  component: './Goods/GoodsList'
+                }
+              ]
+            },
+
+            {
               name: 'list.table-list',
               icon: 'table',
               path: '/list',
