@@ -15,12 +15,12 @@ public class GoodsMaster {
   private String goodsTitle;
   private String goodsDescribe;
   private String goodsCover;
-  private long goodsStatus;
+  private Integer goodsStatus;
   private String goodsContent;
   private String goodsBanner;
-  private long updateUser;
+  private Integer updateUser;
   private java.sql.Timestamp createTime;
   private java.sql.Timestamp updateTime;
-  private long categoryId;
+  private Integer categoryId;
 
 }
