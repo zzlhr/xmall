@@ -159,6 +159,12 @@ export default {
                   name: 'list',
                   icon: 'smile',
                   component: './Goods/GoodsList'
+                },
+                {
+                  path: '/goods/edit',
+                  name: 'edit',
+                  icon: 'smile',
+                  component: './Goods/GoodsEdit'
                 }
               ]
             },

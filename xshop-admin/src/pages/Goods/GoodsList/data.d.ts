@@ -32,9 +32,21 @@ export interface GoodsMaster {
   updateUser?: number,
   createTime?: string,
   updateTime?: string,
-  categoryId?: number
+  category1?: number,
+  category2?: number
 }
 
 export interface GoodsDetail extends GoodsMaster{
 
+}
+
+export interface GoodsCategory {
+  categoryId: number,
+  categoryFid: number,
+  categoryName: string,
+  categoryStatus?: number,
+  categorySort?: number,
+  createTime?: string,
+  updateTime?: string,
+  children: Array<GoodsCategory>
 }

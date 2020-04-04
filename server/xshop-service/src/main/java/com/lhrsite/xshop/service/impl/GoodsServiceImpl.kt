@@ -16,6 +16,8 @@ import com.lhrsite.xshop.vo.*
 import org.springframework.beans.BeanUtils
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
+import java.util.*
+import kotlin.collections.ArrayList
 
 @Service
 class GoodsServiceImpl
@@ -33,7 +35,8 @@ class GoodsServiceImpl
 
     override fun getGoodsCategoryTree(fid: Int?, status: Int?): List<GoodsCategoryVO> {
         val goodsCategorys: List<GoodsCategory> = this.getGoodsCategory(null, null)
-        val goodsCategoryVOS: MutableList<GoodsCategoryVO> = ArrayList()
+        val goodsCategoryVOS: ArrayList<GoodsCategoryVO> = ArrayList()
+        val goodsCategoryResult: ArrayList<GoodsCategoryVO> = ArrayList()
         for (goodsCategory in goodsCategorys) {
             val goodsCategoryVO = GoodsCategoryVO()
             BeanUtils.copyProperties(goodsCategory, goodsCategoryVO);
@@ -41,10 +44,11 @@ class GoodsServiceImpl
         }
         for (goodsCategoryVO in goodsCategoryVOS) {
             val goodsCategoryChildren = goodsCategoryVOS.filter { it.categoryFid == goodsCategoryVO.categoryId }
-            goodsCategoryVO.children = goodsCategoryChildren as MutableList<GoodsCategoryVO>
+            goodsCategoryVO.children = goodsCategoryChildren
         }
+        goodsCategoryVOS.map { if (it.categoryFid == 0) goodsCategoryResult.add(it) }
 
-        return goodsCategoryVOS.filter { it.categoryFid == 0 }
+        return goodsCategoryResult
     }
 
     override fun saveGoodsCategory(goodsCategory: GoodsCategory): GoodsCategory {
@@ -65,6 +69,13 @@ class GoodsServiceImpl
     }
 
     override fun saveGoods(goods: GoodsMaster): GoodsMaster {
+        if (goods.goodsId == null || "".equals(goods.goodsId)) {
+            goods.goodsId = UUID.randomUUID().toString()
+        }
+        //TODO: 默认更新人,后续权限拦截后通过token获取更新用户
+        if (goods.updateUser == null){
+            goods.updateUser = 1
+        }
         return goodsMasterRepository.save(goods)
     }
 
@@ -73,10 +84,10 @@ class GoodsServiceImpl
         val vals: List<GoodsAttrVal> = goodsAttrMapper.getGoodsAttrVals(goodsCategoryId)
 
         val goodsCategoryAttrs = ArrayList<GoodsCategoryAttr>()
-        for (key in keys){
+        for (key in keys) {
             val goodsCategoryAttr: GoodsCategoryAttr = GoodsCategoryAttr()
             BeanUtils.copyProperties(key, goodsCategoryAttr)
-            goodsCategoryAttr.vals = vals.filter { it.goodsAttrKeyId==key.goodsAttrKeyId }
+            goodsCategoryAttr.vals = vals.filter { it.goodsAttrKeyId == key.goodsAttrKeyId }
             goodsCategoryAttrs.add(goodsCategoryAttr)
         }
         return goodsCategoryAttrs

@@ -21,6 +21,7 @@ import kotlin.collections.ArrayList
 class GoodsController @Autowired constructor(private val goodsService: GoodsService) {
     @Value("\${app.upload.shop.cover}")
     private lateinit var coverPath: String
+
     @Value("\${app.upload.shop.pictures}")
     private lateinit var picturePath: String
 
@@ -47,7 +48,7 @@ class GoodsController @Autowired constructor(private val goodsService: GoodsServ
     }
 
     @PostMapping("/getGoodsDetail")
-    fun getGoodsDetail(goodsId: String): ResultVO{
+    fun getGoodsDetail(goodsId: String): ResultVO {
         return ResultVO.create(goodsService.getGoodsDetail(goodsId))
     }
 
@@ -57,7 +58,7 @@ class GoodsController @Autowired constructor(private val goodsService: GoodsServ
      * @return GoodsCategoryAttrs对象包含该分类下的所有key和val
      */
     @PostMapping("/getGoodsCategoryAttrs")
-    fun getGoodsCategoryAttrs(goodsCategoryId: Int): ResultVO{
+    fun getGoodsCategoryAttrs(goodsCategoryId: Int): ResultVO {
         return ResultVO.create(goodsService.getGoodsCategoryAttrKeyAndVal(goodsCategoryId));
     }
 

@@ -3,8 +3,7 @@ import {Table, Button} from 'antd';
 import {connect, Dispatch} from 'dva';
 import {GoodsListVO} from "@/pages/Goods/GoodsList/data";
 import {PaginationConfig} from 'antd/lib/pagination';
-import {User} from "@/pages/user/UserList/data";
-import GoodsForm from "@/pages/Goods/GoodsList/components/GoodsForm";
+import router from 'umi/router';
 
 const columns = [
   {
@@ -40,7 +39,8 @@ const columns = [
     dataIndex: 'action',
     render: (_: any, record: GoodsListVO) => (
       <>
-        <GoodsForm type={1} goodsId={record.goodsId} />
+        <Button onClick={()=>{router.push(`/goods/edit?goodsId=${record.goodsId}&type=1`)}}>编辑商品</Button>
+        {/* <GoodsForm type={1} goodsId={record.goodsId} /> */}
       </>
     ),
   }

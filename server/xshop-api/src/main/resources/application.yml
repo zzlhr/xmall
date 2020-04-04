@@ -28,7 +28,7 @@ spring:
 server:
   port: 8009
 app:
-  workspace: /Users/haoranliu/xshop/
+  workspace: F:\我的项目\xshop\server\
   upload:
     rootDir: ${app.workspace}upload/
     shop:
@@ -39,7 +39,7 @@ app:
     classify:
       pictures: ${app.upload.rootDir}classify/
 logging:
-  path: ${app.workspace}/logs/
+  path: ${app.workspace}logs/
   level:
     root: info
 mybatis:
