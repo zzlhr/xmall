@@ -12,17 +12,22 @@
         u.username updateUserName,
         g.create_time,
         g.update_time,
-        g.category_id,
+        g.category2,
         gc.category_name
         from goods_master g
         left join user u on g.update_user = u.uid
-        left join goods_category gc on g.category_id = gc.category_id
+        left join goods_category gc on g.category2 = gc.category_id
         where 1=1
         <if test="title != null">
             and goods_title=#{title}
         </if>
         <if test="cid != null">
-            and g.category_id=#{categoryId}
+            and g.category2=#{categoryId}
         </if>
+    </select>
+    <select id="getGoodsDetail" resultType="com.lhrsite.xshop.vo.GoodsDetailVO">
+        select *
+        from goods_master
+        where goods_id = #{goodsId}
     </select>
 </mapper>

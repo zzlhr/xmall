@@ -10,9 +10,13 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.sql.Timestamp;
 
+/**
+ * 该类已经不使用了，请使用GoodsMaster
+ */
 @Entity
 @Data
 @Table(name = "goods")
+@Deprecated
 public class Goods implements Serializable {
 
     @Id

@@ -6,12 +6,10 @@ body,
   height: 100%;
 }
 
-.ant-pro-basicLayout-content {
-  padding: 0 !important;
-}
 .colorWeak {
   filter: invert(80%);
 }
+
 .ant-layout {
   min-height: 100vh;
 }
@@ -25,23 +23,12 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
-.xshopTableOption {
-  display: flex;
-  flex-flow: row;
-}
+
 ul,
 ol {
   list-style: none;
 }
 
-.ant-pro-basicLayout-content {
-  position: relative;
-  padding: 24px;
-  margin: 0;
-}
-.antd-pro-pages-user-user-list-index-main{
-  margin: 0 !important;
-}
 @media (max-width: @screen-xs) {
   .ant-table {
     width: 100%;
@@ -59,6 +46,9 @@ ol {
   }
 }
 
-.ant-pro-page-header-wrap-children-content{
-  //padding-bottom: 50px;
+// 兼容IE11
+@media screen and(-ms-high-contrast: active), (-ms-high-contrast: none) {
+  body .ant-design-pro > .ant-layout {
+    min-height: 100vh;
+  }
 }

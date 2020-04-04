@@ -34,9 +34,9 @@ public class UserVO {
     private Integer status;
 
     /** 用户创建时间 */
-    private String createTime;
+    private Timestamp createTime;
     /** 用户更新时间 */
-    private String updateTime;
+    private Timestamp updateTime;
 
 
 

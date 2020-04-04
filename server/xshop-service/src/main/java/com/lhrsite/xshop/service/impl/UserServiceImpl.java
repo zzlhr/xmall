@@ -141,13 +141,12 @@ public class UserServiceImpl implements UserService {
     public PageVO<UserVO> getUsers(String username, String phone, String email, Integer page, Integer pageSize) {
 
         PageHelper.startPage(page, pageSize, "create_time asc");
-        List<User> userList = userMapper.getUsers(SQLUtil.toFuzzySearchVal(email), SQLUtil.toFuzzySearchVal(phone),
+        List<UserVO> userList = userMapper.getUsers(SQLUtil.toFuzzySearchVal(email), SQLUtil.toFuzzySearchVal(phone),
                 SQLUtil.toFuzzySearchVal(username), null);
 
-        PageVO pageVO = new PageVO<>();
-        pageVO.init(new PageInfo<>(userList), page);
-        pageVO.setArr(userToUserVO(userList, false));
-
+        PageVO<UserVO> pageVO = new PageVO<>();
+        pageVO = pageVO.init(new PageInfo<>(userList), page);
+        pageVO.setArr(userList);
         return pageVO;
     }
 
