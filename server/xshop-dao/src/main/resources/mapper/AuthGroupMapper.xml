@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lhrsite.xshop.mapper.AuthGroupMapper">
+    <select id="getAuthGroupVOList" resultType="com.lhrsite.xshop.vo.AuthGroupVO">
+        select *
+        from auth_group ag
+        inner join user u on ag.update_user = u.uid
+        where 1=1
+        <if test="agName != null">
+            and ag.ag_name like ''#{agName}''
+        </if>
+        <if test="agStatus != null">
+            and ag.ag_status = #{agStatus}
+        </if>
+    </select>
+    <select id="getAuthValueVOSByGroupId" resultType="com.lhrsite.xshop.vo.AuthValueVO">
+        select av.*, ag.*, u.*, m.*
+        from auth_value av
+                 inner join auth_group ag on av.group_id = ag.agid
+                 inner join user u on ag.update_user = u.uid
+                 inner join menu m on av.menu_id = m.mid
+        where 1 = 1
+          and ag.agid = #{groupId}
+    </select>
+    <select id="getAuthValuesByGroupId" resultType="com.lhrsite.xshop.po.AuthValue">
+        select av.*
+        from auth_value av
+                 inner join auth_group ag on av.group_id = ag.agid
+        where ag.agid = #{groupId}
+    </select>
+</mapper>

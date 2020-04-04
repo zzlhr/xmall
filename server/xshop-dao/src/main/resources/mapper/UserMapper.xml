@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lhrsite.xshop.mapper.UserMapper">
+
+    <select id="getUsers" resultType="com.lhrsite.xshop.vo.UserVO">
+        select *
+        from user
+        where 1=1
+        <if test="userName != null">
+            and `username` like #{userName}
+        </if>
+        <if test="phone != null">
+            and phone like #{phone}
+        </if>
+        <if test="email != null">
+            and email like #{email}
+        </if>
+        <if test="userStatus != null">
+            and status = #{userStatus}
+        </if>
+
+    </select>
+    <select id="getAdmin" resultType="com.lhrsite.xshop.po.User">
+        select *
+        from `user`
+        where phone = #{phoneNumber} and admin=1 and password=#{password}
+    </select>
+    <select id="getUserVO">
+
+    </select>
+</mapper>

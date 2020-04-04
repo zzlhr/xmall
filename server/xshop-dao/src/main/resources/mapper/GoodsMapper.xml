@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lhrsite.xshop.mapper.GoodsMapper">
+
+    <select id="getGoodsList" resultType="com.lhrsite.xshop.vo.GoodsListVO">
+        select goods_id,
+        goods_title,
+        goods_cover,
+        goods_status,
+        goods_content,
+        update_user,
+        u.username updateUserName,
+        g.create_time,
+        g.update_time,
+        g.category2,
+        gc.category_name
+        from goods_master g
+        left join user u on g.update_user = u.uid
+        left join goods_category gc on g.category2 = gc.category_id
+        where 1=1
+        <if test="title != null">
+            and goods_title=#{title}
+        </if>
+        <if test="cid != null">
+            and g.category2=#{categoryId}
+        </if>
+    </select>
+    <select id="getGoodsDetail" resultType="com.lhrsite.xshop.vo.GoodsDetailVO">
+        select *
+        from goods_master
+        where goods_id = #{goodsId}
+    </select>
+</mapper>

@@ -1,1 +1,6 @@
 /.metadata/
+.idea/**
+*.iml
+.DS_Store
+xshop-web-app/
+**/target/
