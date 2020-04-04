@@ -3,15 +3,15 @@
 
  Source Server         : localhost
  Source Server Type    : MySQL
- Source Server Version : 50725
+ Source Server Version : 80018
  Source Host           : localhost:3306
  Source Schema         : xshop
 
  Target Server Type    : MySQL
- Target Server Version : 50725
+ Target Server Version : 80018
  File Encoding         : 65001
 
- Date: 30/04/2019 21:34:17
+ Date: 04/04/2020 21:40:21
 */
 
 SET NAMES utf8mb4;
@@ -21,130 +21,95 @@ SET FOREIGN_KEY_CHECKS = 0;
 -- Table structure for address
 -- ----------------------------
 DROP TABLE IF EXISTS `address`;
-CREATE TABLE `address` (
-  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+CREATE TABLE `address`  (
+  `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT,
   `uid` int(11) NOT NULL COMMENT '用户id',
-  `province` varchar(20) NOT NULL COMMENT '省份id',
-  `city` varchar(20) NOT NULL COMMENT '城市id',
-  `country` varchar(20) NOT NULL COMMENT '区域id',
-  `town` varchar(20) DEFAULT NULL COMMENT '街道id',
-  `addr` varchar(100) NOT NULL DEFAULT '' COMMENT '地址',
-  `consignee` varchar(50) NOT NULL COMMENT '收货人',
-  `link_tel` varchar(100) NOT NULL COMMENT '联系方式',
-  `default_status` tinyint(1) NOT NULL DEFAULT '0' COMMENT '默认状态',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8mb4;
+  `province` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '省份id',
+  `city` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '城市id',
+  `country` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '区域id',
+  `town` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '街道id',
+  `addr` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT '' COMMENT '地址',
+  `consignee` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '收货人',
+  `link_tel` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '联系方式',
+  `default_status` tinyint(1) NOT NULL DEFAULT 0 COMMENT '默认状态',
+  `address_status` tinyint(4) NOT NULL DEFAULT 1 COMMENT '地址状态 1启用，0禁用',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 20 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of address
 -- ----------------------------
-BEGIN;
-INSERT INTO `address` VALUES (18, 1, '120000000000', '120100000000', '120102000000', '120102002000', '市政家属院1号楼1单元001', '刘先生', '18837188075', 1);
-INSERT INTO `address` VALUES (19, 1, '410000000000', '410100000000', '410172000000', 'false', '玉兰街', '刘浩然', '19937150218', 0);
-INSERT INTO `address` VALUES (20, 1, '110000000000', '110100000000', '110101000000', 'null', '测试地址', '刘先生', '19937150218', 0);
-COMMIT;
+INSERT INTO `address` VALUES (18, 1, '120000000000', '120100000000', '120102000000', '120102002000', '市政家属院1号楼1单元001', '刘先生', '18837188075', 1, 1);
+INSERT INTO `address` VALUES (19, 1, '410000000000', '410100000000', '410172000000', 'false', '玉兰街', '刘浩然', '19937150218', 0, 1);
+INSERT INTO `address` VALUES (20, 1, '110000000000', '110100000000', '110101000000', 'null', '测试地址', '刘先生', '19937150218', 0, 1);
 
 -- ----------------------------
 -- Table structure for app
 -- ----------------------------
 DROP TABLE IF EXISTS `app`;
-CREATE TABLE `app` (
-  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-  `link` text NOT NULL COMMENT '联系方式',
-  `picture` text NOT NULL COMMENT '首页轮播图',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4;
+CREATE TABLE `app`  (
+  `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `link` text CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '联系方式',
+  `picture` text CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '首页轮播图',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of app
 -- ----------------------------
-BEGIN;
 INSERT INTO `app` VALUES (1, '开发人员qq：2388399752', '[{\"picture\":\"https://xuanhuobang.com/home_upload/7cc8f1e6-b8de-4907-aab4-f387533ec97c.jpg\",\"url\":\"b94eee7b70c66d9e1610a006e790c463\"},{\"picture\":\"https://xuanhuobang.com/home_upload/073b698b-d6b4-46aa-88cb-e1aac0a02c7b.jpg\",\"url\":\"46466f3890342cbaf4a6e36a90ff805c\"}]');
-COMMIT;
-
--- ----------------------------
--- Table structure for auth_code
--- ----------------------------
-DROP TABLE IF EXISTS `auth_code`;
-CREATE TABLE `auth_code` (
-  `phone_number` varchar(20) NOT NULL DEFAULT '' COMMENT '手机号',
-  `code` varchar(10) NOT NULL DEFAULT '' COMMENT '验证码',
-  `create_time` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-  `type` tinyint(4) NOT NULL DEFAULT '0',
-  PRIMARY KEY (`phone_number`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
--- ----------------------------
--- Records of auth_code
--- ----------------------------
-BEGIN;
-INSERT INTO `auth_code` VALUES ('13144408255', '0730', '2019-04-19 23:23:46', 1);
-INSERT INTO `auth_code` VALUES ('13155234350', '4813', '2019-04-19 23:23:46', 1);
-INSERT INTO `auth_code` VALUES ('13384068568', '3002', '2019-04-19 23:23:46', 1);
-INSERT INTO `auth_code` VALUES ('13663759285', '3258', '2019-04-19 23:23:46', 1);
-INSERT INTO `auth_code` VALUES ('13703408636', '1877', '2019-04-19 23:23:46', 1);
-INSERT INTO `auth_code` VALUES ('13837473170', '1335', '2019-04-19 23:23:46', 1);
-INSERT INTO `auth_code` VALUES ('13949478229', '1481', '2019-04-19 23:23:46', 1);
-INSERT INTO `auth_code` VALUES ('15038927211', '7240', '2019-04-19 23:23:46', 1);
-INSERT INTO `auth_code` VALUES ('15225037337', '4518', '2019-04-19 23:23:46', 1);
-INSERT INTO `auth_code` VALUES ('15237589610', '4122', '2019-04-19 23:23:46', 1);
-INSERT INTO `auth_code` VALUES ('15537517006', '2878', '2019-04-19 23:23:46', 1);
-INSERT INTO `auth_code` VALUES ('15836981377', '8773', '2019-04-19 23:23:46', 1);
-INSERT INTO `auth_code` VALUES ('17530935329', '4106', '2019-04-19 23:23:46', 1);
-INSERT INTO `auth_code` VALUES ('17837548788', '8114', '2019-04-19 23:23:46', 1);
-INSERT INTO `auth_code` VALUES ('18037598177', '1702', '2019-04-19 23:23:46', 1);
-INSERT INTO `auth_code` VALUES ('18537508556', '6864', '2019-04-19 23:23:46', 1);
-INSERT INTO `auth_code` VALUES ('18737598177', '4575', '2019-04-19 23:23:46', 1);
-INSERT INTO `auth_code` VALUES ('19937150218', '8736', '2019-04-19 23:23:46', 2);
-COMMIT;
 
 -- ----------------------------
 -- Table structure for auth_group
 -- ----------------------------
 DROP TABLE IF EXISTS `auth_group`;
-CREATE TABLE `auth_group` (
+CREATE TABLE `auth_group`  (
   `agid` int(11) NOT NULL AUTO_INCREMENT COMMENT '权限组id',
-  `ag_name` varchar(255) COLLATE utf8mb4_bin NOT NULL COMMENT '权限组名称',
-  `ag_status` tinyint(4) DEFAULT NULL COMMENT '权限组状态',
-  `enterprise` int(11) DEFAULT NULL COMMENT '所属企业',
-  `project` int(11) DEFAULT NULL COMMENT '所属项目',
-  `create_time` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-  `update_user` int(11) DEFAULT NULL COMMENT '操作人',
-  `update_time` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
-  PRIMARY KEY (`agid`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;
+  `ag_code` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL COMMENT '权限组代号',
+  `ag_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL COMMENT '权限组名称',
+  `ag_status` tinyint(4) NULL DEFAULT 1 COMMENT '权限组状态，1启用，0禁用',
+  `create_time` datetime(0) NULL DEFAULT CURRENT_TIMESTAMP(0) COMMENT '创建时间',
+  `update_user` int(11) NULL DEFAULT NULL COMMENT '操作人',
+  `update_time` datetime(0) NULL DEFAULT CURRENT_TIMESTAMP(0) ON UPDATE CURRENT_TIMESTAMP(0) COMMENT '修改时间',
+  PRIMARY KEY (`agid`, `ag_code`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_bin ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of auth_group
+-- ----------------------------
+INSERT INTO `auth_group` VALUES (1, 'superAdmin', '超级管理员', 1, '2019-12-07 13:34:36', 1, '2019-12-07 13:40:11');
+INSERT INTO `auth_group` VALUES (2, 'user', '用户', 1, '2019-12-11 23:10:49', 1, '2019-12-11 23:10:49');
 
 -- ----------------------------
 -- Table structure for auth_value
 -- ----------------------------
 DROP TABLE IF EXISTS `auth_value`;
-CREATE TABLE `auth_value` (
+CREATE TABLE `auth_value`  (
   `menu_id` int(11) NOT NULL COMMENT '菜单id',
   `group_id` int(11) NOT NULL COMMENT '权限组id',
-  `value` tinyint(1) NOT NULL DEFAULT '1' COMMENT '是否有权限',
-  `create_time` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-  `update_time` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+  `value` tinyint(1) NOT NULL DEFAULT 1 COMMENT '是否有权限',
+  `create_time` datetime(0) NULL DEFAULT CURRENT_TIMESTAMP(0) COMMENT '创建时间',
+  `update_time` datetime(0) NULL DEFAULT CURRENT_TIMESTAMP(0) ON UPDATE CURRENT_TIMESTAMP(0) COMMENT '更新时间',
   `update_user` int(11) NOT NULL COMMENT '更新人',
-  PRIMARY KEY (`menu_id`,`group_id`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+  PRIMARY KEY (`menu_id`, `group_id`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Table structure for buy_car
 -- ----------------------------
 DROP TABLE IF EXISTS `buy_car`;
-CREATE TABLE `buy_car` (
-  `id` varchar(32) NOT NULL DEFAULT '' COMMENT 'uuid',
+CREATE TABLE `buy_car`  (
+  `id` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT '' COMMENT 'uuid',
   `user_id` int(11) NOT NULL COMMENT '用户id',
-  `goods_id` varchar(32) NOT NULL DEFAULT '' COMMENT '商品id',
-  `number` int(11) NOT NULL DEFAULT '0' COMMENT '数量',
-  `create_time` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+  `goods_id` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT '' COMMENT '商品id',
+  `number` int(11) NOT NULL DEFAULT 0 COMMENT '数量',
+  `create_time` datetime(0) NULL DEFAULT CURRENT_TIMESTAMP(0) COMMENT '创建时间',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of buy_car
 -- ----------------------------
-BEGIN;
 INSERT INTO `buy_car` VALUES ('1535263399195', 1, 'b75643fe06b91fa4690c88d5ecd5995d', 3, '2019-04-19 23:23:46');
 INSERT INTO `buy_car` VALUES ('1535457357150', 1, '371fbd7d52032d5feb54739c2c5722e7', 3, '2019-04-19 23:23:46');
 INSERT INTO `buy_car` VALUES ('1535810753389', 108, 'b75643fe06b91fa4690c88d5ecd5995d', 10, '2019-04-19 23:23:46');
@@ -158,24 +123,22 @@ INSERT INTO `buy_car` VALUES ('1541226667133', 109, 'cd0c9c0e37748251a705d46acf0
 INSERT INTO `buy_car` VALUES ('1542338582951', 128, 'fdaea0a4fe6c6513871508839f8b34b6', 5, '2019-04-19 23:23:46');
 INSERT INTO `buy_car` VALUES ('1552201091310', 1, '083a1c71a7b519e81b40be58e9422bab', 1, '2019-04-19 23:23:46');
 INSERT INTO `buy_car` VALUES ('1552202585513', 1, '09ae30588a3bc28b7a27adcf31b22781', 3, '2019-04-19 23:23:46');
-COMMIT;
 
 -- ----------------------------
 -- Table structure for city
 -- ----------------------------
 DROP TABLE IF EXISTS `city`;
-CREATE TABLE `city` (
+CREATE TABLE `city`  (
   `id` int(11) NOT NULL,
-  `name` varchar(64) DEFAULT NULL,
-  `city_id` varchar(12) DEFAULT NULL,
-  `province_id` varchar(12) DEFAULT NULL,
+  `name` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
+  `city_id` varchar(12) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
+  `province_id` varchar(12) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of city
 -- ----------------------------
-BEGIN;
 INSERT INTO `city` VALUES (1, '市辖区', '110100000000', '110000000000');
 INSERT INTO `city` VALUES (2, '市辖区', '120100000000', '120000000000');
 INSERT INTO `city` VALUES (3, '石家庄市', '130100000000', '130000000000');
@@ -519,141 +482,58 @@ INSERT INTO `city` VALUES (340, '伊犁哈萨克自治州', '654000000000', '650
 INSERT INTO `city` VALUES (341, '塔城地区', '654200000000', '650000000000');
 INSERT INTO `city` VALUES (342, '阿勒泰地区', '654300000000', '650000000000');
 INSERT INTO `city` VALUES (343, '自治区直辖县级行政区划', '659000000000', '650000000000');
-COMMIT;
-
--- ----------------------------
--- Table structure for classify
--- ----------------------------
-DROP TABLE IF EXISTS `classify`;
-CREATE TABLE `classify` (
-  `cl_id` int(11) NOT NULL AUTO_INCREMENT COMMENT '分类主键',
-  `cl_name` varchar(20) NOT NULL COMMENT '分类名称',
-  `cl_grade` tinyint(4) NOT NULL DEFAULT '0' COMMENT '分类等级',
-  `cl_fid` int(11) NOT NULL DEFAULT '0' COMMENT '父级',
-  `cl_serial` int(11) NOT NULL DEFAULT '99' COMMENT '序号',
-  `eid` int(11) DEFAULT '1' COMMENT '企业id',
-  `picture` varchar(200) DEFAULT NULL COMMENT '图片',
-  PRIMARY KEY (`cl_id`),
-  UNIQUE KEY `classify_pk` (`cl_name`,`eid`)
-) ENGINE=InnoDB AUTO_INCREMENT=169 DEFAULT CHARSET=utf8mb4;
-
--- ----------------------------
--- Records of classify
--- ----------------------------
-BEGIN;
-INSERT INTO `classify` VALUES (1, '粮食', 0, 0, 0, 1, '');
-INSERT INTO `classify` VALUES (9, '大米', 1, 1, 0, 1, NULL);
-INSERT INTO `classify` VALUES (13, '面粉', 1, 1, 2, 1, NULL);
-INSERT INTO `classify` VALUES (16, '杂粮', 1, 1, 6, 1, NULL);
-INSERT INTO `classify` VALUES (19, '豆', 1, 1, 5, 1, NULL);
-INSERT INTO `classify` VALUES (21, '花豇豆', 1, 1, 99, 1, NULL);
-INSERT INTO `classify` VALUES (24, '小米', 1, 1, 3, 1, NULL);
-INSERT INTO `classify` VALUES (29, '食用油', 1, 1, 1, 1, NULL);
-INSERT INTO `classify` VALUES (34, '20L大豆油', 2, 29, 99, 1, NULL);
-INSERT INTO `classify` VALUES (40, '玉米类', 2, 16, 99, 1, NULL);
-INSERT INTO `classify` VALUES (41, '泰国香米', 2, 9, 99, 1, NULL);
-INSERT INTO `classify` VALUES (44, '燕麦类', 2, 16, 99, 1, NULL);
-INSERT INTO `classify` VALUES (45, '薏米类', 2, 16, 99, 1, NULL);
-INSERT INTO `classify` VALUES (52, '籼米/仙桃米', 2, 9, 99, 1, NULL);
-INSERT INTO `classify` VALUES (73, '杂粮面', 2, 13, 99, 1, NULL);
-INSERT INTO `classify` VALUES (74, '花生类', 2, 16, 99, 1, NULL);
-INSERT INTO `classify` VALUES (77, '豌豆类', 2, 19, 99, 1, NULL);
-INSERT INTO `classify` VALUES (90, '粥类', 2, 16, 99, 1, NULL);
-INSERT INTO `classify` VALUES (91, '品牌小米', 2, 24, 99, 1, NULL);
-INSERT INTO `classify` VALUES (92, '小包装小米', 2, 24, 99, 1, NULL);
-INSERT INTO `classify` VALUES (93, '黑米类', 2, 16, 0, 1, NULL);
-INSERT INTO `classify` VALUES (94, '黄豆类', 2, 19, 0, 1, NULL);
-INSERT INTO `classify` VALUES (95, '黑豆类', 2, 19, 0, 1, NULL);
-INSERT INTO `classify` VALUES (96, '红豆类', 2, 19, 0, 1, NULL);
-INSERT INTO `classify` VALUES (97, '绿豆类', 2, 19, 0, 1, NULL);
-INSERT INTO `classify` VALUES (98, '豇豆类', 2, 19, 0, 1, NULL);
-INSERT INTO `classify` VALUES (99, '中粮五湖大豆油', 2, 29, 0, 1, NULL);
-INSERT INTO `classify` VALUES (100, '其他豆类', 2, 19, 0, 1, NULL);
-INSERT INTO `classify` VALUES (101, '糯米/江米类', 2, 16, 0, 1, NULL);
-INSERT INTO `classify` VALUES (102, '东北珍珠米类', 2, 9, 0, 1, NULL);
-INSERT INTO `classify` VALUES (103, '东北长粒香类', 2, 9, 0, 1, NULL);
-INSERT INTO `classify` VALUES (104, '原阳大米类', 2, 9, 0, 1, NULL);
-INSERT INTO `classify` VALUES (105, '小包装品牌大米类', 2, 9, 0, 1, NULL);
-INSERT INTO `classify` VALUES (106, '特价大米类', 2, 9, 0, 1, NULL);
-INSERT INTO `classify` VALUES (107, '芝麻类', 2, 16, 0, 1, NULL);
-INSERT INTO `classify` VALUES (108, '麦仁类', 2, 16, 0, 1, NULL);
-INSERT INTO `classify` VALUES (109, '淀粉类', 1, 1, 0, 1, NULL);
-INSERT INTO `classify` VALUES (110, '食用淀粉类', 2, 109, 0, 1, NULL);
-INSERT INTO `classify` VALUES (111, '稻花香类', 2, 9, 0, 1, NULL);
-INSERT INTO `classify` VALUES (112, '碎米', 2, 9, 0, 1, NULL);
-INSERT INTO `classify` VALUES (121, '吃吃吃112', 0, 119, 0, 1, '');
-INSERT INTO `classify` VALUES (129, '测试啦啦啦', 0, 120, 0, 1, '');
-INSERT INTO `classify` VALUES (130, '吃啥想吃啥', 0, 128, 0, 1, '');
-INSERT INTO `classify` VALUES (131, '阿斯顿', 0, 128, 0, 1, '');
-INSERT INTO `classify` VALUES (132, '2133333', 0, 128, 0, 1, '');
-INSERT INTO `classify` VALUES (133, '2孙v', 0, 128, 0, 1, '');
-INSERT INTO `classify` VALUES (134, '889', 0, 128, 0, 1, '');
-INSERT INTO `classify` VALUES (135, '12388', 0, 128, 0, 1, '');
-INSERT INTO `classify` VALUES (139, 'woshishui', 0, 138, 0, 1, '');
-INSERT INTO `classify` VALUES (140, '存储', 0, 138, 0, 1, '');
-INSERT INTO `classify` VALUES (141, '男装子分类', 0, 113, 0, 1, '');
-INSERT INTO `classify` VALUES (153, '男的是否·', 0, 113, 0, 1, '');
-INSERT INTO `classify` VALUES (162, '男装', 0, 0, 0, 1, '');
-INSERT INTO `classify` VALUES (163, '女装', 0, 0, 0, 1, '');
-INSERT INTO `classify` VALUES (164, '鞋靴', 0, 0, 0, 1, '');
-INSERT INTO `classify` VALUES (165, '裤子', 0, 0, 0, 1, '');
-INSERT INTO `classify` VALUES (166, '上衣', 0, 0, 0, 1, '');
-INSERT INTO `classify` VALUES (167, '生鲜', 0, 0, 0, 1, '');
-INSERT INTO `classify` VALUES (168, '内衣', 0, 0, 0, 1, '');
-COMMIT;
 
 -- ----------------------------
 -- Table structure for config_setting
 -- ----------------------------
 DROP TABLE IF EXISTS `config_setting`;
-CREATE TABLE `config_setting` (
+CREATE TABLE `config_setting`  (
   `csid` int(11) NOT NULL AUTO_INCREMENT COMMENT '配置设置id',
   `ct_type` int(11) NOT NULL COMMENT '配置项类型',
   `config_value` int(11) NOT NULL COMMENT '配置项值',
   `config_enterprise` int(11) NOT NULL COMMENT '配置值所属企业',
-  PRIMARY KEY (`csid`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='配置设置';
+  PRIMARY KEY (`csid`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '配置设置' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Table structure for config_type
 -- ----------------------------
 DROP TABLE IF EXISTS `config_type`;
-CREATE TABLE `config_type` (
+CREATE TABLE `config_type`  (
   `ctid` int(11) NOT NULL AUTO_INCREMENT COMMENT '配置类型id',
   `ct_type` int(11) NOT NULL COMMENT '配置类型',
-  `ct_description` varchar(50) NOT NULL COMMENT '配置类型描述',
-  PRIMARY KEY (`ctid`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='配置类型';
+  `ct_description` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '配置类型描述',
+  PRIMARY KEY (`ctid`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '配置类型' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Table structure for config_values
 -- ----------------------------
 DROP TABLE IF EXISTS `config_values`;
-CREATE TABLE `config_values` (
+CREATE TABLE `config_values`  (
   `cvsid` int(11) NOT NULL AUTO_INCREMENT COMMENT '配置值id',
   `ct_type` int(11) NOT NULL COMMENT '配置类型',
-  `cvs_value` varchar(100) NOT NULL COMMENT '配置值',
-  `cvs_description` varchar(50) NOT NULL COMMENT '配置值描述',
-  `cvs_enterprise` int(11) NOT NULL DEFAULT '0' COMMENT '所属企业',
-  PRIMARY KEY (`cvsid`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='配置值';
+  `cvs_value` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '配置值',
+  `cvs_description` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '配置值描述',
+  `cvs_enterprise` int(11) NOT NULL DEFAULT 0 COMMENT '所属企业',
+  PRIMARY KEY (`cvsid`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '配置值' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Table structure for country
 -- ----------------------------
 DROP TABLE IF EXISTS `country`;
-CREATE TABLE `country` (
+CREATE TABLE `country`  (
   `id` int(11) NOT NULL,
-  `name` varchar(64) DEFAULT NULL,
-  `country_id` varchar(12) DEFAULT NULL,
-  `city_id` varchar(12) DEFAULT NULL,
+  `name` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
+  `country_id` varchar(12) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
+  `city_id` varchar(12) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of country
 -- ----------------------------
-BEGIN;
 INSERT INTO `country` VALUES (1, '东城区', '110101000000', '110100000000');
 INSERT INTO `country` VALUES (2, '西城区', '110102000000', '110100000000');
 INSERT INTO `country` VALUES (3, '朝阳区', '110105000000', '110100000000');
@@ -3811,212 +3691,303 @@ INSERT INTO `country` VALUES (3154, '青铜峡市', '640381000000', '64030000000
 INSERT INTO `country` VALUES (3155, '市辖区', '640401000000', '640400000000');
 INSERT INTO `country` VALUES (3156, '原州区', '640402000000', '640400000000');
 INSERT INTO `country` VALUES (3157, '西吉县', '640422000000', '640400000000');
-COMMIT;
 
 -- ----------------------------
 -- Table structure for enterprise
 -- ----------------------------
 DROP TABLE IF EXISTS `enterprise`;
-CREATE TABLE `enterprise` (
+CREATE TABLE `enterprise`  (
   `eid` int(11) NOT NULL AUTO_INCREMENT COMMENT '企业id',
-  `ep_name` varchar(50) COLLATE utf8mb4_bin NOT NULL DEFAULT '' COMMENT '企业名称',
-  `ep_short_name` varchar(20) COLLATE utf8mb4_bin NOT NULL DEFAULT '' COMMENT '企业简称',
-  `ep_link` varchar(255) COLLATE utf8mb4_bin DEFAULT '' COMMENT '企业联系方式',
-  `ep_remark` varchar(255) COLLATE utf8mb4_bin DEFAULT '' COMMENT '企业备注',
-  `ep_type` tinyint(4) DEFAULT '0' COMMENT '企业类型',
-  `ep_status` tinyint(4) DEFAULT '0' COMMENT '企业状态',
-  `create_time` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-  `update_time` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
-  PRIMARY KEY (`eid`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;
+  `ep_name` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL DEFAULT '' COMMENT '企业名称',
+  `ep_short_name` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL DEFAULT '' COMMENT '企业简称',
+  `ep_link` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL DEFAULT '' COMMENT '企业联系方式',
+  `ep_remark` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL DEFAULT '' COMMENT '企业备注',
+  `ep_type` tinyint(4) NULL DEFAULT 0 COMMENT '企业类型',
+  `ep_status` tinyint(4) NULL DEFAULT 0 COMMENT '企业状态',
+  `create_time` datetime(0) NULL DEFAULT CURRENT_TIMESTAMP(0) COMMENT '创建时间',
+  `update_time` datetime(0) NULL DEFAULT CURRENT_TIMESTAMP(0) ON UPDATE CURRENT_TIMESTAMP(0) COMMENT '更新时间',
+  PRIMARY KEY (`eid`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_bin ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of enterprise
 -- ----------------------------
-BEGIN;
 INSERT INTO `enterprise` VALUES (1, 'xshop', 'xshop', 'qq:2388399752', '0', 0, 0, '2019-04-19 23:23:47', '2019-04-19 23:23:47');
-COMMIT;
 
 -- ----------------------------
 -- Table structure for favorite_goods
 -- ----------------------------
 DROP TABLE IF EXISTS `favorite_goods`;
-CREATE TABLE `favorite_goods` (
+CREATE TABLE `favorite_goods`  (
   `fg_id` int(11) NOT NULL AUTO_INCREMENT COMMENT '收藏id',
   `uid` int(11) NOT NULL COMMENT '用户id',
-  `goods_id` varchar(32) NOT NULL COMMENT '商品id',
-  `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-  PRIMARY KEY (`fg_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+  `goods_id` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '商品id',
+  `create_time` datetime(0) NOT NULL DEFAULT CURRENT_TIMESTAMP(0) COMMENT '创建时间',
+  PRIMARY KEY (`fg_id`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
--- Table structure for goods
+-- Table structure for goods_attr_key
 -- ----------------------------
-DROP TABLE IF EXISTS `goods`;
-CREATE TABLE `goods` (
-  `goods_id` varchar(32) NOT NULL DEFAULT '' COMMENT '商品id',
-  `title` varchar(255) NOT NULL DEFAULT '' COMMENT '商品标题',
-  `describe` varchar(500) NOT NULL DEFAULT '' COMMENT '商品描述',
-  `original_price` decimal(18,2) DEFAULT '0.00' COMMENT '原价',
-  `sale_price` decimal(18,2) DEFAULT '0.00' COMMENT '促销价',
-  `sale_status` tinyint(4) NOT NULL DEFAULT '0' COMMENT '促销状态0未促销，1促销中',
-  `sale_type` tinyint(4) NOT NULL DEFAULT '0' COMMENT '促销类型',
-  `cover` varchar(255) DEFAULT '' COMMENT '商品封面',
-  `status` tinyint(4) DEFAULT '0' COMMENT '状态，0上架，1下架',
-  `stock` int(11) DEFAULT '0' COMMENT '库存',
-  `sales_volume` int(11) DEFAULT '0' COMMENT '月销量',
-  `delivery_place` varchar(50) DEFAULT '' COMMENT '发货地',
-  `despatch_money` decimal(18,2) DEFAULT '0.00' COMMENT '快递费',
-  `despatch_is_plus` tinyint(1) NOT NULL DEFAULT '0' COMMENT '快递费是否累加',
-  `despatch_plus_money` decimal(10,0) NOT NULL DEFAULT '0' COMMENT '运费累加单价',
-  `free_postage_num` int(11) NOT NULL DEFAULT '0' COMMENT '免邮费数量，购买数到达该数量免邮费',
-  `exec_free_postage_num` tinyint(1) NOT NULL DEFAULT '0' COMMENT '是否执行免邮数量',
-  `content` text COMMENT '内容',
-  `pictures` varchar(1000) DEFAULT '' COMMENT 'banner图',
+DROP TABLE IF EXISTS `goods_attr_key`;
+CREATE TABLE `goods_attr_key`  (
+  `goods_attr_key_id` int(11) NOT NULL AUTO_INCREMENT COMMENT '商品规格keyid',
+  `goods_category_id` int(11) NOT NULL COMMENT '商品分类id',
+  `goods_attr_key_name` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '商品规格key name',
+  `goods_attr_key_sort` tinyint(3) NOT NULL COMMENT '商品规格key排序',
+  `create_time` datetime(0) NOT NULL COMMENT '创建时间',
+  `update_time` datetime(0) NOT NULL DEFAULT CURRENT_TIMESTAMP(0) ON UPDATE CURRENT_TIMESTAMP(0) COMMENT '更新时间',
+  PRIMARY KEY (`goods_attr_key_id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of goods_attr_key
+-- ----------------------------
+INSERT INTO `goods_attr_key` VALUES (1, 5, 'cpu', 0, '2020-02-06 21:51:20', '2020-02-06 21:59:18');
+INSERT INTO `goods_attr_key` VALUES (2, 5, '内存', 1, '2020-02-06 22:00:40', '2020-02-06 22:00:44');
+
+-- ----------------------------
+-- Table structure for goods_attr_val
+-- ----------------------------
+DROP TABLE IF EXISTS `goods_attr_val`;
+CREATE TABLE `goods_attr_val`  (
+  `goods_attr_val_id` int(11) NOT NULL COMMENT '商品分类规格值',
+  `goods_attr_key_id` int(11) NOT NULL COMMENT '商品分类规格key',
+  `goods_attr_val` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '商品分类规格值',
+  `goods_attr_val_sort` tinyint(8) NOT NULL DEFAULT 0 COMMENT '排序',
+  `create_time` datetime(0) NULL DEFAULT CURRENT_TIMESTAMP(0) COMMENT '创建时间',
+  `update_time` datetime(0) NULL DEFAULT CURRENT_TIMESTAMP(0) ON UPDATE CURRENT_TIMESTAMP(0) COMMENT '更新时间',
+  PRIMARY KEY (`goods_attr_val_id`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of goods_attr_val
+-- ----------------------------
+INSERT INTO `goods_attr_val` VALUES (1, 1, 'I7 9700K', 0, '2020-02-06 21:59:48', '2020-02-06 21:59:50');
+INSERT INTO `goods_attr_val` VALUES (2, 1, 'I9 9900K', 1, '2020-02-06 22:00:09', '2020-02-06 22:00:11');
+INSERT INTO `goods_attr_val` VALUES (3, 2, '8G', 0, '2020-02-06 22:01:25', '2020-02-06 22:01:25');
+INSERT INTO `goods_attr_val` VALUES (4, 2, '16G', 1, '2020-02-06 22:01:25', '2020-02-06 22:01:25');
+INSERT INTO `goods_attr_val` VALUES (5, 2, '32G', 2, '2020-02-06 22:01:25', '2020-02-06 22:01:25');
+
+-- ----------------------------
+-- Table structure for goods_category
+-- ----------------------------
+DROP TABLE IF EXISTS `goods_category`;
+CREATE TABLE `goods_category`  (
+  `category_id` int(11) NOT NULL AUTO_INCREMENT COMMENT '分类id',
+  `category_fid` int(11) NOT NULL DEFAULT 0 COMMENT '父级id',
+  `category_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '分类名称',
+  `category_status` tinyint(1) NOT NULL DEFAULT 1 COMMENT '状态',
+  `category_sort` int(11) NOT NULL DEFAULT 0 COMMENT '排序',
+  `create_time` datetime(0) NOT NULL DEFAULT CURRENT_TIMESTAMP(0) COMMENT '创建时间',
+  `update_time` datetime(0) NOT NULL DEFAULT CURRENT_TIMESTAMP(0) ON UPDATE CURRENT_TIMESTAMP(0) COMMENT '更新时间',
+  PRIMARY KEY (`category_id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 6 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '商品分类表' ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of goods_category
+-- ----------------------------
+INSERT INTO `goods_category` VALUES (1, 0, '数码3C', 1, 0, '2019-12-12 22:37:39', '2019-12-12 22:37:39');
+INSERT INTO `goods_category` VALUES (2, 0, '男装', 1, 0, '2019-12-12 22:37:53', '2019-12-12 22:37:53');
+INSERT INTO `goods_category` VALUES (3, 0, '女装', 1, 0, '2019-12-12 22:38:04', '2019-12-12 22:38:04');
+INSERT INTO `goods_category` VALUES (4, 1, '手机', 1, 0, '2019-12-12 22:52:23', '2019-12-12 22:52:23');
+INSERT INTO `goods_category` VALUES (5, 1, '笔记本电脑', 1, 0, '2020-02-06 21:58:20', '2020-02-06 21:58:20');
+
+-- ----------------------------
+-- Table structure for goods_master
+-- ----------------------------
+DROP TABLE IF EXISTS `goods_master`;
+CREATE TABLE `goods_master`  (
+  `goods_id` varchar(36) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT '' COMMENT '商品id',
+  `goods_title` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT '' COMMENT '商品标题',
+  `goods_describe` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT '' COMMENT '商品描述',
+  `goods_cover` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT '' COMMENT '商品封面',
+  `goods_status` tinyint(4) NULL DEFAULT 1 COMMENT '状态，1上架，0下架',
+  `goods_content` text CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL COMMENT '内容',
+  `goods_banner` varchar(1000) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT '' COMMENT 'banner图',
   `update_user` int(11) NOT NULL COMMENT '更新人id',
-  `create_time` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-  `update_time` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
-  `cl_id` int(11) NOT NULL DEFAULT '0' COMMENT '所属分类',
-  `cl_fid` int(11) NOT NULL DEFAULT '0' COMMENT '所属分类父级',
-  PRIMARY KEY (`goods_id`,`sale_status`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+  `create_time` datetime(0) NULL DEFAULT CURRENT_TIMESTAMP(0) COMMENT '创建时间',
+  `update_time` datetime(0) NULL DEFAULT CURRENT_TIMESTAMP(0) ON UPDATE CURRENT_TIMESTAMP(0) COMMENT '更新时间',
+  `category1` int(11) NOT NULL DEFAULT 0 COMMENT '所属1级分类',
+  `category2` int(11) NOT NULL DEFAULT 0 COMMENT '所属2级分类',
+  PRIMARY KEY (`goods_id`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
--- Records of goods
+-- Records of goods_master
 -- ----------------------------
-BEGIN;
-INSERT INTO `goods` VALUES ('0132c776e7fb8288af24787902f8afbd', '糯米面20kg', '四十斤江米面，好江米面', 103.00, 0.00, 0, 0, 'https://xuanhuobang.com/cover_upload/025ec4aa-837f-4053-8584-239ae279ee85.jpeg', 0, 19, 1, '本地', 3.00, 0, 0, 0, 0, '<p>散装杂粮净重与实际重量误差在0.25kg均属正常请放心购买。&nbsp;</p><p>由于本品为粮食作物天气炎热不宜存放请少购勤购。 由于本品为粮食作物天气炎热不宜存放请少购勤购，若因存放原因生虫变质概不负责。</p><p>因批次不同故包装可能不同，请以实物为准，放心购买。</p>', '[{\"name\":\"c675cbfd-a622-47a3-bbc1-862f2bb9469d.jpeg\",\"url\":\"https://xuanhuobang.com/pictures_upload/c675cbfd-a622-47a3-bbc1-862f2bb9469d.jpeg\",\"uid\":1539091444652,\"status\":\"success\"}]', 108, '2019-04-19 23:23:47', '2019-04-19 23:23:47', 73, 13);
-INSERT INTO `goods` VALUES ('083a1c71a7b519e81b40be58e9422bab', '10kg昌旺五常稻花香米', '二十斤五常稻花香米', 80.00, 0.00, 0, 2, 'https://xuanhuobang.com/cover_upload/a4951441-91ea-43a1-aa75-f978d206a1f1.jpeg', 0, 19, 1, '本地', 0.00, 0, 0, 0, 0, '', '[{\"name\":\"7b4d65c2-b42a-4234-b4a7-ca8355337e3e.jpeg\",\"url\":\"https://xuanhuobang.com/pictures_upload/7b4d65c2-b42a-4234-b4a7-ca8355337e3e.jpeg\",\"uid\":1541913687699,\"status\":\"success\"}]', 108, '2019-04-19 23:23:47', '2019-04-19 23:23:47', 105, 9);
-INSERT INTO `goods` VALUES ('09ae30588a3bc28b7a27adcf31b22781', '秋天小町东北珍珠米50kg', '五十斤黑龙江华川东北珍珠米', 108.00, 0.00, 0, 2, 'https://xuanhuobang.com/cover_upload/306c08fa-8aac-4bac-b6cd-43234a94bb1a.jpeg', 0, 15, 3, '本地', 0.00, 0, 0, 0, 0, '', '[{\"name\":\"76966aed-a571-48cb-9e72-e76b084e1fea.jpeg\",\"url\":\"https://xuanhuobang.com/pictures_upload/76966aed-a571-48cb-9e72-e76b084e1fea.jpeg\",\"uid\":1540099834633,\"status\":\"success\"}]', 108, '2019-04-19 23:23:47', '2019-04-19 23:23:47', 102, 9);
-INSERT INTO `goods` VALUES ('0a6973f3cff5b5f51761b036c4f72b8b', '小玉米片', '小玉米片', 40.00, 0.00, 0, 0, 'https://xuanhuobang.com/cover_upload/df7bc1d9-46da-4032-9147-cae3f1112304.jpeg', 0, 6, 4, '本地', 0.00, 0, 0, 0, 0, '', '[{\"name\":\"21664652-d15b-4b2d-b475-0784cf3ce2a1.jpeg\",\"url\":\"https://xuanhuobang.com/pictures_upload/21664652-d15b-4b2d-b475-0784cf3ce2a1.jpeg\",\"uid\":1541211843332,\"status\":\"success\"}]', 108, '2019-04-19 23:23:47', '2019-04-19 23:23:47', 40, 16);
-INSERT INTO `goods` VALUES ('0d930f3860e53d46132f8966db5c6936', '89斤豆浆专用豆', '豆浆专用豆', 185.00, 188.00, 0, 2, 'https://xuanhuobang.com/cover_upload/144b9b80-c765-4dc3-9cb5-f7d512409a79.jpeg', 0, 29, 1, '本地', 3.00, 0, 0, 0, 0, '', '[{\"name\":\"68f245a4-383c-4d79-9d5f-6aa8d91cd87a.jpeg\",\"url\":\"https://xuanhuobang.com/pictures_upload/68f245a4-383c-4d79-9d5f-6aa8d91cd87a.jpeg\",\"uid\":1540101115650,\"status\":\"success\"}]', 108, '2019-04-19 23:23:47', '2019-04-19 23:23:47', 94, 19);
-INSERT INTO `goods` VALUES ('0ecb57d1484620189ce1e8f863500483', '黑米', '', 121.00, 125.00, 0, 2, 'https://xuanhuobang.com/cover_upload/5f0e97d1-e442-40c5-9e9b-2912c5f1aa5c.jpeg', 0, 50, 0, '本地', 3.00, 0, 0, 0, 0, '', '[{\"name\":\"5cfc1c90-1392-41d6-9ffd-8216c242e42b.jpeg\",\"url\":\"https://xuanhuobang.com/pictures_upload/5cfc1c90-1392-41d6-9ffd-8216c242e42b.jpeg\",\"uid\":1541211739833,\"status\":\"success\"}]', 108, '2019-04-19 23:23:47', '2019-04-19 23:23:47', 93, 16);
-INSERT INTO `goods` VALUES ('12446e7dfc0ede6c63f4070120a42ce6', '特价珍珠米23.5kg', '四十七斤特价大米', 105.00, 92.00, 1, 1, 'https://xuanhuobang.com/cover_upload/14393142-a7ca-4c19-ae5c-3d8174251cee.jpeg', 0, 100, 0, '本地', 0.00, 0, 0, 0, 0, '', '[{\"name\":\"0a814a4c-eff5-447e-9c67-eeedc50ed7b3.jpeg\",\"url\":\"https://xuanhuobang.com/pictures_upload/0a814a4c-eff5-447e-9c67-eeedc50ed7b3.jpeg\",\"uid\":1540100441340,\"status\":\"success\"}]', 108, '2019-04-19 23:23:47', '2019-04-19 23:23:47', 106, 9);
-INSERT INTO `goods` VALUES ('15766c72f337c2ddc44b1f8b9940e511', '25kg红花生', '五十斤优质红花生', 250.00, 0.00, 0, 2, 'https://xuanhuobang.com/cover_upload/c52dde57-00f5-4ffd-bcb1-4b905d0b381f.jpeg', 0, 100, 0, '本地', 0.00, 0, 0, 0, 0, '', '[{\"name\":\"32903fb8-4f9c-447a-b605-ae91972b33cd.jpeg\",\"url\":\"https://xuanhuobang.com/pictures_upload/32903fb8-4f9c-447a-b605-ae91972b33cd.jpeg\",\"uid\":1543117792197,\"status\":\"success\"}]', 108, '2019-04-19 23:23:47', '2019-04-19 23:23:47', 74, 16);
-INSERT INTO `goods` VALUES ('1763177eb936f4b3b5e37ff8d3acc297', '芝麻仁25kg', '好芝麻仁，颗粒饱满，晶莹透亮，25kg', 410.00, 0.00, 0, 0, 'https://xuanhuobang.com/cover_upload/b31730ee-adaa-4a2a-ad60-c33dc539ac41.jpeg', 0, 49, 1, '本地', 0.00, 0, 0, 0, 0, '<p>散装杂粮净重与实际重量误差在0.25kg均属正常请放心购买。&nbsp;</p><p>由于本品为粮食作物天气炎热不宜存放请少购勤购。 由于本品为粮食作物天气炎热不宜存放请少购勤购，若因存放原因生虫变质概不负责。</p>', '[{\"name\":\"43bd1a77-bd65-4f60-96c1-c52a4d7764c3.jpeg\",\"url\":\"https://xuanhuobang.com/pictures_upload/43bd1a77-bd65-4f60-96c1-c52a4d7764c3.jpeg\",\"uid\":1539177035336,\"status\":\"success\"}]', 108, '2019-04-19 23:23:47', '2019-04-19 23:23:47', 107, 16);
-INSERT INTO `goods` VALUES ('1948441ad87c05df72aac67c1aa6a90b', '22kg谷老帽石磨小米', '四十四斤谷老帽石磨小米', 160.00, 0.00, 0, 2, 'https://xuanhuobang.com/cover_upload/e19fedeb-f8ae-4442-809c-b75f86ec7a2a.jpeg', 0, 11, 9, '本地', 0.00, 0, 0, 0, 0, '', '[{\"name\":\"b1bbc7d9-665f-4624-95d3-f56828928cbc.jpeg\",\"url\":\"https://xuanhuobang.com/pictures_upload/b1bbc7d9-665f-4624-95d3-f56828928cbc.jpeg\",\"uid\":1540100079438,\"status\":\"success\"}]', 108, '2019-04-19 23:23:47', '2019-04-19 23:23:47', 91, 24);
-INSERT INTO `goods` VALUES ('253d0dd17fb8c5a34bdc6fc4fec89150', '5kg原阳大米', '十斤金八素原阳大米', 22.00, 0.00, 0, 2, 'https://xuanhuobang.com/cover_upload/ac892a6f-60cf-4340-8329-119d759c6453.jpeg', 0, 350, 0, '本地', 0.00, 0, 0, 0, 0, '', '[{\"name\":\"2acd106b-0163-4f2a-ad16-3fb045bd8537.jpg\",\"url\":\"https://xuanhuobang.com/pictures_upload/2acd106b-0163-4f2a-ad16-3fb045bd8537.jpg\",\"uid\":1541164797104,\"status\":\"success\"}]', 108, '2019-04-19 23:23:47', '2019-04-19 23:23:47', 105, 9);
-INSERT INTO `goods` VALUES ('265219bafc41bd17a61fe0121f1a053c', '优质芝麻仁23.5kg', '47斤芝麻仁', 385.00, 330.00, 0, 0, 'https://xuanhuobang.com/cover_upload/a5124cd9-b9c2-49d6-a1b8-5abf771bb815.jpeg', 0, 19, 1, '本地', 1.00, 0, 0, 0, 0, '<p>散装杂粮净重与实际重量误差在0.25kg均属正常请放心购买。&nbsp;</p><p>由于本品为粮食作物天气炎热不宜存放请少购勤购。 由于本品为粮食作物天气炎热不宜存放请少购勤购，若因存放原因生虫变质概不负责。</p>', '[{\"name\":\"28b09186-6393-4835-86a3-6406d5e0581e.jpeg\",\"url\":\"https://xuanhuobang.com/pictures_upload/28b09186-6393-4835-86a3-6406d5e0581e.jpeg\",\"uid\":1539305577177,\"status\":\"success\"}]', 108, '2019-04-19 23:23:47', '2019-04-19 23:23:47', 107, 16);
-INSERT INTO `goods` VALUES ('2685edb21a21796fe8b0ce2e2d9fbb19', '5kg无常非转稻花香', '十斤非转基因无常稻花香', 45.00, 0.00, 0, 1, 'https://xuanhuobang.com/cover_upload/e7264f36-b78a-4b67-99c3-123aa66fe10c.jpeg', 0, 100, 0, '本地', 0.00, 0, 0, 0, 0, '', '[{\"name\":\"7642d64d-59b3-4a19-8178-44f0791cfbad.jpeg\",\"url\":\"https://xuanhuobang.com/pictures_upload/7642d64d-59b3-4a19-8178-44f0791cfbad.jpeg\",\"uid\":1541828540136,\"status\":\"success\"}]', 108, '2019-04-19 23:23:47', '2019-04-19 23:23:47', 105, 9);
-INSERT INTO `goods` VALUES ('2947ba86f33579d3819dbfec78bf8678', '英国红25kg', '五十斤红腰豆', 242.00, 245.00, 0, 0, 'https://xuanhuobang.com/cover_upload/31f2438c-172e-4fcd-8acb-1fbd099284aa.jpeg', 0, 4, 0, '本地', 3.00, 0, 0, 0, 0, '', '[{\"name\":\"2d8cc137-51e4-4e38-9d0d-d79dca189f43.jpeg\",\"url\":\"https://xuanhuobang.com/pictures_upload/2d8cc137-51e4-4e38-9d0d-d79dca189f43.jpeg\",\"uid\":1540102388052,\"status\":\"success\"}]', 108, '2019-04-19 23:23:47', '2019-04-19 23:23:47', 100, 19);
-INSERT INTO `goods` VALUES ('2d7f19dca2a3ab094d7b514a466c0440', '泰国糯米25kg', '五十斤泰国糯米，江米', 157.00, 150.00, 0, 0, 'https://xuanhuobang.com/cover_upload/b8376bf0-0501-4d05-9b76-d7025fe75978.jpeg', 0, 1, 1, '本地', 3.00, 0, 0, 0, 0, '<p>散装杂粮净重与实际重量误差在0.25kg均属正常请放心购买。&nbsp;</p><p>由于本品为粮食作物天气炎热不宜存放请少购勤购。 由于本品为粮食作物天气炎热不宜存放请少购勤购，若因存放原因生虫变质概不负责。</p>', '[{\"name\":\"2f719d7d-db98-4d84-8a46-0a7f3ec53842.jpeg\",\"url\":\"https://xuanhuobang.com/pictures_upload/2f719d7d-db98-4d84-8a46-0a7f3ec53842.jpeg\",\"uid\":1539305786065,\"status\":\"success\"}]', 108, '2019-04-19 23:23:47', '2019-04-19 23:23:47', 101, 16);
-INSERT INTO `goods` VALUES ('34a89a08ee306d95b3d629bffb84af2d', '黄豆23.5kg', '四十七斤小包大籽黄豆，好黄豆', 102.00, 0.00, 0, 2, 'https://xuanhuobang.com/cover_upload/be05c842-8f41-4532-98fd-53d19166570c.jpeg', 0, 128, 22, '本地', 3.00, 0, 0, 0, 0, '<p>散装杂粮净重与实际重量误差在0.25kg均属正常请放心购买。&nbsp;</p><p>由于本品为粮食作物天气炎热不宜存放请少购勤购。 由于本品为粮食作物天气炎热不宜存放请少购勤购，若因存放原因生虫变质概不负责。</p><p>因批次不同故包装可能不同，请以实物为准，放心购买。</p>', '[{\"name\":\"7f6b0cb1-a2eb-4353-ab50-4c5b69b8021f.jpeg\",\"url\":\"https://xuanhuobang.com/pictures_upload/7f6b0cb1-a2eb-4353-ab50-4c5b69b8021f.jpeg\",\"uid\":1539231366704,\"status\":\"success\"}]', 108, '2019-04-19 23:23:47', '2019-04-19 23:23:47', 94, 19);
-INSERT INTO `goods` VALUES ('37959c1de5c3ee1451015fc6c0c64628', '万鹤源东北大米25kg', '五十斤万源大米', 115.00, 0.00, 0, 2, 'https://xuanhuobang.com/cover_upload/d2b25639-f897-4ba0-8ca9-603a71a70998.jpeg', 0, 30, 1, '本地', -1.00, 0, 0, 0, 0, '<p>散装杂粮净重与实际重量误差在0.25kg均属正常请放心购买。&nbsp;</p><p>由于本品为粮食作物天气炎热不宜存放请少购勤购。 由于本品为粮食作物天气炎热不宜存放请少购勤购，若因存放原因生虫变质概不负责。</p>', '[{\"name\":\"c2ef553f-5c47-4eef-94e4-f3e01afbd902.jpeg\",\"url\":\"https://xuanhuobang.com/pictures_upload/c2ef553f-5c47-4eef-94e4-f3e01afbd902.jpeg\",\"uid\":1540022130961,\"status\":\"success\"}]', 108, '2019-04-19 23:23:47', '2019-04-19 23:23:47', 102, 9);
-INSERT INTO `goods` VALUES ('37e39e100a0d672cdfb6c79f1bf43976', '福临门水晶米5kg', '', 33.50, 0.00, 0, 0, 'https://xuanhuobang.com/cover_upload/a43cdf71-e38d-472d-80ea-0e2d6dce118e.jpeg', 0, 300, 0, '本地', 0.00, 0, 0, 0, 0, '福临门水晶米，原粮产自东北优质稻米产区，充沛的阳光，肥沃的土壤以及丰富的水源，为稻米生长创造有利条件。\n生米米粒饱满，晶莹剔透，烹煮后口感温润柔软且富有弹性。\n福临门大米依托中郎全产业链严格管控，引进先进工艺封闭生产。从田间到餐桌，福米临门，品质到家。', '[{\"name\":\"ba098d3a-a92a-42db-b561-444c4f79cc9e.jpeg\",\"url\":\"https://xuanhuobang.com/pictures_upload/ba098d3a-a92a-42db-b561-444c4f79cc9e.jpeg\",\"uid\":1538359305763,\"status\":\"success\"},{\"name\":\"0b257ee7-2398-4b7a-9e82-970b6b002f4d.jpeg\",\"url\":\"https://xuanhuobang.com/pictures_upload/0b257ee7-2398-4b7a-9e82-970b6b002f4d.jpeg\",\"uid\":1538359354296,\"status\":\"success\"},{\"name\":\"96c0cd1e-dca4-4b96-b9d5-fb6076c13633.jpeg\",\"url\":\"https://xuanhuobang.com/pictures_upload/96c0cd1e-dca4-4b96-b9d5-fb6076c13633.jpeg\",\"uid\":1538359366311,\"status\":\"success\"}]', 1, '2019-04-19 23:23:47', '2019-04-19 23:23:47', 0, 0);
-INSERT INTO `goods` VALUES ('3ac761a5abe0a7e96c61d9c4c91cdbd5', '玉霖江米', '', 114.00, 0.00, 0, 0, 'https://xuanhuobang.com/cover_upload/cac61a5d-2de2-4c88-94e1-fb8a3ceb634a.jpeg', 0, 15, 0, '本地', 3.00, 0, 0, 0, 0, '', '[{\"name\":\"36d64cbb-3c89-4db1-9a53-deb41da23eb1.jpeg\",\"url\":\"https://xuanhuobang.com/pictures_upload/36d64cbb-3c89-4db1-9a53-deb41da23eb1.jpeg\",\"uid\":1540100185058,\"status\":\"success\"}]', 108, '2019-04-19 23:23:47', '2019-04-19 23:23:47', 101, 16);
-INSERT INTO `goods` VALUES ('3c54ad14abebbce57cacfc3438970b79', '麦仁14kg', '', 42.00, 0.00, 0, 0, 'https://xuanhuobang.com/cover_upload/91b29fa0-e07c-47ba-8c89-e97ed9eef297.jpeg', 0, 49, 1, '本地', 3.00, 0, 0, 0, 0, '<p>营养价值：不含胆固醇，富含纤维。含有少量矿物质，包括铁和锌。 散装杂粮净重与实际重量误差在0.25kg均属正常请放心购买。 由于本品为粮食作物天气炎热不宜存放请少购勤购，若因存放原因生虫变质概不负责。</p>', '[{\"name\":\"6131b8be-5c4d-4737-bcf6-acc92fde7c5a.jpeg\",\"url\":\"https://xuanhuobang.com/pictures_upload/6131b8be-5c4d-4737-bcf6-acc92fde7c5a.jpeg\",\"uid\":1539231539586,\"status\":\"success\"}]', 108, '2019-04-19 23:23:47', '2019-04-19 23:23:47', 108, 16);
-INSERT INTO `goods` VALUES ('3dc59db9017493b3484a294ac1e51814', '22.5kg仙桃香米', '四十五斤仙桃香米，籼米。', 101.00, 0.00, 0, 2, 'https://xuanhuobang.com/cover_upload/79474e35-8c21-4499-8dd5-4cc55c4f4aa0.jpeg', 0, 20, 0, '本地', 3.00, 0, 0, 0, 0, '', '[{\"name\":\"454e5582-bc7c-43fd-b35b-786e3467efbd.jpeg\",\"url\":\"https://xuanhuobang.com/pictures_upload/454e5582-bc7c-43fd-b35b-786e3467efbd.jpeg\",\"uid\":1541466331478,\"status\":\"success\"}]', 108, '2019-04-19 23:23:47', '2019-04-19 23:23:47', 52, 9);
-INSERT INTO `goods` VALUES ('42be484eb8af2f633ea1506a16f8257a', '小青仁黑豆25kg', '小籽青仁黑豆，药黑豆，25kg', 177.00, 179.00, 0, 0, 'https://xuanhuobang.com/cover_upload/86e173bf-7bf0-420c-ad71-12c64ad377ec.jpeg', 0, 10, 0, '本地', 3.00, 0, 0, 0, 0, '<p>散装杂粮净重与实际重量误差在0.5kg均属正常请放心购买。&nbsp;</p><p>由于本品为粮食作物天气炎热不宜存放请少购勤购。 由于本品为粮食作物天气炎热不宜存放请少购勤购，若因存放原因生虫变质概不负责。</p><p>因批次不同故包装可能不同，请以实物为准。</p>', '[{\"name\":\"3a80811a-685c-4396-8222-720948bbc71d.jpeg\",\"url\":\"https://xuanhuobang.com/pictures_upload/3a80811a-685c-4396-8222-720948bbc71d.jpeg\",\"uid\":1539231582358,\"status\":\"success\"}]', 108, '2019-04-19 23:23:47', '2019-04-19 23:23:47', 95, 19);
-INSERT INTO `goods` VALUES ('4303d06816447b57a3971c0e2bbbe329', '玉米仁21kg', '黄玉米仁', 52.00, 66.00, 0, 0, 'https://xuanhuobang.com/cover_upload/224ae2f3-4de8-402d-a448-99bea5caf7e2.jpeg', 0, 30, 0, '本地', 3.00, 0, 0, 0, 0, '<p>散装杂粮净重与实际重量误差在0.25kg均属正常请放心购买。&nbsp;</p><p>由于本品为粮食作物天气炎热不宜存放请少购勤购。 由于本品为粮食作物天气炎热不宜存放请少购勤购，若因存放原因生虫变质概不负责。</p><p>因批次不同故包装可能不同，请以实物为准。</p>', '[{\"name\":\"a47ceeb0-2a40-408d-9aed-9633fb9df2d7.jpeg\",\"url\":\"https://xuanhuobang.com/pictures_upload/a47ceeb0-2a40-408d-9aed-9633fb9df2d7.jpeg\",\"uid\":1539231650833,\"status\":\"success\"}]', 108, '2019-04-19 23:23:47', '2019-04-19 23:23:47', 40, 16);
-INSERT INTO `goods` VALUES ('46466f3890342cbaf4a6e36a90ff805c', '田文华小米25kg', '新小米，养胃米。好小米，朝阳小米。', 245.00, 0.00, 0, 0, 'https://xuanhuobang.com/cover_upload/6aaf44f0-902a-4401-93c0-65d707a75945.jpeg', 0, 94, 6, '本地', 0.00, 0, 0, 0, 0, '<p>散装杂粮净重与实际重量误差在0.25kg均属正常请放心购买。&nbsp;</p><p>由于本品为粮食作物天气炎热不宜存放请少购勤购。 由于本品为粮食作物天气炎热不宜存放请少购勤购，若因存放原因生虫变质概不负责。</p>', '[{\"name\":\"d3a63c06-5226-4977-ac97-dcef99cd5afa.jpeg\",\"url\":\"https://xuanhuobang.com/pictures_upload/d3a63c06-5226-4977-ac97-dcef99cd5afa.jpeg\",\"uid\":1539177468402,\"status\":\"success\"}]', 108, '2019-04-19 23:23:47', '2019-04-19 23:23:47', 91, 24);
-INSERT INTO `goods` VALUES ('478690f517afcdc914ec5bb0bae02f47', '10kg原阳大米', '二十斤金八素原阳大米', 44.00, 44.00, 0, 2, 'https://xuanhuobang.com/cover_upload/a12a114f-ad9a-444d-9d4e-90ff50befb51.jpeg', 0, 390, 0, '本地', 0.00, 0, 0, 0, 0, '', '[{\"name\":\"2fc5af60-8b0f-4f56-8b2a-357574a876fa.jpeg\",\"url\":\"https://xuanhuobang.com/pictures_upload/2fc5af60-8b0f-4f56-8b2a-357574a876fa.jpeg\",\"uid\":1541165745593,\"status\":\"success\"}]', 108, '2019-04-19 23:23:47', '2019-04-19 23:23:47', 105, 9);
-INSERT INTO `goods` VALUES ('4874e747d3809b82658ca8d61aecf0b4', '5kg昌旺五常稻花香（手提）', '十斤真空昌旺手提非转基因五常稻花香', 70.00, 0.00, 0, 0, 'https://xuanhuobang.com/cover_upload/4a08bdb2-caef-4afc-a18a-360437dbbd1c.jpeg', 0, 20, 0, '本地', 0.00, 0, 0, 0, 0, '', '[{\"name\":\"815d089c-cb94-4d52-8042-e56cbe8fbdb7.jpeg\",\"url\":\"https://xuanhuobang.com/pictures_upload/815d089c-cb94-4d52-8042-e56cbe8fbdb7.jpeg\",\"uid\":1544173138106,\"status\":\"success\"}]', 108, '2019-04-19 23:23:47', '2019-04-19 23:23:47', 105, 9);
-INSERT INTO `goods` VALUES ('4aa5e183cbd39823391c18c1fa4554f8', '东北汇五常香米', '五十斤五常长粒香', 137.00, 137.00, 0, 2, 'https://xuanhuobang.com/cover_upload/d77cf6b8-63a0-4266-9efa-40370185b4a9.jpeg', 0, 15, 0, '本地', 1.00, 0, 0, 0, 0, '', '[{\"name\":\"842771c7-3a24-46f9-8e4f-9b9837358ccb.jpeg\",\"url\":\"https://xuanhuobang.com/pictures_upload/842771c7-3a24-46f9-8e4f-9b9837358ccb.jpeg\",\"uid\":1540100893922,\"status\":\"success\"}]', 108, '2019-04-19 23:23:47', '2019-04-19 23:23:47', 103, 9);
-INSERT INTO `goods` VALUES ('52a1d8670a38b340d12a277a94b62911', '10kg优质原阳大米', '二十斤优质金八素原阳大米', 46.00, 46.00, 0, 2, 'https://xuanhuobang.com/cover_upload/0c450971-879c-4f2c-ac10-9e1836e3a96b.jpeg', 0, 378, 12, '本地', 0.00, 0, 0, 0, 0, '', '[{\"name\":\"189b1b0f-857a-4cac-8a70-0a2bc5d98861.jpeg\",\"url\":\"https://xuanhuobang.com/pictures_upload/189b1b0f-857a-4cac-8a70-0a2bc5d98861.jpeg\",\"uid\":1541175313216,\"status\":\"success\"}]', 108, '2019-04-19 23:23:47', '2019-04-19 23:23:47', 105, 9);
-INSERT INTO `goods` VALUES ('52b2501e804973d41b6ec61eb3063369', '特价绿豆25kg', '特价绿豆25kg', 153.00, 0.00, 0, 0, 'https://xuanhuobang.com/cover_upload/b5d9e3db-37c4-47e8-baad-8ddd812c5553.jpeg', 0, 94, 6, '本地', 1.00, 0, 0, 0, 0, '<p>散装杂粮净重与实际重量误差在0.25kg均属正常请放心购买。&nbsp;</p><p>由于本品为粮食作物天气炎热不宜存放请少购勤购。 由于本品为粮食作物天气炎热不宜存放请少购勤购，若因存放原因生虫变质概不负责。</p><p>因批次不同故包装可能不同请以实物为准。</p>', '[{\"name\":\"b79001cd-2d1d-4ed0-9ccf-fca5aa0102f6.jpeg\",\"url\":\"https://xuanhuobang.com/pictures_upload/b79001cd-2d1d-4ed0-9ccf-fca5aa0102f6.jpeg\",\"uid\":1541221213838,\"status\":\"success\"}]', 108, '2019-04-19 23:23:47', '2019-04-19 23:23:47', 97, 19);
-INSERT INTO `goods` VALUES ('5308b7475ab096792785bec7a7c346aa', '20kg虎爆爆花玉米', '四十斤虎爆爆花玉米', 115.00, 0.00, 0, 0, 'https://xuanhuobang.com/cover_upload/88b241b5-40f9-41d6-8850-58fb7a18b891.jpeg', 0, 100, 0, '本地', 0.00, 0, 0, 0, 0, '', '[{\"name\":\"421bb611-49ef-467d-ba53-a6644384935e.jpeg\",\"url\":\"https://xuanhuobang.com/pictures_upload/421bb611-49ef-467d-ba53-a6644384935e.jpeg\",\"uid\":1541914472902,\"status\":\"success\"}]', 108, '2019-04-19 23:23:47', '2019-04-19 23:23:47', 40, 16);
-INSERT INTO `goods` VALUES ('5471bb2bfc89bc7a4330ef15a861542a', '大籽绿豆25kg', '颗粒均匀，色彩鲜亮，好煮，特大籽，25kg', 200.00, 192.00, 1, 1, 'https://xuanhuobang.com/cover_upload/912b1322-a312-454e-ba9d-c8a259ec5f3e.jpeg', 0, 20, 0, '本地', 3.00, 0, 0, 0, 0, '<p>散装杂粮净重与实际重量误差在0.5kg均属正常请放心购买。&nbsp;</p><p>由于本品为粮食作物天气炎热不宜存放请少购勤购。 由于本品为粮食作物天气炎热不宜存放请少购勤购，若因存放原因生虫变质概不负责。</p><p>引批次不同故包装可能不同请以实物为准。</p>', '[{\"name\":\"becc0d5b-703e-48f3-8ac8-84cb5d8ac39f.jpeg\",\"url\":\"https://xuanhuobang.com/pictures_upload/becc0d5b-703e-48f3-8ac8-84cb5d8ac39f.jpeg\",\"uid\":1539231765949,\"status\":\"success\"}]', 108, '2019-04-19 23:23:47', '2019-04-19 23:23:47', 97, 19);
-INSERT INTO `goods` VALUES ('54d76d478ccd893c08170cbcc793b284', '25kg原阳大米', '五十斤金八素原阳大米', 105.00, 103.00, 1, 1, 'https://xuanhuobang.com/cover_upload/8fc1fd11-7b55-4bfd-8834-8ea8a7e55ab6.jpeg', 0, 200, 0, '本地', 0.00, 0, 0, 0, 0, '', '[{\"name\":\"c3352e6d-ee47-46ff-8c4a-696730c1128e.jpeg\",\"url\":\"https://xuanhuobang.com/pictures_upload/c3352e6d-ee47-46ff-8c4a-696730c1128e.jpeg\",\"uid\":1541175344737,\"status\":\"success\"}]', 108, '2019-04-19 23:23:47', '2019-04-19 23:23:47', 104, 9);
-INSERT INTO `goods` VALUES ('5a6382eee9a188f4d10d413344197825', '5kg田文华小米', '十斤田文华小米', 50.00, 0.00, 0, 2, 'https://xuanhuobang.com/cover_upload/c2ead795-a6ef-40d3-98f5-0c0b90efca4f.jpeg', 0, 50, 0, '本地', 0.00, 0, 0, 0, 0, '<p>散装杂粮净重与实际重量误差在0.25kg均属正常请放心购买。&nbsp;</p><p>由于本品为粮食作物天气炎热不宜存放请少购勤购。 由于本品为粮食作物天气炎热不宜存放请少购勤购，若因存放原因生虫变质概不负责。</p>', '[{\"name\":\"ada427d8-50cf-462a-a8ec-317baeb1e359.jpeg\",\"url\":\"https://xuanhuobang.com/pictures_upload/ada427d8-50cf-462a-a8ec-317baeb1e359.jpeg\",\"uid\":1540021221186,\"status\":\"success\"}]', 108, '2019-04-19 23:23:47', '2019-04-19 23:23:47', 92, 24);
-INSERT INTO `goods` VALUES ('5d8aaa1880a13b193f9222be0f2ba43b', '25kg小颗粒东北绿豆', '小颗粒东北绿豆', 167.00, 0.00, 0, 2, 'https://xuanhuobang.com/cover_upload/def6a19d-9934-4f90-822f-0deda3502f4b.jpeg', 0, 200, 0, '本地', 3.00, 0, 0, 0, 0, '', '[{\"name\":\"50e4a3c3-68f0-4b35-8279-3fac39c096e3.jpeg\",\"url\":\"https://xuanhuobang.com/pictures_upload/50e4a3c3-68f0-4b35-8279-3fac39c096e3.jpeg\",\"uid\":1541466798792,\"status\":\"success\"}]', 108, '2019-04-19 23:23:47', '2019-04-19 23:23:47', 97, 19);
-INSERT INTO `goods` VALUES ('60374820516b354169d1df599bccb8bd', '25kg优质原阳大米', '五十斤优质金八素原阳大米', 113.00, 0.00, 0, 0, 'https://xuanhuobang.com/cover_upload/ec663eef-bbb6-4eef-9515-4d65008223f5.jpeg', 0, 200, 0, '本地', 0.00, 0, 0, 0, 0, '', '[{\"name\":\"dd5c8c04-058c-47ed-ad02-c86cafe9096e.jpeg\",\"url\":\"https://xuanhuobang.com/pictures_upload/dd5c8c04-058c-47ed-ad02-c86cafe9096e.jpeg\",\"uid\":1541554985216,\"status\":\"success\"}]', 108, '2019-04-19 23:23:47', '2019-04-19 23:23:47', 104, 9);
-INSERT INTO `goods` VALUES ('605e617d5d77bb105fa0dec0ac2613d3', '2kg真空田文华小米1*10', '四斤真空田文华', 230.00, 0.00, 0, 0, 'https://xuanhuobang.com/cover_upload/c701df07-884b-47bd-ac54-c7ec7c03bf09.jpeg', 0, 30, 0, '本地', 0.00, 0, 0, 0, 0, '<p>四斤真空田文华小米，一包十小袋</p>', '[{\"name\":\"8b823ef7-07de-4db5-b853-a843a394c4b9.jpeg\",\"url\":\"https://xuanhuobang.com/pictures_upload/8b823ef7-07de-4db5-b853-a843a394c4b9.jpeg\",\"uid\":1540021957885,\"status\":\"success\"}]', 1, '2019-04-19 23:23:47', '2019-04-19 23:23:47', 92, 24);
-INSERT INTO `goods` VALUES ('618a24348253852ccb3ab62eaecb9cb8', '25kg黄国江米', '五十斤好江米', 122.00, 0.00, 0, 0, 'https://xuanhuobang.com/cover_upload/06042b8d-99e5-4da5-9ac5-329a8eb02ff1.jpeg', 0, 25, 0, '本地', 3.00, 0, 0, 0, 0, '', '[{\"name\":\"b947f4a7-1c9a-4524-816d-437da827bb8d.jpeg\",\"url\":\"https://xuanhuobang.com/pictures_upload/b947f4a7-1c9a-4524-816d-437da827bb8d.jpeg\",\"uid\":1540100507283,\"status\":\"success\"}]', 108, '2019-04-19 23:23:47', '2019-04-19 23:23:47', 101, 16);
-INSERT INTO `goods` VALUES ('66609156f5e9fcf2681cf6fd285c051c', '25kg优质碎米', '五十斤优质碎米', 67.00, 0.00, 0, 0, 'https://xuanhuobang.com/cover_upload/f6c3bc68-f5de-4b71-b283-5779626a919f.jpeg', 0, 200, 0, '本地', 3.00, 0, 0, 0, 0, '', '[{\"name\":\"3aece5a8-dba8-4c87-97b0-062227b4e139.jpeg\",\"url\":\"https://xuanhuobang.com/pictures_upload/3aece5a8-dba8-4c87-97b0-062227b4e139.jpeg\",\"uid\":1544172904047,\"status\":\"success\"}]', 108, '2019-04-19 23:23:47', '2019-04-19 23:23:47', 112, 9);
-INSERT INTO `goods` VALUES ('6c8ad1d959a85f8e1315f64ea496da39', '25kg球爆爆米花玉米', '五十斤球爆爆米花玉米', 145.00, 0.00, 0, 0, 'https://xuanhuobang.com/cover_upload/b10e5dd0-02cf-41fe-b659-e12b41a1f462.jpeg', 0, 100, 0, '本地', 0.00, 0, 0, 0, 0, '', '[{\"name\":\"4caff011-c31e-4ef3-8581-3819cacd6b85.jpeg\",\"url\":\"https://xuanhuobang.com/pictures_upload/4caff011-c31e-4ef3-8581-3819cacd6b85.jpeg\",\"uid\":1541914257873,\"status\":\"success\"}]', 108, '2019-04-19 23:23:47', '2019-04-19 23:23:47', 40, 16);
-INSERT INTO `goods` VALUES ('6ce4ef7b7c1a5f23e76e38380c0cba7f', '10kg双威东北珍珠米', '二十斤双威东北珍珠米', 44.00, 0.00, 0, 0, 'https://xuanhuobang.com/cover_upload/3a17f17e-e2c4-4eb2-993c-d9203e6dd1df.jpeg', 0, 200, 0, '本地', 0.00, 0, 0, 0, 0, '', '[{\"name\":\"8d1e8a0b-897d-41b9-978f-c80d92053793.jpeg\",\"url\":\"https://xuanhuobang.com/pictures_upload/8d1e8a0b-897d-41b9-978f-c80d92053793.jpeg\",\"uid\":1544172648881,\"status\":\"success\"}]', 108, '2019-04-19 23:23:47', '2019-04-19 23:23:47', 105, 9);
-INSERT INTO `goods` VALUES ('6d025c6d87a49d4f02f75a02e086b54a', '小黑豆25kg', '黄仁小黑豆25kg', 131.00, 0.00, 0, 0, 'https://xuanhuobang.com/cover_upload/557ade04-be9d-4d47-9245-ed80405bb91b.jpeg', 0, 20, 0, '本地', 1.00, 0, 0, 0, 0, '<p>散装杂粮净重与实际重量误差在0.5kg均属正常请放心购买。&nbsp;</p><p>由于本品为粮食作物天气炎热不宜存放请少购勤购。 由于本品为粮食作物天气炎热不宜存放请少购勤购，若因存放原因生虫变质概不负责。</p><p>因批次不同故包装可能不同请以实物为准</p>', '[{\"name\":\"8b6bc0bc-8de1-47cc-9620-924d75036464.jpeg\",\"url\":\"https://xuanhuobang.com/pictures_upload/8b6bc0bc-8de1-47cc-9620-924d75036464.jpeg\",\"uid\":1540020225010,\"status\":\"success\"}]', 108, '2019-04-19 23:23:47', '2019-04-19 23:23:47', 95, 19);
-INSERT INTO `goods` VALUES ('6ed4df9ca1ad61dc2eadb3f108ac851f', '10kg龙缘非转稻花香米', '二十斤非转基因五常稻花香米', 85.00, 0.00, 0, 1, 'https://xuanhuobang.com/cover_upload/824e8e44-b4b6-4610-b4f8-0da8f004a79b.jpeg', 0, 30, 0, '本地', 0.00, 0, 0, 0, 0, '', '[{\"name\":\"ee669caf-bab4-47ff-8d4e-5b0f68438392.jpeg\",\"url\":\"https://xuanhuobang.com/pictures_upload/ee669caf-bab4-47ff-8d4e-5b0f68438392.jpeg\",\"uid\":1541828325546,\"status\":\"success\"}]', 108, '2019-04-19 23:23:47', '2019-04-19 23:23:47', 105, 9);
-INSERT INTO `goods` VALUES ('70855e0daad3f375068f93759cc8cd1f', '红小豆25kg', '普通红小豆25kg', 172.00, 0.00, 0, 0, 'https://xuanhuobang.com/cover_upload/4a2421bc-bb25-43c7-b4fc-eacd7cb76101.jpeg', 0, 20, 0, '本地', 3.00, 0, 0, 0, 0, '<p>散装杂粮净重与实际重量误差在0.5kg均属正常请放心购买。&nbsp;</p><p>由于本品为粮食作物天气炎热不宜存放请少购勤购。 由于本品为粮食作物天气炎热不宜存放请少购勤购，若因存放原因生虫变质概不负责。</p><p>因批次不同故包装可能不同，请以实物为准。</p>', '[{\"name\":\"99cda059-6e9d-4ade-8587-037a011beb4e.jpeg\",\"url\":\"https://xuanhuobang.com/pictures_upload/99cda059-6e9d-4ade-8587-037a011beb4e.jpeg\",\"uid\":1539232013923,\"status\":\"success\"}]', 108, '2019-04-19 23:23:47', '2019-04-19 23:23:47', 96, 19);
-INSERT INTO `goods` VALUES ('72aa337e0279e416bc84d2a594226bea', '细玉米糁21kg', '四十二斤，细玉米糁', 57.00, 54.00, 1, 1, 'https://xuanhuobang.com/cover_upload/5461f771-c855-4bea-ac68-db398c78759d.jpeg', 0, 100, 0, '本地', 1.00, 0, 0, 0, 0, '<p>散装杂粮净重与实际重量误差在0.25kg均属正常请放心购买。&nbsp;</p><p>由于本品为粮食作物天气炎热不宜存放请少购勤购。 由于本品为粮食作物天气炎热不宜存放请少购勤购，若因存放原因生虫变质概不负责。</p><p>因批次不同故包装可能不同请以实物为准。</p>', '[{\"name\":\"c2d0c9be-cda0-455c-a552-cab7f7a6eacb.jpeg\",\"url\":\"https://xuanhuobang.com/pictures_upload/c2d0c9be-cda0-455c-a552-cab7f7a6eacb.jpeg\",\"uid\":1539177515892,\"status\":\"success\"}]', 108, '2019-04-19 23:23:47', '2019-04-19 23:23:47', 40, 16);
-INSERT INTO `goods` VALUES ('74b941ef1c318c57c12d308284cab9cc', '田文华小米5kg', '', 245.00, 0.00, 0, 0, 'https://xuanhuobang.com/cover_upload/b89716ed-3faf-468a-93d8-a6ecf17fcf27.jpeg', 0, 0, 0, '本地', 0.00, 0, 0, 0, 0, '辽宁省朝阳市朝阳县属于北温带大陆性季风气候区，四季分明，雨热同期，昼夜温差大，积温高，日照时间长。全年平均气温约为8.5℃，年均日照总时数为2861.7小时，年均降水量约为486毫米，平均风速约为3米/秒，无霜期为127到167天。朝阳县空气质量优良，列辽宁省第一位，全年达到二级（良）以上标准天数在350天左右。\n朝阳小米颗粒均匀、香甜可口、营养丰富、食用方便、用途较广的特点，对于治疗肝脏病、心脏病、神经官能症、贫血等有一定辅助作用。食用可做成美味可口的稠粥、小米发糕、煎饼干、小米锅巴、小米面饼等二十余种不同风味的食品。“朝阳小米”以独特的土壤、光照、水质条件为基础，利用天然水、农家肥作补充，采用传统的农业耕作方式，精加工制作而成。\n散装杂粮净重与实际重量误差在0.25kg均属正常请放心购买。\n由于本品为粮食作物天气炎热不宜存放请少购勤购，若因存放原因生虫变质概不负责。\n', '[{\"name\":\"d08b6835-e855-49a1-b2bb-7eac908b13e6.jpeg\",\"url\":\"https://xuanhuobang.com/pictures_upload/d08b6835-e855-49a1-b2bb-7eac908b13e6.jpeg\",\"uid\":1538364417711,\"status\":\"success\"}]', 1, '2019-04-19 23:23:47', '2019-04-19 23:23:47', 0, 0);
-INSERT INTO `goods` VALUES ('760b4d1cc959960ff626450dc5a62a64', '燕麦片16kg', '', 72.00, 0.00, 0, 0, 'https://xuanhuobang.com/cover_upload/5c59ca01-e049-4e30-85fb-1746ccacfb38.jpeg', 0, 20, 0, '本地', 3.00, 0, 0, 0, 0, '<p>燕麦经过精细加工制成麦片，使其食用更加方便，口感也得到改善，成为深受欢迎的保健食品。其中的膳食纤维具有许多有益于健康的生物作用可降低甘油三脂的低密度脂肪蛋白，促使胆固醇排泄，防治糖尿病，有利于减少糖尿病的血管并发症的发生；可通便导泄，对于习惯性便秘患者有很好的帮助；燕麦片属低热食品，食后易引起饱感，长期食用具有减肥功效。此外，燕麦中含有丰富的维生素B1、B2、E、叶酸等，可以改善血液循环、缓解生活工作带来的压力；含有的钙、磷、铁、锌、锰等矿物质也有预防骨质疏松、促进伤口愈合、防止贫血的功效。 散装杂粮净重与实际重量误差在0.25kg均属正常请放心购买。 由于本品为粮食作物天气炎热不宜存放请少购勤购，若因存放原因生虫变质概不负责。</p>', '[{\"name\":\"d9ca2f26-c9ab-4097-8ef3-0ece1a073e8b.jpeg\",\"url\":\"https://xuanhuobang.com/pictures_upload/d9ca2f26-c9ab-4097-8ef3-0ece1a073e8b.jpeg\",\"uid\":1539232059188,\"status\":\"success\"}]', 108, '2019-04-19 23:23:47', '2019-04-19 23:23:47', 44, 16);
-INSERT INTO `goods` VALUES ('77d8b44eedff44ccee8db264486afa87', '25kg正和江米', '好江米，正和江米', 145.00, 138.00, 0, 1, 'https://xuanhuobang.com/cover_upload/8e7fe976-be43-487b-81c8-490e01cb9290.jpeg', 0, 500, 0, '本地', 0.00, 0, 0, 0, 0, '', '[{\"name\":\"27f4ebb2-1338-4781-ba61-7c5c21527e4d.jpeg\",\"url\":\"https://xuanhuobang.com/pictures_upload/27f4ebb2-1338-4781-ba61-7c5c21527e4d.jpeg\",\"uid\":1541211930459,\"status\":\"success\"}]', 108, '2019-04-19 23:23:47', '2019-04-19 23:23:47', 101, 16);
-INSERT INTO `goods` VALUES ('781d36a4309be025789fb57e79b298fc', '5kg原生态长粒香1*5', '十斤绥化秦家长粒香一包五小袋', 138.00, 0.00, 0, 0, 'https://xuanhuobang.com/cover_upload/8920f466-37ae-4471-b55e-bb1fa9ef47d4.jpeg', 0, 50, 0, '本地', 1.00, 0, 0, 0, 0, '<p>散装杂粮净重与实际重量误差在0.25kg均属正常请放心购买。&nbsp;</p><p>由于本品为粮食作物天气炎热不宜存放请少购勤购。 由于本品为粮食作物天气炎热不宜存放请少购勤购，若因存放原因生虫变质概不负责。</p>', '[{\"name\":\"a9979b26-d4c7-4434-9c04-541a3878a6f3.jpeg\",\"url\":\"https://xuanhuobang.com/pictures_upload/a9979b26-d4c7-4434-9c04-541a3878a6f3.jpeg\",\"uid\":1540022566265,\"status\":\"success\"}]', 108, '2019-04-19 23:23:47', '2019-04-19 23:23:47', 105, 9);
-INSERT INTO `goods` VALUES ('7b44284e6c0eea0d7e914d6a0af29b22', '七星白芝麻25kg', '五十斤七星白芝麻', 380.00, 0.00, 0, 0, 'https://xuanhuobang.com/cover_upload/d7fd30b1-abd4-4d7e-aaac-5b0bfdfc7c8d.jpeg', 0, 10, 0, '本地', 1.00, 0, 0, 0, 0, '<p>散装杂粮净重与实际重量误差在0.25kg均属正常请放心购买。&nbsp;</p><p>由于本品为粮食作物天气炎热不宜存放请少购勤购。 由于本品为粮食作物天气炎热不宜存放请少购勤购，若因存放原因生虫变质概不负责。</p>', '[{\"name\":\"9ae570b1-eb86-4a08-9870-e7b9635dabd7.jpeg\",\"url\":\"https://xuanhuobang.com/pictures_upload/9ae570b1-eb86-4a08-9870-e7b9635dabd7.jpeg\",\"uid\":1539177357547,\"status\":\"success\"}]', 108, '2019-04-19 23:23:47', '2019-04-19 23:23:47', 107, 16);
-INSERT INTO `goods` VALUES ('7c2675a7d294c7059a646c1f94eae289', '荞麦仁25kg', '好荞麦仁25kg', 90.00, 0.00, 0, 0, 'https://xuanhuobang.com/cover_upload/4924d4d3-76e7-4741-8310-3de00f082f82.jpeg', 0, 50, 0, '本地', 0.00, 0, 0, 0, 0, '<p>	荞麦米，又名三角麦、乌麦、花荞，我国栽培的主要有普通荞麦和鞑靼荞麦两种，前者称甜荞，后者称苦荞。由于苦荞的种实含有芦丁，所以也称丁苦荞。</p><p>	荞麦在我国种植的历史十分悠久，公元前五世纪的《神农书》中就有关于荞麦是当时栽培的八谷之一的记载，除我国外，原苏联、尼泊尔、朝鲜、日本及美洲和欧洲某些地区，人们也喜欢食用荞麦。尤其是日本，自从荞麦从唐朝由我国传入后荞麦食品便风行日本诸岛，光吃法就达到100多种。至今日本国仍然把荞麦食品列为保健食品。荞麦米，就是将荞麦果实脱去外壳后得到的含种皮或不含种皮的籽粒。</p><p>	荞麦蛋白质中含有丰富的赖氨酸成分，铁、锰、锌等微量元素比一般谷物丰富，而且含有丰富膳食纤维，是一般精制大米的10倍。所以荞麦具有很好的营养保健作用。</p><p>	荞麦含有丰富的维生素E和可溶性膳食纤维，同时还含有烟酸和芦丁（芸香甙），芦丁有降低人体血脂和胆固醇、软化血管、保护视力和预防心脑血管疾病的作用。</p><p>	它含有的烟酸成分能促进机体的新陈代谢，增强解毒能力，还具有扩张小血管和降低血液胆固醇的作用。</p><p>	荞麦含有丰富的镁，能促进人体纤维蛋白溶解，使血管扩张，抑制凝血块的形成，具有抗栓塞的作用，也有利于降低血清胆固醇。</p><p><br></p>', '[{\"name\":\"28a1ec85-4c2a-449b-bffd-dfcb8160d67a.jpeg\",\"url\":\"https://xuanhuobang.com/pictures_upload/28a1ec85-4c2a-449b-bffd-dfcb8160d67a.jpeg\",\"uid\":1538375175639,\"status\":\"success\"}]', 1, '2019-04-19 23:23:47', '2019-04-19 23:23:47', 0, 0);
-INSERT INTO `goods` VALUES ('7cc1821d5e68a8c15c01fc473c107b8b', '玉米面24kg', '48斤玉米面', 57.00, 57.00, 0, 4, 'https://xuanhuobang.com/cover_upload/49e03e8f-1736-4046-a1e7-7f9036c3c39c.jpeg', 0, 20, 0, '本地', NULL, 0, 0, 0, 0, '<p>散装杂粮净重与实际重量误差在0.25kg均属正常请放心购买。&nbsp;</p><p>由于本品为粮食作物天气炎热不宜存放请少购勤购。 由于本品为粮食作物天气炎热不宜存放请少购勤购，若因存放原因生虫变质概不负责。</p><p>因批次不同故包装可能不同，请以实物为准，放心购买。</p>', '[{\"name\":\"b350cf2a-b6ba-426a-9b70-e94799ecf06e.jpeg\",\"url\":\"https://xuanhuobang.com/pictures_upload/b350cf2a-b6ba-426a-9b70-e94799ecf06e.jpeg\",\"uid\":1539232151870,\"status\":\"success\"}]', 108, '2019-04-19 23:23:47', '2019-04-19 23:23:47', 73, 13);
-INSERT INTO `goods` VALUES ('7e77b6ec3070d5ed73ccbd94e0a905f8', '泰国香米25kg', '五十斤泰国香米，茉莉香米，25kg', 200.00, 0.00, 0, 0, 'https://xuanhuobang.com/cover_upload/1abd11f3-56bc-4304-b84a-868e1f2224e0.jpeg', 0, 40, 10, '本地', 0.00, 0, 0, 0, 0, '<p>泰国香米是原产于泰国的长粒型大米，是籼米的一种。因其香糯的口感和独特的露兜树香味享誉世界。是仅次于印度香米的世界上最大宗的出口大米品种之一。</p><p>泰国香稻只有在原产地才能表现出最好的品质。这是因为那里具有特殊的生长条件，尤其是香稻扬花期间，那里凉爽的气候，明媚的日光，及水稻灌浆期间土壤中渐渐降低的湿度，对香味的产生及积累，起到非常重要的作用。</p><p>散装杂粮净重与实际重量误差在0.25kg均属正常请放心购买。&nbsp;</p><p>由于本品为粮食作物天气炎热不宜存放请少购勤购。 由于本品为粮食作物天气炎热不宜存放请少购勤购，若因存放原因生虫变质概不负责。</p>', '[{\"name\":\"2f5a7ba2-b3cb-43d2-9d6b-a85443d0cada.jpeg\",\"url\":\"https://xuanhuobang.com/pictures_upload/2f5a7ba2-b3cb-43d2-9d6b-a85443d0cada.jpeg\",\"uid\":1538439254480,\"status\":\"success\"}]', 1, '2019-04-19 23:23:47', '2019-04-19 23:23:47', 41, 9);
-INSERT INTO `goods` VALUES ('7f1f4da503a3cee90587051da6498684', '荞麦米25kg', '好荞麦米25kg', 85.00, 0.00, 0, 0, 'https://xuanhuobang.com/cover_upload/14afdbaa-ae1f-4e3b-b858-5c3cf422695f.jpeg', 0, 30, 0, '本地', 3.00, 0, 0, 0, 0, '<p>荞麦蛋白质中含有丰富的赖氨酸成分，铁、锰、锌等微量元素比一般谷物丰富，而且含有丰富膳食纤维，是一般精制大米的10倍。所以荞麦具有很好的营养保健作用。</p><p>荞麦含有丰富的维生素E和可溶性膳食纤维，同时还含有烟酸和芦丁（芸香甙），芦丁有降低人体血脂和胆固醇、软化血管、保护视力和预防心脑血管疾病的作用。</p><p>它含有的烟酸成分能促进机体的新陈代谢，增强解毒能力，还具有扩张小血管和降低血液胆固醇的作用。</p><p>荞麦含有丰富的镁，能促进人体纤维蛋白溶解，使血管扩张，抑制凝血块的形成，具有抗栓塞的作用，也有利于降低血清胆固醇。</p><p>荞麦中的某些黄酮成分还具有抗菌、消炎、止咳平喘、祛痰的作用。因此，荞麦还有“消炎粮食”的美称。另外这些成分还具有降低血糖的功效。</p><p>散装杂粮净重与实际重量误差在0.25kg均属正常请放心购买。&nbsp;</p><p>由于本品为粮食作物天气炎热不宜存放请少购勤购。 由于本品为粮食作物天气炎热不宜存放请少购勤购，若因存放原因生虫变质概不负责。</p>', '[{\"name\":\"300c2244-bebf-4bf1-bb76-8d44469f0b85.jpeg\",\"url\":\"https://xuanhuobang.com/pictures_upload/300c2244-bebf-4bf1-bb76-8d44469f0b85.jpeg\",\"uid\":1539232183457,\"status\":\"success\"}]', 108, '2019-04-19 23:23:47', '2019-04-19 23:23:47', 17, 16);
-INSERT INTO `goods` VALUES ('82e0798271c448a1a6d6c7844995a4c5', '荞麦面25kg', '五十斤精品荞麦面', 102.00, 0.00, 0, 0, 'https://xuanhuobang.com/cover_upload/df77570b-2cf0-424f-a08b-b3ac625b7bf9.jpeg', 0, 5, 0, '本地', 3.00, 0, 0, 0, 0, '<p>散装杂粮净重与实际重量误差在0.25kg均属正常请放心购买。&nbsp;</p><p>由于本品为粮食作物天气炎热不宜存放请少购勤购。 由于本品为粮食作物天气炎热不宜存放请少购勤购，若因存放原因生虫变质概不负责。</p>', '[{\"name\":\"eeb999dd-197f-4a98-aea4-50d1421e0244.jpeg\",\"url\":\"https://xuanhuobang.com/pictures_upload/eeb999dd-197f-4a98-aea4-50d1421e0244.jpeg\",\"uid\":1539232223273,\"status\":\"success\"}]', 108, '2019-04-19 23:23:47', '2019-04-19 23:23:47', 73, 13);
-INSERT INTO `goods` VALUES ('8583ee01e71042d565452e459f0660b7', '好五常黑米25kg', '五十斤好五常黑米', 141.00, 0.00, 0, 0, 'https://xuanhuobang.com/cover_upload/bcc929da-017c-4e14-aef1-1e2e4165a3c2.jpeg', 0, 15, 0, '本地', 3.00, 0, 0, 0, 0, '', '[{\"name\":\"f6e8f11c-d08a-4e30-93d5-968b424015d0.jpeg\",\"url\":\"https://xuanhuobang.com/pictures_upload/f6e8f11c-d08a-4e30-93d5-968b424015d0.jpeg\",\"uid\":1540100296404,\"status\":\"success\"}]', 108, '2019-04-19 23:23:47', '2019-04-19 23:23:47', 93, 16);
-INSERT INTO `goods` VALUES ('8d237cf990b95d81def1c2114df4eca0', '大青仁黑豆25kg', '青仁，黑豆，大籽，25kg', 171.00, 0.00, 0, 0, 'https://xuanhuobang.com/cover_upload/df46b5b2-e72d-40e9-9220-5e27125210bd.jpeg', 0, 50, 0, '本地', 3.00, 0, 0, 0, 0, '<p>黑豆中所含的不饱和脂肪酸，可促进胆固醇的代谢、降低血脂，预防心血管疾病，且黑豆的纤维质含量高，可促进肠胃蠕动，预防便秘，所以是不错的减肥佳品。而且黑豆浆不像黄豆性冷，喝多了也不会拉肚子，而且还有治疗风湿、抗衰老等效果。</p><p>黑豆浆，全麦面包，可以称之为营养减肥早餐的黄金搭档了，要减肥的美眉们可以吃得舒坦放心。</p><p>黑豆一直被人们视为药食两用的佳品，因为它具有高蛋白、低热量的特性。有机黑豆中蛋白质含量高达36%~40%，相当于肉类的2倍、鸡蛋的3倍、牛奶的12倍，还能提供食物中粗纤维，促进消化，防止便秘发生。</p><p>黑豆性平，味甘，具有补脾、利水、解毒的功效，对于各种水肿、体虚、中风、肾虚等病症有显著疗效。凡食物中毒或药物中毒，均可用黑豆汁与甘草煎汤喝，用来解毒。<span style=\"color: rgb(51, 102, 204);\">&nbsp;</span></p><p>散装杂粮净重与实际重量误差在0.25kg均属正常请放心购买。&nbsp;</p><p>由于本品为粮食作物天气炎热不宜存放请少购勤购。 由于本品为粮食作物天气炎热不宜存放请少购勤购，若因存放原因生虫变质概不负责。</p><p>因批次不同故包装可能不同请以实物为准。</p>', '[{\"name\":\"c3a21c91-ffc6-4722-954b-c1e70b718bdb.jpeg\",\"url\":\"https://xuanhuobang.com/pictures_upload/c3a21c91-ffc6-4722-954b-c1e70b718bdb.jpeg\",\"uid\":1539252971533,\"status\":\"success\"}]', 108, '2019-04-19 23:23:47', '2019-04-19 23:23:47', 95, 19);
-INSERT INTO `goods` VALUES ('8e64be6f8606e7cdffaddd2a7c613ccb', '10kg五常方正秋然长粒香', '二十斤五常方正秋然长粒香', 56.00, 0.00, 0, 2, 'https://xuanhuobang.com/cover_upload/109d9d77-e656-493b-9ed7-e05940b50981.jpeg', 0, 300, 0, '本地', 0.00, 0, 0, 0, 0, '', '[{\"name\":\"ea0fd09d-5e27-44ae-82fb-0ab0bce6b5ae.jpeg\",\"url\":\"https://xuanhuobang.com/pictures_upload/ea0fd09d-5e27-44ae-82fb-0ab0bce6b5ae.jpeg\",\"uid\":1542863836879,\"status\":\"success\"}]', 108, '2019-04-19 23:23:47', '2019-04-19 23:23:47', 105, 9);
-INSERT INTO `goods` VALUES ('8eb7986aeeeb478575e65602e9d67d1a', '高粱面25kg', '五十斤高粱面', 72.00, 0.00, 0, 0, 'https://xuanhuobang.com/cover_upload/f3b79b64-f4fd-4ef8-9c69-57556d83ee22.jpeg', 0, 5, 0, '本地', 3.00, 0, 0, 0, 0, '<p>散装杂粮净重与实际重量误差在0.25kg均属正常请放心购买。&nbsp;</p><p>由于本品为粮食作物天气炎热不宜存放请少购勤购。 由于本品为粮食作物天气炎热不宜存放请少购勤购，若因存放原因生虫变质概不负责。</p><p>因批次不同故包装可能不同，请以实物为准，放心购买。</p>', '[{\"name\":\"4d97049d-dc52-4341-9dd0-ca1113947486.jpeg\",\"url\":\"https://xuanhuobang.com/pictures_upload/4d97049d-dc52-4341-9dd0-ca1113947486.jpeg\",\"uid\":1539253038606,\"status\":\"success\"}]', 108, '2019-04-19 23:23:47', '2019-04-19 23:23:47', 73, 13);
-INSERT INTO `goods` VALUES ('8ecdaffc9cc6e2d95124996412073f43', '商品腐竹豆50kg', '一百斤芽黄豆', 215.00, 0.00, 0, 0, 'https://xuanhuobang.com/cover_upload/53bb17f5-e51e-4ec0-9971-2aaf2f080d02.jpeg', 0, 50, 0, '本地', 2.00, 0, 0, 0, 0, '<p>散装杂粮净重与实际重量误差在0.25kg均属正常请放心购买。&nbsp;</p><p>由于本品为粮食作物天气炎热不宜存放请少购勤购。 由于本品为粮食作物天气炎热不宜存放请少购勤购，若因存放原因生虫变质概不负责。</p>', '[{\"name\":\"7ccb1238-124a-44eb-a9fb-5d23a292ce62.jpeg\",\"url\":\"https://xuanhuobang.com/pictures_upload/7ccb1238-124a-44eb-a9fb-5d23a292ce62.jpeg\",\"uid\":1539305937047,\"status\":\"success\"}]', 108, '2019-04-19 23:23:47', '2019-04-19 23:23:47', 94, 19);
-INSERT INTO `goods` VALUES ('904894756c99a13d03ab87404a44b2f4', '10kg稻花香米', '二十斤斤稻花香米', 52.00, 0.00, 0, 0, 'https://xuanhuobang.com/cover_upload/f3aecf96-031a-40a2-b9d0-43a3be83225d.jpg', 0, 300, 0, '本地', 0.00, 0, 0, 0, 0, '', '[{\"name\":\"08cc18c3-b281-4ba4-a998-26dff956c4c6.jpg\",\"url\":\"https://xuanhuobang.com/pictures_upload/08cc18c3-b281-4ba4-a998-26dff956c4c6.jpg\",\"uid\":1543806360762,\"status\":\"success\"}]', 108, '2019-04-19 23:23:47', '2019-04-19 23:23:47', 105, 9);
-INSERT INTO `goods` VALUES ('90f6927a53eb753c355b5e1bf8280c69', '25kg永辉大金苗', '优质大金苗小米', 225.00, 0.00, 0, 2, 'https://xuanhuobang.com/cover_upload/e53702f3-4152-4b62-8ce7-a92abbd58bbe.jpeg', 0, 50, 0, '本地', 0.00, 0, 0, 0, 0, '', '[{\"name\":\"150c1ad1-06d7-4412-b06a-767d1b509389.jpeg\",\"url\":\"https://xuanhuobang.com/pictures_upload/150c1ad1-06d7-4412-b06a-767d1b509389.jpeg\",\"uid\":1541211966576,\"status\":\"success\"}]', 108, '2019-04-19 23:23:47', '2019-04-19 23:23:47', 91, 24);
-INSERT INTO `goods` VALUES ('91ca225433b4bfeb96beb9e42816f807', '优质花豇豆25kg', '好花豇豆，颗粒均匀，色彩鲜艳。25kg', 160.00, 0.00, 0, 0, 'https://xuanhuobang.com/cover_upload/ae756d8e-6c12-472f-9ce2-40be98b52192.jpeg', 0, 50, 0, '本地', 3.00, 0, 0, 0, 0, '<p>散装杂粮净重与实际重量误差在0.25kg均属正常请放心购买。&nbsp;</p><p>由于本品为粮食作物天气炎热不宜存放请少购勤购。 由于本品为粮食作物天气炎热不宜存放请少购勤购，若因存放原因生虫变质概不负责。</p><p>因批次不同故可能包装不同，请以实物为准。</p>', '[{\"name\":\"d493f3fe-8d12-4d54-ab28-aa4c62726d3f.jpeg\",\"url\":\"https://xuanhuobang.com/pictures_upload/d493f3fe-8d12-4d54-ab28-aa4c62726d3f.jpeg\",\"uid\":1539253177680,\"status\":\"success\"}]', 108, '2019-04-19 23:23:47', '2019-04-19 23:23:47', 98, 19);
-INSERT INTO `goods` VALUES ('95b5f6eeb1deaefc279412195402ba6f', '白芝麻25kg', '五十斤白芝麻', 365.00, 0.00, 0, 0, 'https://xuanhuobang.com/cover_upload/e13dca75-cd87-4e76-8c63-ce9cf3ffd166.jpeg', 0, 10, 0, '本地', 1.00, 0, 0, 0, 0, '<p>散装杂粮净重与实际重量误差在0.25kg均属正常请放心购买。&nbsp;</p><p>由于本品为粮食作物天气炎热不宜存放请少购勤购。 由于本品为粮食作物天气炎热不宜存放请少购勤购，若因存放原因生虫变质概不负责。</p>', '[{\"name\":\"f5a0e6f1-753b-4edc-b091-e40dcfbff320.jpeg\",\"url\":\"https://xuanhuobang.com/pictures_upload/f5a0e6f1-753b-4edc-b091-e40dcfbff320.jpeg\",\"uid\":1539177223989,\"status\":\"success\"}]', 108, '2019-04-19 23:23:47', '2019-04-19 23:23:47', 107, 16);
-INSERT INTO `goods` VALUES ('97987360ea7910a0dd72601ffa5466d7', '25kg赤峰大金苗小米', '优质大金苗小米', 220.00, 0.00, 0, 2, 'https://xuanhuobang.com/cover_upload/ad48b5bd-51a8-4a56-8369-8983767bf2a9.jpeg', 0, 50, 0, '本地', 0.00, 0, 0, 0, 0, '', '[{\"name\":\"81c9b433-b320-4054-b464-d6dbef1357bc.jpeg\",\"url\":\"https://xuanhuobang.com/pictures_upload/81c9b433-b320-4054-b464-d6dbef1357bc.jpeg\",\"uid\":1541212022766,\"status\":\"success\"}]', 108, '2019-04-19 23:23:47', '2019-04-19 23:23:47', 91, 24);
-INSERT INTO `goods` VALUES ('9b1ede907d6c4d7f805dd2d74ded6bf7', '泰谷香米10k g', '二十斤泰谷香米', 57.00, 0.00, 0, 2, 'https://xuanhuobang.com/cover_upload/79738c20-9cf5-407f-b9d6-2fbe72d4b9fb.jpeg', 0, 100, 0, '本地', 0.00, 0, 0, 0, 0, '<p>福香御系列之“泰谷香米”大米产自黑龙江省绥化市太平川县，这里位于松嫩平原上呼兰河下游地段。是世界上少有的黑土地之一，土壤肥沃，自然河水灌溉。 御福香系列之“泰谷香米”的品种是用天然的香稻和优质的长粒香加工而成，此米外观美，透明光亮。煮熟的米饭口感醇香“泰谷香米”近年来受广大消费者的追捧。</p>', '[{\"name\":\"ebf5101b-14b2-43c5-834c-2a3f8d4c5e26.jpeg\",\"url\":\"https://xuanhuobang.com/pictures_upload/ebf5101b-14b2-43c5-834c-2a3f8d4c5e26.jpeg\",\"uid\":1539598759562,\"status\":\"success\"}]', 108, '2019-04-19 23:23:47', '2019-04-19 23:23:47', 105, 9);
-INSERT INTO `goods` VALUES ('9ec6bbe76836cacd1f42e0fea4c94cc5', '24.5kg特价大米', '四十九斤特价大米', 96.00, 0.00, 0, 0, 'https://xuanhuobang.com/cover_upload/cc2b6875-cac6-40b9-8203-61491170ff51.jpg', 0, 1000, 0, '本地', 0.00, 0, 0, 0, 0, '', '[{\"name\":\"5be8d2f6-3bbe-41ce-a2f3-573760776316.jpg\",\"url\":\"https://xuanhuobang.com/pictures_upload/5be8d2f6-3bbe-41ce-a2f3-573760776316.jpg\",\"uid\":1545533936955,\"status\":\"success\"}]', 108, '2019-04-19 23:23:47', '2019-04-19 23:23:47', 106, 9);
-INSERT INTO `goods` VALUES ('9ef54ea83dd2d1aa67e36a9fb8d5bc73', '大红扁豆25kg', '', 130.00, 0.00, 0, 0, 'https://xuanhuobang.com/cover_upload/ca23ddd5-fe17-48d6-a6dc-3b782352b3b3.jpeg', 0, 20, 0, '本地', 0.00, 0, 0, 0, 0, '<p>散装杂粮净重与实际重量误差在0.25kg均属正常请放心购买。&nbsp;</p><p>由于本品为粮食作物天气炎热不宜存放请少购勤购。 由于本品为粮食作物天气炎热不宜存放请少购勤购，若因存放原因生虫变质概不负责。</p><p>因批次不同故包装可能不同，请以实物为准。</p>', '[{\"name\":\"9106c2d6-5aa5-4e81-8cc4-75866c34afbd.jpeg\",\"url\":\"https://xuanhuobang.com/pictures_upload/9106c2d6-5aa5-4e81-8cc4-75866c34afbd.jpeg\",\"uid\":1538380910244,\"status\":\"success\"},{\"name\":\"37b7c3fe-582a-49a4-8584-ae12de488ea5.jpeg\",\"url\":\"https://xuanhuobang.com/pictures_upload/37b7c3fe-582a-49a4-8584-ae12de488ea5.jpeg\",\"uid\":1538380936128,\"status\":\"success\"}]', 1, '2019-04-19 23:23:47', '2019-04-19 23:23:47', 0, 0);
-INSERT INTO `goods` VALUES ('9fd99e15b349e9bbc2835bcdaa7bb26a', '原生态长粒香10kg', '绥化秦家长粒香10kg', 54.00, 0.00, 0, 2, 'https://xuanhuobang.com/cover_upload/f4cf04cf-b6d6-4c99-9b51-f46abeb79449.jpeg', 0, 200, 0, '本地', 0.00, 0, 0, 0, 0, '<p>散装杂粮净重与实际重量误差在0.25kg均属正常请放心购买。&nbsp;</p><p>由于本品为粮食作物天气炎热不宜存放请少购勤购。 由于本品为粮食作物天气炎热不宜存放请少购勤购，若因存放原因生虫变质概不负责。</p>', '[{\"name\":\"0932d3ba-7d45-47bc-9cfc-e789175bb7cb.jpeg\",\"url\":\"https://xuanhuobang.com/pictures_upload/0932d3ba-7d45-47bc-9cfc-e789175bb7cb.jpeg\",\"uid\":1539598075414,\"status\":\"success\"}]', 108, '2019-04-19 23:23:47', '2019-04-19 23:23:47', 105, 9);
-INSERT INTO `goods` VALUES ('aad86567539cc1348592181a845a5456', '25kg银润江米', '银润生态糯米', 132.00, 0.00, 0, 2, 'https://xuanhuobang.com/cover_upload/5642e798-5fbc-4e67-8b67-9cf115618490.jpeg', 0, 50, 0, '本地', 3.00, 0, 0, 0, 0, '', '[{\"name\":\"15eebead-f549-49cd-9ca9-52a09785160d.jpeg\",\"url\":\"https://xuanhuobang.com/pictures_upload/15eebead-f549-49cd-9ca9-52a09785160d.jpeg\",\"uid\":1541211565260,\"status\":\"success\"}]', 108, '2019-04-19 23:23:47', '2019-04-19 23:23:47', 101, 16);
-INSERT INTO `goods` VALUES ('ab5da391b7e42cba9d222763ee5959f8', '25kg五常方正秋然长粒香', '五十斤五常方正秋然长粒香', 138.00, 0.00, 0, 2, 'https://xuanhuobang.com/cover_upload/2979cc3d-c3ea-48e4-9853-e20dd2d59fd5.jpeg', 0, 200, 0, '本地', 0.00, 0, 0, 0, 0, '', '[{\"name\":\"214c94f3-ffb6-44b4-a625-fb6bcfa8a210.jpeg\",\"url\":\"https://xuanhuobang.com/pictures_upload/214c94f3-ffb6-44b4-a625-fb6bcfa8a210.jpeg\",\"uid\":1542863645594,\"status\":\"success\"}]', 108, '2019-04-19 23:23:47', '2019-04-19 23:23:47', 103, 9);
-INSERT INTO `goods` VALUES ('adebd63bef885d042c415a3ccd14a2f2', '25kg谷老帽小米', '五十斤优质小米', 175.00, 0.00, 0, 0, 'https://xuanhuobang.com/cover_upload/4fb6d05b-113f-4b31-b91d-25f4dc6e5ed1.jpeg', 0, 20, 0, '本地', 0.00, 0, 0, 0, 0, '<p>散装杂粮净重与实际重量误差在0.25kg均属正常请放心购买。&nbsp;</p><p>由于本品为粮食作物天气炎热不宜存放请少购勤购。 由于本品为粮食作物天气炎热不宜存放请少购勤购，若因存放原因生虫变质概不负责。</p>', '[{\"name\":\"1352461d-c2dc-420a-85ff-a677f87cfa53.jpeg\",\"url\":\"https://xuanhuobang.com/pictures_upload/1352461d-c2dc-420a-85ff-a677f87cfa53.jpeg\",\"uid\":1539309082667,\"status\":\"success\"}]', 108, '2019-04-19 23:23:47', '2019-04-19 23:23:47', 91, 24);
-INSERT INTO `goods` VALUES ('b052668378c1776b2029773c319a083f', '5kg优质原阳大米', '十斤金八素优质原阳大米', 23.00, 0.00, 0, 0, 'https://xuanhuobang.com/cover_upload/85f915fa-c949-4fd0-89e0-ed484bc683e6.jpeg', 0, 350, 0, '本地', 0.00, 0, 0, 0, 0, '', '[{\"name\":\"e66f8225-b7b3-4138-9dc6-1b02901959a6.jpeg\",\"url\":\"https://xuanhuobang.com/pictures_upload/e66f8225-b7b3-4138-9dc6-1b02901959a6.jpeg\",\"uid\":1541222080482,\"status\":\"success\"}]', 108, '2019-04-19 23:23:47', '2019-04-19 23:23:47', 105, 9);
-INSERT INTO `goods` VALUES ('b5a3006d7733cb68d759542c1e1eea46', '扁红豆25k g', '五十斤扁红豆', 126.00, 0.00, 0, 0, 'https://xuanhuobang.com/cover_upload/72107477-5ecf-41f1-8179-564d32667865.jpeg', 0, 10, 0, '本地', 3.00, 0, 0, 0, 0, '<p>散装杂粮净重与实际重量误差在0.25kg均属正常请放心购买。&nbsp;</p><p>由于本品为粮食作物天气炎热不宜存放请少购勤购。 由于本品为粮食作物天气炎热不宜存放请少购勤购，若因存放原因生虫变质概不负责。</p>', '[{\"name\":\"c6129549-5bbe-4748-b0b3-8743ad27fc5d.jpeg\",\"url\":\"https://xuanhuobang.com/pictures_upload/c6129549-5bbe-4748-b0b3-8743ad27fc5d.jpeg\",\"uid\":1539306230690,\"status\":\"success\"}]', 108, '2019-04-19 23:23:47', '2019-04-19 23:23:47', 100, 19);
-INSERT INTO `goods` VALUES ('b94eee7b70c66d9e1610a006e790c463', '泰谷香米25kg', '', 140.00, 140.00, 1, 1, 'https://xuanhuobang.com/cover_upload/eebb7c0c-13f7-472b-9d17-d2346645dda4.jpeg', 0, 400, 10, '本地', 0.00, 0, 0, 0, 0, '<p>福香御系列之“泰谷香米”大米产自黑龙江省绥化市太平川县，这里位于松嫩平原上呼兰河下游地段。是世界上少有的黑土地之一，土壤肥沃，自然河水灌溉。 御福香系列之“泰谷香米”的品种是用天然的香稻和优质的长粒香加工而成，此米外观美，透明光亮。煮熟的米饭口感醇香“泰谷香米”近年来受广大消费者的追捧。</p>', '[{\"name\":\"e0213123-43f5-43dc-b7ef-ae880da749de.jpeg\",\"url\":\"https://xuanhuobang.com/pictures_upload/e0213123-43f5-43dc-b7ef-ae880da749de.jpeg\",\"uid\":1539177782495,\"status\":\"success\"}]', 108, '2019-04-19 23:23:47', '2019-04-19 23:23:47', 103, 9);
-INSERT INTO `goods` VALUES ('b9f0d4d6887ebbe65caeae631e323f46', '25kg东北金丝豆', '五十斤东北金丝豆', 205.00, 0.00, 0, 2, 'https://xuanhuobang.com/cover_upload/732ab618-2f7d-447d-b5f4-db484477cd4a.jpeg', 0, 50, 0, '本地', 0.00, 0, 0, 0, 0, '', '[{\"name\":\"2945a69f-0c1e-4092-9424-0303cb631273.jpeg\",\"url\":\"https://xuanhuobang.com/pictures_upload/2945a69f-0c1e-4092-9424-0303cb631273.jpeg\",\"uid\":1542864034892,\"status\":\"success\"}]', 108, '2019-04-19 23:23:47', '2019-04-19 23:23:47', 100, 19);
-INSERT INTO `goods` VALUES ('be27e1b5edfab2477b3865514d85b65d', '玉米淀粉', '', 73.00, 0.00, 0, 0, 'https://xuanhuobang.com/cover_upload/4aa6d7c4-3dce-4465-a414-815812349d0a.jpeg', 0, 10, 0, '本地', 0.00, 0, 0, 0, 0, '', '[{\"name\":\"41dfc10a-a271-42e4-b08b-6b3c926b71b1.jpeg\",\"url\":\"https://xuanhuobang.com/pictures_upload/41dfc10a-a271-42e4-b08b-6b3c926b71b1.jpeg\",\"uid\":1541211890083,\"status\":\"success\"}]', 108, '2019-04-19 23:23:47', '2019-04-19 23:23:47', 110, 109);
-INSERT INTO `goods` VALUES ('be73f589fc49dc7cd3681096c6513691', '25kg五常黑米', '优质五常黑米', 150.00, 145.00, 1, 2, 'https://xuanhuobang.com/cover_upload/d93f8c60-2098-47e3-ae38-a21c2da8f09e.jpeg', 0, 20, 0, '本地', 0.00, 0, 0, 0, 0, '', '[{\"name\":\"2a5cfd39-bf64-4438-ab9b-52813ac6d0c9.jpeg\",\"url\":\"https://xuanhuobang.com/pictures_upload/2a5cfd39-bf64-4438-ab9b-52813ac6d0c9.jpeg\",\"uid\":1541211776338,\"status\":\"success\"}]', 108, '2019-04-19 23:23:47', '2019-04-19 23:23:47', 93, 16);
-INSERT INTO `goods` VALUES ('bfff3909ba3232b56e5f123396a9aa95', '25kg优质大金苗小米', '五十斤优质大金苗小米', 225.00, 0.00, 0, 0, 'https://xuanhuobang.com/cover_upload/76529df9-2a91-476d-9777-1dae994af81b.jpeg', 0, 50, 0, '本地', 0.00, 0, 0, 0, 0, '', '[{\"name\":\"cbc02100-9e67-4484-ae33-54aa378aaa14.jpeg\",\"url\":\"https://xuanhuobang.com/pictures_upload/cbc02100-9e67-4484-ae33-54aa378aaa14.jpeg\",\"uid\":1540445333441,\"status\":\"success\"}]', 1, '2019-04-19 23:23:47', '2019-04-19 23:23:47', 91, 24);
-INSERT INTO `goods` VALUES ('c6c8df983f77eb6b5c654168f38ac8de', '燕麦米22.5kg', '', 100.00, 0.00, 0, 0, 'https://xuanhuobang.com/cover_upload/a4efb891-c3c1-42f4-846c-4f03bcdb78a1.jpeg', 0, 10, 0, '本地', 3.00, 0, 0, 0, 0, '<p>散装杂粮净重与实际重量误差在0.25kg均属正常请放心购买。&nbsp;</p><p>由于本品为粮食作物天气炎热不宜存放请少购勤购。 由于本品为粮食作物天气炎热不宜存放请少购勤购，若因存放原因生虫变质概不负责。</p><p>因批次不同故包装可能不同请以实物为准</p>', '[{\"name\":\"c34ca9ee-8041-433b-b6e9-1fed85db37e2.jpeg\",\"url\":\"https://xuanhuobang.com/pictures_upload/c34ca9ee-8041-433b-b6e9-1fed85db37e2.jpeg\",\"uid\":1539253435801,\"status\":\"success\"}]', 108, '2019-04-19 23:23:47', '2019-04-19 23:23:47', 44, 16);
-INSERT INTO `goods` VALUES ('c974a8ad1c2a48ecc6d8d42a1fcab5b4', '5L五湖大豆油1*4', '五升五湖大豆油一箱四瓶', 125.00, 0.00, 0, 0, 'https://xuanhuobang.com/cover_upload/be5e3302-5681-4460-bb4f-d59965c94bc7.jpeg', 0, 20, 0, '本地', 0.00, 0, 0, 0, 0, '', '[{\"name\":\"1f63e6f3-40f0-4e7f-abb0-b02856bb7009.jpeg\",\"url\":\"https://xuanhuobang.com/pictures_upload/1f63e6f3-40f0-4e7f-abb0-b02856bb7009.jpeg\",\"uid\":1540373810665,\"status\":\"success\"}]', 108, '2019-04-19 23:23:47', '2019-04-19 23:23:47', 99, 29);
-INSERT INTO `goods` VALUES ('cc81eb742f75bd1fad99dad78b626c45', '双威珍珠米25kg', '五十斤双威', 102.00, 100.00, 0, 1, 'https://xuanhuobang.com/cover_upload/0fa1efe4-491a-473d-aaf6-d8496dc0c80f.jpeg', 0, 50, 10, '本地', 1.00, 0, 0, 0, 0, '<p>散装杂粮净重与实际重量误差在0.25kg均属正常请放心购买。&nbsp;</p><p>由于本品为粮食作物天气炎热不宜存放请少购勤购。 由于本品为粮食作物天气炎热不宜存放请少购勤购，若因存放原因生虫变质概不负责。</p>', '[{\"name\":\"6195c58a-686c-43ba-b901-350fe7a0c55d.jpeg\",\"url\":\"https://xuanhuobang.com/pictures_upload/6195c58a-686c-43ba-b901-350fe7a0c55d.jpeg\",\"uid\":1539176957184,\"status\":\"success\"}]', 108, '2019-04-19 23:23:47', '2019-04-19 23:23:47', 102, 9);
-INSERT INTO `goods` VALUES ('ccbaa2c609a0cffaaaf52b46c4028c51', '20k g子强小米', '四十斤特价小米', 115.00, 95.00, 0, 0, 'https://xuanhuobang.com/cover_upload/a592be32-336b-4543-8237-99cf987b1f1c.jpeg', 0, 40, 0, '本地', 1.00, 0, 0, 0, 0, '<p>散装杂粮净重与实际重量误差在0.25kg均属正常请放心购买。&nbsp;</p><p>由于本品为粮食作物天气炎热不宜存放请少购勤购。 由于本品为粮食作物天气炎热不宜存放请少购勤购，若因存放原因生虫变质概不负责。</p>', '[{\"name\":\"ffc2c39c-db6c-49c2-8217-bff47c22a528.jpeg\",\"url\":\"https://xuanhuobang.com/pictures_upload/ffc2c39c-db6c-49c2-8217-bff47c22a528.jpeg\",\"uid\":1539309384706,\"status\":\"success\"}]', 108, '2019-04-19 23:23:47', '2019-04-19 23:23:47', 91, 24);
-INSERT INTO `goods` VALUES ('cf61d1c28a7868480bd507f4e672c7bc', '25kg晋府大金苗', '五十斤优质小米', 185.00, 0.00, 0, 2, 'https://xuanhuobang.com/cover_upload/805a1bd3-261e-45a9-93c7-e4a0c634a8e1.jpeg', 0, 50, 0, '本地', 0.00, 0, 0, 0, 0, '', '[{\"name\":\"b1f1ae9b-c78b-49a3-bab9-66df96839f92.jpeg\",\"url\":\"https://xuanhuobang.com/pictures_upload/b1f1ae9b-c78b-49a3-bab9-66df96839f92.jpeg\",\"uid\":1541211994083,\"status\":\"success\"}]', 108, '2019-04-19 23:23:47', '2019-04-19 23:23:47', 91, 24);
-INSERT INTO `goods` VALUES ('d013959dcd574b81f7dcbb398c741835', '好小薏米25kg', '优质小籽薏米', 312.00, 0.00, 0, 0, 'https://xuanhuobang.com/cover_upload/01d1f521-b93d-4cfa-bab2-f4e56326394d.jpeg', 0, 10, 0, '本地', 3.00, 0, 0, 0, 0, '<p>散装杂粮净重与实际重量误差在0.25kg均属正常请放心购买。&nbsp;</p><p>由于本品为粮食作物天气炎热不宜存放请少购勤购。 由于本品为粮食作物天气炎热不宜存放请少购勤购，若因存放原因生虫变质概不负责。</p>', '[{\"name\":\"412a6914-6cec-4fce-933c-110363a9b435.jpeg\",\"url\":\"https://xuanhuobang.com/pictures_upload/412a6914-6cec-4fce-933c-110363a9b435.jpeg\",\"uid\":1540021529733,\"status\":\"success\"}]', 108, '2019-04-19 23:23:47', '2019-04-19 23:23:47', 45, 16);
-INSERT INTO `goods` VALUES ('d36e87bf68c4cc56d4837bdf4feff314', '5kg泰谷香米1*5', '十斤泰谷香米，一包五小袋', 145.00, 0.00, 0, 0, 'https://xuanhuobang.com/cover_upload/41c83885-1f13-4a23-b44b-562098d46fbd.jpeg', 0, 100, 0, '本地', 0.00, 0, 0, 0, 0, '<p>福香御系列之“泰谷香米”大米产自黑龙江省绥化市太平川县，这里位于松嫩平原上呼兰河下游地段。是世界上少有的黑土地之一，土壤肥沃，自然河水灌溉。 御福香系列之“泰谷香米”的品种是用天然的香稻和优质的长粒香加工而成，此米外观美，透明光亮。煮熟的米饭口感醇香“泰谷香米”近年来受广大消费者的追捧。</p>', '[{\"name\":\"46f25bf8-74ae-4f96-bad4-40245d43b2cd.jpeg\",\"url\":\"https://xuanhuobang.com/pictures_upload/46f25bf8-74ae-4f96-bad4-40245d43b2cd.jpeg\",\"uid\":1540022598302,\"status\":\"success\"}]', 1, '2019-04-19 23:23:47', '2019-04-19 23:23:47', 105, 9);
-INSERT INTO `goods` VALUES ('d39726859b14f6a9aae323ac4b9e1d07', '25kg白豇豆', '五十斤优质新白豇豆', 155.00, 0.00, 0, 0, 'https://xuanhuobang.com/cover_upload/682cc7d6-09ca-4b71-b029-6c44b038e162.jpeg', 0, 20, 0, '本地', 0.00, 0, 0, 0, 0, '', '[{\"name\":\"9d0d7d4f-df6c-402d-9858-cd693b832003.jpeg\",\"url\":\"https://xuanhuobang.com/pictures_upload/9d0d7d4f-df6c-402d-9858-cd693b832003.jpeg\",\"uid\":1541211630289,\"status\":\"success\"}]', 108, '2019-04-19 23:23:47', '2019-04-19 23:23:47', 98, 19);
-INSERT INTO `goods` VALUES ('d3eb382514aa7fc9a2b9c8bd76ffdb16', '育龙东北珍珠米', '50斤新育龙东北珍珠米', 105.00, 103.00, 1, 1, 'https://xuanhuobang.com/cover_upload/c7097b40-b781-48f7-87ca-4c3d39770291.jpeg', 0, 100, 0, '本地', 1.00, 0, 0, 0, 0, '', '[{\"name\":\"4cc3e882-2403-451d-9c3b-fa4e72b893b3.jpeg\",\"url\":\"https://xuanhuobang.com/pictures_upload/4cc3e882-2403-451d-9c3b-fa4e72b893b3.jpeg\",\"uid\":1541211680461,\"status\":\"success\"}]', 108, '2019-04-19 23:23:47', '2019-04-19 23:23:47', 102, 9);
-INSERT INTO `goods` VALUES ('d8469d8c1f73d97066c5e25f98c255e6', '东北绿豆25kg', '优质东北豆', 190.00, 0.00, 0, 2, 'https://xuanhuobang.com/cover_upload/aacee515-8cef-408b-a588-8fc94c137ef2.jpeg', 0, 50, 0, '本地', NULL, 0, 0, 0, 0, '', '[{\"name\":\"e920dd53-80bd-4ee7-b09e-39412117fcc7.jpeg\",\"url\":\"https://xuanhuobang.com/pictures_upload/e920dd53-80bd-4ee7-b09e-39412117fcc7.jpeg\",\"uid\":1541221501312,\"status\":\"success\"}]', 108, '2019-04-19 23:23:47', '2019-04-19 23:23:47', 97, 19);
-INSERT INTO `goods` VALUES ('db70811e01b6ab33787ad649fe2cdf07', '五谷珍宝东北长粒香', '', 140.00, 0.00, 0, 0, 'https://xuanhuobang.com/cover_upload/839a50f6-b514-4793-afa1-545d503962fe.jpeg', 0, 200, 0, '本地', 0.00, 0, 0, 0, 0, '<p>散装杂粮净重与实际重量误差在0.25kg均属正常请放心购买。&nbsp;</p><p>由于本品为粮食作物天气炎热不宜存放请少购勤购。 由于本品为粮食作物天气炎热不宜存放请少购勤购，若因存放原因生虫变质概不负责。</p>', '[]', 1, '2019-04-19 23:23:47', '2019-04-19 23:23:47', 0, 0);
-INSERT INTO `goods` VALUES ('dcec71edd679ae04a55e9ce3d6185421', '大红扁豆25kg', '', 130.00, 0.00, 0, 0, 'https://xuanhuobang.com/cover_upload/ca23ddd5-fe17-48d6-a6dc-3b782352b3b3.jpeg', 0, 20, 0, '本地', 0.00, 0, 0, 0, 0, '<p>散装杂粮净重与实际重量误差在0.25kg均属正常请放心购买。&nbsp;</p><p>由于本品为粮食作物天气炎热不宜存放请少购勤购。 由于本品为粮食作物天气炎热不宜存放请少购勤购，若因存放原因生虫变质概不负责。</p><p>因批次不同故包装可能不同，请以实物为准。</p>', '[{\"name\":\"9106c2d6-5aa5-4e81-8cc4-75866c34afbd.jpeg\",\"url\":\"https://xuanhuobang.com/pictures_upload/9106c2d6-5aa5-4e81-8cc4-75866c34afbd.jpeg\",\"uid\":1538380910244,\"status\":\"success\"},{\"name\":\"37b7c3fe-582a-49a4-8584-ae12de488ea5.jpeg\",\"url\":\"https://xuanhuobang.com/pictures_upload/37b7c3fe-582a-49a4-8584-ae12de488ea5.jpeg\",\"uid\":1538380936128,\"status\":\"success\"}]', 1, '2019-04-19 23:23:47', '2019-04-19 23:23:47', 0, 0);
-INSERT INTO `goods` VALUES ('dea0f45eb1149528b591eb3be1fb8276', '五常黑米25kg', '五常黑米，中等黑米，25kg', 134.00, 0.00, 0, 0, 'https://xuanhuobang.com/cover_upload/f04399c3-043c-4839-9439-ae4c0bd9b5c0.jpeg', 0, 15, 0, '本地', 3.00, 0, 0, 0, 0, '<p>黑米是黑稻加工产品，属于籼米或者粳米，是由禾本科植物稻经长期培育形成的一类特色品种，黑米稻粒外观长椭圆形，稻壳灰褐色，粒型有籼、粳两种，黑米是非糯性稻米。</p><p>黑米呈黑色或黑褐色，营养丰富，食、药用价值高，除煮粥外还可以制作各种营养食品和酿酒，素有“黑珍珠”和“世界米中之王”的美誉。最具代表性的陕西洋县黑米，<span style=\"color: rgb(19, 110, 194);\">&nbsp;</span>&nbsp;自古就有“药米”、“贡米”、“寿米”的美誉。</p><p>散装杂粮净重与实际重量误差在0.25kg均属正常请放心购买。&nbsp;</p><p>由于本品为粮食作物天气炎热不宜存放请少购勤购。 由于本品为粮食作物天气炎热不宜存放请少购勤购，若因存放原因生虫变质概不负责。，若因存放原因生虫变质概不负责。</p>', '[{\"name\":\"74d0ab5a-7c87-4470-b36c-f6c0240b86ea.jpeg\",\"url\":\"https://xuanhuobang.com/pictures_upload/74d0ab5a-7c87-4470-b36c-f6c0240b86ea.jpeg\",\"uid\":1539253502780,\"status\":\"success\"}]', 108, '2019-04-19 23:23:47', '2019-04-19 23:23:47', 93, 16);
-INSERT INTO `goods` VALUES ('e1178d845673b6c0600c35acd9be8e74', '红薯面25kg', '五十斤红薯面', 92.00, 0.00, 0, 0, 'https://xuanhuobang.com/cover_upload/93be0d53-3f9c-4c04-9f37-5dc5f80178a4.jpeg', 0, 10, 0, '本地', 1.00, 0, 0, 0, 0, '<p>散装杂粮净重与实际重量误差在0.25kg均属正常请放心购买。&nbsp;</p><p>由于本品为粮食作物天气炎热不宜存放请少购勤购。 由于本品为粮食作物天气炎热不宜存放请少购勤购，若因存放原因生虫变质概不负责。</p><p>因批次不同故包装可能不同，请以实物为准，放心购买，</p>', '[{\"name\":\"b3794338-a7c0-4d18-87ce-9d8df92df062.jpeg\",\"url\":\"https://xuanhuobang.com/pictures_upload/b3794338-a7c0-4d18-87ce-9d8df92df062.jpeg\",\"uid\":1539253667840,\"status\":\"success\"}]', 108, '2019-04-19 23:23:47', '2019-04-19 23:23:47', 73, 13);
-INSERT INTO `goods` VALUES ('e2182688383a31ccae7222f95fbd2cfc', '25kg东北特大籽绿豆', '五十斤东北特大籽绿豆', 232.00, 0.00, 0, 0, 'https://xuanhuobang.com/cover_upload/6a4a3fab-93df-41c6-abe4-79a9a06ea567.jpeg', 0, 100, 0, '本地', 3.00, 0, 0, 0, 0, '', '[{\"name\":\"36a217a7-97ae-4606-ac32-ef73d3b6222f.jpeg\",\"url\":\"https://xuanhuobang.com/pictures_upload/36a217a7-97ae-4606-ac32-ef73d3b6222f.jpeg\",\"uid\":1541914838742,\"status\":\"success\"}]', 108, '2019-04-19 23:23:47', '2019-04-19 23:23:47', 97, 19);
-INSERT INTO `goods` VALUES ('e3418ad001e07b2beca6a8c1e7fa3246', '好红小豆25kg', '好红小豆，珍珠粒，25kg', 206.00, 0.00, 0, 2, 'https://xuanhuobang.com/cover_upload/b5575c46-ff0d-4cec-ae4d-061a7a5d7ed9.jpeg', 0, 20, 0, '本地', 3.00, 0, 0, 0, 0, '<p>散装杂粮净重与实际重量误差在0.25kg均属正常请放心购买。&nbsp;</p><p>由于本品为粮食作物天气炎热不宜存放请少购勤购。 由于本品为粮食作物天气炎热不宜存放请少购勤购，若因存放原因生虫变质概不负责。</p><p>因批次不同故包装可能不同，请以实物为准。</p>', '[{\"name\":\"a8a91150-ae17-46a3-815b-919d0c735a13.jpeg\",\"url\":\"https://xuanhuobang.com/pictures_upload/a8a91150-ae17-46a3-815b-919d0c735a13.jpeg\",\"uid\":1539306351799,\"status\":\"success\"}]', 108, '2019-04-19 23:23:47', '2019-04-19 23:23:47', 96, 19);
-INSERT INTO `goods` VALUES ('e49872f769f1cfd890915b9ce131a4a4', '原生态长粒香25kg', '绥化秦家长粒香米25kg', 133.00, 132.00, 1, 1, 'https://xuanhuobang.com/cover_upload/42703a04-4734-41ad-a364-27479f6a373c.jpeg', 0, 40, 10, '本地', 1.00, 0, 0, 0, 0, '<p>散装杂粮净重与实际重量误差在0.25kg均属正常请放心购买。&nbsp;</p><p>由于本品为粮食作物天气炎热不宜存放请少购勤购。 由于本品为粮食作物天气炎热不宜存放请少购勤购，若因存放原因生虫变质概不负责。</p>', '[{\"name\":\"36d5e078-2667-4144-8877-9436f91b2247.jpeg\",\"url\":\"https://xuanhuobang.com/pictures_upload/36d5e078-2667-4144-8877-9436f91b2247.jpeg\",\"uid\":1539254170220,\"status\":\"success\"}]', 108, '2019-04-19 23:23:47', '2019-04-19 23:23:47', 103, 9);
-INSERT INTO `goods` VALUES ('e52388fc7fd79a220b889ec64469ec1c', '25kg花喜鹊豆', '五十斤面豆花喜鹊豆', 187.00, 0.00, 0, 0, 'https://xuanhuobang.com/cover_upload/beaaa7b9-6066-45de-a72e-16980ad3445d.jpeg', 0, 20, 0, '本地', 3.00, 0, 0, 0, 0, '', '[{\"name\":\"868f55c5-91bb-407d-8225-a5d1e19090cc.jpeg\",\"url\":\"https://xuanhuobang.com/pictures_upload/868f55c5-91bb-407d-8225-a5d1e19090cc.jpeg\",\"uid\":1543466982751,\"status\":\"success\"}]', 108, '2019-04-19 23:23:47', '2019-04-19 23:23:47', 100, 19);
-INSERT INTO `goods` VALUES ('e5c0c610b838f835f8faaa68167a54d1', '双威珍珠米5kg', '', 24.00, 0.00, 0, 0, 'https://xuanhuobang.com/cover_upload/1df2e4f5-f164-47d6-955c-85f8f127701a.jpeg', 0, 100, 0, '本地', 0.00, 0, 0, 0, 0, '<p>散装杂粮净重与实际重量误差在0.25kg均属正常请放心购买。&nbsp;</p><p>由于本品为粮食作物天气炎热不宜存放请少购勤购。 由于本品为粮食作物天气炎热不宜存放请少购勤购，若因存放原因生虫变质概不负责。</p>', '[{\"name\":\"daecb2b8-8caa-4e6c-8125-98b3b41a6f71.jpeg\",\"url\":\"https://xuanhuobang.com/pictures_upload/daecb2b8-8caa-4e6c-8125-98b3b41a6f71.jpeg\",\"uid\":1540101990995,\"status\":\"success\"}]', 1, '2019-04-19 23:23:47', '2019-04-19 23:23:47', 105, 9);
-INSERT INTO `goods` VALUES ('eb2c81f394cdb10acc7a81cb6b542c39', '子强黄金苗小米20kg', '四十斤子强黄金苗，糯小米', 9090.00, 0.00, 0, 0, 'https://xuanhuobang.com/cover_upload/49b5b673-7ce6-4bb3-8ca5-cd9f913cde10.jpeg', 0, 100, 0, '本地', 0.00, 0, 0, 0, 0, '<p>散装杂粮净重与实际重量误差在0.25kg均属正常请放心购买。&nbsp;</p><p>由于本品为粮食作物天气炎热不宜存放请少购勤购。 由于本品为粮食作物天气炎热不宜存放请少购勤购，若因存放原因生虫变质概不负责。</p>', '[]', 1, '2019-04-19 23:23:47', '2019-04-19 23:23:47', 0, 0);
-INSERT INTO `goods` VALUES ('eb92ac60a8acd5c6c5b25efd78887e59', '25kg银芝芝麻仁', '五十斤好芝麻仁', 410.00, 0.00, 0, 0, 'https://xuanhuobang.com/cover_upload/6cca2c5a-3932-4656-8758-0d476202db2a.jpeg', 0, 30, 0, '本地', 0.00, 0, 0, 0, 0, '', '[{\"name\":\"890e4a63-53ee-4ded-bada-914bf556d075.jpeg\",\"url\":\"https://xuanhuobang.com/pictures_upload/890e4a63-53ee-4ded-bada-914bf556d075.jpeg\",\"uid\":1541211593978,\"status\":\"success\"}]', 108, '2019-04-19 23:23:47', '2019-04-19 23:23:47', 107, 16);
-INSERT INTO `goods` VALUES ('eec48413263108fa27d5aa0d18c68749', '25kg大白芸豆', '五十斤大白芸豆', 350.00, 0.00, 0, 0, 'https://xuanhuobang.com/cover_upload/f44ec913-a87b-4897-a437-00b8d5f1d15c.jpeg', 0, 20, 0, '本地', 0.00, 0, 0, 0, 0, '', '[{\"name\":\"647ee5a5-becf-46e2-b593-c483033f3b3e.jpeg\",\"url\":\"https://xuanhuobang.com/pictures_upload/647ee5a5-becf-46e2-b593-c483033f3b3e.jpeg\",\"uid\":1541914202547,\"status\":\"success\"}]', 108, '2019-04-19 23:23:47', '2019-04-19 23:23:47', 100, 19);
-INSERT INTO `goods` VALUES ('f1912638bfc4a65d8afd5bd020001b25', '大片玉米片', '', 40.00, 0.00, 0, 0, 'https://xuanhuobang.com/cover_upload/580ffa18-de1c-4ec3-b18c-a3462d1c3d45.jpeg', 0, 15, 0, '本地', 0.00, 0, 0, 0, 0, '<p>散装杂粮净重与实际重量误差在0.25kg均属正常请放心购买。&nbsp;</p><p>由于本品为粮食作物天气炎热不宜存放请少购勤购。 由于本品为粮食作物天气炎热不宜存放请少购勤购，若因存放原因生虫变质概不负责。</p>', '[{\"name\":\"ae0ae11d-0b7f-4b64-b889-0dc1329a443d.jpeg\",\"url\":\"https://xuanhuobang.com/pictures_upload/ae0ae11d-0b7f-4b64-b889-0dc1329a443d.jpeg\",\"uid\":1539176995457,\"status\":\"success\"}]', 1, '2019-04-19 23:23:47', '2019-04-19 23:23:47', 40, 16);
-INSERT INTO `goods` VALUES ('f2f7fc9835868a940b80d7d51cd83c55', '25kg五常昌旺稻花香', '五十斤优质稻花香', 188.00, 188.00, 1, 1, 'https://xuanhuobang.com/cover_upload/508903db-4cdc-4cd6-8b1c-e7a27d042f51.jpeg', 0, 20, 0, '本地', 0.00, 0, 0, 0, 0, '', '[{\"name\":\"5c47b00d-b3f8-471c-9345-46c695e34159.jpeg\",\"url\":\"https://xuanhuobang.com/pictures_upload/5c47b00d-b3f8-471c-9345-46c695e34159.jpeg\",\"uid\":1541211655725,\"status\":\"success\"}]', 108, '2019-04-19 23:23:47', '2019-04-19 23:23:47', 111, 9);
-INSERT INTO `goods` VALUES ('f337a9016d6200bea86797388f56bef6', '中粗玉米糁21kg', '四十二斤，中粗玉米糁。', 56.00, 54.00, 1, 0, 'https://xuanhuobang.com/cover_upload/8b8efee3-7187-414f-bb22-e1e819c9a69d.jpeg', 0, 100, 0, '本地', 1.00, 0, 0, 0, 0, '<p>散装杂粮净重与实际重量误差在0.25kg均属正常请放心购买。&nbsp;</p><p>由于本品为粮食作物天气炎热不宜存放请少购勤购。 由于本品为粮食作物天气炎热不宜存放请少购勤购，若因存放原因生虫变质概不负责。</p>', '[{\"name\":\"68e6c0e4-4f05-42fa-89ba-5fdf4ba03d5c.jpeg\",\"url\":\"https://xuanhuobang.com/pictures_upload/68e6c0e4-4f05-42fa-89ba-5fdf4ba03d5c.jpeg\",\"uid\":1539253811569,\"status\":\"success\"}]', 108, '2019-04-19 23:23:47', '2019-04-19 23:23:47', 40, 16);
-INSERT INTO `goods` VALUES ('f429736e8079b923f274999c7cc10063', '太子粥25kg', '五十斤八宝粥', 115.00, 0.00, 0, 0, 'https://xuanhuobang.com/cover_upload/efbfa49e-5197-4e70-b3e5-46106bc22095.jpeg', 0, 10, 0, '本地', 3.00, 0, 0, 0, 0, '<p>散装杂粮净重与实际重量误差在0.25kg均属正常请放心购买。&nbsp;</p><p>由于本品为粮食作物天气炎热不宜存放请少购勤购。 由于本品为粮食作物天气炎热不宜存放请少购勤购，若因存放原因生虫变质概不负责。</p>', '[{\"name\":\"0f5d110f-f9a5-4e15-9d90-9a14c222a668.jpeg\",\"url\":\"https://xuanhuobang.com/pictures_upload/0f5d110f-f9a5-4e15-9d90-9a14c222a668.jpeg\",\"uid\":1539253993298,\"status\":\"success\"}]', 108, '2019-04-19 23:23:47', '2019-04-19 23:23:47', 90, 16);
-INSERT INTO `goods` VALUES ('fb2772b86bff388d6913e78f7be636e8', '5kg稻花香米', '十斤稻花香米', 27.00, 0.00, 0, 0, 'https://xuanhuobang.com/cover_upload/ca64df1f-274f-4513-9a90-1dd92fc8ccd8.jpg', 0, 300, 0, '本地', 0.00, 0, 0, 0, 0, '', '[{\"name\":\"46593c88-2b14-4e0e-a9ce-616e023f09f9.jpg\",\"url\":\"https://xuanhuobang.com/pictures_upload/46593c88-2b14-4e0e-a9ce-616e023f09f9.jpg\",\"uid\":1543806207964,\"status\":\"success\"}]', 108, '2019-04-19 23:23:47', '2019-04-19 23:23:47', 105, 9);
-INSERT INTO `goods` VALUES ('fdaea0a4fe6c6513871508839f8b34b6', '五星黑芝麻25kg', '五十斤黑芝麻好黑芝麻', 490.00, 0.00, 0, 0, 'https://xuanhuobang.com/cover_upload/057c23b5-3da6-476a-976b-793c3de3076b.jpeg', 0, 50, 0, '本地', 0.00, 0, 0, 0, 0, '<p>散装杂粮净重与实际重量误差在0.25kg均属正常请放心购买。&nbsp;</p><p>由于本品为粮食作物天气炎热不宜存放请少购勤购。 由于本品为粮食作物天气炎热不宜存放请少购勤购，若因存放原因生虫变质概不负责。</p><p>因批次不同故包装可能不同请以实物为准。</p>', '[{\"name\":\"4d7ae2f9-b467-4bba-a84c-3379a2305f08.jpeg\",\"url\":\"https://xuanhuobang.com/pictures_upload/4d7ae2f9-b467-4bba-a84c-3379a2305f08.jpeg\",\"uid\":1539177091130,\"status\":\"success\"}]', 108, '2019-04-19 23:23:47', '2019-04-19 23:23:47', 107, 16);
-COMMIT;
+INSERT INTO `goods_master` VALUES ('179d83bd-7b43-44f9-866c-60fda21c10c4', 'MacBookPro', 'MacBookPro', '[\"http://localhost:8009/goods/goodsCover/1585963744706921.jpg\"]', NULL, '[\"http://localhost:8009/goods/goodsPicture/1585975672491433.jpg\",\"http://localhost:8009/goods/goodsPicture/1585975708170545.jpg\",\"http://localhost:8009/goods/goodsPicture/1585975709908794.jpg\"]', '[\"http://localhost:8009/goods/goodsPicture/1585975666559369.jpg\",\"http://localhost:8009/goods/goodsPicture/1585975668374367.jpg\",\"http://localhost:8009/goods/goodsPicture/1585975670131001.jpg\"]', 1, NULL, '2020-04-04 12:48:31', 1, 5);
+INSERT INTO `goods_master` VALUES ('c28c6793-b917-4465-b287-ebfb084f5a16', 'MacBookPro111', 'MacBookPro1111', '[\"http://localhost:8009/goods/goodsCover/1585923851609281.jpg\"]', NULL, '[\"http://localhost:8009/goods/uploadGoodsPicture/1585923859612930.jpg\",\"http://localhost:8009/goods/uploadGoodsPicture/1585923861680633.jpg\",\"http://localhost:8009/goods/uploadGoodsPicture/1585923863293852.jpg\"]', '[\"http://localhost:8009/goods/uploadGoodsPicture/1585923853407736.jpg\",\"http://localhost:8009/goods/uploadGoodsPicture/1585923854976124.jpg\",\"http://localhost:8009/goods/uploadGoodsPicture/1585923856648430.jpg\"]', 1, '2020-04-03 22:29:47', '2020-04-03 22:29:47', 1, 5);
+
+-- ----------------------------
+-- Table structure for goods_master_copy1
+-- ----------------------------
+DROP TABLE IF EXISTS `goods_master_copy1`;
+CREATE TABLE `goods_master_copy1`  (
+  `goods_id` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT '' COMMENT '商品id',
+  `goods_title` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT '' COMMENT '商品标题',
+  `goods_describe` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT '' COMMENT '商品描述',
+  `goods_cover` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT '' COMMENT '商品封面',
+  `goods_status` tinyint(4) NULL DEFAULT 1 COMMENT '状态，1上架，0下架',
+  `goods_content` text CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL COMMENT '内容',
+  `goods_banner` varchar(1000) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT '' COMMENT 'banner图',
+  `update_user` int(11) NOT NULL COMMENT '更新人id',
+  `create_time` datetime(0) NULL DEFAULT CURRENT_TIMESTAMP(0) COMMENT '创建时间',
+  `update_time` datetime(0) NULL DEFAULT CURRENT_TIMESTAMP(0) ON UPDATE CURRENT_TIMESTAMP(0) COMMENT '更新时间',
+  `category_id` int(11) NOT NULL DEFAULT 0 COMMENT '所属分类',
+  PRIMARY KEY (`goods_id`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of goods_master_copy1
+-- ----------------------------
+INSERT INTO `goods_master_copy1` VALUES ('0132c776e7fb8288af24787902f8afbd', '糯米面20kg', '四十斤江米面，好江米面', 'https://xuanhuobang.com/cover_upload/025ec4aa-837f-4053-8584-239ae279ee85.jpeg', 1, '<p>散装杂粮净重与实际重量误差在0.25kg均属正常请放心购买。&nbsp;</p><p>由于本品为粮食作物天气炎热不宜存放请少购勤购。 由于本品为粮食作物天气炎热不宜存放请少购勤购，若因存放原因生虫变质概不负责。</p><p>因批次不同故包装可能不同，请以实物为准，放心购买。</p>', '[{\"name\":\"c675cbfd-a622-47a3-bbc1-862f2bb9469d.jpeg\",\"url\":\"https://xuanhuobang.com/pictures_upload/c675cbfd-a622-47a3-bbc1-862f2bb9469d.jpeg\",\"uid\":1539091444652,\"status\":\"success\"}]', 108, '2019-04-19 23:23:47', '2019-12-12 20:52:39', 73);
+INSERT INTO `goods_master_copy1` VALUES ('083a1c71a7b519e81b40be58e9422bab', '10kg昌旺五常稻花香米', '二十斤五常稻花香米', 'https://xuanhuobang.com/cover_upload/a4951441-91ea-43a1-aa75-f978d206a1f1.jpeg', 1, '', '[{\"name\":\"7b4d65c2-b42a-4234-b4a7-ca8355337e3e.jpeg\",\"url\":\"https://xuanhuobang.com/pictures_upload/7b4d65c2-b42a-4234-b4a7-ca8355337e3e.jpeg\",\"uid\":1541913687699,\"status\":\"success\"}]', 108, '2019-04-19 23:23:47', '2019-12-12 20:52:39', 105);
+INSERT INTO `goods_master_copy1` VALUES ('09ae30588a3bc28b7a27adcf31b22781', '秋天小町东北珍珠米50kg', '五十斤黑龙江华川东北珍珠米', 'https://xuanhuobang.com/cover_upload/306c08fa-8aac-4bac-b6cd-43234a94bb1a.jpeg', 1, '', '[{\"name\":\"76966aed-a571-48cb-9e72-e76b084e1fea.jpeg\",\"url\":\"https://xuanhuobang.com/pictures_upload/76966aed-a571-48cb-9e72-e76b084e1fea.jpeg\",\"uid\":1540099834633,\"status\":\"success\"}]', 108, '2019-04-19 23:23:47', '2019-12-12 20:52:39', 102);
+INSERT INTO `goods_master_copy1` VALUES ('0a6973f3cff5b5f51761b036c4f72b8b', '小玉米片', '小玉米片', 'https://xuanhuobang.com/cover_upload/df7bc1d9-46da-4032-9147-cae3f1112304.jpeg', 1, '', '[{\"name\":\"21664652-d15b-4b2d-b475-0784cf3ce2a1.jpeg\",\"url\":\"https://xuanhuobang.com/pictures_upload/21664652-d15b-4b2d-b475-0784cf3ce2a1.jpeg\",\"uid\":1541211843332,\"status\":\"success\"}]', 108, '2019-04-19 23:23:47', '2019-12-12 20:52:39', 40);
+INSERT INTO `goods_master_copy1` VALUES ('0d930f3860e53d46132f8966db5c6936', '89斤豆浆专用豆', '豆浆专用豆', 'https://xuanhuobang.com/cover_upload/144b9b80-c765-4dc3-9cb5-f7d512409a79.jpeg', 1, '', '[{\"name\":\"68f245a4-383c-4d79-9d5f-6aa8d91cd87a.jpeg\",\"url\":\"https://xuanhuobang.com/pictures_upload/68f245a4-383c-4d79-9d5f-6aa8d91cd87a.jpeg\",\"uid\":1540101115650,\"status\":\"success\"}]', 108, '2019-04-19 23:23:47', '2019-12-12 20:52:39', 94);
+INSERT INTO `goods_master_copy1` VALUES ('0ecb57d1484620189ce1e8f863500483', '黑米', '', 'https://xuanhuobang.com/cover_upload/5f0e97d1-e442-40c5-9e9b-2912c5f1aa5c.jpeg', 1, '', '[{\"name\":\"5cfc1c90-1392-41d6-9ffd-8216c242e42b.jpeg\",\"url\":\"https://xuanhuobang.com/pictures_upload/5cfc1c90-1392-41d6-9ffd-8216c242e42b.jpeg\",\"uid\":1541211739833,\"status\":\"success\"}]', 108, '2019-04-19 23:23:47', '2019-12-12 20:52:39', 93);
+INSERT INTO `goods_master_copy1` VALUES ('12446e7dfc0ede6c63f4070120a42ce6', '特价珍珠米23.5kg', '四十七斤特价大米', 'https://xuanhuobang.com/cover_upload/14393142-a7ca-4c19-ae5c-3d8174251cee.jpeg', 1, '', '[{\"name\":\"0a814a4c-eff5-447e-9c67-eeedc50ed7b3.jpeg\",\"url\":\"https://xuanhuobang.com/pictures_upload/0a814a4c-eff5-447e-9c67-eeedc50ed7b3.jpeg\",\"uid\":1540100441340,\"status\":\"success\"}]', 108, '2019-04-19 23:23:47', '2019-12-12 20:52:39', 106);
+INSERT INTO `goods_master_copy1` VALUES ('15766c72f337c2ddc44b1f8b9940e511', '25kg红花生', '五十斤优质红花生', 'https://xuanhuobang.com/cover_upload/c52dde57-00f5-4ffd-bcb1-4b905d0b381f.jpeg', 1, '', '[{\"name\":\"32903fb8-4f9c-447a-b605-ae91972b33cd.jpeg\",\"url\":\"https://xuanhuobang.com/pictures_upload/32903fb8-4f9c-447a-b605-ae91972b33cd.jpeg\",\"uid\":1543117792197,\"status\":\"success\"}]', 108, '2019-04-19 23:23:47', '2019-12-12 20:52:39', 74);
+INSERT INTO `goods_master_copy1` VALUES ('1763177eb936f4b3b5e37ff8d3acc297', '芝麻仁25kg', '好芝麻仁，颗粒饱满，晶莹透亮，25kg', 'https://xuanhuobang.com/cover_upload/b31730ee-adaa-4a2a-ad60-c33dc539ac41.jpeg', 1, '<p>散装杂粮净重与实际重量误差在0.25kg均属正常请放心购买。&nbsp;</p><p>由于本品为粮食作物天气炎热不宜存放请少购勤购。 由于本品为粮食作物天气炎热不宜存放请少购勤购，若因存放原因生虫变质概不负责。</p>', '[{\"name\":\"43bd1a77-bd65-4f60-96c1-c52a4d7764c3.jpeg\",\"url\":\"https://xuanhuobang.com/pictures_upload/43bd1a77-bd65-4f60-96c1-c52a4d7764c3.jpeg\",\"uid\":1539177035336,\"status\":\"success\"}]', 108, '2019-04-19 23:23:47', '2019-12-12 20:52:39', 107);
+INSERT INTO `goods_master_copy1` VALUES ('1948441ad87c05df72aac67c1aa6a90b', '22kg谷老帽石磨小米', '四十四斤谷老帽石磨小米', 'https://xuanhuobang.com/cover_upload/e19fedeb-f8ae-4442-809c-b75f86ec7a2a.jpeg', 1, '', '[{\"name\":\"b1bbc7d9-665f-4624-95d3-f56828928cbc.jpeg\",\"url\":\"https://xuanhuobang.com/pictures_upload/b1bbc7d9-665f-4624-95d3-f56828928cbc.jpeg\",\"uid\":1540100079438,\"status\":\"success\"}]', 108, '2019-04-19 23:23:47', '2019-12-12 20:52:39', 91);
+INSERT INTO `goods_master_copy1` VALUES ('253d0dd17fb8c5a34bdc6fc4fec89150', '5kg原阳大米', '十斤金八素原阳大米', 'https://xuanhuobang.com/cover_upload/ac892a6f-60cf-4340-8329-119d759c6453.jpeg', 1, '', '[{\"name\":\"2acd106b-0163-4f2a-ad16-3fb045bd8537.jpg\",\"url\":\"https://xuanhuobang.com/pictures_upload/2acd106b-0163-4f2a-ad16-3fb045bd8537.jpg\",\"uid\":1541164797104,\"status\":\"success\"}]', 108, '2019-04-19 23:23:47', '2019-12-12 20:52:39', 105);
+INSERT INTO `goods_master_copy1` VALUES ('265219bafc41bd17a61fe0121f1a053c', '优质芝麻仁23.5kg', '47斤芝麻仁', 'https://xuanhuobang.com/cover_upload/a5124cd9-b9c2-49d6-a1b8-5abf771bb815.jpeg', 1, '<p>散装杂粮净重与实际重量误差在0.25kg均属正常请放心购买。&nbsp;</p><p>由于本品为粮食作物天气炎热不宜存放请少购勤购。 由于本品为粮食作物天气炎热不宜存放请少购勤购，若因存放原因生虫变质概不负责。</p>', '[{\"name\":\"28b09186-6393-4835-86a3-6406d5e0581e.jpeg\",\"url\":\"https://xuanhuobang.com/pictures_upload/28b09186-6393-4835-86a3-6406d5e0581e.jpeg\",\"uid\":1539305577177,\"status\":\"success\"}]', 108, '2019-04-19 23:23:47', '2019-12-12 20:52:39', 107);
+INSERT INTO `goods_master_copy1` VALUES ('2685edb21a21796fe8b0ce2e2d9fbb19', '5kg无常非转稻花香', '十斤非转基因无常稻花香', 'https://xuanhuobang.com/cover_upload/e7264f36-b78a-4b67-99c3-123aa66fe10c.jpeg', 1, '', '[{\"name\":\"7642d64d-59b3-4a19-8178-44f0791cfbad.jpeg\",\"url\":\"https://xuanhuobang.com/pictures_upload/7642d64d-59b3-4a19-8178-44f0791cfbad.jpeg\",\"uid\":1541828540136,\"status\":\"success\"}]', 108, '2019-04-19 23:23:47', '2019-12-12 20:52:39', 105);
+INSERT INTO `goods_master_copy1` VALUES ('2947ba86f33579d3819dbfec78bf8678', '英国红25kg', '五十斤红腰豆', 'https://xuanhuobang.com/cover_upload/31f2438c-172e-4fcd-8acb-1fbd099284aa.jpeg', 1, '', '[{\"name\":\"2d8cc137-51e4-4e38-9d0d-d79dca189f43.jpeg\",\"url\":\"https://xuanhuobang.com/pictures_upload/2d8cc137-51e4-4e38-9d0d-d79dca189f43.jpeg\",\"uid\":1540102388052,\"status\":\"success\"}]', 108, '2019-04-19 23:23:47', '2019-12-12 20:52:39', 100);
+INSERT INTO `goods_master_copy1` VALUES ('2d7f19dca2a3ab094d7b514a466c0440', '泰国糯米25kg', '五十斤泰国糯米，江米', 'https://xuanhuobang.com/cover_upload/b8376bf0-0501-4d05-9b76-d7025fe75978.jpeg', 1, '<p>散装杂粮净重与实际重量误差在0.25kg均属正常请放心购买。&nbsp;</p><p>由于本品为粮食作物天气炎热不宜存放请少购勤购。 由于本品为粮食作物天气炎热不宜存放请少购勤购，若因存放原因生虫变质概不负责。</p>', '[{\"name\":\"2f719d7d-db98-4d84-8a46-0a7f3ec53842.jpeg\",\"url\":\"https://xuanhuobang.com/pictures_upload/2f719d7d-db98-4d84-8a46-0a7f3ec53842.jpeg\",\"uid\":1539305786065,\"status\":\"success\"}]', 108, '2019-04-19 23:23:47', '2019-12-12 20:52:39', 101);
+INSERT INTO `goods_master_copy1` VALUES ('34a89a08ee306d95b3d629bffb84af2d', '黄豆23.5kg', '四十七斤小包大籽黄豆，好黄豆', 'https://xuanhuobang.com/cover_upload/be05c842-8f41-4532-98fd-53d19166570c.jpeg', 1, '<p>散装杂粮净重与实际重量误差在0.25kg均属正常请放心购买。&nbsp;</p><p>由于本品为粮食作物天气炎热不宜存放请少购勤购。 由于本品为粮食作物天气炎热不宜存放请少购勤购，若因存放原因生虫变质概不负责。</p><p>因批次不同故包装可能不同，请以实物为准，放心购买。</p>', '[{\"name\":\"7f6b0cb1-a2eb-4353-ab50-4c5b69b8021f.jpeg\",\"url\":\"https://xuanhuobang.com/pictures_upload/7f6b0cb1-a2eb-4353-ab50-4c5b69b8021f.jpeg\",\"uid\":1539231366704,\"status\":\"success\"}]', 108, '2019-04-19 23:23:47', '2019-12-12 20:52:39', 94);
+INSERT INTO `goods_master_copy1` VALUES ('37959c1de5c3ee1451015fc6c0c64628', '万鹤源东北大米25kg', '五十斤万源大米', 'https://xuanhuobang.com/cover_upload/d2b25639-f897-4ba0-8ca9-603a71a70998.jpeg', 1, '<p>散装杂粮净重与实际重量误差在0.25kg均属正常请放心购买。&nbsp;</p><p>由于本品为粮食作物天气炎热不宜存放请少购勤购。 由于本品为粮食作物天气炎热不宜存放请少购勤购，若因存放原因生虫变质概不负责。</p>', '[{\"name\":\"c2ef553f-5c47-4eef-94e4-f3e01afbd902.jpeg\",\"url\":\"https://xuanhuobang.com/pictures_upload/c2ef553f-5c47-4eef-94e4-f3e01afbd902.jpeg\",\"uid\":1540022130961,\"status\":\"success\"}]', 108, '2019-04-19 23:23:47', '2019-12-12 20:52:39', 102);
+INSERT INTO `goods_master_copy1` VALUES ('37e39e100a0d672cdfb6c79f1bf43976', '福临门水晶米5kg', '', 'https://xuanhuobang.com/cover_upload/a43cdf71-e38d-472d-80ea-0e2d6dce118e.jpeg', 1, '福临门水晶米，原粮产自东北优质稻米产区，充沛的阳光，肥沃的土壤以及丰富的水源，为稻米生长创造有利条件。\n生米米粒饱满，晶莹剔透，烹煮后口感温润柔软且富有弹性。\n福临门大米依托中郎全产业链严格管控，引进先进工艺封闭生产。从田间到餐桌，福米临门，品质到家。', '[{\"name\":\"ba098d3a-a92a-42db-b561-444c4f79cc9e.jpeg\",\"url\":\"https://xuanhuobang.com/pictures_upload/ba098d3a-a92a-42db-b561-444c4f79cc9e.jpeg\",\"uid\":1538359305763,\"status\":\"success\"},{\"name\":\"0b257ee7-2398-4b7a-9e82-970b6b002f4d.jpeg\",\"url\":\"https://xuanhuobang.com/pictures_upload/0b257ee7-2398-4b7a-9e82-970b6b002f4d.jpeg\",\"uid\":1538359354296,\"status\":\"success\"},{\"name\":\"96c0cd1e-dca4-4b96-b9d5-fb6076c13633.jpeg\",\"url\":\"https://xuanhuobang.com/pictures_upload/96c0cd1e-dca4-4b96-b9d5-fb6076c13633.jpeg\",\"uid\":1538359366311,\"status\":\"success\"}]', 1, '2019-04-19 23:23:47', '2019-12-12 20:52:39', 0);
+INSERT INTO `goods_master_copy1` VALUES ('3ac761a5abe0a7e96c61d9c4c91cdbd5', '玉霖江米', '', 'https://xuanhuobang.com/cover_upload/cac61a5d-2de2-4c88-94e1-fb8a3ceb634a.jpeg', 1, '', '[{\"name\":\"36d64cbb-3c89-4db1-9a53-deb41da23eb1.jpeg\",\"url\":\"https://xuanhuobang.com/pictures_upload/36d64cbb-3c89-4db1-9a53-deb41da23eb1.jpeg\",\"uid\":1540100185058,\"status\":\"success\"}]', 108, '2019-04-19 23:23:47', '2019-12-12 20:52:39', 101);
+INSERT INTO `goods_master_copy1` VALUES ('3c54ad14abebbce57cacfc3438970b79', '麦仁14kg', '', 'https://xuanhuobang.com/cover_upload/91b29fa0-e07c-47ba-8c89-e97ed9eef297.jpeg', 1, '<p>营养价值：不含胆固醇，富含纤维。含有少量矿物质，包括铁和锌。 散装杂粮净重与实际重量误差在0.25kg均属正常请放心购买。 由于本品为粮食作物天气炎热不宜存放请少购勤购，若因存放原因生虫变质概不负责。</p>', '[{\"name\":\"6131b8be-5c4d-4737-bcf6-acc92fde7c5a.jpeg\",\"url\":\"https://xuanhuobang.com/pictures_upload/6131b8be-5c4d-4737-bcf6-acc92fde7c5a.jpeg\",\"uid\":1539231539586,\"status\":\"success\"}]', 108, '2019-04-19 23:23:47', '2019-12-12 20:52:39', 108);
+INSERT INTO `goods_master_copy1` VALUES ('3dc59db9017493b3484a294ac1e51814', '22.5kg仙桃香米', '四十五斤仙桃香米，籼米。', 'https://xuanhuobang.com/cover_upload/79474e35-8c21-4499-8dd5-4cc55c4f4aa0.jpeg', 1, '', '[{\"name\":\"454e5582-bc7c-43fd-b35b-786e3467efbd.jpeg\",\"url\":\"https://xuanhuobang.com/pictures_upload/454e5582-bc7c-43fd-b35b-786e3467efbd.jpeg\",\"uid\":1541466331478,\"status\":\"success\"}]', 108, '2019-04-19 23:23:47', '2019-12-12 20:52:39', 52);
+INSERT INTO `goods_master_copy1` VALUES ('42be484eb8af2f633ea1506a16f8257a', '小青仁黑豆25kg', '小籽青仁黑豆，药黑豆，25kg', 'https://xuanhuobang.com/cover_upload/86e173bf-7bf0-420c-ad71-12c64ad377ec.jpeg', 1, '<p>散装杂粮净重与实际重量误差在0.5kg均属正常请放心购买。&nbsp;</p><p>由于本品为粮食作物天气炎热不宜存放请少购勤购。 由于本品为粮食作物天气炎热不宜存放请少购勤购，若因存放原因生虫变质概不负责。</p><p>因批次不同故包装可能不同，请以实物为准。</p>', '[{\"name\":\"3a80811a-685c-4396-8222-720948bbc71d.jpeg\",\"url\":\"https://xuanhuobang.com/pictures_upload/3a80811a-685c-4396-8222-720948bbc71d.jpeg\",\"uid\":1539231582358,\"status\":\"success\"}]', 108, '2019-04-19 23:23:47', '2019-12-12 20:52:39', 95);
+INSERT INTO `goods_master_copy1` VALUES ('4303d06816447b57a3971c0e2bbbe329', '玉米仁21kg', '黄玉米仁', 'https://xuanhuobang.com/cover_upload/224ae2f3-4de8-402d-a448-99bea5caf7e2.jpeg', 1, '<p>散装杂粮净重与实际重量误差在0.25kg均属正常请放心购买。&nbsp;</p><p>由于本品为粮食作物天气炎热不宜存放请少购勤购。 由于本品为粮食作物天气炎热不宜存放请少购勤购，若因存放原因生虫变质概不负责。</p><p>因批次不同故包装可能不同，请以实物为准。</p>', '[{\"name\":\"a47ceeb0-2a40-408d-9aed-9633fb9df2d7.jpeg\",\"url\":\"https://xuanhuobang.com/pictures_upload/a47ceeb0-2a40-408d-9aed-9633fb9df2d7.jpeg\",\"uid\":1539231650833,\"status\":\"success\"}]', 108, '2019-04-19 23:23:47', '2019-12-12 20:52:39', 40);
+INSERT INTO `goods_master_copy1` VALUES ('46466f3890342cbaf4a6e36a90ff805c', '田文华小米25kg', '新小米，养胃米。好小米，朝阳小米。', 'https://xuanhuobang.com/cover_upload/6aaf44f0-902a-4401-93c0-65d707a75945.jpeg', 1, '<p>散装杂粮净重与实际重量误差在0.25kg均属正常请放心购买。&nbsp;</p><p>由于本品为粮食作物天气炎热不宜存放请少购勤购。 由于本品为粮食作物天气炎热不宜存放请少购勤购，若因存放原因生虫变质概不负责。</p>', '[{\"name\":\"d3a63c06-5226-4977-ac97-dcef99cd5afa.jpeg\",\"url\":\"https://xuanhuobang.com/pictures_upload/d3a63c06-5226-4977-ac97-dcef99cd5afa.jpeg\",\"uid\":1539177468402,\"status\":\"success\"}]', 108, '2019-04-19 23:23:47', '2019-12-12 20:52:39', 91);
+INSERT INTO `goods_master_copy1` VALUES ('478690f517afcdc914ec5bb0bae02f47', '10kg原阳大米', '二十斤金八素原阳大米', 'https://xuanhuobang.com/cover_upload/a12a114f-ad9a-444d-9d4e-90ff50befb51.jpeg', 1, '', '[{\"name\":\"2fc5af60-8b0f-4f56-8b2a-357574a876fa.jpeg\",\"url\":\"https://xuanhuobang.com/pictures_upload/2fc5af60-8b0f-4f56-8b2a-357574a876fa.jpeg\",\"uid\":1541165745593,\"status\":\"success\"}]', 108, '2019-04-19 23:23:47', '2019-12-12 20:52:39', 105);
+INSERT INTO `goods_master_copy1` VALUES ('4874e747d3809b82658ca8d61aecf0b4', '5kg昌旺五常稻花香（手提）', '十斤真空昌旺手提非转基因五常稻花香', 'https://xuanhuobang.com/cover_upload/4a08bdb2-caef-4afc-a18a-360437dbbd1c.jpeg', 1, '', '[{\"name\":\"815d089c-cb94-4d52-8042-e56cbe8fbdb7.jpeg\",\"url\":\"https://xuanhuobang.com/pictures_upload/815d089c-cb94-4d52-8042-e56cbe8fbdb7.jpeg\",\"uid\":1544173138106,\"status\":\"success\"}]', 108, '2019-04-19 23:23:47', '2019-12-12 20:52:39', 105);
+INSERT INTO `goods_master_copy1` VALUES ('4aa5e183cbd39823391c18c1fa4554f8', '东北汇五常香米', '五十斤五常长粒香', 'https://xuanhuobang.com/cover_upload/d77cf6b8-63a0-4266-9efa-40370185b4a9.jpeg', 1, '', '[{\"name\":\"842771c7-3a24-46f9-8e4f-9b9837358ccb.jpeg\",\"url\":\"https://xuanhuobang.com/pictures_upload/842771c7-3a24-46f9-8e4f-9b9837358ccb.jpeg\",\"uid\":1540100893922,\"status\":\"success\"}]', 108, '2019-04-19 23:23:47', '2019-12-12 20:52:39', 103);
+INSERT INTO `goods_master_copy1` VALUES ('52a1d8670a38b340d12a277a94b62911', '10kg优质原阳大米', '二十斤优质金八素原阳大米', 'https://xuanhuobang.com/cover_upload/0c450971-879c-4f2c-ac10-9e1836e3a96b.jpeg', 1, '', '[{\"name\":\"189b1b0f-857a-4cac-8a70-0a2bc5d98861.jpeg\",\"url\":\"https://xuanhuobang.com/pictures_upload/189b1b0f-857a-4cac-8a70-0a2bc5d98861.jpeg\",\"uid\":1541175313216,\"status\":\"success\"}]', 108, '2019-04-19 23:23:47', '2019-12-12 20:52:39', 105);
+INSERT INTO `goods_master_copy1` VALUES ('52b2501e804973d41b6ec61eb3063369', '特价绿豆25kg', '特价绿豆25kg', 'https://xuanhuobang.com/cover_upload/b5d9e3db-37c4-47e8-baad-8ddd812c5553.jpeg', 1, '<p>散装杂粮净重与实际重量误差在0.25kg均属正常请放心购买。&nbsp;</p><p>由于本品为粮食作物天气炎热不宜存放请少购勤购。 由于本品为粮食作物天气炎热不宜存放请少购勤购，若因存放原因生虫变质概不负责。</p><p>因批次不同故包装可能不同请以实物为准。</p>', '[{\"name\":\"b79001cd-2d1d-4ed0-9ccf-fca5aa0102f6.jpeg\",\"url\":\"https://xuanhuobang.com/pictures_upload/b79001cd-2d1d-4ed0-9ccf-fca5aa0102f6.jpeg\",\"uid\":1541221213838,\"status\":\"success\"}]', 108, '2019-04-19 23:23:47', '2019-12-12 20:52:39', 97);
+INSERT INTO `goods_master_copy1` VALUES ('5308b7475ab096792785bec7a7c346aa', '20kg虎爆爆花玉米', '四十斤虎爆爆花玉米', 'https://xuanhuobang.com/cover_upload/88b241b5-40f9-41d6-8850-58fb7a18b891.jpeg', 1, '', '[{\"name\":\"421bb611-49ef-467d-ba53-a6644384935e.jpeg\",\"url\":\"https://xuanhuobang.com/pictures_upload/421bb611-49ef-467d-ba53-a6644384935e.jpeg\",\"uid\":1541914472902,\"status\":\"success\"}]', 108, '2019-04-19 23:23:47', '2019-12-12 20:52:39', 40);
+INSERT INTO `goods_master_copy1` VALUES ('5471bb2bfc89bc7a4330ef15a861542a', '大籽绿豆25kg', '颗粒均匀，色彩鲜亮，好煮，特大籽，25kg', 'https://xuanhuobang.com/cover_upload/912b1322-a312-454e-ba9d-c8a259ec5f3e.jpeg', 1, '<p>散装杂粮净重与实际重量误差在0.5kg均属正常请放心购买。&nbsp;</p><p>由于本品为粮食作物天气炎热不宜存放请少购勤购。 由于本品为粮食作物天气炎热不宜存放请少购勤购，若因存放原因生虫变质概不负责。</p><p>引批次不同故包装可能不同请以实物为准。</p>', '[{\"name\":\"becc0d5b-703e-48f3-8ac8-84cb5d8ac39f.jpeg\",\"url\":\"https://xuanhuobang.com/pictures_upload/becc0d5b-703e-48f3-8ac8-84cb5d8ac39f.jpeg\",\"uid\":1539231765949,\"status\":\"success\"}]', 108, '2019-04-19 23:23:47', '2019-12-12 20:52:39', 97);
+INSERT INTO `goods_master_copy1` VALUES ('54d76d478ccd893c08170cbcc793b284', '25kg原阳大米', '五十斤金八素原阳大米', 'https://xuanhuobang.com/cover_upload/8fc1fd11-7b55-4bfd-8834-8ea8a7e55ab6.jpeg', 1, '', '[{\"name\":\"c3352e6d-ee47-46ff-8c4a-696730c1128e.jpeg\",\"url\":\"https://xuanhuobang.com/pictures_upload/c3352e6d-ee47-46ff-8c4a-696730c1128e.jpeg\",\"uid\":1541175344737,\"status\":\"success\"}]', 108, '2019-04-19 23:23:47', '2019-12-12 20:52:39', 104);
+INSERT INTO `goods_master_copy1` VALUES ('5a6382eee9a188f4d10d413344197825', '5kg田文华小米', '十斤田文华小米', 'https://xuanhuobang.com/cover_upload/c2ead795-a6ef-40d3-98f5-0c0b90efca4f.jpeg', 1, '<p>散装杂粮净重与实际重量误差在0.25kg均属正常请放心购买。&nbsp;</p><p>由于本品为粮食作物天气炎热不宜存放请少购勤购。 由于本品为粮食作物天气炎热不宜存放请少购勤购，若因存放原因生虫变质概不负责。</p>', '[{\"name\":\"ada427d8-50cf-462a-a8ec-317baeb1e359.jpeg\",\"url\":\"https://xuanhuobang.com/pictures_upload/ada427d8-50cf-462a-a8ec-317baeb1e359.jpeg\",\"uid\":1540021221186,\"status\":\"success\"}]', 108, '2019-04-19 23:23:47', '2019-12-12 20:52:39', 92);
+INSERT INTO `goods_master_copy1` VALUES ('5d8aaa1880a13b193f9222be0f2ba43b', '25kg小颗粒东北绿豆', '小颗粒东北绿豆', 'https://xuanhuobang.com/cover_upload/def6a19d-9934-4f90-822f-0deda3502f4b.jpeg', 1, '', '[{\"name\":\"50e4a3c3-68f0-4b35-8279-3fac39c096e3.jpeg\",\"url\":\"https://xuanhuobang.com/pictures_upload/50e4a3c3-68f0-4b35-8279-3fac39c096e3.jpeg\",\"uid\":1541466798792,\"status\":\"success\"}]', 108, '2019-04-19 23:23:47', '2019-12-12 20:52:39', 97);
+INSERT INTO `goods_master_copy1` VALUES ('60374820516b354169d1df599bccb8bd', '25kg优质原阳大米', '五十斤优质金八素原阳大米', 'https://xuanhuobang.com/cover_upload/ec663eef-bbb6-4eef-9515-4d65008223f5.jpeg', 1, '', '[{\"name\":\"dd5c8c04-058c-47ed-ad02-c86cafe9096e.jpeg\",\"url\":\"https://xuanhuobang.com/pictures_upload/dd5c8c04-058c-47ed-ad02-c86cafe9096e.jpeg\",\"uid\":1541554985216,\"status\":\"success\"}]', 108, '2019-04-19 23:23:47', '2019-12-12 20:52:39', 104);
+INSERT INTO `goods_master_copy1` VALUES ('605e617d5d77bb105fa0dec0ac2613d3', '2kg真空田文华小米1*10', '四斤真空田文华', 'https://xuanhuobang.com/cover_upload/c701df07-884b-47bd-ac54-c7ec7c03bf09.jpeg', 1, '<p>四斤真空田文华小米，一包十小袋</p>', '[{\"name\":\"8b823ef7-07de-4db5-b853-a843a394c4b9.jpeg\",\"url\":\"https://xuanhuobang.com/pictures_upload/8b823ef7-07de-4db5-b853-a843a394c4b9.jpeg\",\"uid\":1540021957885,\"status\":\"success\"}]', 1, '2019-04-19 23:23:47', '2019-12-12 20:52:39', 92);
+INSERT INTO `goods_master_copy1` VALUES ('618a24348253852ccb3ab62eaecb9cb8', '25kg黄国江米', '五十斤好江米', 'https://xuanhuobang.com/cover_upload/06042b8d-99e5-4da5-9ac5-329a8eb02ff1.jpeg', 1, '', '[{\"name\":\"b947f4a7-1c9a-4524-816d-437da827bb8d.jpeg\",\"url\":\"https://xuanhuobang.com/pictures_upload/b947f4a7-1c9a-4524-816d-437da827bb8d.jpeg\",\"uid\":1540100507283,\"status\":\"success\"}]', 108, '2019-04-19 23:23:47', '2019-12-12 20:52:39', 101);
+INSERT INTO `goods_master_copy1` VALUES ('66609156f5e9fcf2681cf6fd285c051c', '25kg优质碎米', '五十斤优质碎米', 'https://xuanhuobang.com/cover_upload/f6c3bc68-f5de-4b71-b283-5779626a919f.jpeg', 1, '', '[{\"name\":\"3aece5a8-dba8-4c87-97b0-062227b4e139.jpeg\",\"url\":\"https://xuanhuobang.com/pictures_upload/3aece5a8-dba8-4c87-97b0-062227b4e139.jpeg\",\"uid\":1544172904047,\"status\":\"success\"}]', 108, '2019-04-19 23:23:47', '2019-12-12 20:52:39', 112);
+INSERT INTO `goods_master_copy1` VALUES ('6c8ad1d959a85f8e1315f64ea496da39', '25kg球爆爆米花玉米', '五十斤球爆爆米花玉米', 'https://xuanhuobang.com/cover_upload/b10e5dd0-02cf-41fe-b659-e12b41a1f462.jpeg', 1, '', '[{\"name\":\"4caff011-c31e-4ef3-8581-3819cacd6b85.jpeg\",\"url\":\"https://xuanhuobang.com/pictures_upload/4caff011-c31e-4ef3-8581-3819cacd6b85.jpeg\",\"uid\":1541914257873,\"status\":\"success\"}]', 108, '2019-04-19 23:23:47', '2019-12-12 20:52:39', 40);
+INSERT INTO `goods_master_copy1` VALUES ('6ce4ef7b7c1a5f23e76e38380c0cba7f', '10kg双威东北珍珠米', '二十斤双威东北珍珠米', 'https://xuanhuobang.com/cover_upload/3a17f17e-e2c4-4eb2-993c-d9203e6dd1df.jpeg', 1, '', '[{\"name\":\"8d1e8a0b-897d-41b9-978f-c80d92053793.jpeg\",\"url\":\"https://xuanhuobang.com/pictures_upload/8d1e8a0b-897d-41b9-978f-c80d92053793.jpeg\",\"uid\":1544172648881,\"status\":\"success\"}]', 108, '2019-04-19 23:23:47', '2019-12-12 20:52:39', 105);
+INSERT INTO `goods_master_copy1` VALUES ('6d025c6d87a49d4f02f75a02e086b54a', '小黑豆25kg', '黄仁小黑豆25kg', 'https://xuanhuobang.com/cover_upload/557ade04-be9d-4d47-9245-ed80405bb91b.jpeg', 1, '<p>散装杂粮净重与实际重量误差在0.5kg均属正常请放心购买。&nbsp;</p><p>由于本品为粮食作物天气炎热不宜存放请少购勤购。 由于本品为粮食作物天气炎热不宜存放请少购勤购，若因存放原因生虫变质概不负责。</p><p>因批次不同故包装可能不同请以实物为准</p>', '[{\"name\":\"8b6bc0bc-8de1-47cc-9620-924d75036464.jpeg\",\"url\":\"https://xuanhuobang.com/pictures_upload/8b6bc0bc-8de1-47cc-9620-924d75036464.jpeg\",\"uid\":1540020225010,\"status\":\"success\"}]', 108, '2019-04-19 23:23:47', '2019-12-12 20:52:39', 95);
+INSERT INTO `goods_master_copy1` VALUES ('6ed4df9ca1ad61dc2eadb3f108ac851f', '10kg龙缘非转稻花香米', '二十斤非转基因五常稻花香米', 'https://xuanhuobang.com/cover_upload/824e8e44-b4b6-4610-b4f8-0da8f004a79b.jpeg', 1, '', '[{\"name\":\"ee669caf-bab4-47ff-8d4e-5b0f68438392.jpeg\",\"url\":\"https://xuanhuobang.com/pictures_upload/ee669caf-bab4-47ff-8d4e-5b0f68438392.jpeg\",\"uid\":1541828325546,\"status\":\"success\"}]', 108, '2019-04-19 23:23:47', '2019-12-12 20:52:39', 105);
+INSERT INTO `goods_master_copy1` VALUES ('70855e0daad3f375068f93759cc8cd1f', '红小豆25kg', '普通红小豆25kg', 'https://xuanhuobang.com/cover_upload/4a2421bc-bb25-43c7-b4fc-eacd7cb76101.jpeg', 1, '<p>散装杂粮净重与实际重量误差在0.5kg均属正常请放心购买。&nbsp;</p><p>由于本品为粮食作物天气炎热不宜存放请少购勤购。 由于本品为粮食作物天气炎热不宜存放请少购勤购，若因存放原因生虫变质概不负责。</p><p>因批次不同故包装可能不同，请以实物为准。</p>', '[{\"name\":\"99cda059-6e9d-4ade-8587-037a011beb4e.jpeg\",\"url\":\"https://xuanhuobang.com/pictures_upload/99cda059-6e9d-4ade-8587-037a011beb4e.jpeg\",\"uid\":1539232013923,\"status\":\"success\"}]', 108, '2019-04-19 23:23:47', '2019-12-12 20:52:40', 96);
+INSERT INTO `goods_master_copy1` VALUES ('72aa337e0279e416bc84d2a594226bea', '细玉米糁21kg', '四十二斤，细玉米糁', 'https://xuanhuobang.com/cover_upload/5461f771-c855-4bea-ac68-db398c78759d.jpeg', 1, '<p>散装杂粮净重与实际重量误差在0.25kg均属正常请放心购买。&nbsp;</p><p>由于本品为粮食作物天气炎热不宜存放请少购勤购。 由于本品为粮食作物天气炎热不宜存放请少购勤购，若因存放原因生虫变质概不负责。</p><p>因批次不同故包装可能不同请以实物为准。</p>', '[{\"name\":\"c2d0c9be-cda0-455c-a552-cab7f7a6eacb.jpeg\",\"url\":\"https://xuanhuobang.com/pictures_upload/c2d0c9be-cda0-455c-a552-cab7f7a6eacb.jpeg\",\"uid\":1539177515892,\"status\":\"success\"}]', 108, '2019-04-19 23:23:47', '2019-12-12 20:52:40', 40);
+INSERT INTO `goods_master_copy1` VALUES ('74b941ef1c318c57c12d308284cab9cc', '田文华小米5kg', '', 'https://xuanhuobang.com/cover_upload/b89716ed-3faf-468a-93d8-a6ecf17fcf27.jpeg', 1, '辽宁省朝阳市朝阳县属于北温带大陆性季风气候区，四季分明，雨热同期，昼夜温差大，积温高，日照时间长。全年平均气温约为8.5℃，年均日照总时数为2861.7小时，年均降水量约为486毫米，平均风速约为3米/秒，无霜期为127到167天。朝阳县空气质量优良，列辽宁省第一位，全年达到二级（良）以上标准天数在350天左右。\n朝阳小米颗粒均匀、香甜可口、营养丰富、食用方便、用途较广的特点，对于治疗肝脏病、心脏病、神经官能症、贫血等有一定辅助作用。食用可做成美味可口的稠粥、小米发糕、煎饼干、小米锅巴、小米面饼等二十余种不同风味的食品。“朝阳小米”以独特的土壤、光照、水质条件为基础，利用天然水、农家肥作补充，采用传统的农业耕作方式，精加工制作而成。\n散装杂粮净重与实际重量误差在0.25kg均属正常请放心购买。\n由于本品为粮食作物天气炎热不宜存放请少购勤购，若因存放原因生虫变质概不负责。\n', '[{\"name\":\"d08b6835-e855-49a1-b2bb-7eac908b13e6.jpeg\",\"url\":\"https://xuanhuobang.com/pictures_upload/d08b6835-e855-49a1-b2bb-7eac908b13e6.jpeg\",\"uid\":1538364417711,\"status\":\"success\"}]', 1, '2019-04-19 23:23:47', '2019-12-12 20:52:40', 0);
+INSERT INTO `goods_master_copy1` VALUES ('760b4d1cc959960ff626450dc5a62a64', '燕麦片16kg', '', 'https://xuanhuobang.com/cover_upload/5c59ca01-e049-4e30-85fb-1746ccacfb38.jpeg', 1, '<p>燕麦经过精细加工制成麦片，使其食用更加方便，口感也得到改善，成为深受欢迎的保健食品。其中的膳食纤维具有许多有益于健康的生物作用可降低甘油三脂的低密度脂肪蛋白，促使胆固醇排泄，防治糖尿病，有利于减少糖尿病的血管并发症的发生；可通便导泄，对于习惯性便秘患者有很好的帮助；燕麦片属低热食品，食后易引起饱感，长期食用具有减肥功效。此外，燕麦中含有丰富的维生素B1、B2、E、叶酸等，可以改善血液循环、缓解生活工作带来的压力；含有的钙、磷、铁、锌、锰等矿物质也有预防骨质疏松、促进伤口愈合、防止贫血的功效。 散装杂粮净重与实际重量误差在0.25kg均属正常请放心购买。 由于本品为粮食作物天气炎热不宜存放请少购勤购，若因存放原因生虫变质概不负责。</p>', '[{\"name\":\"d9ca2f26-c9ab-4097-8ef3-0ece1a073e8b.jpeg\",\"url\":\"https://xuanhuobang.com/pictures_upload/d9ca2f26-c9ab-4097-8ef3-0ece1a073e8b.jpeg\",\"uid\":1539232059188,\"status\":\"success\"}]', 108, '2019-04-19 23:23:47', '2019-12-12 20:52:40', 44);
+INSERT INTO `goods_master_copy1` VALUES ('77d8b44eedff44ccee8db264486afa87', '25kg正和江米', '好江米，正和江米', 'https://xuanhuobang.com/cover_upload/8e7fe976-be43-487b-81c8-490e01cb9290.jpeg', 1, '', '[{\"name\":\"27f4ebb2-1338-4781-ba61-7c5c21527e4d.jpeg\",\"url\":\"https://xuanhuobang.com/pictures_upload/27f4ebb2-1338-4781-ba61-7c5c21527e4d.jpeg\",\"uid\":1541211930459,\"status\":\"success\"}]', 108, '2019-04-19 23:23:47', '2019-12-12 20:52:40', 101);
+INSERT INTO `goods_master_copy1` VALUES ('781d36a4309be025789fb57e79b298fc', '5kg原生态长粒香1*5', '十斤绥化秦家长粒香一包五小袋', 'https://xuanhuobang.com/cover_upload/8920f466-37ae-4471-b55e-bb1fa9ef47d4.jpeg', 1, '<p>散装杂粮净重与实际重量误差在0.25kg均属正常请放心购买。&nbsp;</p><p>由于本品为粮食作物天气炎热不宜存放请少购勤购。 由于本品为粮食作物天气炎热不宜存放请少购勤购，若因存放原因生虫变质概不负责。</p>', '[{\"name\":\"a9979b26-d4c7-4434-9c04-541a3878a6f3.jpeg\",\"url\":\"https://xuanhuobang.com/pictures_upload/a9979b26-d4c7-4434-9c04-541a3878a6f3.jpeg\",\"uid\":1540022566265,\"status\":\"success\"}]', 108, '2019-04-19 23:23:47', '2019-12-12 20:52:40', 105);
+INSERT INTO `goods_master_copy1` VALUES ('7b44284e6c0eea0d7e914d6a0af29b22', '七星白芝麻25kg', '五十斤七星白芝麻', 'https://xuanhuobang.com/cover_upload/d7fd30b1-abd4-4d7e-aaac-5b0bfdfc7c8d.jpeg', 1, '<p>散装杂粮净重与实际重量误差在0.25kg均属正常请放心购买。&nbsp;</p><p>由于本品为粮食作物天气炎热不宜存放请少购勤购。 由于本品为粮食作物天气炎热不宜存放请少购勤购，若因存放原因生虫变质概不负责。</p>', '[{\"name\":\"9ae570b1-eb86-4a08-9870-e7b9635dabd7.jpeg\",\"url\":\"https://xuanhuobang.com/pictures_upload/9ae570b1-eb86-4a08-9870-e7b9635dabd7.jpeg\",\"uid\":1539177357547,\"status\":\"success\"}]', 108, '2019-04-19 23:23:47', '2019-12-12 20:52:40', 107);
+INSERT INTO `goods_master_copy1` VALUES ('7c2675a7d294c7059a646c1f94eae289', '荞麦仁25kg', '好荞麦仁25kg', 'https://xuanhuobang.com/cover_upload/4924d4d3-76e7-4741-8310-3de00f082f82.jpeg', 1, '<p>	荞麦米，又名三角麦、乌麦、花荞，我国栽培的主要有普通荞麦和鞑靼荞麦两种，前者称甜荞，后者称苦荞。由于苦荞的种实含有芦丁，所以也称丁苦荞。</p><p>	荞麦在我国种植的历史十分悠久，公元前五世纪的《神农书》中就有关于荞麦是当时栽培的八谷之一的记载，除我国外，原苏联、尼泊尔、朝鲜、日本及美洲和欧洲某些地区，人们也喜欢食用荞麦。尤其是日本，自从荞麦从唐朝由我国传入后荞麦食品便风行日本诸岛，光吃法就达到100多种。至今日本国仍然把荞麦食品列为保健食品。荞麦米，就是将荞麦果实脱去外壳后得到的含种皮或不含种皮的籽粒。</p><p>	荞麦蛋白质中含有丰富的赖氨酸成分，铁、锰、锌等微量元素比一般谷物丰富，而且含有丰富膳食纤维，是一般精制大米的10倍。所以荞麦具有很好的营养保健作用。</p><p>	荞麦含有丰富的维生素E和可溶性膳食纤维，同时还含有烟酸和芦丁（芸香甙），芦丁有降低人体血脂和胆固醇、软化血管、保护视力和预防心脑血管疾病的作用。</p><p>	它含有的烟酸成分能促进机体的新陈代谢，增强解毒能力，还具有扩张小血管和降低血液胆固醇的作用。</p><p>	荞麦含有丰富的镁，能促进人体纤维蛋白溶解，使血管扩张，抑制凝血块的形成，具有抗栓塞的作用，也有利于降低血清胆固醇。</p><p><br></p>', '[{\"name\":\"28a1ec85-4c2a-449b-bffd-dfcb8160d67a.jpeg\",\"url\":\"https://xuanhuobang.com/pictures_upload/28a1ec85-4c2a-449b-bffd-dfcb8160d67a.jpeg\",\"uid\":1538375175639,\"status\":\"success\"}]', 1, '2019-04-19 23:23:47', '2019-12-12 20:52:40', 0);
+INSERT INTO `goods_master_copy1` VALUES ('7cc1821d5e68a8c15c01fc473c107b8b', '玉米面24kg', '48斤玉米面', 'https://xuanhuobang.com/cover_upload/49e03e8f-1736-4046-a1e7-7f9036c3c39c.jpeg', 1, '<p>散装杂粮净重与实际重量误差在0.25kg均属正常请放心购买。&nbsp;</p><p>由于本品为粮食作物天气炎热不宜存放请少购勤购。 由于本品为粮食作物天气炎热不宜存放请少购勤购，若因存放原因生虫变质概不负责。</p><p>因批次不同故包装可能不同，请以实物为准，放心购买。</p>', '[{\"name\":\"b350cf2a-b6ba-426a-9b70-e94799ecf06e.jpeg\",\"url\":\"https://xuanhuobang.com/pictures_upload/b350cf2a-b6ba-426a-9b70-e94799ecf06e.jpeg\",\"uid\":1539232151870,\"status\":\"success\"}]', 108, '2019-04-19 23:23:47', '2019-12-12 20:52:40', 73);
+INSERT INTO `goods_master_copy1` VALUES ('7e77b6ec3070d5ed73ccbd94e0a905f8', '泰国香米25kg', '五十斤泰国香米，茉莉香米，25kg', 'https://xuanhuobang.com/cover_upload/1abd11f3-56bc-4304-b84a-868e1f2224e0.jpeg', 1, '<p>泰国香米是原产于泰国的长粒型大米，是籼米的一种。因其香糯的口感和独特的露兜树香味享誉世界。是仅次于印度香米的世界上最大宗的出口大米品种之一。</p><p>泰国香稻只有在原产地才能表现出最好的品质。这是因为那里具有特殊的生长条件，尤其是香稻扬花期间，那里凉爽的气候，明媚的日光，及水稻灌浆期间土壤中渐渐降低的湿度，对香味的产生及积累，起到非常重要的作用。</p><p>散装杂粮净重与实际重量误差在0.25kg均属正常请放心购买。&nbsp;</p><p>由于本品为粮食作物天气炎热不宜存放请少购勤购。 由于本品为粮食作物天气炎热不宜存放请少购勤购，若因存放原因生虫变质概不负责。</p>', '[{\"name\":\"2f5a7ba2-b3cb-43d2-9d6b-a85443d0cada.jpeg\",\"url\":\"https://xuanhuobang.com/pictures_upload/2f5a7ba2-b3cb-43d2-9d6b-a85443d0cada.jpeg\",\"uid\":1538439254480,\"status\":\"success\"}]', 1, '2019-04-19 23:23:47', '2019-12-12 20:52:40', 41);
+INSERT INTO `goods_master_copy1` VALUES ('7f1f4da503a3cee90587051da6498684', '荞麦米25kg', '好荞麦米25kg', 'https://xuanhuobang.com/cover_upload/14afdbaa-ae1f-4e3b-b858-5c3cf422695f.jpeg', 1, '<p>荞麦蛋白质中含有丰富的赖氨酸成分，铁、锰、锌等微量元素比一般谷物丰富，而且含有丰富膳食纤维，是一般精制大米的10倍。所以荞麦具有很好的营养保健作用。</p><p>荞麦含有丰富的维生素E和可溶性膳食纤维，同时还含有烟酸和芦丁（芸香甙），芦丁有降低人体血脂和胆固醇、软化血管、保护视力和预防心脑血管疾病的作用。</p><p>它含有的烟酸成分能促进机体的新陈代谢，增强解毒能力，还具有扩张小血管和降低血液胆固醇的作用。</p><p>荞麦含有丰富的镁，能促进人体纤维蛋白溶解，使血管扩张，抑制凝血块的形成，具有抗栓塞的作用，也有利于降低血清胆固醇。</p><p>荞麦中的某些黄酮成分还具有抗菌、消炎、止咳平喘、祛痰的作用。因此，荞麦还有“消炎粮食”的美称。另外这些成分还具有降低血糖的功效。</p><p>散装杂粮净重与实际重量误差在0.25kg均属正常请放心购买。&nbsp;</p><p>由于本品为粮食作物天气炎热不宜存放请少购勤购。 由于本品为粮食作物天气炎热不宜存放请少购勤购，若因存放原因生虫变质概不负责。</p>', '[{\"name\":\"300c2244-bebf-4bf1-bb76-8d44469f0b85.jpeg\",\"url\":\"https://xuanhuobang.com/pictures_upload/300c2244-bebf-4bf1-bb76-8d44469f0b85.jpeg\",\"uid\":1539232183457,\"status\":\"success\"}]', 108, '2019-04-19 23:23:47', '2019-12-12 20:52:40', 17);
+INSERT INTO `goods_master_copy1` VALUES ('82e0798271c448a1a6d6c7844995a4c5', '荞麦面25kg', '五十斤精品荞麦面', 'https://xuanhuobang.com/cover_upload/df77570b-2cf0-424f-a08b-b3ac625b7bf9.jpeg', 1, '<p>散装杂粮净重与实际重量误差在0.25kg均属正常请放心购买。&nbsp;</p><p>由于本品为粮食作物天气炎热不宜存放请少购勤购。 由于本品为粮食作物天气炎热不宜存放请少购勤购，若因存放原因生虫变质概不负责。</p>', '[{\"name\":\"eeb999dd-197f-4a98-aea4-50d1421e0244.jpeg\",\"url\":\"https://xuanhuobang.com/pictures_upload/eeb999dd-197f-4a98-aea4-50d1421e0244.jpeg\",\"uid\":1539232223273,\"status\":\"success\"}]', 108, '2019-04-19 23:23:47', '2019-12-12 20:52:40', 73);
+INSERT INTO `goods_master_copy1` VALUES ('8583ee01e71042d565452e459f0660b7', '好五常黑米25kg', '五十斤好五常黑米', 'https://xuanhuobang.com/cover_upload/bcc929da-017c-4e14-aef1-1e2e4165a3c2.jpeg', 1, '', '[{\"name\":\"f6e8f11c-d08a-4e30-93d5-968b424015d0.jpeg\",\"url\":\"https://xuanhuobang.com/pictures_upload/f6e8f11c-d08a-4e30-93d5-968b424015d0.jpeg\",\"uid\":1540100296404,\"status\":\"success\"}]', 108, '2019-04-19 23:23:47', '2019-12-12 20:52:40', 93);
+INSERT INTO `goods_master_copy1` VALUES ('8d237cf990b95d81def1c2114df4eca0', '大青仁黑豆25kg', '青仁，黑豆，大籽，25kg', 'https://xuanhuobang.com/cover_upload/df46b5b2-e72d-40e9-9220-5e27125210bd.jpeg', 1, '<p>黑豆中所含的不饱和脂肪酸，可促进胆固醇的代谢、降低血脂，预防心血管疾病，且黑豆的纤维质含量高，可促进肠胃蠕动，预防便秘，所以是不错的减肥佳品。而且黑豆浆不像黄豆性冷，喝多了也不会拉肚子，而且还有治疗风湿、抗衰老等效果。</p><p>黑豆浆，全麦面包，可以称之为营养减肥早餐的黄金搭档了，要减肥的美眉们可以吃得舒坦放心。</p><p>黑豆一直被人们视为药食两用的佳品，因为它具有高蛋白、低热量的特性。有机黑豆中蛋白质含量高达36%~40%，相当于肉类的2倍、鸡蛋的3倍、牛奶的12倍，还能提供食物中粗纤维，促进消化，防止便秘发生。</p><p>黑豆性平，味甘，具有补脾、利水、解毒的功效，对于各种水肿、体虚、中风、肾虚等病症有显著疗效。凡食物中毒或药物中毒，均可用黑豆汁与甘草煎汤喝，用来解毒。<span style=\"color: rgb(51, 102, 204);\">&nbsp;</span></p><p>散装杂粮净重与实际重量误差在0.25kg均属正常请放心购买。&nbsp;</p><p>由于本品为粮食作物天气炎热不宜存放请少购勤购。 由于本品为粮食作物天气炎热不宜存放请少购勤购，若因存放原因生虫变质概不负责。</p><p>因批次不同故包装可能不同请以实物为准。</p>', '[{\"name\":\"c3a21c91-ffc6-4722-954b-c1e70b718bdb.jpeg\",\"url\":\"https://xuanhuobang.com/pictures_upload/c3a21c91-ffc6-4722-954b-c1e70b718bdb.jpeg\",\"uid\":1539252971533,\"status\":\"success\"}]', 108, '2019-04-19 23:23:47', '2019-12-12 20:52:40', 95);
+INSERT INTO `goods_master_copy1` VALUES ('8e64be6f8606e7cdffaddd2a7c613ccb', '10kg五常方正秋然长粒香', '二十斤五常方正秋然长粒香', 'https://xuanhuobang.com/cover_upload/109d9d77-e656-493b-9ed7-e05940b50981.jpeg', 1, '', '[{\"name\":\"ea0fd09d-5e27-44ae-82fb-0ab0bce6b5ae.jpeg\",\"url\":\"https://xuanhuobang.com/pictures_upload/ea0fd09d-5e27-44ae-82fb-0ab0bce6b5ae.jpeg\",\"uid\":1542863836879,\"status\":\"success\"}]', 108, '2019-04-19 23:23:47', '2019-12-12 20:52:40', 105);
+INSERT INTO `goods_master_copy1` VALUES ('8eb7986aeeeb478575e65602e9d67d1a', '高粱面25kg', '五十斤高粱面', 'https://xuanhuobang.com/cover_upload/f3b79b64-f4fd-4ef8-9c69-57556d83ee22.jpeg', 1, '<p>散装杂粮净重与实际重量误差在0.25kg均属正常请放心购买。&nbsp;</p><p>由于本品为粮食作物天气炎热不宜存放请少购勤购。 由于本品为粮食作物天气炎热不宜存放请少购勤购，若因存放原因生虫变质概不负责。</p><p>因批次不同故包装可能不同，请以实物为准，放心购买。</p>', '[{\"name\":\"4d97049d-dc52-4341-9dd0-ca1113947486.jpeg\",\"url\":\"https://xuanhuobang.com/pictures_upload/4d97049d-dc52-4341-9dd0-ca1113947486.jpeg\",\"uid\":1539253038606,\"status\":\"success\"}]', 108, '2019-04-19 23:23:47', '2019-12-12 20:52:40', 73);
+INSERT INTO `goods_master_copy1` VALUES ('8ecdaffc9cc6e2d95124996412073f43', '商品腐竹豆50kg', '一百斤芽黄豆', 'https://xuanhuobang.com/cover_upload/53bb17f5-e51e-4ec0-9971-2aaf2f080d02.jpeg', 1, '<p>散装杂粮净重与实际重量误差在0.25kg均属正常请放心购买。&nbsp;</p><p>由于本品为粮食作物天气炎热不宜存放请少购勤购。 由于本品为粮食作物天气炎热不宜存放请少购勤购，若因存放原因生虫变质概不负责。</p>', '[{\"name\":\"7ccb1238-124a-44eb-a9fb-5d23a292ce62.jpeg\",\"url\":\"https://xuanhuobang.com/pictures_upload/7ccb1238-124a-44eb-a9fb-5d23a292ce62.jpeg\",\"uid\":1539305937047,\"status\":\"success\"}]', 108, '2019-04-19 23:23:47', '2019-12-12 20:52:40', 94);
+INSERT INTO `goods_master_copy1` VALUES ('904894756c99a13d03ab87404a44b2f4', '10kg稻花香米', '二十斤斤稻花香米', 'https://xuanhuobang.com/cover_upload/f3aecf96-031a-40a2-b9d0-43a3be83225d.jpg', 1, '', '[{\"name\":\"08cc18c3-b281-4ba4-a998-26dff956c4c6.jpg\",\"url\":\"https://xuanhuobang.com/pictures_upload/08cc18c3-b281-4ba4-a998-26dff956c4c6.jpg\",\"uid\":1543806360762,\"status\":\"success\"}]', 108, '2019-04-19 23:23:47', '2019-12-12 20:52:40', 105);
+INSERT INTO `goods_master_copy1` VALUES ('90f6927a53eb753c355b5e1bf8280c69', '25kg永辉大金苗', '优质大金苗小米', 'https://xuanhuobang.com/cover_upload/e53702f3-4152-4b62-8ce7-a92abbd58bbe.jpeg', 1, '', '[{\"name\":\"150c1ad1-06d7-4412-b06a-767d1b509389.jpeg\",\"url\":\"https://xuanhuobang.com/pictures_upload/150c1ad1-06d7-4412-b06a-767d1b509389.jpeg\",\"uid\":1541211966576,\"status\":\"success\"}]', 108, '2019-04-19 23:23:47', '2019-12-12 20:52:40', 91);
+INSERT INTO `goods_master_copy1` VALUES ('91ca225433b4bfeb96beb9e42816f807', '优质花豇豆25kg', '好花豇豆，颗粒均匀，色彩鲜艳。25kg', 'https://xuanhuobang.com/cover_upload/ae756d8e-6c12-472f-9ce2-40be98b52192.jpeg', 1, '<p>散装杂粮净重与实际重量误差在0.25kg均属正常请放心购买。&nbsp;</p><p>由于本品为粮食作物天气炎热不宜存放请少购勤购。 由于本品为粮食作物天气炎热不宜存放请少购勤购，若因存放原因生虫变质概不负责。</p><p>因批次不同故可能包装不同，请以实物为准。</p>', '[{\"name\":\"d493f3fe-8d12-4d54-ab28-aa4c62726d3f.jpeg\",\"url\":\"https://xuanhuobang.com/pictures_upload/d493f3fe-8d12-4d54-ab28-aa4c62726d3f.jpeg\",\"uid\":1539253177680,\"status\":\"success\"}]', 108, '2019-04-19 23:23:47', '2019-12-12 20:52:40', 98);
+INSERT INTO `goods_master_copy1` VALUES ('95b5f6eeb1deaefc279412195402ba6f', '白芝麻25kg', '五十斤白芝麻', 'https://xuanhuobang.com/cover_upload/e13dca75-cd87-4e76-8c63-ce9cf3ffd166.jpeg', 1, '<p>散装杂粮净重与实际重量误差在0.25kg均属正常请放心购买。&nbsp;</p><p>由于本品为粮食作物天气炎热不宜存放请少购勤购。 由于本品为粮食作物天气炎热不宜存放请少购勤购，若因存放原因生虫变质概不负责。</p>', '[{\"name\":\"f5a0e6f1-753b-4edc-b091-e40dcfbff320.jpeg\",\"url\":\"https://xuanhuobang.com/pictures_upload/f5a0e6f1-753b-4edc-b091-e40dcfbff320.jpeg\",\"uid\":1539177223989,\"status\":\"success\"}]', 108, '2019-04-19 23:23:47', '2019-12-12 20:52:40', 107);
+INSERT INTO `goods_master_copy1` VALUES ('97987360ea7910a0dd72601ffa5466d7', '25kg赤峰大金苗小米', '优质大金苗小米', 'https://xuanhuobang.com/cover_upload/ad48b5bd-51a8-4a56-8369-8983767bf2a9.jpeg', 1, '', '[{\"name\":\"81c9b433-b320-4054-b464-d6dbef1357bc.jpeg\",\"url\":\"https://xuanhuobang.com/pictures_upload/81c9b433-b320-4054-b464-d6dbef1357bc.jpeg\",\"uid\":1541212022766,\"status\":\"success\"}]', 108, '2019-04-19 23:23:47', '2019-12-12 20:52:40', 91);
+INSERT INTO `goods_master_copy1` VALUES ('9b1ede907d6c4d7f805dd2d74ded6bf7', '泰谷香米10k g', '二十斤泰谷香米', 'https://xuanhuobang.com/cover_upload/79738c20-9cf5-407f-b9d6-2fbe72d4b9fb.jpeg', 1, '<p>福香御系列之“泰谷香米”大米产自黑龙江省绥化市太平川县，这里位于松嫩平原上呼兰河下游地段。是世界上少有的黑土地之一，土壤肥沃，自然河水灌溉。 御福香系列之“泰谷香米”的品种是用天然的香稻和优质的长粒香加工而成，此米外观美，透明光亮。煮熟的米饭口感醇香“泰谷香米”近年来受广大消费者的追捧。</p>', '[{\"name\":\"ebf5101b-14b2-43c5-834c-2a3f8d4c5e26.jpeg\",\"url\":\"https://xuanhuobang.com/pictures_upload/ebf5101b-14b2-43c5-834c-2a3f8d4c5e26.jpeg\",\"uid\":1539598759562,\"status\":\"success\"}]', 108, '2019-04-19 23:23:47', '2019-12-12 20:52:40', 105);
+INSERT INTO `goods_master_copy1` VALUES ('9ec6bbe76836cacd1f42e0fea4c94cc5', '24.5kg特价大米', '四十九斤特价大米', 'https://xuanhuobang.com/cover_upload/cc2b6875-cac6-40b9-8203-61491170ff51.jpg', 1, '', '[{\"name\":\"5be8d2f6-3bbe-41ce-a2f3-573760776316.jpg\",\"url\":\"https://xuanhuobang.com/pictures_upload/5be8d2f6-3bbe-41ce-a2f3-573760776316.jpg\",\"uid\":1545533936955,\"status\":\"success\"}]', 108, '2019-04-19 23:23:47', '2019-12-12 20:52:40', 106);
+INSERT INTO `goods_master_copy1` VALUES ('9ef54ea83dd2d1aa67e36a9fb8d5bc73', '大红扁豆25kg', '', 'https://xuanhuobang.com/cover_upload/ca23ddd5-fe17-48d6-a6dc-3b782352b3b3.jpeg', 1, '<p>散装杂粮净重与实际重量误差在0.25kg均属正常请放心购买。&nbsp;</p><p>由于本品为粮食作物天气炎热不宜存放请少购勤购。 由于本品为粮食作物天气炎热不宜存放请少购勤购，若因存放原因生虫变质概不负责。</p><p>因批次不同故包装可能不同，请以实物为准。</p>', '[{\"name\":\"9106c2d6-5aa5-4e81-8cc4-75866c34afbd.jpeg\",\"url\":\"https://xuanhuobang.com/pictures_upload/9106c2d6-5aa5-4e81-8cc4-75866c34afbd.jpeg\",\"uid\":1538380910244,\"status\":\"success\"},{\"name\":\"37b7c3fe-582a-49a4-8584-ae12de488ea5.jpeg\",\"url\":\"https://xuanhuobang.com/pictures_upload/37b7c3fe-582a-49a4-8584-ae12de488ea5.jpeg\",\"uid\":1538380936128,\"status\":\"success\"}]', 1, '2019-04-19 23:23:47', '2019-12-12 20:52:40', 0);
+INSERT INTO `goods_master_copy1` VALUES ('9fd99e15b349e9bbc2835bcdaa7bb26a', '原生态长粒香10kg', '绥化秦家长粒香10kg', 'https://xuanhuobang.com/cover_upload/f4cf04cf-b6d6-4c99-9b51-f46abeb79449.jpeg', 1, '<p>散装杂粮净重与实际重量误差在0.25kg均属正常请放心购买。&nbsp;</p><p>由于本品为粮食作物天气炎热不宜存放请少购勤购。 由于本品为粮食作物天气炎热不宜存放请少购勤购，若因存放原因生虫变质概不负责。</p>', '[{\"name\":\"0932d3ba-7d45-47bc-9cfc-e789175bb7cb.jpeg\",\"url\":\"https://xuanhuobang.com/pictures_upload/0932d3ba-7d45-47bc-9cfc-e789175bb7cb.jpeg\",\"uid\":1539598075414,\"status\":\"success\"}]', 108, '2019-04-19 23:23:47', '2019-12-12 20:52:40', 105);
+INSERT INTO `goods_master_copy1` VALUES ('aad86567539cc1348592181a845a5456', '25kg银润江米', '银润生态糯米', 'https://xuanhuobang.com/cover_upload/5642e798-5fbc-4e67-8b67-9cf115618490.jpeg', 1, '', '[{\"name\":\"15eebead-f549-49cd-9ca9-52a09785160d.jpeg\",\"url\":\"https://xuanhuobang.com/pictures_upload/15eebead-f549-49cd-9ca9-52a09785160d.jpeg\",\"uid\":1541211565260,\"status\":\"success\"}]', 108, '2019-04-19 23:23:47', '2019-12-12 20:52:40', 101);
+INSERT INTO `goods_master_copy1` VALUES ('ab5da391b7e42cba9d222763ee5959f8', '25kg五常方正秋然长粒香', '五十斤五常方正秋然长粒香', 'https://xuanhuobang.com/cover_upload/2979cc3d-c3ea-48e4-9853-e20dd2d59fd5.jpeg', 1, '', '[{\"name\":\"214c94f3-ffb6-44b4-a625-fb6bcfa8a210.jpeg\",\"url\":\"https://xuanhuobang.com/pictures_upload/214c94f3-ffb6-44b4-a625-fb6bcfa8a210.jpeg\",\"uid\":1542863645594,\"status\":\"success\"}]', 108, '2019-04-19 23:23:47', '2019-12-12 20:52:40', 103);
+INSERT INTO `goods_master_copy1` VALUES ('adebd63bef885d042c415a3ccd14a2f2', '25kg谷老帽小米', '五十斤优质小米', 'https://xuanhuobang.com/cover_upload/4fb6d05b-113f-4b31-b91d-25f4dc6e5ed1.jpeg', 1, '<p>散装杂粮净重与实际重量误差在0.25kg均属正常请放心购买。&nbsp;</p><p>由于本品为粮食作物天气炎热不宜存放请少购勤购。 由于本品为粮食作物天气炎热不宜存放请少购勤购，若因存放原因生虫变质概不负责。</p>', '[{\"name\":\"1352461d-c2dc-420a-85ff-a677f87cfa53.jpeg\",\"url\":\"https://xuanhuobang.com/pictures_upload/1352461d-c2dc-420a-85ff-a677f87cfa53.jpeg\",\"uid\":1539309082667,\"status\":\"success\"}]', 108, '2019-04-19 23:23:47', '2019-12-12 20:52:40', 91);
+INSERT INTO `goods_master_copy1` VALUES ('b052668378c1776b2029773c319a083f', '5kg优质原阳大米', '十斤金八素优质原阳大米', 'https://xuanhuobang.com/cover_upload/85f915fa-c949-4fd0-89e0-ed484bc683e6.jpeg', 1, '', '[{\"name\":\"e66f8225-b7b3-4138-9dc6-1b02901959a6.jpeg\",\"url\":\"https://xuanhuobang.com/pictures_upload/e66f8225-b7b3-4138-9dc6-1b02901959a6.jpeg\",\"uid\":1541222080482,\"status\":\"success\"}]', 108, '2019-04-19 23:23:47', '2019-12-12 20:52:40', 105);
+INSERT INTO `goods_master_copy1` VALUES ('b5a3006d7733cb68d759542c1e1eea46', '扁红豆25k g', '五十斤扁红豆', 'https://xuanhuobang.com/cover_upload/72107477-5ecf-41f1-8179-564d32667865.jpeg', 1, '<p>散装杂粮净重与实际重量误差在0.25kg均属正常请放心购买。&nbsp;</p><p>由于本品为粮食作物天气炎热不宜存放请少购勤购。 由于本品为粮食作物天气炎热不宜存放请少购勤购，若因存放原因生虫变质概不负责。</p>', '[{\"name\":\"c6129549-5bbe-4748-b0b3-8743ad27fc5d.jpeg\",\"url\":\"https://xuanhuobang.com/pictures_upload/c6129549-5bbe-4748-b0b3-8743ad27fc5d.jpeg\",\"uid\":1539306230690,\"status\":\"success\"}]', 108, '2019-04-19 23:23:47', '2019-12-12 20:52:40', 100);
+INSERT INTO `goods_master_copy1` VALUES ('b94eee7b70c66d9e1610a006e790c463', '泰谷香米25kg', '', 'https://xuanhuobang.com/cover_upload/eebb7c0c-13f7-472b-9d17-d2346645dda4.jpeg', 1, '<p>福香御系列之“泰谷香米”大米产自黑龙江省绥化市太平川县，这里位于松嫩平原上呼兰河下游地段。是世界上少有的黑土地之一，土壤肥沃，自然河水灌溉。 御福香系列之“泰谷香米”的品种是用天然的香稻和优质的长粒香加工而成，此米外观美，透明光亮。煮熟的米饭口感醇香“泰谷香米”近年来受广大消费者的追捧。</p>', '[{\"name\":\"e0213123-43f5-43dc-b7ef-ae880da749de.jpeg\",\"url\":\"https://xuanhuobang.com/pictures_upload/e0213123-43f5-43dc-b7ef-ae880da749de.jpeg\",\"uid\":1539177782495,\"status\":\"success\"}]', 108, '2019-04-19 23:23:47', '2019-12-12 20:52:40', 103);
+INSERT INTO `goods_master_copy1` VALUES ('b9f0d4d6887ebbe65caeae631e323f46', '25kg东北金丝豆', '五十斤东北金丝豆', 'https://xuanhuobang.com/cover_upload/732ab618-2f7d-447d-b5f4-db484477cd4a.jpeg', 1, '', '[{\"name\":\"2945a69f-0c1e-4092-9424-0303cb631273.jpeg\",\"url\":\"https://xuanhuobang.com/pictures_upload/2945a69f-0c1e-4092-9424-0303cb631273.jpeg\",\"uid\":1542864034892,\"status\":\"success\"}]', 108, '2019-04-19 23:23:47', '2019-12-12 20:52:40', 100);
+INSERT INTO `goods_master_copy1` VALUES ('be27e1b5edfab2477b3865514d85b65d', '玉米淀粉', '', 'https://xuanhuobang.com/cover_upload/4aa6d7c4-3dce-4465-a414-815812349d0a.jpeg', 1, '', '[{\"name\":\"41dfc10a-a271-42e4-b08b-6b3c926b71b1.jpeg\",\"url\":\"https://xuanhuobang.com/pictures_upload/41dfc10a-a271-42e4-b08b-6b3c926b71b1.jpeg\",\"uid\":1541211890083,\"status\":\"success\"}]', 108, '2019-04-19 23:23:47', '2019-12-12 20:52:40', 110);
+INSERT INTO `goods_master_copy1` VALUES ('be73f589fc49dc7cd3681096c6513691', '25kg五常黑米', '优质五常黑米', 'https://xuanhuobang.com/cover_upload/d93f8c60-2098-47e3-ae38-a21c2da8f09e.jpeg', 1, '', '[{\"name\":\"2a5cfd39-bf64-4438-ab9b-52813ac6d0c9.jpeg\",\"url\":\"https://xuanhuobang.com/pictures_upload/2a5cfd39-bf64-4438-ab9b-52813ac6d0c9.jpeg\",\"uid\":1541211776338,\"status\":\"success\"}]', 108, '2019-04-19 23:23:47', '2019-12-12 20:52:40', 93);
+INSERT INTO `goods_master_copy1` VALUES ('bfff3909ba3232b56e5f123396a9aa95', '25kg优质大金苗小米', '五十斤优质大金苗小米', 'https://xuanhuobang.com/cover_upload/76529df9-2a91-476d-9777-1dae994af81b.jpeg', 1, '', '[{\"name\":\"cbc02100-9e67-4484-ae33-54aa378aaa14.jpeg\",\"url\":\"https://xuanhuobang.com/pictures_upload/cbc02100-9e67-4484-ae33-54aa378aaa14.jpeg\",\"uid\":1540445333441,\"status\":\"success\"}]', 1, '2019-04-19 23:23:47', '2019-12-12 20:52:40', 91);
+INSERT INTO `goods_master_copy1` VALUES ('c6c8df983f77eb6b5c654168f38ac8de', '燕麦米22.5kg', '', 'https://xuanhuobang.com/cover_upload/a4efb891-c3c1-42f4-846c-4f03bcdb78a1.jpeg', 1, '<p>散装杂粮净重与实际重量误差在0.25kg均属正常请放心购买。&nbsp;</p><p>由于本品为粮食作物天气炎热不宜存放请少购勤购。 由于本品为粮食作物天气炎热不宜存放请少购勤购，若因存放原因生虫变质概不负责。</p><p>因批次不同故包装可能不同请以实物为准</p>', '[{\"name\":\"c34ca9ee-8041-433b-b6e9-1fed85db37e2.jpeg\",\"url\":\"https://xuanhuobang.com/pictures_upload/c34ca9ee-8041-433b-b6e9-1fed85db37e2.jpeg\",\"uid\":1539253435801,\"status\":\"success\"}]', 108, '2019-04-19 23:23:47', '2019-12-12 20:52:40', 44);
+INSERT INTO `goods_master_copy1` VALUES ('c974a8ad1c2a48ecc6d8d42a1fcab5b4', '5L五湖大豆油1*4', '五升五湖大豆油一箱四瓶', 'https://xuanhuobang.com/cover_upload/be5e3302-5681-4460-bb4f-d59965c94bc7.jpeg', 1, '', '[{\"name\":\"1f63e6f3-40f0-4e7f-abb0-b02856bb7009.jpeg\",\"url\":\"https://xuanhuobang.com/pictures_upload/1f63e6f3-40f0-4e7f-abb0-b02856bb7009.jpeg\",\"uid\":1540373810665,\"status\":\"success\"}]', 108, '2019-04-19 23:23:47', '2019-12-12 20:52:40', 99);
+INSERT INTO `goods_master_copy1` VALUES ('cc81eb742f75bd1fad99dad78b626c45', '双威珍珠米25kg', '五十斤双威', 'https://xuanhuobang.com/cover_upload/0fa1efe4-491a-473d-aaf6-d8496dc0c80f.jpeg', 1, '<p>散装杂粮净重与实际重量误差在0.25kg均属正常请放心购买。&nbsp;</p><p>由于本品为粮食作物天气炎热不宜存放请少购勤购。 由于本品为粮食作物天气炎热不宜存放请少购勤购，若因存放原因生虫变质概不负责。</p>', '[{\"name\":\"6195c58a-686c-43ba-b901-350fe7a0c55d.jpeg\",\"url\":\"https://xuanhuobang.com/pictures_upload/6195c58a-686c-43ba-b901-350fe7a0c55d.jpeg\",\"uid\":1539176957184,\"status\":\"success\"}]', 108, '2019-04-19 23:23:47', '2019-12-12 20:52:40', 102);
+INSERT INTO `goods_master_copy1` VALUES ('ccbaa2c609a0cffaaaf52b46c4028c51', '20k g子强小米', '四十斤特价小米', 'https://xuanhuobang.com/cover_upload/a592be32-336b-4543-8237-99cf987b1f1c.jpeg', 1, '<p>散装杂粮净重与实际重量误差在0.25kg均属正常请放心购买。&nbsp;</p><p>由于本品为粮食作物天气炎热不宜存放请少购勤购。 由于本品为粮食作物天气炎热不宜存放请少购勤购，若因存放原因生虫变质概不负责。</p>', '[{\"name\":\"ffc2c39c-db6c-49c2-8217-bff47c22a528.jpeg\",\"url\":\"https://xuanhuobang.com/pictures_upload/ffc2c39c-db6c-49c2-8217-bff47c22a528.jpeg\",\"uid\":1539309384706,\"status\":\"success\"}]', 108, '2019-04-19 23:23:47', '2019-12-12 20:52:40', 91);
+INSERT INTO `goods_master_copy1` VALUES ('cf61d1c28a7868480bd507f4e672c7bc', '25kg晋府大金苗', '五十斤优质小米', 'https://xuanhuobang.com/cover_upload/805a1bd3-261e-45a9-93c7-e4a0c634a8e1.jpeg', 1, '', '[{\"name\":\"b1f1ae9b-c78b-49a3-bab9-66df96839f92.jpeg\",\"url\":\"https://xuanhuobang.com/pictures_upload/b1f1ae9b-c78b-49a3-bab9-66df96839f92.jpeg\",\"uid\":1541211994083,\"status\":\"success\"}]', 108, '2019-04-19 23:23:47', '2019-12-12 20:52:40', 91);
+INSERT INTO `goods_master_copy1` VALUES ('d013959dcd574b81f7dcbb398c741835', '好小薏米25kg', '优质小籽薏米', 'https://xuanhuobang.com/cover_upload/01d1f521-b93d-4cfa-bab2-f4e56326394d.jpeg', 1, '<p>散装杂粮净重与实际重量误差在0.25kg均属正常请放心购买。&nbsp;</p><p>由于本品为粮食作物天气炎热不宜存放请少购勤购。 由于本品为粮食作物天气炎热不宜存放请少购勤购，若因存放原因生虫变质概不负责。</p>', '[{\"name\":\"412a6914-6cec-4fce-933c-110363a9b435.jpeg\",\"url\":\"https://xuanhuobang.com/pictures_upload/412a6914-6cec-4fce-933c-110363a9b435.jpeg\",\"uid\":1540021529733,\"status\":\"success\"}]', 108, '2019-04-19 23:23:47', '2019-12-12 20:52:40', 45);
+INSERT INTO `goods_master_copy1` VALUES ('d36e87bf68c4cc56d4837bdf4feff314', '5kg泰谷香米1*5', '十斤泰谷香米，一包五小袋', 'https://xuanhuobang.com/cover_upload/41c83885-1f13-4a23-b44b-562098d46fbd.jpeg', 1, '<p>福香御系列之“泰谷香米”大米产自黑龙江省绥化市太平川县，这里位于松嫩平原上呼兰河下游地段。是世界上少有的黑土地之一，土壤肥沃，自然河水灌溉。 御福香系列之“泰谷香米”的品种是用天然的香稻和优质的长粒香加工而成，此米外观美，透明光亮。煮熟的米饭口感醇香“泰谷香米”近年来受广大消费者的追捧。</p>', '[{\"name\":\"46f25bf8-74ae-4f96-bad4-40245d43b2cd.jpeg\",\"url\":\"https://xuanhuobang.com/pictures_upload/46f25bf8-74ae-4f96-bad4-40245d43b2cd.jpeg\",\"uid\":1540022598302,\"status\":\"success\"}]', 1, '2019-04-19 23:23:47', '2019-12-12 20:52:40', 105);
+INSERT INTO `goods_master_copy1` VALUES ('d39726859b14f6a9aae323ac4b9e1d07', '25kg白豇豆', '五十斤优质新白豇豆', 'https://xuanhuobang.com/cover_upload/682cc7d6-09ca-4b71-b029-6c44b038e162.jpeg', 1, '', '[{\"name\":\"9d0d7d4f-df6c-402d-9858-cd693b832003.jpeg\",\"url\":\"https://xuanhuobang.com/pictures_upload/9d0d7d4f-df6c-402d-9858-cd693b832003.jpeg\",\"uid\":1541211630289,\"status\":\"success\"}]', 108, '2019-04-19 23:23:47', '2019-12-12 20:52:18', 98);
+INSERT INTO `goods_master_copy1` VALUES ('d3eb382514aa7fc9a2b9c8bd76ffdb16', '育龙东北珍珠米', '50斤新育龙东北珍珠米', 'https://xuanhuobang.com/cover_upload/c7097b40-b781-48f7-87ca-4c3d39770291.jpeg', 1, '', '[{\"name\":\"4cc3e882-2403-451d-9c3b-fa4e72b893b3.jpeg\",\"url\":\"https://xuanhuobang.com/pictures_upload/4cc3e882-2403-451d-9c3b-fa4e72b893b3.jpeg\",\"uid\":1541211680461,\"status\":\"success\"}]', 108, '2019-04-19 23:23:47', '2019-12-12 20:52:18', 102);
+INSERT INTO `goods_master_copy1` VALUES ('d8469d8c1f73d97066c5e25f98c255e6', '东北绿豆25kg', '优质东北豆', 'https://xuanhuobang.com/cover_upload/aacee515-8cef-408b-a588-8fc94c137ef2.jpeg', 1, '', '[{\"name\":\"e920dd53-80bd-4ee7-b09e-39412117fcc7.jpeg\",\"url\":\"https://xuanhuobang.com/pictures_upload/e920dd53-80bd-4ee7-b09e-39412117fcc7.jpeg\",\"uid\":1541221501312,\"status\":\"success\"}]', 108, '2019-04-19 23:23:47', '2019-12-12 20:52:18', 97);
+INSERT INTO `goods_master_copy1` VALUES ('db70811e01b6ab33787ad649fe2cdf07', '五谷珍宝东北长粒香', '', 'https://xuanhuobang.com/cover_upload/839a50f6-b514-4793-afa1-545d503962fe.jpeg', 1, '<p>散装杂粮净重与实际重量误差在0.25kg均属正常请放心购买。&nbsp;</p><p>由于本品为粮食作物天气炎热不宜存放请少购勤购。 由于本品为粮食作物天气炎热不宜存放请少购勤购，若因存放原因生虫变质概不负责。</p>', '[]', 1, '2019-04-19 23:23:47', '2019-12-12 20:52:18', 0);
+INSERT INTO `goods_master_copy1` VALUES ('dcec71edd679ae04a55e9ce3d6185421', '大红扁豆25kg', '', 'https://xuanhuobang.com/cover_upload/ca23ddd5-fe17-48d6-a6dc-3b782352b3b3.jpeg', 1, '<p>散装杂粮净重与实际重量误差在0.25kg均属正常请放心购买。&nbsp;</p><p>由于本品为粮食作物天气炎热不宜存放请少购勤购。 由于本品为粮食作物天气炎热不宜存放请少购勤购，若因存放原因生虫变质概不负责。</p><p>因批次不同故包装可能不同，请以实物为准。</p>', '[{\"name\":\"9106c2d6-5aa5-4e81-8cc4-75866c34afbd.jpeg\",\"url\":\"https://xuanhuobang.com/pictures_upload/9106c2d6-5aa5-4e81-8cc4-75866c34afbd.jpeg\",\"uid\":1538380910244,\"status\":\"success\"},{\"name\":\"37b7c3fe-582a-49a4-8584-ae12de488ea5.jpeg\",\"url\":\"https://xuanhuobang.com/pictures_upload/37b7c3fe-582a-49a4-8584-ae12de488ea5.jpeg\",\"uid\":1538380936128,\"status\":\"success\"}]', 1, '2019-04-19 23:23:47', '2019-12-12 20:52:18', 0);
+INSERT INTO `goods_master_copy1` VALUES ('dea0f45eb1149528b591eb3be1fb8276', '五常黑米25kg', '五常黑米，中等黑米，25kg', 'https://xuanhuobang.com/cover_upload/f04399c3-043c-4839-9439-ae4c0bd9b5c0.jpeg', 1, '<p>黑米是黑稻加工产品，属于籼米或者粳米，是由禾本科植物稻经长期培育形成的一类特色品种，黑米稻粒外观长椭圆形，稻壳灰褐色，粒型有籼、粳两种，黑米是非糯性稻米。</p><p>黑米呈黑色或黑褐色，营养丰富，食、药用价值高，除煮粥外还可以制作各种营养食品和酿酒，素有“黑珍珠”和“世界米中之王”的美誉。最具代表性的陕西洋县黑米，<span style=\"color: rgb(19, 110, 194);\">&nbsp;</span>&nbsp;自古就有“药米”、“贡米”、“寿米”的美誉。</p><p>散装杂粮净重与实际重量误差在0.25kg均属正常请放心购买。&nbsp;</p><p>由于本品为粮食作物天气炎热不宜存放请少购勤购。 由于本品为粮食作物天气炎热不宜存放请少购勤购，若因存放原因生虫变质概不负责。，若因存放原因生虫变质概不负责。</p>', '[{\"name\":\"74d0ab5a-7c87-4470-b36c-f6c0240b86ea.jpeg\",\"url\":\"https://xuanhuobang.com/pictures_upload/74d0ab5a-7c87-4470-b36c-f6c0240b86ea.jpeg\",\"uid\":1539253502780,\"status\":\"success\"}]', 108, '2019-04-19 23:23:47', '2019-12-12 20:52:18', 93);
+INSERT INTO `goods_master_copy1` VALUES ('e1178d845673b6c0600c35acd9be8e74', '红薯面25kg', '五十斤红薯面', 'https://xuanhuobang.com/cover_upload/93be0d53-3f9c-4c04-9f37-5dc5f80178a4.jpeg', 1, '<p>散装杂粮净重与实际重量误差在0.25kg均属正常请放心购买。&nbsp;</p><p>由于本品为粮食作物天气炎热不宜存放请少购勤购。 由于本品为粮食作物天气炎热不宜存放请少购勤购，若因存放原因生虫变质概不负责。</p><p>因批次不同故包装可能不同，请以实物为准，放心购买，</p>', '[{\"name\":\"b3794338-a7c0-4d18-87ce-9d8df92df062.jpeg\",\"url\":\"https://xuanhuobang.com/pictures_upload/b3794338-a7c0-4d18-87ce-9d8df92df062.jpeg\",\"uid\":1539253667840,\"status\":\"success\"}]', 108, '2019-04-19 23:23:47', '2019-12-12 20:52:18', 73);
+INSERT INTO `goods_master_copy1` VALUES ('e2182688383a31ccae7222f95fbd2cfc', '25kg东北特大籽绿豆', '五十斤东北特大籽绿豆', 'https://xuanhuobang.com/cover_upload/6a4a3fab-93df-41c6-abe4-79a9a06ea567.jpeg', 1, '', '[{\"name\":\"36a217a7-97ae-4606-ac32-ef73d3b6222f.jpeg\",\"url\":\"https://xuanhuobang.com/pictures_upload/36a217a7-97ae-4606-ac32-ef73d3b6222f.jpeg\",\"uid\":1541914838742,\"status\":\"success\"}]', 108, '2019-04-19 23:23:47', '2019-12-12 20:52:18', 97);
+INSERT INTO `goods_master_copy1` VALUES ('e3418ad001e07b2beca6a8c1e7fa3246', '好红小豆25kg', '好红小豆，珍珠粒，25kg', 'https://xuanhuobang.com/cover_upload/b5575c46-ff0d-4cec-ae4d-061a7a5d7ed9.jpeg', 1, '<p>散装杂粮净重与实际重量误差在0.25kg均属正常请放心购买。&nbsp;</p><p>由于本品为粮食作物天气炎热不宜存放请少购勤购。 由于本品为粮食作物天气炎热不宜存放请少购勤购，若因存放原因生虫变质概不负责。</p><p>因批次不同故包装可能不同，请以实物为准。</p>', '[{\"name\":\"a8a91150-ae17-46a3-815b-919d0c735a13.jpeg\",\"url\":\"https://xuanhuobang.com/pictures_upload/a8a91150-ae17-46a3-815b-919d0c735a13.jpeg\",\"uid\":1539306351799,\"status\":\"success\"}]', 108, '2019-04-19 23:23:47', '2019-12-12 20:52:18', 96);
+INSERT INTO `goods_master_copy1` VALUES ('e49872f769f1cfd890915b9ce131a4a4', '原生态长粒香25kg', '绥化秦家长粒香米25kg', 'https://xuanhuobang.com/cover_upload/42703a04-4734-41ad-a364-27479f6a373c.jpeg', 1, '<p>散装杂粮净重与实际重量误差在0.25kg均属正常请放心购买。&nbsp;</p><p>由于本品为粮食作物天气炎热不宜存放请少购勤购。 由于本品为粮食作物天气炎热不宜存放请少购勤购，若因存放原因生虫变质概不负责。</p>', '[{\"name\":\"36d5e078-2667-4144-8877-9436f91b2247.jpeg\",\"url\":\"https://xuanhuobang.com/pictures_upload/36d5e078-2667-4144-8877-9436f91b2247.jpeg\",\"uid\":1539254170220,\"status\":\"success\"}]', 108, '2019-04-19 23:23:47', '2019-12-12 20:52:18', 103);
+INSERT INTO `goods_master_copy1` VALUES ('e52388fc7fd79a220b889ec64469ec1c', '25kg花喜鹊豆', '五十斤面豆花喜鹊豆', 'https://xuanhuobang.com/cover_upload/beaaa7b9-6066-45de-a72e-16980ad3445d.jpeg', 1, '', '[{\"name\":\"868f55c5-91bb-407d-8225-a5d1e19090cc.jpeg\",\"url\":\"https://xuanhuobang.com/pictures_upload/868f55c5-91bb-407d-8225-a5d1e19090cc.jpeg\",\"uid\":1543466982751,\"status\":\"success\"}]', 108, '2019-04-19 23:23:47', '2019-12-12 20:52:18', 100);
+INSERT INTO `goods_master_copy1` VALUES ('e5c0c610b838f835f8faaa68167a54d1', '双威珍珠米5kg', '', 'https://xuanhuobang.com/cover_upload/1df2e4f5-f164-47d6-955c-85f8f127701a.jpeg', 1, '<p>散装杂粮净重与实际重量误差在0.25kg均属正常请放心购买。&nbsp;</p><p>由于本品为粮食作物天气炎热不宜存放请少购勤购。 由于本品为粮食作物天气炎热不宜存放请少购勤购，若因存放原因生虫变质概不负责。</p>', '[{\"name\":\"daecb2b8-8caa-4e6c-8125-98b3b41a6f71.jpeg\",\"url\":\"https://xuanhuobang.com/pictures_upload/daecb2b8-8caa-4e6c-8125-98b3b41a6f71.jpeg\",\"uid\":1540101990995,\"status\":\"success\"}]', 1, '2019-04-19 23:23:47', '2019-12-12 20:52:18', 105);
+INSERT INTO `goods_master_copy1` VALUES ('eb2c81f394cdb10acc7a81cb6b542c39', '子强黄金苗小米20kg', '四十斤子强黄金苗，糯小米', 'https://xuanhuobang.com/cover_upload/49b5b673-7ce6-4bb3-8ca5-cd9f913cde10.jpeg', 1, '<p>散装杂粮净重与实际重量误差在0.25kg均属正常请放心购买。&nbsp;</p><p>由于本品为粮食作物天气炎热不宜存放请少购勤购。 由于本品为粮食作物天气炎热不宜存放请少购勤购，若因存放原因生虫变质概不负责。</p>', '[]', 1, '2019-04-19 23:23:47', '2019-12-12 20:52:18', 0);
+INSERT INTO `goods_master_copy1` VALUES ('eb92ac60a8acd5c6c5b25efd78887e59', '25kg银芝芝麻仁', '五十斤好芝麻仁', 'https://xuanhuobang.com/cover_upload/6cca2c5a-3932-4656-8758-0d476202db2a.jpeg', 1, '', '[{\"name\":\"890e4a63-53ee-4ded-bada-914bf556d075.jpeg\",\"url\":\"https://xuanhuobang.com/pictures_upload/890e4a63-53ee-4ded-bada-914bf556d075.jpeg\",\"uid\":1541211593978,\"status\":\"success\"}]', 108, '2019-04-19 23:23:47', '2019-12-12 20:52:18', 107);
+INSERT INTO `goods_master_copy1` VALUES ('eec48413263108fa27d5aa0d18c68749', '25kg大白芸豆', '五十斤大白芸豆', 'https://xuanhuobang.com/cover_upload/f44ec913-a87b-4897-a437-00b8d5f1d15c.jpeg', 1, '', '[{\"name\":\"647ee5a5-becf-46e2-b593-c483033f3b3e.jpeg\",\"url\":\"https://xuanhuobang.com/pictures_upload/647ee5a5-becf-46e2-b593-c483033f3b3e.jpeg\",\"uid\":1541914202547,\"status\":\"success\"}]', 108, '2019-04-19 23:23:47', '2019-12-12 20:52:18', 100);
+INSERT INTO `goods_master_copy1` VALUES ('f1912638bfc4a65d8afd5bd020001b25', '大片玉米片', '', 'https://xuanhuobang.com/cover_upload/580ffa18-de1c-4ec3-b18c-a3462d1c3d45.jpeg', 1, '<p>散装杂粮净重与实际重量误差在0.25kg均属正常请放心购买。&nbsp;</p><p>由于本品为粮食作物天气炎热不宜存放请少购勤购。 由于本品为粮食作物天气炎热不宜存放请少购勤购，若因存放原因生虫变质概不负责。</p>', '[{\"name\":\"ae0ae11d-0b7f-4b64-b889-0dc1329a443d.jpeg\",\"url\":\"https://xuanhuobang.com/pictures_upload/ae0ae11d-0b7f-4b64-b889-0dc1329a443d.jpeg\",\"uid\":1539176995457,\"status\":\"success\"}]', 1, '2019-04-19 23:23:47', '2019-12-12 20:52:18', 40);
+INSERT INTO `goods_master_copy1` VALUES ('f2f7fc9835868a940b80d7d51cd83c55', '25kg五常昌旺稻花香', '五十斤优质稻花香', 'https://xuanhuobang.com/cover_upload/508903db-4cdc-4cd6-8b1c-e7a27d042f51.jpeg', 1, '', '[{\"name\":\"5c47b00d-b3f8-471c-9345-46c695e34159.jpeg\",\"url\":\"https://xuanhuobang.com/pictures_upload/5c47b00d-b3f8-471c-9345-46c695e34159.jpeg\",\"uid\":1541211655725,\"status\":\"success\"}]', 108, '2019-04-19 23:23:47', '2019-12-12 20:52:18', 111);
+INSERT INTO `goods_master_copy1` VALUES ('f337a9016d6200bea86797388f56bef6', '中粗玉米糁21kg', '四十二斤，中粗玉米糁。', 'https://xuanhuobang.com/cover_upload/8b8efee3-7187-414f-bb22-e1e819c9a69d.jpeg', 1, '<p>散装杂粮净重与实际重量误差在0.25kg均属正常请放心购买。&nbsp;</p><p>由于本品为粮食作物天气炎热不宜存放请少购勤购。 由于本品为粮食作物天气炎热不宜存放请少购勤购，若因存放原因生虫变质概不负责。</p>', '[{\"name\":\"68e6c0e4-4f05-42fa-89ba-5fdf4ba03d5c.jpeg\",\"url\":\"https://xuanhuobang.com/pictures_upload/68e6c0e4-4f05-42fa-89ba-5fdf4ba03d5c.jpeg\",\"uid\":1539253811569,\"status\":\"success\"}]', 108, '2019-04-19 23:23:47', '2019-12-12 20:52:18', 40);
+INSERT INTO `goods_master_copy1` VALUES ('f429736e8079b923f274999c7cc10063', '太子粥25kg', '五十斤八宝粥', 'https://xuanhuobang.com/cover_upload/efbfa49e-5197-4e70-b3e5-46106bc22095.jpeg', 1, '<p>散装杂粮净重与实际重量误差在0.25kg均属正常请放心购买。&nbsp;</p><p>由于本品为粮食作物天气炎热不宜存放请少购勤购。 由于本品为粮食作物天气炎热不宜存放请少购勤购，若因存放原因生虫变质概不负责。</p>', '[{\"name\":\"0f5d110f-f9a5-4e15-9d90-9a14c222a668.jpeg\",\"url\":\"https://xuanhuobang.com/pictures_upload/0f5d110f-f9a5-4e15-9d90-9a14c222a668.jpeg\",\"uid\":1539253993298,\"status\":\"success\"}]', 108, '2019-04-19 23:23:47', '2019-12-12 20:52:18', 90);
+INSERT INTO `goods_master_copy1` VALUES ('fb2772b86bff388d6913e78f7be636e8', '5kg稻花香米', '十斤稻花香米', 'https://xuanhuobang.com/cover_upload/ca64df1f-274f-4513-9a90-1dd92fc8ccd8.jpg', 1, '', '[{\"name\":\"46593c88-2b14-4e0e-a9ce-616e023f09f9.jpg\",\"url\":\"https://xuanhuobang.com/pictures_upload/46593c88-2b14-4e0e-a9ce-616e023f09f9.jpg\",\"uid\":1543806207964,\"status\":\"success\"}]', 108, '2019-04-19 23:23:47', '2019-12-12 20:52:18', 105);
+INSERT INTO `goods_master_copy1` VALUES ('fdaea0a4fe6c6513871508839f8b34b6', '五星黑芝麻25kg', '五十斤黑芝麻好黑芝麻', 'https://xuanhuobang.com/cover_upload/057c23b5-3da6-476a-976b-793c3de3076b.jpeg', 1, '<p>散装杂粮净重与实际重量误差在0.25kg均属正常请放心购买。&nbsp;</p><p>由于本品为粮食作物天气炎热不宜存放请少购勤购。 由于本品为粮食作物天气炎热不宜存放请少购勤购，若因存放原因生虫变质概不负责。</p><p>因批次不同故包装可能不同请以实物为准。</p>', '[{\"name\":\"4d7ae2f9-b467-4bba-a84c-3379a2305f08.jpeg\",\"url\":\"https://xuanhuobang.com/pictures_upload/4d7ae2f9-b467-4bba-a84c-3379a2305f08.jpeg\",\"uid\":1539177091130,\"status\":\"success\"}]', 108, '2019-04-19 23:23:47', '2019-12-12 20:52:18', 107);
+
+-- ----------------------------
+-- Table structure for goods_spec
+-- ----------------------------
+DROP TABLE IF EXISTS `goods_spec`;
+CREATE TABLE `goods_spec`  (
+  `goods_id` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '商品id',
+  `goods_spec_id` int(11) NOT NULL AUTO_INCREMENT COMMENT '规格id',
+  `goods_spec_val` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '规格',
+  `goods_spec_sort` int(3) NOT NULL COMMENT '排序',
+  `goods_spec_stock` int(11) NOT NULL DEFAULT 0 COMMENT '库存',
+  `goods_spec_price` decimal(18, 2) NOT NULL DEFAULT 0.00 COMMENT '价格',
+  `create_time` datetime(0) NOT NULL COMMENT '创建时间',
+  `update_time` datetime(0) NOT NULL COMMENT '更新时间',
+  PRIMARY KEY (`goods_spec_id`) USING BTREE,
+  INDEX `goods_id`(`goods_id`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Table structure for menu
 -- ----------------------------
 DROP TABLE IF EXISTS `menu`;
-CREATE TABLE `menu` (
+CREATE TABLE `menu`  (
   `mid` int(11) NOT NULL AUTO_INCREMENT COMMENT ' 菜单id',
-  `menu_name` varchar(50) COLLATE utf8mb4_bin NOT NULL COMMENT '菜单名称',
-  `menu_url` varchar(255) COLLATE utf8mb4_bin DEFAULT '' COMMENT '菜单页面地址',
-  `menu_api` varchar(255) COLLATE utf8mb4_bin DEFAULT '' COMMENT '菜单api地址',
-  `menu_fmid` int(11) NOT NULL DEFAULT '0' COMMENT '父级id',
-  `menu_status` tinyint(4) NOT NULL DEFAULT '0' COMMENT '状态',
-  `menu_level` tinyint(4) DEFAULT '1' COMMENT '菜单等级',
+  `menu_name` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL COMMENT '菜单名称',
+  `menu_url` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL DEFAULT '' COMMENT '菜单页面地址',
+  `menu_api` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL DEFAULT '' COMMENT '菜单api地址',
+  `menu_fmid` int(11) NOT NULL DEFAULT 0 COMMENT '父级id',
+  `menu_status` tinyint(4) NOT NULL DEFAULT 0 COMMENT '状态',
+  `menu_level` tinyint(4) NULL DEFAULT 1 COMMENT '菜单等级',
   `enterprise` int(11) NOT NULL COMMENT '所属企业',
-  `project` int(11) DEFAULT '0' COMMENT '所属项目',
+  `project` int(11) NULL DEFAULT 0 COMMENT '所属项目',
   `update_user` int(11) NOT NULL COMMENT '更新人',
-  `create_time` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-  `update_time` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '更新时间',
-  PRIMARY KEY (`mid`)
-) ENGINE=InnoDB AUTO_INCREMENT=29 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;
+  `create_time` datetime(0) NULL DEFAULT CURRENT_TIMESTAMP(0) COMMENT '创建时间',
+  `update_time` datetime(0) NULL DEFAULT CURRENT_TIMESTAMP(0) COMMENT '更新时间',
+  PRIMARY KEY (`mid`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 28 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_bin ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of menu
 -- ----------------------------
-BEGIN;
 INSERT INTO `menu` VALUES (1, '菜单列表', '/', '/', 0, 0, 1, 0, 0, 1, '2019-04-19 23:23:47', '2019-04-19 23:23:47');
 INSERT INTO `menu` VALUES (22, '用户管理', '/user', '', 1, 0, 2, 0, 0, 1, '2019-04-19 23:23:47', '2019-04-19 23:23:47');
 INSERT INTO `menu` VALUES (23, '权限管理', '/auth', '', 1, 0, 2, 0, 0, 1, '2019-04-19 23:23:47', '2019-04-19 23:23:47');
@@ -4024,28 +3995,26 @@ INSERT INTO `menu` VALUES (24, '商品管理', '/goods', '', 1, 0, 2, 0, 0, 1, '
 INSERT INTO `menu` VALUES (25, '管理员登录', '/admin/login', '/user/login', 22, 0, 3, 0, 0, 1, '2019-04-19 23:23:47', '2019-04-19 23:23:47');
 INSERT INTO `menu` VALUES (26, '用户登录', '/phone/user/login', '/user/login', 22, 0, 3, 0, 0, 1, '2019-04-19 23:23:47', '2019-04-19 23:23:47');
 INSERT INTO `menu` VALUES (28, '用户列表', '', '/user/userList', 1, 1, 2, 0, 0, 1, '2019-04-19 23:23:47', '2019-04-19 23:23:47');
-COMMIT;
 
 -- ----------------------------
 -- Table structure for message
 -- ----------------------------
 DROP TABLE IF EXISTS `message`;
-CREATE TABLE `message` (
-  `msg_id` varchar(50) NOT NULL DEFAULT '' COMMENT '消息id',
+CREATE TABLE `message`  (
+  `msg_id` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT '' COMMENT '消息id',
   `message_type` tinyint(4) NOT NULL COMMENT '消息类型',
-  `message_value` varchar(1000) NOT NULL DEFAULT '' COMMENT '消息内容',
-  `message_status` tinyint(4) NOT NULL DEFAULT '0' COMMENT '0未读，1已读，2删除',
-  `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-  `update_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '更新时间',
+  `message_value` varchar(1000) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT '' COMMENT '消息内容',
+  `message_status` tinyint(4) NOT NULL DEFAULT 0 COMMENT '0未读，1已读，2删除',
+  `create_time` datetime(0) NOT NULL DEFAULT CURRENT_TIMESTAMP(0) COMMENT '创建时间',
+  `update_time` datetime(0) NOT NULL DEFAULT CURRENT_TIMESTAMP(0) COMMENT '更新时间',
   `send_user` int(11) NOT NULL COMMENT '发送人',
   `incept_user` int(11) NOT NULL COMMENT '接收人',
-  PRIMARY KEY (`msg_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+  PRIMARY KEY (`msg_id`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of message
 -- ----------------------------
-BEGIN;
 INSERT INTO `message` VALUES ('01fd9f7c-b23d-4278-b450-620fa93d8643', 2, '选货邦特价大米97元/袋欢迎选购', 0, '2019-04-19 23:23:47', '2019-04-19 23:23:47', 0, 0);
 INSERT INTO `message` VALUES ('27b71b8e-7f14-4df8-a0ee-fc768a908e30', 1, '您有一个订单待处理: 用户 超级管理员(超级管理员) 下了一个订单，订单号:20181118145529989,请及时处理!', 1, '2019-04-19 23:23:47', '2019-04-19 23:23:47', 0, 1);
 INSERT INTO `message` VALUES ('34d8aa68-594c-4d6d-85a4-f1d3e35848eb', 1, '您有一个订单待处理: 用户 超级管理员(超级管理员) 下了一个订单，订单号:20181103160441154,请及时处理!', 0, '2019-04-19 23:23:47', '2019-04-19 23:23:47', 0, 1);
@@ -4063,26 +4032,24 @@ INSERT INTO `message` VALUES ('bd6cc801-4e20-41eb-af7a-4b7f695c2678', 2, '大籽
 INSERT INTO `message` VALUES ('d3f261f4-fb71-455e-b090-d7292d932132', 2, '大籽绿豆25kg191厂家直销|5471bb2bfc89bc7a4330ef15a861542a', 0, '2019-04-19 23:23:47', '2019-04-19 23:23:47', 0, 0);
 INSERT INTO `message` VALUES ('e0b84c58-f6f5-407b-97b7-d0138898df83', 2, '选货邦特价大米97元/袋欢迎选购', 0, '2019-04-19 23:23:47', '2019-04-19 23:23:47', 0, 0);
 INSERT INTO `message` VALUES ('e84ce9c3-2da0-40c1-9741-a7e5ac23ccca', 3, '新上特价大米47斤/92元一袋|', 0, '2019-04-19 23:23:47', '2019-04-19 23:23:47', 0, 0);
-COMMIT;
 
 -- ----------------------------
 -- Table structure for order_details
 -- ----------------------------
 DROP TABLE IF EXISTS `order_details`;
-CREATE TABLE `order_details` (
-  `od_id` varchar(35) NOT NULL DEFAULT '' COMMENT '详情id',
-  `order_id` varchar(32) NOT NULL DEFAULT '' COMMENT '订单id',
-  `goods_id` varchar(32) NOT NULL DEFAULT '' COMMENT '商品id',
-  `number` int(11) NOT NULL DEFAULT '1' COMMENT '数量',
-  `transaction_price` decimal(18,2) NOT NULL COMMENT '成交价',
-  `create_time` datetime DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY (`od_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+CREATE TABLE `order_details`  (
+  `od_id` varchar(35) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT '' COMMENT '详情id',
+  `order_id` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT '' COMMENT '订单id',
+  `goods_id` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT '' COMMENT '商品id',
+  `number` int(11) NOT NULL DEFAULT 1 COMMENT '数量',
+  `transaction_price` decimal(18, 2) NOT NULL COMMENT '成交价',
+  `create_time` datetime(0) NULL DEFAULT CURRENT_TIMESTAMP(0),
+  PRIMARY KEY (`od_id`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of order_details
 -- ----------------------------
-BEGIN;
 INSERT INTO `order_details` VALUES ('15350243185691780000', '1535024318569178', 'c65b3d776d2c563b72bb65d2e54c635b', 1, 60.00, '2019-04-19 23:23:47');
 INSERT INTO `order_details` VALUES ('15350243185691780001', '1535024318569178', 'c65b3d776d2c563b72bb65d2e54c635c', 3, 60.00, '2019-04-19 23:23:47');
 INSERT INTO `order_details` VALUES ('15350244808835980000', '1535024480883598', 'c65b3d776d2c563b72bb65d2e54c635c', 1, 60.00, '2019-04-19 23:23:47');
@@ -4130,28 +4097,26 @@ INSERT INTO `order_details` VALUES ('201811181455299890007', '20181118145529989'
 INSERT INTO `order_details` VALUES ('201811181455299890008', '20181118145529989', '0d930f3860e53d46132f8966db5c6936', 1, 185.00, '2019-04-19 23:23:47');
 INSERT INTO `order_details` VALUES ('201903171842044350001', '20190317184204435', '09ae30588a3bc28b7a27adcf31b22781', 3, 324.00, '2019-04-19 23:23:47');
 INSERT INTO `order_details` VALUES ('201903171842044350002', '20190317184204435', '083a1c71a7b519e81b40be58e9422bab', 1, 404.00, '2019-04-19 23:23:47');
-COMMIT;
 
 -- ----------------------------
 -- Table structure for order_master
 -- ----------------------------
 DROP TABLE IF EXISTS `order_master`;
-CREATE TABLE `order_master` (
-  `order_id` varchar(32) NOT NULL DEFAULT '' COMMENT '订单id',
+CREATE TABLE `order_master`  (
+  `order_id` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT '' COMMENT '订单id',
   `user_id` int(11) NOT NULL COMMENT '用户id',
-  `order_amount` decimal(18,2) NOT NULL DEFAULT '0.00' COMMENT '订单金额',
-  `despatch_money` decimal(18,2) NOT NULL COMMENT '快递费',
-  `offer` decimal(18,2) NOT NULL DEFAULT '0.00' COMMENT '优惠',
-  `status` tinyint(4) NOT NULL DEFAULT '0' COMMENT '状态',
-  `create_time` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `order_amount` decimal(18, 2) NOT NULL DEFAULT 0.00 COMMENT '订单金额',
+  `despatch_money` decimal(18, 2) NOT NULL COMMENT '快递费',
+  `offer` decimal(18, 2) NOT NULL DEFAULT 0.00 COMMENT '优惠',
+  `status` tinyint(4) NOT NULL DEFAULT 0 COMMENT '状态',
+  `create_time` datetime(0) NULL DEFAULT CURRENT_TIMESTAMP(0) COMMENT '创建时间',
   `addr_id` int(11) NOT NULL COMMENT '收货地址',
-  PRIMARY KEY (`order_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+  PRIMARY KEY (`order_id`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of order_master
 -- ----------------------------
-BEGIN;
 INSERT INTO `order_master` VALUES ('1535024318569178', 1, 240.00, 0.00, 0.00, 0, '2019-04-19 23:23:48', 11);
 INSERT INTO `order_master` VALUES ('1535024480883598', 1, 60.00, 0.00, 0.00, 0, '2019-04-19 23:23:48', 11);
 INSERT INTO `order_master` VALUES ('1535120473140989', 1, 80.00, 10.00, 0.00, 0, '2019-04-19 23:23:48', 11);
@@ -4172,23 +4137,21 @@ INSERT INTO `order_master` VALUES ('20181019153003373', 108, 2205.00, 0.00, 0.00
 INSERT INTO `order_master` VALUES ('20181103160441154', 1, 1807.00, 9.00, 0.00, 0, '2019-04-19 23:23:48', 11);
 INSERT INTO `order_master` VALUES ('20181118145529989', 1, 737.00, 3.00, 0.00, 0, '2019-04-19 23:23:48', 17);
 INSERT INTO `order_master` VALUES ('20190317184204435', 1, 404.00, 0.00, 0.00, 2, '2019-04-19 23:23:48', 18);
-COMMIT;
 
 -- ----------------------------
 -- Table structure for province
 -- ----------------------------
 DROP TABLE IF EXISTS `province`;
-CREATE TABLE `province` (
+CREATE TABLE `province`  (
   `id` int(11) NOT NULL,
-  `name` varchar(64) DEFAULT NULL,
-  `province_id` varchar(12) DEFAULT NULL,
+  `name` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
+  `province_id` varchar(12) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of province
 -- ----------------------------
-BEGIN;
 INSERT INTO `province` VALUES (1, '北京市', '110000000000');
 INSERT INTO `province` VALUES (2, '天津市', '120000000000');
 INSERT INTO `province` VALUES (3, '河北省', '130000000000');
@@ -4220,150 +4183,146 @@ INSERT INTO `province` VALUES (28, '甘肃省', '620000000000');
 INSERT INTO `province` VALUES (29, '青海省', '630000000000');
 INSERT INTO `province` VALUES (30, '宁夏回族自治区', '640000000000');
 INSERT INTO `province` VALUES (31, '新疆维吾尔自治区', '650000000000');
-COMMIT;
 
 -- ----------------------------
 -- Table structure for st_storage
 -- ----------------------------
 DROP TABLE IF EXISTS `st_storage`;
-CREATE TABLE `st_storage` (
-  `storage_id` int(11) unsigned NOT NULL AUTO_INCREMENT COMMENT '仓库id',
-  `storage_name` varchar(50) NOT NULL DEFAULT '' COMMENT '仓库名称',
-  `storage_address` varchar(150) NOT NULL DEFAULT '' COMMENT '仓库地址',
-  `storage_remark` varchar(200) NOT NULL DEFAULT '' COMMENT '仓库备注',
-  `storage_status` tinyint(4) NOT NULL DEFAULT '0' COMMENT '仓库状态，0启用，1禁用',
-  `storage_del` tinyint(4) NOT NULL DEFAULT '0' COMMENT '删除否，0未删除，1删除',
-  `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-  `update_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+CREATE TABLE `st_storage`  (
+  `storage_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '仓库id',
+  `storage_name` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT '' COMMENT '仓库名称',
+  `storage_address` varchar(150) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT '' COMMENT '仓库地址',
+  `storage_remark` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT '' COMMENT '仓库备注',
+  `storage_status` tinyint(4) NOT NULL DEFAULT 0 COMMENT '仓库状态，0启用，1禁用',
+  `storage_del` tinyint(4) NOT NULL DEFAULT 0 COMMENT '删除否，0未删除，1删除',
+  `create_time` datetime(0) NOT NULL DEFAULT CURRENT_TIMESTAMP(0) COMMENT '创建时间',
+  `update_time` datetime(0) NOT NULL DEFAULT CURRENT_TIMESTAMP(0) ON UPDATE CURRENT_TIMESTAMP(0) COMMENT '更新时间',
   `update_user` int(11) NOT NULL COMMENT '更新人',
-  PRIMARY KEY (`storage_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='仓库表';
+  PRIMARY KEY (`storage_id`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '仓库表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Table structure for st_storage_in_details
 -- ----------------------------
 DROP TABLE IF EXISTS `st_storage_in_details`;
-CREATE TABLE `st_storage_in_details` (
-  `sid_id` varchar(32) NOT NULL DEFAULT '' COMMENT '入库单详情id',
-  `si_id` varchar(20) NOT NULL DEFAULT '' COMMENT '入库单主表id',
-  `goods_id` varchar(32) NOT NULL DEFAULT '' COMMENT '商品id',
-  `goods_number` decimal(18,2) NOT NULL DEFAULT '0.00' COMMENT '商品数量',
-  `goods_unit` varchar(5) NOT NULL DEFAULT '' COMMENT '商品单位',
-  `goods_in_unit_price` decimal(18,2) NOT NULL COMMENT '入库单价',
-  `goods_total_despatch` decimal(18,2) NOT NULL COMMENT '商品总运费',
-  `goods_total_price` decimal(18,2) NOT NULL COMMENT '商品总价',
-  `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+CREATE TABLE `st_storage_in_details`  (
+  `sid_id` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT '' COMMENT '入库单详情id',
+  `si_id` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT '' COMMENT '入库单主表id',
+  `goods_id` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT '' COMMENT '商品id',
+  `goods_number` decimal(18, 2) NOT NULL DEFAULT 0.00 COMMENT '商品数量',
+  `goods_unit` varchar(5) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT '' COMMENT '商品单位',
+  `goods_in_unit_price` decimal(18, 2) NOT NULL COMMENT '入库单价',
+  `goods_total_despatch` decimal(18, 2) NOT NULL COMMENT '商品总运费',
+  `goods_total_price` decimal(18, 2) NOT NULL COMMENT '商品总价',
+  `create_time` datetime(0) NOT NULL DEFAULT CURRENT_TIMESTAMP(0) COMMENT '创建时间',
   `create_user` int(11) NOT NULL COMMENT '创建用户',
-  `update_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+  `update_time` datetime(0) NOT NULL DEFAULT CURRENT_TIMESTAMP(0) ON UPDATE CURRENT_TIMESTAMP(0) COMMENT '更新时间',
   `update_user` int(11) NOT NULL COMMENT '更新人',
-  `sid_remark` varchar(100) NOT NULL DEFAULT '' COMMENT '备注',
-  PRIMARY KEY (`sid_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='入库单详情';
+  `sid_remark` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT '' COMMENT '备注',
+  PRIMARY KEY (`sid_id`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '入库单详情' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Table structure for st_storage_in_master
 -- ----------------------------
 DROP TABLE IF EXISTS `st_storage_in_master`;
-CREATE TABLE `st_storage_in_master` (
-  `si_id` varchar(20) NOT NULL DEFAULT '' COMMENT '入库单id',
-  `si_code` varchar(20) NOT NULL DEFAULT '' COMMENT '入库单号',
+CREATE TABLE `st_storage_in_master`  (
+  `si_id` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT '' COMMENT '入库单id',
+  `si_code` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT '' COMMENT '入库单号',
   `supplier_id` int(11) NOT NULL COMMENT '供应商id',
-  `examine_status` tinyint(4) NOT NULL DEFAULT '0' COMMENT '审核状态，0未审核，1审核通过，2不通过',
+  `examine_status` tinyint(4) NOT NULL DEFAULT 0 COMMENT '审核状态，0未审核，1审核通过，2不通过',
   `examine_user` int(11) NOT NULL COMMENT '审核人',
-  `examine_remark` varchar(200) NOT NULL DEFAULT '' COMMENT '审核意见',
-  `examine_time` datetime NOT NULL COMMENT '审核时间',
-  `si_time` datetime NOT NULL COMMENT '入库时间',
-  `si_status` tinyint(4) NOT NULL DEFAULT '0' COMMENT '入库单状态',
-  `si_total_price` decimal(18,2) NOT NULL COMMENT '入库单总金额',
-  `si_total_despatch` decimal(18,2) NOT NULL COMMENT '入库单总运费',
-  `si_total_goods` decimal(18,2) NOT NULL COMMENT '入库单商品总价',
-  `si_del` tinyint(4) NOT NULL DEFAULT '0' COMMENT '删除状态0为删除，1已删除',
+  `examine_remark` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT '' COMMENT '审核意见',
+  `examine_time` datetime(0) NOT NULL COMMENT '审核时间',
+  `si_time` datetime(0) NOT NULL COMMENT '入库时间',
+  `si_status` tinyint(4) NOT NULL DEFAULT 0 COMMENT '入库单状态',
+  `si_total_price` decimal(18, 2) NOT NULL COMMENT '入库单总金额',
+  `si_total_despatch` decimal(18, 2) NOT NULL COMMENT '入库单总运费',
+  `si_total_goods` decimal(18, 2) NOT NULL COMMENT '入库单商品总价',
+  `si_del` tinyint(4) NOT NULL DEFAULT 0 COMMENT '删除状态0为删除，1已删除',
   `create_user` int(11) NOT NULL COMMENT '创建人',
-  `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `create_time` datetime(0) NOT NULL DEFAULT CURRENT_TIMESTAMP(0) COMMENT '创建时间',
   `update_user` int(11) NOT NULL COMMENT '修改用户',
-  `update_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
-  PRIMARY KEY (`si_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='入库单主表';
+  `update_time` datetime(0) NOT NULL DEFAULT CURRENT_TIMESTAMP(0) ON UPDATE CURRENT_TIMESTAMP(0) COMMENT '修改时间',
+  PRIMARY KEY (`si_id`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '入库单主表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Table structure for st_storage_out_details
 -- ----------------------------
 DROP TABLE IF EXISTS `st_storage_out_details`;
-CREATE TABLE `st_storage_out_details` (
-  `sod_id` varchar(32) NOT NULL DEFAULT '' COMMENT '出库单详情id',
-  `so_id` varchar(20) NOT NULL DEFAULT '' COMMENT '出库主表id',
-  `goods_id` varchar(32) NOT NULL DEFAULT '' COMMENT '商品id',
-  `goods_number` decimal(18,2) NOT NULL DEFAULT '0.00' COMMENT '出库商品数量',
+CREATE TABLE `st_storage_out_details`  (
+  `sod_id` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT '' COMMENT '出库单详情id',
+  `so_id` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT '' COMMENT '出库主表id',
+  `goods_id` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT '' COMMENT '商品id',
+  `goods_number` decimal(18, 2) NOT NULL DEFAULT 0.00 COMMENT '出库商品数量',
   `storage_id` int(11) NOT NULL COMMENT '仓库id',
-  PRIMARY KEY (`sod_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='出库单详情';
+  PRIMARY KEY (`sod_id`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '出库单详情' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Table structure for st_storage_out_master
 -- ----------------------------
 DROP TABLE IF EXISTS `st_storage_out_master`;
-CREATE TABLE `st_storage_out_master` (
-  `so_id` varchar(20) NOT NULL DEFAULT '' COMMENT '出库单id',
-  `so_code` varchar(20) NOT NULL DEFAULT '' COMMENT '出库单代号',
-  `order_id` varchar(32) NOT NULL DEFAULT '' COMMENT '订单id',
-  `so_remark` varchar(200) NOT NULL DEFAULT '' COMMENT '出库单备注',
+CREATE TABLE `st_storage_out_master`  (
+  `so_id` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT '' COMMENT '出库单id',
+  `so_code` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT '' COMMENT '出库单代号',
+  `order_id` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT '' COMMENT '订单id',
+  `so_remark` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT '' COMMENT '出库单备注',
   `user_id` int(11) NOT NULL COMMENT '购买用户id',
   `so_status` tinyint(4) NOT NULL COMMENT '出库单状态',
-  `so_time` datetime NOT NULL COMMENT '出库时间',
-  `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `so_time` datetime(0) NOT NULL COMMENT '出库时间',
+  `create_time` datetime(0) NOT NULL DEFAULT CURRENT_TIMESTAMP(0) COMMENT '创建时间',
   `create_user` int(11) NOT NULL COMMENT '创建用户',
-  `update_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
-  `update_user` int(11) NOT NULL DEFAULT '0' COMMENT '更新用户',
-  `examine_status` tinyint(4) NOT NULL DEFAULT '0' COMMENT '审核状态，0未审核，1审核通过，2审核未通过',
+  `update_time` datetime(0) NOT NULL DEFAULT CURRENT_TIMESTAMP(0) ON UPDATE CURRENT_TIMESTAMP(0) COMMENT '更新时间',
+  `update_user` int(11) NOT NULL DEFAULT 0 COMMENT '更新用户',
+  `examine_status` tinyint(4) NOT NULL DEFAULT 0 COMMENT '审核状态，0未审核，1审核通过，2审核未通过',
   `examine_user` int(11) NOT NULL COMMENT '审核用户',
-  `examine_remark` varchar(500) NOT NULL DEFAULT '' COMMENT '审核备注',
-  `examine_time` datetime NOT NULL COMMENT '审核时间',
-  PRIMARY KEY (`so_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='出库单主表';
+  `examine_remark` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT '' COMMENT '审核备注',
+  `examine_time` datetime(0) NOT NULL COMMENT '审核时间',
+  PRIMARY KEY (`so_id`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '出库单主表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Table structure for supplier
 -- ----------------------------
 DROP TABLE IF EXISTS `supplier`;
-CREATE TABLE `supplier` (
+CREATE TABLE `supplier`  (
   `supplier_id` int(11) NOT NULL AUTO_INCREMENT COMMENT '供应商id',
-  `supplier_name` varchar(50) NOT NULL DEFAULT '默认供应商' COMMENT '供应商名称',
-  `supplier_tel` varchar(100) DEFAULT NULL COMMENT '供应商联系电话',
-  `supplier_address` varchar(100) DEFAULT NULL COMMENT '供应商地址',
-  `supplier_describe` varchar(100) DEFAULT NULL COMMENT '供应商描述',
-  `supplier_remark` varchar(50) DEFAULT NULL COMMENT '供应商描述',
+  `supplier_name` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT '默认供应商' COMMENT '供应商名称',
+  `supplier_tel` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '供应商联系电话',
+  `supplier_address` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '供应商地址',
+  `supplier_describe` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '供应商描述',
+  `supplier_remark` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '供应商描述',
   `create_user` int(11) NOT NULL COMMENT '创建人id',
   `update_user` int(11) NOT NULL COMMENT '修改人id',
-  `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-  `update_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '更新时间',
-  `enterprise` int(11) DEFAULT NULL COMMENT '所属企业',
-  `row_status` tinyint(4) NOT NULL DEFAULT '0' COMMENT '删除否',
-  PRIMARY KEY (`supplier_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COMMENT='供应商表';
+  `create_time` datetime(0) NOT NULL DEFAULT CURRENT_TIMESTAMP(0) COMMENT '创建时间',
+  `update_time` datetime(0) NOT NULL DEFAULT CURRENT_TIMESTAMP(0) COMMENT '更新时间',
+  `enterprise` int(11) NULL DEFAULT NULL COMMENT '所属企业',
+  `row_status` tinyint(4) NOT NULL DEFAULT 0 COMMENT '删除否',
+  PRIMARY KEY (`supplier_id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '供应商表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of supplier
 -- ----------------------------
-BEGIN;
 INSERT INTO `supplier` VALUES (1, '默认供应商', '123456789', '郑州市高新区', '这是一条系统自带的供应商', '联系人:刘先生,手机号:000000123', 1, 1, '2019-04-19 23:23:48', '2019-04-19 23:23:48', 1, 0);
-COMMIT;
 
 -- ----------------------------
 -- Table structure for town
 -- ----------------------------
 DROP TABLE IF EXISTS `town`;
-CREATE TABLE `town` (
+CREATE TABLE `town`  (
   `id` int(11) NOT NULL,
-  `name` varchar(64) DEFAULT NULL,
-  `town_id` varchar(12) DEFAULT NULL,
-  `country_id` varchar(12) DEFAULT NULL,
+  `name` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
+  `town_id` varchar(12) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
+  `country_id` varchar(12) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of town
 -- ----------------------------
-BEGIN;
 INSERT INTO `town` VALUES (1, '东华门街道办事处', '110101001000', '110101000000');
 INSERT INTO `town` VALUES (2, '景山街道办事处', '110101002000', '110101000000');
 INSERT INTO `town` VALUES (3, '交道口街道办事处', '110101003000', '110101000000');
@@ -8779,96 +8738,92 @@ INSERT INTO `town` VALUES (4412, '和合乡', '141126201000', '141126000000');
 INSERT INTO `town` VALUES (4413, '前山乡', '141126202000', '141126000000');
 INSERT INTO `town` VALUES (4414, '曹家垣乡', '141126203000', '141126000000');
 INSERT INTO `town` VALUES (4415, '裴沟乡', '141126204000', '141126000000');
-COMMIT;
 
 -- ----------------------------
 -- Table structure for user
 -- ----------------------------
 DROP TABLE IF EXISTS `user`;
-CREATE TABLE `user` (
+CREATE TABLE `user`  (
   `uid` int(11) NOT NULL AUTO_INCREMENT COMMENT '用户id',
-  `username` varchar(50) COLLATE utf8mb4_bin NOT NULL DEFAULT '' COMMENT '用户名',
-  `password` varchar(128) COLLATE utf8mb4_bin NOT NULL DEFAULT '' COMMENT '密码',
-  `phone` varchar(20) COLLATE utf8mb4_bin NOT NULL DEFAULT '' COMMENT '手机号',
-  `email` varchar(255) COLLATE utf8mb4_bin DEFAULT '' COMMENT '邮箱',
-  `enterprise` int(11) DEFAULT '1' COMMENT '所属企业',
-  `header` varchar(255) COLLATE utf8mb4_bin DEFAULT '' COMMENT '头像',
-  `auth_group` int(11) DEFAULT '0' COMMENT '所属权限组',
-  `status` tinyint(4) DEFAULT '0' COMMENT '用户状态',
-  `create_time` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-  `update_time` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
-  `admin` tinyint(4) NOT NULL DEFAULT '0' COMMENT '是否为管理员',
-  `wechat_openid` varbinary(100) DEFAULT NULL COMMENT '用户微信openid',
-  PRIMARY KEY (`uid`),
-  KEY `phone` (`phone`)
-) ENGINE=InnoDB AUTO_INCREMENT=148 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;
+  `username` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL DEFAULT '' COMMENT '用户名',
+  `password` varchar(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL DEFAULT '' COMMENT '密码',
+  `phone` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL DEFAULT '' COMMENT '手机号',
+  `email` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL DEFAULT '' COMMENT '邮箱',
+  `header` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL DEFAULT '' COMMENT '头像',
+  `auth_group` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL DEFAULT '' COMMENT '所属权限组',
+  `status` tinyint(4) NULL DEFAULT 0 COMMENT '用户状态',
+  `create_time` datetime(0) NULL DEFAULT CURRENT_TIMESTAMP(0) COMMENT '创建时间',
+  `update_time` datetime(0) NULL DEFAULT CURRENT_TIMESTAMP(0) ON UPDATE CURRENT_TIMESTAMP(0) COMMENT '更新时间',
+  `admin` tinyint(4) NOT NULL DEFAULT 0 COMMENT '是否为管理员',
+  `wechat_openid` varbinary(100) NULL DEFAULT NULL COMMENT '用户微信openid',
+  PRIMARY KEY (`uid`) USING BTREE,
+  INDEX `phone`(`phone`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 149 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_bin ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of user
 -- ----------------------------
-BEGIN;
-INSERT INTO `user` VALUES (1, '超级管理员', '5ce35f64226f202040a88f260bd0b950', '19937150218', '', 1, '', 1, 0, '2019-04-19 23:23:48', '2019-04-19 23:23:48', 1, '');
-INSERT INTO `user` VALUES (105, 'lhr', '5ce35f64226f202040a88f260bd0b950', '19937150211', '', 0, '', 0, 0, '2019-04-19 23:23:48', '2019-04-19 23:23:48', 0, NULL);
-INSERT INTO `user` VALUES (106, '测试用户', '5ce35f64226f202040a88f260bd0b950', '12345678911', '', 0, '', 0, 0, '2019-04-19 23:23:48', '2019-04-19 23:23:48', 0, NULL);
-INSERT INTO `user` VALUES (107, '19937150217', 'ad2160f45d57ea6f26c265270c541f51', '19937150217', '', 0, '', 0, 0, '2019-04-19 23:23:48', '2019-04-19 23:23:48', 0, NULL);
-INSERT INTO `user` VALUES (108, 'Bossforviii', '5ce35f64226f202040a88f260bd0b950', 'Bossforviii', '', 0, '', 0, 0, '2019-04-19 23:23:48', '2019-04-19 23:23:48', 1, NULL);
-INSERT INTO `user` VALUES (109, '杜老板', 'eda707bab7e44a236fa899e9889a007b', '15225037337', '', 0, '', 0, 0, '2019-04-19 23:23:48', '2019-04-19 23:23:48', 0, 0x6F314B65323038794F366367583361654879505246795746655A6963);
-INSERT INTO `user` VALUES (110, '测试用户', '5ce35f64226f202040a88f260bd0b950', '15578514074', '', 0, '', 0, 0, '2019-04-19 23:23:48', '2019-04-19 23:23:48', 0, NULL);
-INSERT INTO `user` VALUES (111, 'Z', '2e6965dd68e6cfaf2b1ae6633a0f11fc', '13144408255', '', 0, '', 0, 0, '2019-04-19 23:23:48', '2019-04-19 23:23:48', 0, NULL);
-INSERT INTO `user` VALUES (112, '杜军', '5ce35f64226f202040a88f260bd0b950', '13949478229', '', 0, '', 0, 0, '2019-04-19 23:23:48', '2019-04-19 23:23:48', 0, NULL);
-INSERT INTO `user` VALUES (113, '平东粮店', '5ce35f64226f202040a88f260bd0b950', '13663759285', '', 0, '', 0, 0, '2019-04-19 23:23:48', '2019-04-19 23:23:48', 0, NULL);
-INSERT INTO `user` VALUES (114, 'dhq', '5e21536795d0f0cee39cf57b249e595c', '15836981377', '', 0, '', 0, 0, '2019-04-19 23:23:48', '2019-04-19 23:23:48', 0, NULL);
-INSERT INTO `user` VALUES (115, '西平粮店', '50a56d6fa3b0a672ef780aedb66a4467', '13525399850', '', 0, '', 0, 0, '2019-04-19 23:23:48', '2019-04-19 23:23:48', 0, NULL);
-INSERT INTO `user` VALUES (116, '李记粮油', '5ce35f64226f202040a88f260bd0b950', '18737570521', '', 0, '', 0, 0, '2019-04-19 23:23:48', '2019-04-19 23:23:48', 0, NULL);
-INSERT INTO `user` VALUES (117, '李记粮油店', '5ce35f64226f202040a88f260bd0b950', '13849557387', '', 0, '', 0, 0, '2019-04-19 23:23:48', '2019-04-19 23:23:48', 0, NULL);
-INSERT INTO `user` VALUES (118, '涛涛超市', '5ce35f64226f202040a88f260bd0b950', '13937539137', '', 0, '', 0, 0, '2019-04-19 23:23:48', '2019-04-19 23:23:48', 0, NULL);
-INSERT INTO `user` VALUES (119, '明珠世纪城生鲜超市', '5ce35f64226f202040a88f260bd0b950', '18903906288', '', 0, '', 0, 0, '2019-04-19 23:23:48', '2019-04-19 23:23:48', 0, NULL);
-INSERT INTO `user` VALUES (120, '鹰大德信泉', '5ce35f64226f202040a88f260bd0b950', '15537517006', '', 0, '', 0, 0, '2019-04-19 23:23:48', '2019-04-19 23:23:48', 0, NULL);
-INSERT INTO `user` VALUES (122, '马松', '4ab42d0eaaaf9bd0b0bb623234c5238e', '13384068567', '', 0, '', 0, 0, '2019-04-19 23:23:48', '2019-04-19 23:23:48', 0, NULL);
-INSERT INTO `user` VALUES (123, '薛庄老邢粮油店', '5ce35f64226f202040a88f260bd0b950', '13183326951', '', 0, '', 0, 0, '2019-04-19 23:23:48', '2019-04-19 23:23:48', 0, 0x6F314B653230385A557359374B6875396F3237757A494845594A4C51);
-INSERT INTO `user` VALUES (124, '薛庄诚信粮油店', '5ce35f64226f202040a88f260bd0b950', '13937564191', '', 0, '', 0, 0, '2019-04-19 23:23:48', '2019-04-19 23:23:48', 0, 0x6F314B653230794D424337634E5A55396E6C2D726638584E6F6E6277);
-INSERT INTO `user` VALUES (127, '', 'f2931a01b7cec1d132c7851ac42dda46', '18537508556', '', 0, '', 0, 0, '2019-04-19 23:23:48', '2019-04-19 23:23:48', 0, NULL);
-INSERT INTO `user` VALUES (128, '粮油店', '0ca7555b6209d33c01c423b85d9356e8', '19937582018', '', 0, '', 0, 0, '2019-04-19 23:23:48', '2019-04-19 23:23:48', 0, NULL);
-INSERT INTO `user` VALUES (129, '小杰粮店', 'e46447acc855685dee2d267a523c5413', '15893484999', '', 0, '', 0, 0, '2019-04-19 23:23:48', '2019-04-19 23:23:48', 0, 0x6F314B65323036433070355F486A5233317479506D6553364B2D3673);
-INSERT INTO `user` VALUES (130, '。', '05bd33b3b063efe1f35614c85b939e5c', '13937568201', '', 0, '', 0, 0, '2019-04-19 23:23:48', '2019-04-19 23:23:48', 0, NULL);
-INSERT INTO `user` VALUES (131, '。', '5ce35f64226f202040a88f260bd0b950', '15837551369', '', 0, '', 0, 0, '2019-04-19 23:23:48', '2019-04-19 23:23:48', 0, NULL);
-INSERT INTO `user` VALUES (132, '小娟干菜', '5ce35f64226f202040a88f260bd0b950', '15237468582', '', 0, '', 0, 0, '2019-04-19 23:23:48', '2019-04-19 23:23:48', 0, 0x6F314B6532302D684135546131314D47535535584B6D6D656B485851);
-INSERT INTO `user` VALUES (133, '丹丹美味干菜店', '5ce35f64226f202040a88f260bd0b950', '13693757108', '', 0, '', 0, 0, '2019-04-19 23:23:48', '2019-04-19 23:23:48', 0, 0x6F314B6532303463714666756445735A4846516D597230334C434673);
-INSERT INTO `user` VALUES (134, '13049973740', 'f2931a01b7cec1d132c7851ac42dda46', '13049973740', '', 0, '', 0, 0, '2019-04-19 23:23:48', '2019-04-19 23:23:48', 0, NULL);
-INSERT INTO `user` VALUES (135, '13703408636', 'f2931a01b7cec1d132c7851ac42dda46', '13703408636', '', 0, '', 0, 0, '2019-04-19 23:23:48', '2019-04-19 23:23:48', 0, NULL);
-INSERT INTO `user` VALUES (137, '18837188075', 'f2931a01b7cec1d132c7851ac42dda46', '18837188075', '', 0, '', 0, 0, '2019-04-19 23:23:48', '2019-04-19 23:23:48', 0, NULL);
-INSERT INTO `user` VALUES (138, '17530806109', 'f2931a01b7cec1d132c7851ac42dda46', '17530806109', '', 0, '', 0, 0, '2019-04-19 23:23:48', '2019-04-19 23:23:48', 0, 0x6F314B6532305F5631624D625374327A36443079505856706574686B);
-INSERT INTO `user` VALUES (139, '13837473170', 'f2931a01b7cec1d132c7851ac42dda46', '13837473170', '', 0, '', 0, 0, '2019-04-19 23:23:48', '2019-04-19 23:23:48', 0, 0x6F314B6532305F35333269474F5345575151674271486D444C596C77);
-INSERT INTO `user` VALUES (140, '15093852531', 'f2931a01b7cec1d132c7851ac42dda46', '15093852531', '', 0, '', 0, 0, '2019-04-19 23:23:48', '2019-04-19 23:23:48', 0, NULL);
-INSERT INTO `user` VALUES (141, '17337548788', 'f2931a01b7cec1d132c7851ac42dda46', '17337548788', '', 0, '', 0, 0, '2019-04-19 23:23:48', '2019-04-19 23:23:48', 0, NULL);
-INSERT INTO `user` VALUES (142, '13233700139', 'f2931a01b7cec1d132c7851ac42dda46', '13233700139', '', 0, '', 0, 0, '2019-04-19 23:23:48', '2019-04-19 23:23:48', 0, NULL);
-INSERT INTO `user` VALUES (143, '17122609526', 'f2931a01b7cec1d132c7851ac42dda46', '17122609526', '', 0, '', 0, 0, '2019-04-19 23:23:48', '2019-04-19 23:23:48', 0, NULL);
-INSERT INTO `user` VALUES (144, '15837460820', 'f2931a01b7cec1d132c7851ac42dda46', '15837460820', '', 0, '', 0, 0, '2019-04-19 23:23:48', '2019-04-19 23:23:48', 0, NULL);
-INSERT INTO `user` VALUES (145, '18937572210', 'f2931a01b7cec1d132c7851ac42dda46', '18937572210', '', 0, '', 0, 0, '2019-04-19 23:23:48', '2019-04-19 23:23:48', 0, NULL);
-INSERT INTO `user` VALUES (146, '13592190698', 'f2931a01b7cec1d132c7851ac42dda46', '13592190698', '', 0, '', 0, 0, '2019-04-19 23:23:48', '2019-04-19 23:23:48', 0, NULL);
-INSERT INTO `user` VALUES (147, '15237529478', 'f2931a01b7cec1d132c7851ac42dda46', '15237529478', '', 0, '', 0, 0, '2019-04-19 23:23:48', '2019-04-19 23:23:48', 0, NULL);
-COMMIT;
+INSERT INTO `user` VALUES (1, '超级管理员', '5ce35f64226f202040a88f260bd0b950', '19937150218', '2388399752@qq.com', '', '1', 1, '2019-04-19 23:23:48', '2019-12-11 23:42:40', 1, '');
+INSERT INTO `user` VALUES (105, 'lhr', '5ce35f64226f202040a88f260bd0b950', '19937150211', '', '', '0', 1, '2019-04-19 23:23:48', '2019-12-07 22:31:07', 0, NULL);
+INSERT INTO `user` VALUES (106, '测试用户', '5ce35f64226f202040a88f260bd0b950', '12345678911', '', '', '0', 1, '2019-04-19 23:23:48', '2019-12-07 22:31:07', 0, NULL);
+INSERT INTO `user` VALUES (107, '19937150217', 'ad2160f45d57ea6f26c265270c541f51', '19937150217', '', '', '0', 1, '2019-04-19 23:23:48', '2019-12-07 22:31:07', 0, NULL);
+INSERT INTO `user` VALUES (108, 'Bossforviii', '5ce35f64226f202040a88f260bd0b950', 'Bossforviii', '', '', '0', 1, '2019-04-19 23:23:48', '2019-12-07 22:31:07', 1, NULL);
+INSERT INTO `user` VALUES (109, '杜老板', 'eda707bab7e44a236fa899e9889a007b', '15225037337', '', '', '0', 1, '2019-04-19 23:23:48', '2019-12-07 22:31:07', 0, 0x6F314B65323038794F366367583361654879505246795746655A6963);
+INSERT INTO `user` VALUES (110, '测试用户', '5ce35f64226f202040a88f260bd0b950', '15578514074', '', '', '0', 1, '2019-04-19 23:23:48', '2019-12-07 22:31:07', 0, NULL);
+INSERT INTO `user` VALUES (111, 'Z', '2e6965dd68e6cfaf2b1ae6633a0f11fc', '13144408255', '', '', '0', 1, '2019-04-19 23:23:48', '2019-12-07 22:31:07', 0, NULL);
+INSERT INTO `user` VALUES (112, '杜军', '5ce35f64226f202040a88f260bd0b950', '13949478229', '', '', '0', 1, '2019-04-19 23:23:48', '2019-12-07 22:31:07', 0, NULL);
+INSERT INTO `user` VALUES (113, '平东粮店', '5ce35f64226f202040a88f260bd0b950', '13663759285', '', '', '0', 1, '2019-04-19 23:23:48', '2019-12-07 22:31:07', 0, NULL);
+INSERT INTO `user` VALUES (114, 'dhq', '5e21536795d0f0cee39cf57b249e595c', '15836981377', '', '', '0', 1, '2019-04-19 23:23:48', '2019-12-07 22:31:07', 0, NULL);
+INSERT INTO `user` VALUES (115, '西平粮店', '50a56d6fa3b0a672ef780aedb66a4467', '13525399850', '', '', '0', 1, '2019-04-19 23:23:48', '2019-12-07 22:31:07', 0, NULL);
+INSERT INTO `user` VALUES (116, '李记粮油', '5ce35f64226f202040a88f260bd0b950', '18737570521', '', '', '0', 1, '2019-04-19 23:23:48', '2019-12-07 22:31:07', 0, NULL);
+INSERT INTO `user` VALUES (117, '李记粮油店', '5ce35f64226f202040a88f260bd0b950', '13849557387', '', '', '0', 1, '2019-04-19 23:23:48', '2019-12-07 22:31:07', 0, NULL);
+INSERT INTO `user` VALUES (118, '涛涛超市', '5ce35f64226f202040a88f260bd0b950', '13937539137', '', '', '0', 1, '2019-04-19 23:23:48', '2019-12-07 22:31:07', 0, NULL);
+INSERT INTO `user` VALUES (119, '明珠世纪城生鲜超市', '5ce35f64226f202040a88f260bd0b950', '18903906288', '', '', '0', 1, '2019-04-19 23:23:48', '2019-12-07 22:31:07', 0, NULL);
+INSERT INTO `user` VALUES (120, '鹰大德信泉', '5ce35f64226f202040a88f260bd0b950', '15537517006', '', '', '0', 1, '2019-04-19 23:23:48', '2019-12-07 22:31:07', 0, NULL);
+INSERT INTO `user` VALUES (122, '马松', '4ab42d0eaaaf9bd0b0bb623234c5238e', '13384068567', '', '', '0', 1, '2019-04-19 23:23:48', '2019-12-07 22:31:07', 0, NULL);
+INSERT INTO `user` VALUES (123, '薛庄老邢粮油店', '5ce35f64226f202040a88f260bd0b950', '13183326951', '', '', '0', 1, '2019-04-19 23:23:48', '2019-12-07 22:31:07', 0, 0x6F314B653230385A557359374B6875396F3237757A494845594A4C51);
+INSERT INTO `user` VALUES (124, '薛庄诚信粮油店', '5ce35f64226f202040a88f260bd0b950', '13937564191', '', '', '0', 1, '2019-04-19 23:23:48', '2019-12-07 22:31:07', 0, 0x6F314B653230794D424337634E5A55396E6C2D726638584E6F6E6277);
+INSERT INTO `user` VALUES (127, '', 'f2931a01b7cec1d132c7851ac42dda46', '18537508556', '', '', '0', 1, '2019-04-19 23:23:48', '2019-12-07 22:31:07', 0, NULL);
+INSERT INTO `user` VALUES (128, '粮油店', '0ca7555b6209d33c01c423b85d9356e8', '19937582018', '', '', '0', 1, '2019-04-19 23:23:48', '2019-12-07 22:31:07', 0, NULL);
+INSERT INTO `user` VALUES (129, '小杰粮店', 'e46447acc855685dee2d267a523c5413', '15893484999', '', '', '0', 1, '2019-04-19 23:23:48', '2019-12-07 22:31:07', 0, 0x6F314B65323036433070355F486A5233317479506D6553364B2D3673);
+INSERT INTO `user` VALUES (130, '。', '05bd33b3b063efe1f35614c85b939e5c', '13937568201', '', '', '0', 1, '2019-04-19 23:23:48', '2019-12-07 22:31:07', 0, NULL);
+INSERT INTO `user` VALUES (131, '。', '5ce35f64226f202040a88f260bd0b950', '15837551369', '', '', '0', 1, '2019-04-19 23:23:48', '2019-12-07 22:31:07', 0, NULL);
+INSERT INTO `user` VALUES (132, '小娟干菜', '5ce35f64226f202040a88f260bd0b950', '15237468582', '', '', '0', 1, '2019-04-19 23:23:48', '2019-12-07 22:31:07', 0, 0x6F314B6532302D684135546131314D47535535584B6D6D656B485851);
+INSERT INTO `user` VALUES (133, '丹丹美味干菜店', '5ce35f64226f202040a88f260bd0b950', '13693757108', '', '', '0', 1, '2019-04-19 23:23:48', '2019-12-07 22:31:07', 0, 0x6F314B6532303463714666756445735A4846516D597230334C434673);
+INSERT INTO `user` VALUES (134, '13049973740', 'f2931a01b7cec1d132c7851ac42dda46', '13049973740', '', '', '0', 1, '2019-04-19 23:23:48', '2019-12-07 22:31:07', 0, NULL);
+INSERT INTO `user` VALUES (135, '13703408636', 'f2931a01b7cec1d132c7851ac42dda46', '13703408636', '', '', '0', 1, '2019-04-19 23:23:48', '2019-12-07 22:31:07', 0, NULL);
+INSERT INTO `user` VALUES (137, '18837188075', 'f2931a01b7cec1d132c7851ac42dda46', '18837188075', '', '', '0', 1, '2019-04-19 23:23:48', '2019-12-07 22:31:07', 0, NULL);
+INSERT INTO `user` VALUES (138, '17530806109', 'f2931a01b7cec1d132c7851ac42dda46', '17530806109', '', '', '0', 1, '2019-04-19 23:23:48', '2019-12-07 22:31:07', 0, 0x6F314B6532305F5631624D625374327A36443079505856706574686B);
+INSERT INTO `user` VALUES (139, '13837473170', 'f2931a01b7cec1d132c7851ac42dda46', '13837473170', '', '', '0', 1, '2019-04-19 23:23:48', '2019-12-07 22:31:07', 0, 0x6F314B6532305F35333269474F5345575151674271486D444C596C77);
+INSERT INTO `user` VALUES (140, '15093852531', 'f2931a01b7cec1d132c7851ac42dda46', '15093852531', '', '', '0', 1, '2019-04-19 23:23:48', '2019-12-07 22:31:07', 0, NULL);
+INSERT INTO `user` VALUES (141, '17337548788', 'f2931a01b7cec1d132c7851ac42dda46', '17337548788', '', '', '0', 1, '2019-04-19 23:23:48', '2019-12-07 22:31:07', 0, NULL);
+INSERT INTO `user` VALUES (142, '13233700139', 'f2931a01b7cec1d132c7851ac42dda46', '13233700139', '', '', '0', 1, '2019-04-19 23:23:48', '2019-12-07 22:31:07', 0, NULL);
+INSERT INTO `user` VALUES (143, '17122609526', 'f2931a01b7cec1d132c7851ac42dda46', '17122609526', '', '', '0', 1, '2019-04-19 23:23:48', '2019-12-07 22:31:07', 0, NULL);
+INSERT INTO `user` VALUES (144, '15837460820', 'f2931a01b7cec1d132c7851ac42dda46', '15837460820', '', '', '0', 1, '2019-04-19 23:23:48', '2019-12-07 22:31:07', 0, NULL);
+INSERT INTO `user` VALUES (145, '18937572210', 'f2931a01b7cec1d132c7851ac42dda46', '18937572210', '', '', '0', 1, '2019-04-19 23:23:48', '2019-12-07 22:31:07', 0, NULL);
+INSERT INTO `user` VALUES (146, '13592190698', 'f2931a01b7cec1d132c7851ac42dda46', '13592190698', '', '', '0', 1, '2019-04-19 23:23:48', '2019-12-07 22:31:07', 0, NULL);
+INSERT INTO `user` VALUES (147, '15237529478', 'f2931a01b7cec1d132c7851ac42dda46', '15237529478', '', '', '0', 1, '2019-04-19 23:23:48', '2019-12-07 22:31:07', 0, NULL);
+INSERT INTO `user` VALUES (148, '19937150000', '5ce35f64226f202040a88f260bd0b950', '19937150000', '2388399752@qq.com', '', '1', 0, '2019-12-11 22:58:30', '2019-12-11 22:58:30', 0, NULL);
 
 -- ----------------------------
 -- Table structure for user_login
 -- ----------------------------
 DROP TABLE IF EXISTS `user_login`;
-CREATE TABLE `user_login` (
-  `id` varchar(32) NOT NULL DEFAULT '',
+CREATE TABLE `user_login`  (
+  `id` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT '',
   `user_id` int(11) NOT NULL COMMENT '用户id',
-  `user_token` varchar(32) NOT NULL DEFAULT '' COMMENT '登录获取token',
-  `login_ip` varchar(20) NOT NULL DEFAULT '0.0.0.0' COMMENT '登录ip',
-  `login_address` varchar(50) DEFAULT '未知' COMMENT '登录地址',
-  `login_app` varchar(20) DEFAULT '未知' COMMENT '登录应用',
-  `create_time` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-  `expire_time` datetime DEFAULT '1970-01-01 00:00:00' COMMENT '过期时间',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+  `user_token` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT '' COMMENT '登录获取token',
+  `login_ip` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT '0.0.0.0' COMMENT '登录ip',
+  `login_address` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT '未知' COMMENT '登录地址',
+  `login_app` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT '未知' COMMENT '登录应用',
+  `create_time` datetime(0) NULL DEFAULT CURRENT_TIMESTAMP(0) COMMENT '创建时间',
+  `expire_time` datetime(0) NULL DEFAULT '1970-01-01 00:00:00' COMMENT '过期时间',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of user_login
 -- ----------------------------
-BEGIN;
 INSERT INTO `user_login` VALUES ('00110e2bc774965bbf4ba5f174f1e8c7', 1, '72a36c19e3ce239609a1b26df5aece72', '171.15.159.18', '未知', '未知', '2019-04-19 23:23:49', '2018-11-15 22:57:54');
 INSERT INTO `user_login` VALUES ('00b6e4cc9488c0a05c943199f24e2077', 1, '69bdda039903dc9d413c2111fd27e0bb', '182.119.160.201', '未知', '未知', '2019-04-19 23:23:49', '2018-11-30 11:34:24');
 INSERT INTO `user_login` VALUES ('00e2479a9be297bd98d490be7f08db1b', 108, '8fa56acaa844036752a765775e688f68', '117.136.104.23', '未知', '未知', '2019-04-19 23:23:49', '2018-12-10 13:29:39');
@@ -8948,6 +8903,7 @@ INSERT INTO `user_login` VALUES ('1e1c1c293b9b178aac94869e53c8dd44', 1, 'f475f81
 INSERT INTO `user_login` VALUES ('1e7c8b2e9873f291844b5a6e414126fb', 1, '6eeae02a8e12415c5d27096909127d85', '171.15.158.158', '未知', '未知', '2019-04-19 23:23:49', '2018-10-31 17:04:53');
 INSERT INTO `user_login` VALUES ('1f30b69245a58f1e1af8c7fdaf1ad9ad', 1, '2110bb5cd424e395ef0e49c7d196529a', '171.15.158.158', '未知', '未知', '2019-04-19 23:23:49', '2018-11-01 16:13:22');
 INSERT INTO `user_login` VALUES ('1f5723ebaf04efe6a2a8833dfb6380ae', 1, '8178bb4d30f8c03598c988ab4f8e306f', '192.168.31.8', '未知', '未知', '2019-04-26 22:01:15', '2019-05-26 09:01:16');
+INSERT INTO `user_login` VALUES ('2170785680fc32746e2e4794fdf26ba7', 1, 'e49b66877efca5c73cf6b8f6dbe7d4b1', '0:0:0:0:0:0:0:1', '未知', '未知', '2019-12-07 13:17:43', '2020-01-06 05:17:43');
 INSERT INTO `user_login` VALUES ('217e3a57fbadf32c172c0415459e6b3a', 1, 'c5ed7eb4f4fe41e4234c2f0753709576', '171.15.158.178', '未知', '未知', '2019-04-19 23:23:49', '2018-11-29 19:48:59');
 INSERT INTO `user_login` VALUES ('2245216be4e324abb6389bed6f2d5061', 143, 'c4d84e26aa05987f3c6f4cedc5ec0062', '223.90.205.85', '未知', '未知', '2019-04-19 23:23:49', '2019-01-09 18:36:18');
 INSERT INTO `user_login` VALUES ('2312e6f618dcd9743e9ae29bcea93d3d', 108, '5d88b64911f72b804355d749681fcb4a', '223.104.105.44', '未知', '未知', '2019-04-19 23:23:49', '2018-12-25 11:13:18');
@@ -8968,6 +8924,7 @@ INSERT INTO `user_login` VALUES ('26a684b38b232f7c8bc2bd474601c7ce', 1, '48e8ee0
 INSERT INTO `user_login` VALUES ('26c13b2069bb5b8c57c395d780378070', 108, 'e82486c3599ebab4f9bc2973157547e6', '117.136.61.94', '未知', '未知', '2019-04-19 23:23:49', '2019-01-16 13:59:19');
 INSERT INTO `user_login` VALUES ('26e1f976bf8fa2a9dd2771d868853b1b', 1, 'bd074cc15229689421abf9d60b4ddcb3', '192.168.31.8', '未知', '未知', '2019-04-19 23:23:49', '2019-04-14 08:20:57');
 INSERT INTO `user_login` VALUES ('2715902cb57656136af638ded87995c9', 1, '2782b910a0d44fe2af9648ac837c1afa', '171.15.157.150', '未知', '未知', '2019-04-19 23:23:49', '2018-11-21 00:37:14');
+INSERT INTO `user_login` VALUES ('276fcfcbf3b94032eb6b89be7c12098a', 1, '277339bf5ba6776e668db260c4ce00ad', '0:0:0:0:0:0:0:1', '未知', '未知', '2019-12-07 13:31:58', '2020-01-06 05:31:59');
 INSERT INTO `user_login` VALUES ('27bf11ad81c0795b6d53c6f82c8018ca', 1, '5eafff4e61cf29481e8ab0942912f68c', '171.15.158.178', '未知', '未知', '2019-04-19 23:23:49', '2018-11-30 20:53:38');
 INSERT INTO `user_login` VALUES ('27dd106a84570b10bfa9ea34a3251dfa', 1, '293c2526dd9985f4be5fa8f63d0f51de', '171.15.158.180', '未知', '未知', '2019-04-19 23:23:49', '2018-12-14 22:07:30');
 INSERT INTO `user_login` VALUES ('286fcbc5e0d53a59b0e66b126d0789f3', 108, '80b86ca56d4ecb380947cf9f5c81bd99', '183.205.191.116', '未知', '未知', '2019-04-19 23:23:49', '2018-12-02 21:35:07');
@@ -9087,6 +9044,7 @@ INSERT INTO `user_login` VALUES ('5f22a4535b3b91f82bf9e9960ffbe46a', 139, '33baf
 INSERT INTO `user_login` VALUES ('5fcad426aa8bd77f5cb264fe1d32b5e6', 1, '51d5cc5df2029e219ed5396ae164ebab', '182.119.160.201', '未知', '未知', '2019-04-19 23:23:49', '2018-11-30 11:25:43');
 INSERT INTO `user_login` VALUES ('605e284bd87334f42f4dd70620aab51f', 1, 'e2e077b5ca3714c271f2bf8006e44701', '171.15.159.101', '未知', '未知', '2019-04-19 23:23:49', '2018-12-09 23:54:05');
 INSERT INTO `user_login` VALUES ('606f8b333641c8b5c078f9dbaa3c5fb4', 1, '2171b3af11d8256cfac6d3ff4e1cbd59', '192.168.31.8', '未知', '未知', '2019-04-26 22:01:27', '2019-05-26 09:01:28');
+INSERT INTO `user_login` VALUES ('60a9f8ed6ac315c59daa7612f169042a', 1, 'b80e34a5dbe54a68181629f12433a74c', '0:0:0:0:0:0:0:1', '未知', '未知', '2019-12-07 14:25:48', '2020-01-06 06:25:49');
 INSERT INTO `user_login` VALUES ('6155f7e5dc146f1093706f096bdf4021', 108, '8d2b37c17df8636549ce51e7f59896c9', '183.205.191.18', '未知', '未知', '2019-04-19 23:23:49', '2018-12-31 18:22:02');
 INSERT INTO `user_login` VALUES ('615e12d2e7b384f211b574b52739760d', 1, '75d97583042ca0a8412ca9c9177d22da', '171.15.158.180', '未知', '未知', '2019-04-19 23:23:49', '2018-12-14 22:14:50');
 INSERT INTO `user_login` VALUES ('619b1e266cf2d05f9c6a4ab1317a0942', 108, 'b958152990779fdb6e778653de84eca7', '117.136.104.23', '未知', '未知', '2019-04-19 23:23:49', '2018-12-10 12:52:42');
@@ -9187,6 +9145,7 @@ INSERT INTO `user_login` VALUES ('8edb70b280a49f31ec7e0c1d4911ff2a', 108, 'b32c6
 INSERT INTO `user_login` VALUES ('8ee33ceb5efce6a1eb752ccd7c47c6b6', 109, 'bffb47063a1d9220a75954271148ad1f', '117.136.104.167', '未知', '未知', '2019-04-19 23:23:49', '2018-12-01 18:01:04');
 INSERT INTO `user_login` VALUES ('8f43b7f5b7731f45033f72d7cef0b472', 1, '7d72c8d6df5fb82d1666151e190aac6b', '192.168.31.8', '未知', '未知', '2019-04-19 23:23:49', '2018-10-01 11:02:47');
 INSERT INTO `user_login` VALUES ('8f60ca151e323612ca420aa2889163e2', 109, '083464c575c0757dba1b4d2de3130c0b', '183.205.191.132', '未知', '未知', '2019-04-19 23:23:49', '2018-12-06 08:12:06');
+INSERT INTO `user_login` VALUES ('8fcfb2dbe0772490216f2e18059f9990', 1, '4884931d120117dffb99457adb9925ca', '0:0:0:0:0:0:0:1', '未知', '未知', '2019-12-06 23:58:11', '2020-01-05 15:58:11');
 INSERT INTO `user_login` VALUES ('8ff9d96227eb149d160165aa71cf55bf', 1, '4e783c6676be614173127ee187fc7744', '192.168.31.8', '未知', '未知', '2019-04-19 23:23:49', '2019-04-08 08:53:27');
 INSERT INTO `user_login` VALUES ('911ca3ec4c2e09095374ed4f394d7f1d', 109, 'dc5574496662aee6576f36f95a0ae210', '117.136.104.167', '未知', '未知', '2019-04-19 23:23:49', '2018-11-30 10:58:11');
 INSERT INTO `user_login` VALUES ('914662e3b841cc5a0bb9b765ab359554', 1, '01e7932498303eddb9c804c42a42e80c', '192.168.31.15', '未知', '未知', '2019-04-21 14:16:16', '2019-05-21 01:16:16');
@@ -9201,6 +9160,7 @@ INSERT INTO `user_login` VALUES ('953f6383a8c2c1827640dd51008a4f5c', 109, '849ad
 INSERT INTO `user_login` VALUES ('973662df8dd70a17c50aa4a0d8f53d33', 1, 'b1ad4e252ababb43bfb87774e78cb8f8', '171.15.157.150', '未知', '未知', '2019-04-19 23:23:49', '2018-11-21 00:34:33');
 INSERT INTO `user_login` VALUES ('97bbb56302643f15c9efad477cc8a60c', 1, 'c60286ec649ecc37d10ac398b953bb17', '223.88.10.240', '未知', '未知', '2019-04-19 23:23:49', '2019-01-19 20:58:51');
 INSERT INTO `user_login` VALUES ('98ba843e20954195226277f0258c4369', 1, '66107706ce2c11e4ceb05ea9313dbfd6', '192.168.31.8', '未知', '未知', '2019-04-19 23:23:49', '2019-04-08 11:13:55');
+INSERT INTO `user_login` VALUES ('99739b304f5f84dd0eacfe60485bf5d5', 1, '8a5b598b232997aab7299da8b64b36da', '0:0:0:0:0:0:0:1', '未知', '未知', '2019-12-06 23:55:57', '2020-01-05 15:55:58');
 INSERT INTO `user_login` VALUES ('99d621f02f9b90e6f3915b3e053c396e', 108, '350fe8bb5721e37dc9b0cfc518d89ca6', '117.136.104.55', '未知', '未知', '2019-04-19 23:23:49', '2018-11-08 10:36:25');
 INSERT INTO `user_login` VALUES ('9a75e19f68dd823f7ecff8d751fd9c8c', 109, 'bcda7c605af775d9d659e53720947e75', '223.104.105.43', '未知', '未知', '2019-04-19 23:23:49', '2018-12-27 16:46:29');
 INSERT INTO `user_login` VALUES ('9a981f6a858e92f961a49a6e4c02a73c', 109, '79744ffc98d17f29ad1d2f6e8b85f256', '117.136.36.174', '未知', '未知', '2019-04-19 23:23:49', '2018-12-06 10:36:10');
@@ -9227,6 +9187,7 @@ INSERT INTO `user_login` VALUES ('a2675fe49b77c2fd1d4aa7e4e54a275c', 147, 'd9336
 INSERT INTO `user_login` VALUES ('a2d77141b9452da26bb5e5fcca0a82a1', 1, '22c49d0319c03babb607d80939696640', '171.15.157.146', '未知', '未知', '2019-04-19 23:23:49', '2018-12-06 20:51:18');
 INSERT INTO `user_login` VALUES ('a2de800ece35acd0c296f8ec703b98c4', 1, '9a44aa978bc08b79e4036730000369e0', '192.168.31.8', '未知', '未知', '2019-04-19 23:30:29', '2019-05-19 10:30:30');
 INSERT INTO `user_login` VALUES ('a33f94cd88927cf59b3aac9cd2a95bb2', 1, '40dd85726df4748baa9d256f8759e556', '192.168.31.8', '未知', '未知', '2019-04-19 23:23:49', '2019-04-13 07:08:42');
+INSERT INTO `user_login` VALUES ('a38ec7e1cb84cecf2191b08fc03eca9a', 1, '2babc913b0cbfe9a7da9df157993f736', '0:0:0:0:0:0:0:1', '未知', '未知', '2019-12-06 23:58:35', '2020-01-05 15:58:36');
 INSERT INTO `user_login` VALUES ('a3d503b12da20a828b9ff23fbc52ee42', 1, '9b48d742f3c44471eeb9eeb48399a461', '192.168.31.8', '未知', '未知', '2019-04-19 23:23:49', '2018-10-04 21:14:09');
 INSERT INTO `user_login` VALUES ('a3feec8b17b1d9ba4dd1af3c363c3c99', 1, '1c6949251383ba2d093219ac5533bde7', '192.168.31.8', '未知', '未知', '2019-04-19 23:23:49', '2019-04-01 10:04:43');
 INSERT INTO `user_login` VALUES ('a5a7a7a199babee51f4a4cf1a0c3ed80', 1, '7c545baccd8616096e7a2c0373b5e8cc', '171.15.158.146', '未知', '未知', '2019-04-19 23:23:49', '2018-11-14 20:01:32');
@@ -9243,6 +9204,7 @@ INSERT INTO `user_login` VALUES ('aa75484bc10c01e07939ff1372c56daa', 1, '38e177f
 INSERT INTO `user_login` VALUES ('aaa6032a855ab83d6046afa3811be930', 1, 'db0a11c39e0d27c6fe9c3a9d09d89f16', '222.89.212.235', '未知', '未知', '2019-04-19 23:23:49', '2018-10-31 16:58:03');
 INSERT INTO `user_login` VALUES ('ab66a1298182b2c4d6885757edd8b041', 1, '052e6fd224390f5b28b9e68dd79345c1', '182.119.166.62', '未知', '未知', '2019-04-19 23:23:49', '2018-11-22 10:36:29');
 INSERT INTO `user_login` VALUES ('ac7fe1026a9ef6926cae3b614c10d4f0', 1, '8282212aed5ba55ec94278df35f47851', '0:0:0:0:0:0:0:1', '未知', '未知', '2019-04-19 23:23:49', '2018-11-13 19:27:19');
+INSERT INTO `user_login` VALUES ('acbf00069ea544c01df8be644c0c1ff6', 1, '93055934c542c7316389df2123ff125c', '0:0:0:0:0:0:0:1', '未知', '未知', '2019-12-06 23:55:27', '2020-01-05 15:55:28');
 INSERT INTO `user_login` VALUES ('acbf6a5c9f5f2e83b5aee67f742fb174', 1, '58f0f74202a5d8c1ac9164c3b65263a1', '192.168.31.8', '未知', '未知', '2019-04-26 22:02:49', '2019-05-26 09:02:49');
 INSERT INTO `user_login` VALUES ('accca2cce4be01cf76cd74f0f86004e4', 108, '69bff3eef3eb63cf956b33fa58221e46', '117.136.36.174', '未知', '未知', '2019-04-19 23:23:49', '2018-12-06 11:11:08');
 INSERT INTO `user_login` VALUES ('accffa95dbc90d3548bc59ae8cb45368', 1, 'c872f4ce2fc1e34b69458ba81719544b', '171.15.158.180', '未知', '未知', '2019-04-19 23:23:49', '2018-12-14 22:05:51');
@@ -9382,6 +9344,7 @@ INSERT INTO `user_login` VALUES ('ed1e69d17c084946e35578cdac105a1e', 108, 'e9ac7
 INSERT INTO `user_login` VALUES ('eeac4731b4247a0a2bbc59eb086f9237', 1, 'd3bd5443eb2e512ae58100e208433797', '171.15.158.180', '未知', '未知', '2019-04-19 23:23:49', '2018-12-14 21:32:27');
 INSERT INTO `user_login` VALUES ('ef0cb652f6236b6ae40b362f45e4d49c', 109, '6f0b67bd52f977ba7252169ab2fd463a', '117.136.104.167', '未知', '未知', '2019-04-19 23:23:49', '2018-11-30 10:39:32');
 INSERT INTO `user_login` VALUES ('ef11d6a652c37f9f48ffc30ad50b2712', 133, '6c3d3d9efc6eae0e020ef282b6d35734', '117.136.36.230', '未知', '未知', '2019-04-19 23:23:49', '2018-12-17 11:42:04');
+INSERT INTO `user_login` VALUES ('efad2b290968a0be1b9d790c66de5a95', 1, '6a4272b9e1fe140119e0d8b842831d88', '0:0:0:0:0:0:0:1', '未知', '未知', '2019-12-06 23:58:02', '2020-01-05 15:58:02');
 INSERT INTO `user_login` VALUES ('f0f593cb64d7fbe5374630f1c334b5da', 1, 'b3a280bb62eefb0b2eb0fae37e520569', '123.161.203.217', '未知', '未知', '2019-04-19 23:23:49', '2019-02-23 22:08:59');
 INSERT INTO `user_login` VALUES ('f149540db6b961c92818258d424b68f7', 1, 'e5da24b17c5a6490e5b92bece6673759', '182.119.160.201', '未知', '未知', '2019-04-19 23:23:49', '2018-11-30 11:17:46');
 INSERT INTO `user_login` VALUES ('f15519ca2118c314698b2792ce391715', 109, 'cbb6780b9d1af1d5bd0f153030a1dd48', '183.205.191.51', '未知', '未知', '2019-04-19 23:23:49', '2019-01-18 10:43:56');
@@ -9416,6 +9379,5 @@ INSERT INTO `user_login` VALUES ('fe3a900574dc6c6b61cfe3ac0fa050f3', 109, '3ffff
 INSERT INTO `user_login` VALUES ('fe67f4f68426636878aa1950a7a084d0', 1, 'e6f24799c214a514fd96c7b3c6d48e11', '192.168.31.8', '未知', '未知', '2019-04-19 23:23:49', '2018-09-24 19:32:11');
 INSERT INTO `user_login` VALUES ('ff1d11ea2f8df825d204a93b5a2b3824', 108, 'b597abfd62f70da2d0090154fa2860ef', '117.136.104.183', '未知', '未知', '2019-04-19 23:23:49', '2019-01-02 10:59:57');
 INSERT INTO `user_login` VALUES ('ff2155ebce03d418d15fa524a3c9ae28', 1, '8ffc4915102605622a0e85d768842fb6', '171.15.159.242', '未知', '未知', '2019-04-19 23:23:49', '2018-12-08 19:43:04');
-COMMIT;
 
 SET FOREIGN_KEY_CHECKS = 1;
