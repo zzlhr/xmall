@@ -26,8 +26,8 @@ class GoodsController @Autowired constructor(private val goodsService: GoodsServ
     private lateinit var picturePath: String
 
     @PostMapping("/getGoodsCategory")
-    fun getGoodsCategory(fid: Int?, status: Int?): ResultVO {
-        return ResultVO.create(goodsService.getGoodsCategoryTree(fid, status))
+    fun getGoodsCategory(): ResultVO {
+        return ResultVO.create(goodsService.getGoodsCategoryTree())
     }
 
     @PostMapping("/saveGoodsCategory")

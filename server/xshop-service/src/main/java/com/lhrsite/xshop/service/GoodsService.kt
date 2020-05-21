@@ -18,7 +18,7 @@ interface GoodsService {
     /**
      * 获取分类树
      */
-    fun getGoodsCategoryTree(fid: Int?, status: Int?): List<GoodsCategoryVO>
+    fun getGoodsCategoryTree(): List<GoodsCategoryVO>
 
 
     /**

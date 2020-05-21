@@ -33,11 +33,11 @@ class GoodsServiceImpl
         return goodsCategoryMapper.getGoodsCategory(fid, status)
     }
 
-    override fun getGoodsCategoryTree(fid: Int?, status: Int?): List<GoodsCategoryVO> {
-        val goodsCategorys: List<GoodsCategory> = this.getGoodsCategory(null, null)
+    override fun getGoodsCategoryTree(): List<GoodsCategoryVO> {
+        val goodsCategories: List<GoodsCategory> = this.getGoodsCategory(null, null)
         val goodsCategoryVOS: ArrayList<GoodsCategoryVO> = ArrayList()
         val goodsCategoryResult: ArrayList<GoodsCategoryVO> = ArrayList()
-        for (goodsCategory in goodsCategorys) {
+        for (goodsCategory in goodsCategories) {
             val goodsCategoryVO = GoodsCategoryVO()
             BeanUtils.copyProperties(goodsCategory, goodsCategoryVO);
             goodsCategoryVOS.add(goodsCategoryVO)

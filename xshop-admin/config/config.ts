@@ -165,10 +165,34 @@ export default {
                   name: 'edit',
                   icon: 'smile',
                   component: './Goods/GoodsEdit'
+                },
+                {
+                  path: '/goods/category',
+                  name: 'category',
+                  icon: 'smile',
+                  component: './Goods/GoodsCategory'
+                },
+                {
+                  path: '/goods/categoryAttr',
+                  name: 'categoryAttr',
+                  hideInMenu: true,
+                  component: './Goods/GoodsCategoryAttr'
                 }
               ]
             },
-
+            {
+              path: '/stock',
+              name: 'stock',
+              icon: 'crown',
+              routes: [
+                {
+                  path: '/stock/goodsStock',
+                  name: 'goodsStock',
+                  icon: 'smile',
+                  component: './Stock/GoodsStock'
+                },
+              ]
+            },
             {
               name: 'list.table-list',
               icon: 'table',

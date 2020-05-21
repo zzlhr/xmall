@@ -53,5 +53,8 @@ export default {
   'menu.users.list': '用户列表',
   'menu.goods': '商品管理',
   'menu.goods.list': '商品列表',
-  'menu.goods.edit': '编辑商品'
+  'menu.goods.edit': '编辑商品',
+  'menu.goods.category': '商品分类',
+  'menu.stock': '库存管理',
+  'menu.stock.goodsStock': '商品库存'
 };

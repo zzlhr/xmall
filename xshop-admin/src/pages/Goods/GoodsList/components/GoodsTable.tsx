@@ -40,6 +40,8 @@ const columns = [
     render: (_: any, record: GoodsListVO) => (
       <>
         <Button onClick={()=>{router.push(`/goods/edit?goodsId=${record.goodsId}&type=1`)}}>编辑商品</Button>
+        <Button onClick={()=>{router.push(`/stock/goodsStock?goodsId=${record.goodsId}&type=1`)}}>设置库存</Button>
+
         {/* <GoodsForm type={1} goodsId={record.goodsId} /> */}
       </>
     ),
@@ -66,7 +68,6 @@ class GoodsTable extends React.Component<GoodsTableProps, any> {
   }
 
   onTableChange = (pagination: PaginationConfig) => {
-    console.log('pagination:', pagination);
     const {dispatch} = this.props;
     dispatch({
       type: 'goods/updatePagination',
