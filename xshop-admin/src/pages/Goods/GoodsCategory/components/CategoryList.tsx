@@ -1,7 +1,8 @@
-import React from "react";
-import {connect, Dispatch} from 'dva';
-import {Tree} from "antd";
-import {GoodsCategoryVO} from "@/pages/Goods/GoodsCategory/data";
+import React, { ReactNode } from "react";
+import { connect, Dispatch } from 'dva';
+import { Tree, Button } from "antd";
+import { GoodsCategoryVO } from "@/pages/Goods/GoodsCategory/data";
+import { router } from "umi";
 
 
 export interface CategoryListProps {
@@ -13,22 +14,26 @@ class CategoryList extends React.Component<CategoryListProps, any> {
 
   constructor(props: CategoryListProps) {
     super(props);
-    const {dispatch} = this.props;
+    const { dispatch } = this.props;
     dispatch({
       type: 'goodsCategory/fetchCategoryList',
     })
   }
 
-  toTreeData = (categories: Array<GoodsCategoryVO>) =>{
-    const treeData: {key: string, title: String; children: any[]; }[] = []
+  editCategoryAttr = (categoryId: number) => {
+    router.push(`/goods/categoryAttr?categoryId=${categoryId}`)
+  }
+
+  toTreeData = (categories: Array<GoodsCategoryVO>) => {
+    const treeData: { key: string, title: String | ReactNode; children: any[]; }[] = []
     categories.forEach(it => {
-      let children: {key: string, title: String; children: any[]; }[] = []
-      if (it.children.length > 0){
+      let children: { key: string, title: String | ReactNode; children: any[]; }[] = []
+      if (it.children.length > 0) {
         children = this.toTreeData(it.children)
       }
       treeData.push({
         key: it.categoryId,
-        title: it.categoryName,
+        title: <>{it.categoryName} <Button onClick={() => { this.editCategoryAttr(it.categoryId) }} type="link">编辑参数</Button></>,
         children
       })
     })
@@ -36,7 +41,7 @@ class CategoryList extends React.Component<CategoryListProps, any> {
   }
 
   render(): React.ReactNode {
-    const {categories} = this.props
+    const { categories } = this.props
     const treeData = this.toTreeData(categories)
     return (
       <Tree
@@ -50,6 +55,6 @@ class CategoryList extends React.Component<CategoryListProps, any> {
   }
 }
 
-export default connect(({goodsCategory}) => ({
+export default connect(({ goodsCategory }: any) => ({
   categories: goodsCategory.categories
 }))(CategoryList)

@@ -80,7 +80,7 @@ class GoodsEdit extends React.Component<GoodsFormProps, GoodsFormState> {
         // 更新二级分类
         for (let i = 0; i < goodsCategory.length; i += 1) {
           if (goodsCategory[i].categoryId === goodsDetail?.category1) {
-            await this.setState({
+            this.setState({
               goodsCategoryFSelected: goodsCategory[i]
             });
             this.formRef.current.setFieldsValue({
@@ -92,7 +92,7 @@ class GoodsEdit extends React.Component<GoodsFormProps, GoodsFormState> {
         // 初始化几个上传组件内容
         if (goodsDetail?.goodsBanner !== undefined) {
           const goodsBannerFileList: Array<UploadFile> = JSON.parse(goodsDetail?.goodsBanner)
-            .map(item => {
+            .map((item: any) => {
               return {
                 uid: item,
                 name: 'image.png',
@@ -107,7 +107,7 @@ class GoodsEdit extends React.Component<GoodsFormProps, GoodsFormState> {
 
         if (goodsDetail?.goodsCover !== undefined) {
           const goodsCoverFileList: Array<UploadFile> = JSON.parse(goodsDetail?.goodsCover)
-            .map(item => {
+            .map((item: any) => {
               return {
                 uid: item,
                 name: 'image.png',
@@ -121,7 +121,7 @@ class GoodsEdit extends React.Component<GoodsFormProps, GoodsFormState> {
         }
         if (goodsDetail?.goodsContent !== undefined) {
           const goodsContentFileList: Array<UploadFile> = JSON.parse(goodsDetail?.goodsContent)
-            .map(item => {
+            .map((item: any) => {
               return {
                 uid: item,
                 name: 'image.png',
@@ -229,7 +229,7 @@ class GoodsEdit extends React.Component<GoodsFormProps, GoodsFormState> {
 
 
   handleSaveGoods = async () => {
-    this.formRef.current.validateFields().then(async values => {
+    this.formRef.current.validateFields().then(async (values: any) => {
       const {goodsCoverFileList, goodsBannerFileList, goodsContentFileList} = this.state;
       if (goodsCoverFileList === undefined || goodsCoverFileList?.length === 0) {
         notification.error({
@@ -275,8 +275,9 @@ class GoodsEdit extends React.Component<GoodsFormProps, GoodsFormState> {
         payload
       })
 
-    }).catch(errorInfo => {
-      console.log(errorInfo)
+    }).catch((errorInfo: any) => {
+      // console.log(errorInfo)
+      throw errorInfo
     })
   };
 

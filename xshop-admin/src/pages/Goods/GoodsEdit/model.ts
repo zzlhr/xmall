@@ -56,7 +56,7 @@ const Model: UserListModelType = {
       }
     },
 
-    *saveGoodsMaster ({payload}, {call, put}){
+    *saveGoodsMaster ({payload}, {call}){
       const response = yield call(saveGoodsMaster, payload);
       if (response.code === 0) {
         // yield put({
