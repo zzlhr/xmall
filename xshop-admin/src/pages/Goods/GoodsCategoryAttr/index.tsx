@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
-import { Card, Select, Row, Col, Button, Table } from 'antd';
+import { Card, Select, Button, Table } from 'antd';
 import FormItemLabel from 'antd/lib/form/FormItemLabel';
 
 export interface GoodsCategoryAttrProps {
