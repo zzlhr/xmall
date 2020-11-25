@@ -1,6 +1,10 @@
 # XShop
 一套基于springboot + vue的开源商城
 
+## TODO LIST
+- [ ] flutter app
+- [ ] vue升级
+
 **处于开发阶段，暂时欠缺部分功能**
 
 
